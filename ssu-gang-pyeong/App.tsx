@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import { Image } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Asset } from "expo-asset";
+import { NavigationContainer } from "@react-navigation/native";
+import Tabs from "./navigation/Tabs";
 
 type Props = {
   Ionicons: keyof typeof Ionicons.glyphMap | any;
@@ -39,5 +41,9 @@ export default function App({ Ionicons }: Props) {
       />
     );
   }
-  return null;
+  return (
+    <NavigationContainer>
+      <Tabs />
+    </NavigationContainer>
+  );
 }
