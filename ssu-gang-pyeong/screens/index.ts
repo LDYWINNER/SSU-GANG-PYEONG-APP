@@ -3,5 +3,6 @@ import Search from "./Search";
 import Home from "./Home";
 import Todo from "./Todo";
 import Notification from "./Notification";
+import CourseDetail from "./CourseDetail";
 
-export { Bulletin, Search, Home, Todo, Notification };
+export { Bulletin, Search, Home, Todo, Notification, CourseDetail };
