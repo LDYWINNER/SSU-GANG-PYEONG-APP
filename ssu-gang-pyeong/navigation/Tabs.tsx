@@ -21,12 +21,7 @@ const Tabs = () => {
         },
         tabBarActiveTintColor: colors.SBU_RED,
         tabBarInactiveTintColor: isDark ? colors.DARK_GREY : colors.LIGHT_GREY,
-        headerStyle: {
-          backgroundColor: isDark ? colors.BLACK_COLOR : "white",
-        },
-        headerTitleStyle: {
-          color: isDark ? "white" : colors.BLACK_COLOR,
-        },
+        headerShown: false,
         tabBarShowLabel: false,
       }}
     >
