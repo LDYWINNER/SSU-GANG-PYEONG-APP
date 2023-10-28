@@ -5,10 +5,10 @@ import { Image, useColorScheme } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Asset } from "expo-asset";
 import { NavigationContainer } from "@react-navigation/native";
-import Tabs from "./navigation/Tabs";
 import { ThemeProvider } from "styled-components/native";
 import { darkTheme, lightTheme } from "./styled";
 import { QueryClient, QueryClientProvider } from "react-query";
+import Root from "./navigation/Root";
 
 const queryClient = new QueryClient();
 
@@ -51,7 +51,7 @@ export default function App({ Ionicons }: Props) {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
         <NavigationContainer>
-          <Tabs />
+          <Root />
         </NavigationContainer>
       </ThemeProvider>
     </QueryClientProvider>

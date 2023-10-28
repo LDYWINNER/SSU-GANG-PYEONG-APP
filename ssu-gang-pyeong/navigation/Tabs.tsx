@@ -1,6 +1,12 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Bulletin, Search, Home, Todo, Notification } from "../screens/index";
+import {
+  HomeStack,
+  BulletinStack,
+  NotificationStack,
+  SearchStack,
+  ToDoStack,
+} from "../navigation/mainStacks/index";
 import { useColorScheme } from "react-native";
 import colors from "../colors";
 import { Ionicons } from "@expo/vector-icons";
@@ -26,8 +32,8 @@ const Tabs = () => {
       }}
     >
       <Tab.Screen
-        name="Bulletin"
-        component={Bulletin}
+        name="BulletinStack"
+        component={BulletinStack}
         options={{
           tabBarIcon: ({ focused, color, size }) => {
             return (
@@ -41,8 +47,8 @@ const Tabs = () => {
         }}
       />
       <Tab.Screen
-        name="Search"
-        component={Search}
+        name="SearchStack"
+        component={SearchStack}
         options={{
           tabBarIcon: ({ focused, color, size }) => {
             return (
@@ -56,8 +62,8 @@ const Tabs = () => {
         }}
       />
       <Tab.Screen
-        name="Home"
-        component={Home}
+        name="HomeStack"
+        component={HomeStack}
         options={{
           tabBarIcon: ({ focused, color, size }) => {
             return (
@@ -71,8 +77,8 @@ const Tabs = () => {
         }}
       />
       <Tab.Screen
-        name="To Do"
-        component={Todo}
+        name="ToDoStack"
+        component={ToDoStack}
         options={{
           tabBarIcon: ({ focused, color, size }) => {
             return (
@@ -86,8 +92,8 @@ const Tabs = () => {
         }}
       />
       <Tab.Screen
-        name="Notification"
-        component={Notification}
+        name="NotificationStack"
+        component={NotificationStack}
         options={{
           tabBarIcon: ({ focused, color, size }) => {
             return (
