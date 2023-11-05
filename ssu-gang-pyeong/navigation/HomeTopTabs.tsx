@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import React, { useRef, useState, useCallback, useMemo } from "react";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { CourseDetail } from "../screens";
 import styled from "styled-components/native";
-import { TouchableOpacity } from "react-native";
+import { Button, Text, TouchableOpacity } from "react-native";
 import { useColorScheme } from "react-native";
 import colors from "../colors";
 import { Ionicons } from "@expo/vector-icons";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ListView } from "../screens/homeScreens/index";
+import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 
 const Row = styled.View`
   flex-direction: row;
@@ -37,6 +38,29 @@ const HomeTopTabs: React.FC<NativeStackScreenProps<any, "HomeTopTabs">> = ({
   const color = isDark ? "white" : colors.BLACK_COLOR;
   const [tableView, setTableView] = useState(true);
   const toggleView = () => setTableView((current) => !current);
+  const sheetRef = useRef<BottomSheet>(null);
+  const snapPoints = useMemo(() => ["25%"], []);
+  const handleSnapPress = useCallback(() => {
+    sheetRef.current?.snapToIndex(0);
+  }, []);
+  const handleClosePress = useCallback(() => {
+    sheetRef.current?.close();
+  }, []);
+  const [moreMenu, setmoreMenu] = useState(true);
+  const toggleMoreMenu = () => {
+    if (moreMenu) {
+      handleSnapPress();
+      setmoreMenu(false);
+    } else {
+      handleClosePress();
+      setmoreMenu(true);
+    }
+  };
+  const handleSheetChange = useCallback((index: any) => {
+    if (index == -1) {
+      setmoreMenu(true);
+    }
+  }, []);
   return (
     <>
       <BigRow>
@@ -51,9 +75,7 @@ const HomeTopTabs: React.FC<NativeStackScreenProps<any, "HomeTopTabs">> = ({
               size={35}
             />
           </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => navigate("HomeStack", { screen: "MoreMenu" })}
-          >
+          <TouchableOpacity onPress={() => toggleMoreMenu()}>
             <Ionicons
               name={
                 isDark
@@ -83,15 +105,30 @@ const HomeTopTabs: React.FC<NativeStackScreenProps<any, "HomeTopTabs">> = ({
         </Row>
       </BigRow>
       {tableView ? (
-        <Tab.Navigator>
-          {semesters.map((semester) => (
-            <Tab.Screen
-              key={semester}
-              name={semester}
-              component={CourseDetail}
-            />
-          ))}
-        </Tab.Navigator>
+        <>
+          <Tab.Navigator>
+            {semesters.map((semester) => (
+              <Tab.Screen
+                key={semester}
+                name={semester}
+                component={CourseDetail}
+              />
+            ))}
+          </Tab.Navigator>
+
+          <BottomSheet
+            index={-1}
+            ref={sheetRef}
+            snapPoints={snapPoints}
+            enablePanDownToClose={true}
+            enableContentPanningGesture={false}
+            onChange={handleSheetChange}
+          >
+            <BottomSheetView>
+              <Text>Awesome 🔥</Text>
+            </BottomSheetView>
+          </BottomSheet>
+        </>
       ) : (
         <>
           <ListView />

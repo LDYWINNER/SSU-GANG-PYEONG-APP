@@ -9,6 +9,7 @@ import { ThemeProvider } from "styled-components/native";
 import { darkTheme, lightTheme } from "./styled";
 import { QueryClient, QueryClientProvider } from "react-query";
 import Root from "./navigation/Root";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const queryClient = new QueryClient();
 
@@ -51,7 +52,9 @@ export default function App({ Ionicons }: Props) {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
         <NavigationContainer>
-          <Root />
+          <GestureHandlerRootView style={{ flex: 1 }}>
+            <Root />
+          </GestureHandlerRootView>
         </NavigationContainer>
       </ThemeProvider>
     </QueryClientProvider>

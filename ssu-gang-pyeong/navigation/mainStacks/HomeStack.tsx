@@ -13,11 +13,6 @@ const HomeStack = () => {
       }}
     >
       <NativeStack.Screen name="HomeTopTabs" component={HomeTopTabs} />
-      <NativeStack.Screen
-        name="MoreMenu"
-        component={MoreMenu}
-        options={{ presentation: "modal" }}
-      />
     </NativeStack.Navigator>
   );
 };
