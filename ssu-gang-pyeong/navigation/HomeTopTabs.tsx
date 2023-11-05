@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { CourseDetail } from "../screens";
 import styled from "styled-components/native";
-import { TouchableOpacity, View } from "react-native";
+import { TouchableOpacity } from "react-native";
 import { useColorScheme } from "react-native";
 import colors from "../colors";
 import { Ionicons } from "@expo/vector-icons";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { ListView } from "../screens/homeScreens/index";
 
 const Row = styled.View`
   flex-direction: row;
@@ -28,7 +30,9 @@ const semesters = ["2023-fall", "2023-spring", "2022-fall"];
 
 const Tab = createMaterialTopTabNavigator();
 
-function HomeTopTabs() {
+const HomeTopTabs: React.FC<NativeStackScreenProps<any, "HomeTopTabs">> = ({
+  navigation: { navigate },
+}) => {
   const isDark = useColorScheme() === "dark";
   const color = isDark ? "white" : colors.BLACK_COLOR;
   const [tableView, setTableView] = useState(true);
@@ -43,7 +47,6 @@ function HomeTopTabs() {
               name={isDark ? "add-circle-outline" : "add-circle"}
               color={color}
               size={35}
-              style={{ marginRight: 1 }}
             />
           </TouchableOpacity>
           <TouchableOpacity>
@@ -51,7 +54,7 @@ function HomeTopTabs() {
               name={
                 isDark
                   ? "ellipsis-horizontal-circle-outline"
-                  : "ellipsis-horizontal-circle"
+                  : "ellipsis-horizontal-circle-sharp"
               }
               color={color}
               size={35}
@@ -60,7 +63,7 @@ function HomeTopTabs() {
           </TouchableOpacity>
           <TouchableOpacity onPress={() => toggleView()}>
             <Ionicons
-              name={tableView ? "grid" : "grid-outline"}
+              name={!tableView ? "grid-outline" : "grid"}
               color={color}
               size={30}
               style={{ marginRight: 1 }}
@@ -68,21 +71,30 @@ function HomeTopTabs() {
           </TouchableOpacity>
           <TouchableOpacity onPress={() => toggleView()}>
             <Ionicons
-              name={!tableView ? "menu" : "menu-outline"}
+              name={tableView ? "menu-outline" : "menu"}
               color={color}
               size={45}
-              style={{ marginRight: 1 }}
             />
           </TouchableOpacity>
         </Row>
       </BigRow>
-      <Tab.Navigator>
-        {semesters.map((semester) => (
-          <Tab.Screen key={semester} name={semester} component={CourseDetail} />
-        ))}
-      </Tab.Navigator>
+      {tableView ? (
+        <Tab.Navigator>
+          {semesters.map((semester) => (
+            <Tab.Screen
+              key={semester}
+              name={semester}
+              component={CourseDetail}
+            />
+          ))}
+        </Tab.Navigator>
+      ) : (
+        <>
+          <ListView />
+        </>
+      )}
     </>
   );
-}
+};
 
 export default HomeTopTabs;
