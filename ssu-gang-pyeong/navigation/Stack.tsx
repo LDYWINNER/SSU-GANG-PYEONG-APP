@@ -1,8 +1,8 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { CourseDetail } from "../screens";
 import { useColorScheme } from "react-native";
 import colors from "../colors";
+import { CourseDetail, CourseReview, WriteReview, MyAccount } from "../screens";
 
 const NativeStack = createNativeStackNavigator();
 
@@ -20,7 +20,26 @@ const Stack = () => {
         },
       }}
     >
-      <NativeStack.Screen name="CourseDetail" component={CourseDetail} />
+      <NativeStack.Screen
+        name="CourseDetail"
+        component={CourseDetail}
+        options={{ presentation: "modal" }}
+      />
+      <NativeStack.Screen
+        name="CourseReview"
+        component={CourseReview}
+        options={{ presentation: "card" }}
+      />
+      <NativeStack.Screen
+        name="WriteReview"
+        component={WriteReview}
+        options={{ presentation: "card" }}
+      />
+      <NativeStack.Screen
+        name="MyAccount"
+        component={MyAccount}
+        options={{ presentation: "card" }}
+      />
     </NativeStack.Navigator>
   );
 };

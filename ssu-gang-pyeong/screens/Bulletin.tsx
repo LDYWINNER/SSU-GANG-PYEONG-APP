@@ -7,7 +7,7 @@ const Bulletin: React.FC<NativeStackScreenProps<any, "Bulletin">> = ({
   navigation: { navigate },
 }) => (
   <TouchableOpacity
-    onPress={() => navigate("Stack", { screen: "Three" })}
+    onPress={() => navigate("Stack", { screen: "CourseDetail" })}
     style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
   >
     <Text>Bulletin</Text>
