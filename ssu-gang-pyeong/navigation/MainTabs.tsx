@@ -6,14 +6,14 @@ import {
   NotificationStack,
   SearchStack,
   ToDoStack,
-} from "../navigation/mainStacks/index";
+} from "./mainStacks/index";
 import { useColorScheme } from "react-native";
 import colors from "../colors";
 import { Ionicons } from "@expo/vector-icons";
 
 const Tab = createBottomTabNavigator();
 
-const Tabs = () => {
+const MainTabs = () => {
   const isDark = useColorScheme() === "dark";
   return (
     <Tab.Navigator
@@ -110,4 +110,4 @@ const Tabs = () => {
   );
 };
 
-export default Tabs;
+export default MainTabs;

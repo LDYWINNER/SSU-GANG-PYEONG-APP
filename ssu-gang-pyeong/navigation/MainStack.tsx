@@ -6,7 +6,7 @@ import { CourseDetail, CourseReview, WriteReview, MyAccount } from "../screens";
 
 const NativeStack = createNativeStackNavigator();
 
-const Stack = () => {
+const MainStack = () => {
   const isDark = useColorScheme() === "dark";
   return (
     <NativeStack.Navigator
@@ -44,4 +44,4 @@ const Stack = () => {
   );
 };
 
-export default Stack;
+export default MainStack;

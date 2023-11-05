@@ -5,7 +5,7 @@ const semesters = ["2023-fall", "2023-spring", "2022-fall"];
 
 const Tab = createMaterialTopTabNavigator();
 
-function TopTabs() {
+function HomeTopTabs() {
   return (
     <Tab.Navigator>
       {semesters.map((semester) => (
@@ -15,4 +15,4 @@ function TopTabs() {
   );
 }
 
-export default TopTabs;
+export default HomeTopTabs;
