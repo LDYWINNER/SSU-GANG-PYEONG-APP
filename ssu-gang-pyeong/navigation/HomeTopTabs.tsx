@@ -42,14 +42,18 @@ const HomeTopTabs: React.FC<NativeStackScreenProps<any, "HomeTopTabs">> = ({
       <BigRow>
         <Title>@USERNAME</Title>
         <Row>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigate("MainStack", { screen: "WriteReview" })}
+          >
             <Ionicons
               name={isDark ? "add-circle-outline" : "add-circle"}
               color={color}
               size={35}
             />
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigate("HomeStack", { screen: "MoreMenu" })}
+          >
             <Ionicons
               name={
                 isDark

@@ -1,7 +1,7 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeTopTabs from "../HomeTopTabs";
-import { ListView } from "../../screens/homeScreens";
+import { MoreMenu } from "../../screens/homeScreens";
 
 const NativeStack = createNativeStackNavigator();
 
@@ -13,7 +13,11 @@ const HomeStack = () => {
       }}
     >
       <NativeStack.Screen name="HomeTopTabs" component={HomeTopTabs} />
-      <NativeStack.Screen name="ListView" component={ListView} />
+      <NativeStack.Screen
+        name="MoreMenu"
+        component={MoreMenu}
+        options={{ presentation: "modal" }}
+      />
     </NativeStack.Navigator>
   );
 };
