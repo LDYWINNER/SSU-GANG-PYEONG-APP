@@ -20,7 +20,7 @@ const MainTabs = () => {
       sceneContainerStyle={{
         backgroundColor: isDark ? colors.BLACK_COLOR : "white",
       }}
-      initialRouteName="Home"
+      initialRouteName="HomeStack"
       screenOptions={{
         tabBarStyle: {
           backgroundColor: isDark ? colors.BLACK_COLOR : "white",
