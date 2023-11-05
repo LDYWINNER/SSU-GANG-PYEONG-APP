@@ -3,7 +3,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useColorScheme } from "react-native";
 import colors from "../../colors";
 import HomeTopTabs from "../HomeTopTabs";
-import { Home } from "../../screens";
+import { ListView } from "../../screens/homeScreens/homeIndex";
 
 const NativeStack = createNativeStackNavigator();
 
@@ -22,7 +22,7 @@ const HomeStack = () => {
       }}
     >
       <NativeStack.Screen name="HomeTopTabs" component={HomeTopTabs} />
-      <NativeStack.Screen name="Home" component={Home} />
+      <NativeStack.Screen name="ListView" component={ListView} />
     </NativeStack.Navigator>
   );
 };
