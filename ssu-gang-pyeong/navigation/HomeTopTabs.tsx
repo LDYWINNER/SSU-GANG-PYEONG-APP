@@ -2,13 +2,14 @@ import React, { useRef, useState, useCallback, useMemo } from "react";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { CourseDetail } from "../screens";
 import styled from "styled-components/native";
-import { Button, Text, TouchableOpacity } from "react-native";
-import { useColorScheme } from "react-native";
+import { TouchableOpacity, View } from "react-native";
+import { useColorScheme, StyleSheet } from "react-native";
 import colors from "../colors";
 import { Ionicons } from "@expo/vector-icons";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { ListView } from "../screens/homeScreens/index";
-import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
+import { ListView, MoreMenu } from "../screens/homeScreens/index";
+import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
+import { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";
 
 const Row = styled.View`
   flex-direction: row;
@@ -39,7 +40,7 @@ const HomeTopTabs: React.FC<NativeStackScreenProps<any, "HomeTopTabs">> = ({
   const [tableView, setTableView] = useState(true);
   const toggleView = () => setTableView((current) => !current);
   const sheetRef = useRef<BottomSheet>(null);
-  const snapPoints = useMemo(() => ["25%"], []);
+  const snapPoints = useMemo(() => ["35%"], []);
   const handleSnapPress = useCallback(() => {
     sheetRef.current?.snapToIndex(0);
   }, []);
@@ -61,6 +62,18 @@ const HomeTopTabs: React.FC<NativeStackScreenProps<any, "HomeTopTabs">> = ({
       setmoreMenu(true);
     }
   }, []);
+  const renderBackdrop = useCallback(
+    (
+      props: React.JSX.IntrinsicAttributes & BottomSheetDefaultBackdropProps
+    ) => (
+      <BottomSheetBackdrop
+        {...props}
+        disappearsOnIndex={-1}
+        appearsOnIndex={1}
+      />
+    ),
+    []
+  );
   return (
     <>
       <BigRow>
@@ -123,19 +136,36 @@ const HomeTopTabs: React.FC<NativeStackScreenProps<any, "HomeTopTabs">> = ({
             enablePanDownToClose={true}
             enableContentPanningGesture={false}
             onChange={handleSheetChange}
+            backdropComponent={renderBackdrop}
           >
-            <BottomSheetView>
-              <Text>Awesome 🔥</Text>
-            </BottomSheetView>
+            <MoreMenu />
           </BottomSheet>
         </>
       ) : (
         <>
           <ListView />
+          <BottomSheet
+            index={-1}
+            ref={sheetRef}
+            snapPoints={snapPoints}
+            enablePanDownToClose={true}
+            enableContentPanningGesture={false}
+            backdropComponent={renderBackdrop}
+            onChange={handleSheetChange}
+          >
+            <MoreMenu />
+          </BottomSheet>
         </>
       )}
     </>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "grey",
+  },
+});
 
 export default HomeTopTabs;
