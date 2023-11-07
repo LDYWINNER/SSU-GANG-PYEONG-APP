@@ -2,8 +2,8 @@ import React, { useRef, useState, useCallback, useMemo } from "react";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { CourseDetail } from "../screens";
 import styled from "styled-components/native";
-import { TouchableOpacity, View } from "react-native";
-import { useColorScheme, StyleSheet } from "react-native";
+import { TouchableOpacity } from "react-native";
+import { useColorScheme } from "react-native";
 import colors from "../colors";
 import { Ionicons } from "@expo/vector-icons";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -40,7 +40,7 @@ const HomeTopTabs: React.FC<NativeStackScreenProps<any, "HomeTopTabs">> = ({
   const [tableView, setTableView] = useState(true);
   const toggleView = () => setTableView((current) => !current);
   const sheetRef = useRef<BottomSheet>(null);
-  const snapPoints = useMemo(() => ["35%"], []);
+  const snapPoints = useMemo(() => ["30%"], []);
   const handleSnapPress = useCallback(() => {
     sheetRef.current?.snapToIndex(0);
   }, []);
@@ -119,7 +119,11 @@ const HomeTopTabs: React.FC<NativeStackScreenProps<any, "HomeTopTabs">> = ({
       </BigRow>
       {tableView ? (
         <>
-          <Tab.Navigator>
+          <Tab.Navigator
+            sceneContainerStyle={{
+              backgroundColor: isDark ? colors.BLACK_COLOR : "white",
+            }}
+          >
             {semesters.map((semester) => (
               <Tab.Screen
                 key={semester}
@@ -137,6 +141,9 @@ const HomeTopTabs: React.FC<NativeStackScreenProps<any, "HomeTopTabs">> = ({
             enableContentPanningGesture={false}
             onChange={handleSheetChange}
             backdropComponent={renderBackdrop}
+            backgroundStyle={{
+              backgroundColor: isDark ? colors.BLACK_COLOR : "white",
+            }}
           >
             <MoreMenu />
           </BottomSheet>
@@ -152,6 +159,9 @@ const HomeTopTabs: React.FC<NativeStackScreenProps<any, "HomeTopTabs">> = ({
             enableContentPanningGesture={false}
             backdropComponent={renderBackdrop}
             onChange={handleSheetChange}
+            backgroundStyle={{
+              backgroundColor: isDark ? colors.BLACK_COLOR : "white",
+            }}
           >
             <MoreMenu />
           </BottomSheet>
@@ -160,12 +170,5 @@ const HomeTopTabs: React.FC<NativeStackScreenProps<any, "HomeTopTabs">> = ({
     </>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "grey",
-  },
-});
 
 export default HomeTopTabs;
