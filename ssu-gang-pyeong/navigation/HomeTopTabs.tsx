@@ -2,7 +2,7 @@ import React, { useRef, useState, useCallback, useMemo } from "react";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { CourseDetail } from "../screens";
 import styled from "styled-components/native";
-import { TouchableOpacity } from "react-native";
+import { Dimensions, TouchableOpacity } from "react-native";
 import { useColorScheme } from "react-native";
 import colors from "../colors";
 import { Ionicons } from "@expo/vector-icons";
@@ -21,8 +21,8 @@ const BigRow = styled(Row)`
   margin-top: 70px;
 `;
 
-const Title = styled.Text`
-  color: black;
+const Title = styled.Text<{ color: string }>`
+  color: ${(props) => props.color};
   font-weight: 600;
   font-size: 30px;
   margin-left: 10px;
@@ -77,7 +77,7 @@ const HomeTopTabs: React.FC<NativeStackScreenProps<any, "HomeTopTabs">> = ({
   return (
     <>
       <BigRow>
-        <Title>@USERNAME</Title>
+        <Title color={color}>@USERNAME</Title>
         <Row>
           <TouchableOpacity
             onPress={() => navigate("MainStack", { screen: "WriteReview" })}
@@ -120,8 +120,25 @@ const HomeTopTabs: React.FC<NativeStackScreenProps<any, "HomeTopTabs">> = ({
       {tableView ? (
         <>
           <Tab.Navigator
+            initialRouteName="2023-fall"
             sceneContainerStyle={{
               backgroundColor: isDark ? colors.BLACK_COLOR : "white",
+            }}
+            initialLayout={{
+              width: Dimensions.get("window").width,
+            }}
+            screenOptions={{
+              tabBarStyle: {
+                backgroundColor: isDark ? colors.BLACK_COLOR : "white",
+              },
+              tabBarIndicatorStyle: {
+                backgroundColor: colors.SBU_RED,
+              },
+              tabBarActiveTintColor: colors.SBU_RED,
+              tabBarInactiveTintColor: isDark
+                ? colors.DARK_GREY
+                : colors.LIGHT_GREY,
+              swipeEnabled: true,
             }}
           >
             {semesters.map((semester) => (
