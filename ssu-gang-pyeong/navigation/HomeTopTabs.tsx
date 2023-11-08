@@ -16,9 +16,10 @@ const Row = styled.View`
   align-items: center;
 `;
 
-const BigRow = styled(Row)`
+const BigRow = styled(Row)<{ bgColor: string }>`
   justify-content: space-between;
-  margin-top: 70px;
+  background-color: ${(props) => props.bgColor};
+  padding-top: 70px;
 `;
 
 const Title = styled.Text<{ color: string }>`
@@ -37,6 +38,7 @@ const HomeTopTabs: React.FC<NativeStackScreenProps<any, "HomeTopTabs">> = ({
 }) => {
   const isDark = useColorScheme() === "dark";
   const color = isDark ? "white" : colors.BLACK_COLOR;
+  const bgColor = isDark ? colors.BLACK_COLOR : "white";
   const [tableView, setTableView] = useState(true);
   const toggleView = () => setTableView((current) => !current);
   const sheetRef = useRef<BottomSheet>(null);
@@ -76,7 +78,7 @@ const HomeTopTabs: React.FC<NativeStackScreenProps<any, "HomeTopTabs">> = ({
   );
   return (
     <>
-      <BigRow>
+      <BigRow bgColor={bgColor}>
         <Title color={color}>@USERNAME</Title>
         <Row>
           <TouchableOpacity
