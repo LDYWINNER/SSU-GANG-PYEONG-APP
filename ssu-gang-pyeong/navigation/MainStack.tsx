@@ -33,7 +33,7 @@ const MainStack = () => {
       <NativeStack.Screen
         name="WriteReview"
         component={WriteReview}
-        options={{ presentation: "card" }}
+        options={{ presentation: "card", headerShown: false }}
       />
       <NativeStack.Screen
         name="MyAccount"

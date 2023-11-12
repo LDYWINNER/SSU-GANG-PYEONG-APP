@@ -76,6 +76,7 @@ const HomeTopTabs: React.FC<NativeStackScreenProps<any, "HomeTopTabs">> = ({
     ),
     []
   );
+
   return (
     <>
       <BigRow bgColor={bgColor}>
