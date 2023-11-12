@@ -7,7 +7,7 @@ import { useColorScheme } from "react-native";
 import colors from "../colors";
 import { Ionicons } from "@expo/vector-icons";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { ListView, MoreMenu } from "../screens/homeScreens/index";
+import { ListView, MoreMenu, TableView } from "../screens/homeScreens/index";
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";
 
@@ -148,7 +148,7 @@ const HomeTopTabs: React.FC<NativeStackScreenProps<any, "HomeTopTabs">> = ({
               <Tab.Screen
                 key={semester}
                 name={semester}
-                component={CourseDetail}
+                component={TableView}
               />
             ))}
           </Tab.Navigator>

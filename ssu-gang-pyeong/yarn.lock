@@ -5293,7 +5293,7 @@ moment-timezone@^0.5.14:
   dependencies:
     moment "^2.29.4"
 
-moment@^2.20.1, moment@^2.29.4:
+moment@^2.20.1, moment@^2.24.0, moment@^2.29.4:
   version "2.29.4"
   resolved "https://registry.npmjs.org/moment/-/moment-2.29.4.tgz"
   integrity sha512-5LC9SOxjSc2HF6vO2CyuTDNivEdoz2IvyJJGj6X8DJ0eFyfszE0QiEd+iXmBvUP3WHxSjFH/vIsA0EN00cgr8w==
@@ -6060,6 +6060,14 @@ react-native-tab-view@^3.5.2:
   integrity sha512-nE5WqjbeEPsWQx4mtz81QGVvgHRhujTNIIZiMCx3Bj6CBFDafbk7XZp9ocmtzXUQaZ4bhtVS43R4FIiR4LboJw==
   dependencies:
     use-latest-callback "^0.1.5"
+
+react-native-timetable@^1.0.6:
+  version "1.0.6"
+  resolved "https://registry.npmjs.org/react-native-timetable/-/react-native-timetable-1.0.6.tgz"
+  integrity sha512-d14hbFSnudyPEwFMz+C2OF8yjBoGH0mMfxTVviR/73gTn2WFbzs2/zt1e3GBmQsa/hMV9nJwxT46rLfUCQv1Sw==
+  dependencies:
+    moment "^2.24.0"
+    prop-types "^15.7.2"
 
 react-native-vector-icons@^4.5.0:
   version "4.6.0"
