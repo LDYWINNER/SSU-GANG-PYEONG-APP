@@ -6,7 +6,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Asset } from "expo-asset";
 import { NavigationContainer } from "@react-navigation/native";
 import { ThemeProvider } from "styled-components/native";
-import { darkTheme, lightTheme } from "./styled";
+import { darkTheme, lightTheme } from "./theme/index";
 import { QueryClient, QueryClientProvider } from "react-query";
 import Root from "./navigation/Root";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
