@@ -10,6 +10,7 @@ import { darkTheme, lightTheme } from "./theme/index";
 import { QueryClient, QueryClientProvider } from "react-query";
 import Root from "./navigation/Root";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 const queryClient = new QueryClient();
 
@@ -53,7 +54,9 @@ export default function App({ Ionicons }: Props) {
       <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
         <NavigationContainer>
           <GestureHandlerRootView style={{ flex: 1 }}>
-            <Root />
+            <SafeAreaProvider>
+              <Root />
+            </SafeAreaProvider>
           </GestureHandlerRootView>
         </NavigationContainer>
       </ThemeProvider>
