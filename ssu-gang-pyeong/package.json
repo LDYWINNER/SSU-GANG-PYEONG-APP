@@ -12,6 +12,7 @@
     "@gorhom/bottom-sheet": "^4.5.1",
     "@kolking/react-native-rating": "^1.1.2",
     "@mikezzb/react-native-timetable": "^0.2.6",
+    "@react-native-async-storage/async-storage": "^1.19.8",
     "@react-native-picker/picker": "^2.5.1",
     "@react-navigation/bottom-tabs": "^6.5.9",
     "@react-navigation/material-top-tabs": "^6.6.5",
@@ -38,7 +39,8 @@
     "react-native-timetable": "^1.0.6",
     "react-native-web-swiper": "^2.2.4",
     "react-query": "^3.39.3",
-    "styled-components": "^6.1.0"
+    "styled-components": "^6.1.0",
+    "zustand": "^4.4.6"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
