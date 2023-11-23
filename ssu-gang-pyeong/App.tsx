@@ -35,9 +35,14 @@ export default function App({ Ionicons }: Props) {
     setReady(true);
   };
   const startLoading = async () => {
-    const images = loadImages([require("./"), require("./")]);
-    const fonts = loadFonts([Ionicons.font]);
-    await Promise.all([...fonts, ...images]);
+    const images = loadImages([
+      require("./assets/images/logo.png"),
+      require("./assets/images/logo-transparent.png"),
+    ]);
+    // font preload not working
+    //const fonts = loadFonts([Ionicons.font]);
+    //await Promise.all([...fonts, ...images]);
+    await Promise.all([...images]);
   };
   const isDark = useColorScheme() === "dark";
   if (!ready) {
