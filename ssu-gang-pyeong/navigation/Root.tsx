@@ -10,15 +10,19 @@ const Nav = createNativeStackNavigator();
 const Root = () => {
   const { user, updateUser } = useUserGlobalStore();
 
+  // useEffect(() => {
+  //   updateUser({
+  //     username: "",
+  //     email: "",
+  //     school: "",
+  //     major: "",
+  //     courseReviewNum: 0,
+  //     adminAccount: false,
+  //   });
+  // }, []);
+
   useEffect(() => {
-    updateUser({
-      username: "",
-      email: "",
-      school: "",
-      major: "",
-      courseReviewNum: 0,
-      adminAccount: false,
-    });
+    updateUser(null);
   }, []);
 
   return (

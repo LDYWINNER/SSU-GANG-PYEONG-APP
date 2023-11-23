@@ -1,18 +1,17 @@
 import React from "react";
-import { View, Text } from "react-native";
-import { useColorScheme } from "react-native";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { Box, Text } from "../../theme";
+import { useNavigation } from "@react-navigation/native";
+import SafeAreaWrapper from "../SafeAreaWrapper";
+import { AuthScreenNavigationType } from "../../navigation/types";
 
-const Welcome: React.FC<NativeStackScreenProps<any, "Welcome">> = ({
-  navigation: { navigate },
-}) => {
-  const isDark = useColorScheme() === "dark";
+const Welcome = () => {
+  const navigation = useNavigation<AuthScreenNavigationType<"Welcome">>();
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text onPress={() => navigate("AuthStack", { screen: "Register" })}>
-        Welcome
-      </Text>
-    </View>
+    <SafeAreaWrapper>
+      <Box>
+        <Text onPress={() => navigation.navigate("Register")}>Welcome</Text>
+      </Box>
+    </SafeAreaWrapper>
   );
 };
 

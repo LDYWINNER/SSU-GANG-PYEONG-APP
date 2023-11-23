@@ -5,7 +5,7 @@ import { Image, useColorScheme } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Asset } from "expo-asset";
 import { NavigationContainer } from "@react-navigation/native";
-import { ThemeProvider } from "styled-components/native";
+import { ThemeProvider } from "@shopify/restyle";
 import { darkTheme, lightTheme } from "./theme/index";
 import { QueryClient, QueryClientProvider } from "react-query";
 import Root from "./navigation/Root";
