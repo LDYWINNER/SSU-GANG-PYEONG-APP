@@ -1,7 +1,7 @@
 import AppLoading from "expo-app-loading";
 import * as Font from "expo-font";
 import React, { useState } from "react";
-import { Image, useColorScheme } from "react-native";
+import { AppState, Image, useColorScheme } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Asset } from "expo-asset";
 import { NavigationContainer } from "@react-navigation/native";
@@ -11,6 +11,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import Root from "./navigation/Root";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { SWRConfig } from "swr";
 
 const queryClient = new QueryClient();
 
@@ -60,7 +61,40 @@ export default function App({ Ionicons }: Props) {
         <NavigationContainer>
           <GestureHandlerRootView style={{ flex: 1 }}>
             <SafeAreaProvider>
-              <Root />
+              <SWRConfig
+                value={{
+                  provider: () => new Map(),
+                  isVisible: () => {
+                    return true;
+                  },
+                  initFocus(callback) {
+                    let appState = AppState.currentState;
+
+                    const onAppStateChange = (nextAppState: any) => {
+                      /* If it's resuming from background or inactive mode to active one */
+                      if (
+                        appState.match(/inactive|background/) &&
+                        nextAppState === "active"
+                      ) {
+                        callback();
+                      }
+                      appState = nextAppState;
+                    };
+
+                    // Subscribe to the app state change events
+                    const subscription = AppState.addEventListener(
+                      "change",
+                      onAppStateChange
+                    );
+
+                    return () => {
+                      subscription.remove();
+                    };
+                  },
+                }}
+              >
+                <Root />
+              </SWRConfig>
             </SafeAreaProvider>
           </GestureHandlerRootView>
         </NavigationContainer>
