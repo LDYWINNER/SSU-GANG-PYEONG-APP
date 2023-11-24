@@ -33,7 +33,7 @@ const LoginScreen = () => {
     try {
       const { email } = data;
       const _user = await loginUser({
-        email: email.toLowerCase(),
+        email,
       });
       updateUser({
         username: _user.username,
