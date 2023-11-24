@@ -13,11 +13,12 @@ import { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typesc
 import { Picker } from "@react-native-picker/picker";
 import { useColorScheme } from "react-native";
 import colors from "../../colors";
+import { Ionicons } from "@expo/vector-icons";
 
 const SignUpScreen = () => {
   //temp
-  const [school, setSchool] = useState("What school are you in?");
-  const [major, setMajor] = useState("What is your major?");
+  const [school, setSchool] = useState("SBU");
+  const [major, setMajor] = useState("AMS");
 
   const isDark = useColorScheme() === "dark";
 
@@ -42,9 +43,7 @@ const SignUpScreen = () => {
   const onSubmit = async (data: IUser) => {
     try {
       const { username, email, school, major } = data;
-      /**
-       * register user
-       */
+      // register user
       await registerUser({
         username,
         email,
@@ -139,19 +138,64 @@ const SignUpScreen = () => {
           name="email"
         />
         <Box mt="5.5" />
+        <TouchableOpacity onPress={() => togglePicker("school")}>
+          <Text>School</Text>
+          <Box mb="2" />
+          <Box
+            bg="gray500"
+            py="2"
+            borderRadius="rounded-xl"
+            flexDirection="row"
+            alignItems="center"
+            justifyContent="space-between"
+          >
+            <Box width={35} />
+            <Text
+              variant="textSm"
+              fontWeight="700"
+              textAlign="center"
+              color="white"
+            >
+              {school}
+            </Text>
+            <Text textAlign="right" mr="3">
+              <Ionicons name={"caret-down"} color={"white"} size={35} />
+            </Text>
+          </Box>
+        </TouchableOpacity>
+        <Box mb="5.5" />
+        <TouchableOpacity onPress={() => togglePicker("major")}>
+          <Text>Major</Text>
+          <Box mb="2" />
+          <Box
+            bg="gray500"
+            py="2"
+            borderRadius="rounded-xl"
+            flexDirection="row"
+            alignItems="center"
+            justifyContent="space-between"
+          >
+            <Box width={35} />
+            <Text
+              variant="textSm"
+              fontWeight="700"
+              textAlign="center"
+              color="white"
+            >
+              {major}
+            </Text>
+            <Text textAlign="right" mr="3">
+              <Ionicons name={"caret-down"} color={"white"} size={35} />
+            </Text>
+          </Box>
+        </TouchableOpacity>
+        <Box mb="5.5" />
         <Pressable onPress={navigateToLoginScreen}>
           <Text color="primary" textAlign="right">
             Log in?
           </Text>
         </Pressable>
         <Box mb="5.5" />
-        <TouchableOpacity onPress={() => togglePicker("school")}>
-          <Text>{school}</Text>
-        </TouchableOpacity>
-        <Box mb="5.5" />
-        <TouchableOpacity onPress={() => togglePicker("major")}>
-          <Text>{major}</Text>
-        </TouchableOpacity>
 
         <SmoothButton
           label="Register"
