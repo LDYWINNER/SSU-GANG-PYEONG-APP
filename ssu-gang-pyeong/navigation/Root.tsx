@@ -10,6 +10,20 @@ const Nav = createNativeStackNavigator();
 const Root = () => {
   const { user } = useUserGlobalStore();
 
+  // useEffect(() => {
+  //   updateUser({
+  //     username: "",
+  //     email: "",
+  //     school: "",
+  //     major: "",
+  //     courseReviewNum: 0,
+  //     adminAccount: false,
+  //   });
+  // }, []);
+  // useEffect(() => {
+  //   updateUser(null);
+  // }, []);
+
   return (
     <>
       {user ? (
