@@ -1,5 +1,5 @@
 import { Box, Text } from "../theme";
-import { Pressable } from "react-native";
+import { TouchableOpacity } from "react-native";
 
 type ButtonProps = {
   label: string;
@@ -17,7 +17,11 @@ const SmoothButton = ({
   uppercase,
 }: ButtonProps) => {
   return (
-    <Pressable onPress={onPress} onLongPress={onLongPress} disabled={disabled}>
+    <TouchableOpacity
+      onPress={onPress}
+      onLongPress={onLongPress}
+      disabled={disabled}
+    >
       <Box
         bg={disabled ? "gray800" : "primary"}
         py="3.5"
@@ -33,7 +37,7 @@ const SmoothButton = ({
           {label}
         </Text>
       </Box>
-    </Pressable>
+    </TouchableOpacity>
   );
 };
 
