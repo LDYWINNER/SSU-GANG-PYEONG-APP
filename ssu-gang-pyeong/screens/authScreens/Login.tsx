@@ -3,7 +3,7 @@ import { Controller, useForm } from "react-hook-form";
 import { Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { SmoothButton, Input } from "../../components";
-import SafeAreaWrapper from "../SafeAreaWrapper";
+import SafeAreaWrapper from "../../components/SafeAreaWrapper";
 import { AuthScreenNavigationType } from "../../navigation/types";
 import { loginUser } from "../../utils/api";
 import { Box, Text } from "../../theme";

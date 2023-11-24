@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useRef, useState } from "react";
 import { SmoothButton, Input } from "../../components";
 import { Pressable, TouchableOpacity } from "react-native";
-import SafeAreaWrapper from "../SafeAreaWrapper";
+import SafeAreaWrapper from "../../components/SafeAreaWrapper";
 import { AuthScreenNavigationType } from "../../navigation/types";
 import { useNavigation } from "@react-navigation/native";
 import { Controller, useForm } from "react-hook-form";
