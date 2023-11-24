@@ -1,7 +1,12 @@
+//user interface for register
 interface IUser {
+  username: string;
   email: string;
+  school: string;
+  major: string;
 }
 
+// literally authenticated user
 interface IAuthenticatedUser {
   username: string;
   email: string;

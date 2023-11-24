@@ -3,7 +3,6 @@ import { ScrollView, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
 import { useColorScheme } from "react-native";
 import colors from "../colors";
-import { Ionicons } from "@expo/vector-icons";
 import { Rating } from "@kolking/react-native-rating";
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";

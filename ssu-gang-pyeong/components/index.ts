@@ -1,3 +1,4 @@
 import SmoothButton from "./SmoothButton";
+import Input from "./Input";
 
-export { SmoothButton };
+export { SmoothButton, Input };
