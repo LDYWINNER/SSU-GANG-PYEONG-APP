@@ -16,10 +16,6 @@ import colors from "../../colors";
 import { Ionicons } from "@expo/vector-icons";
 
 const SignUpScreen = () => {
-  //temp
-  const [school, setSchool] = useState("SBU");
-  const [major, setMajor] = useState("AMS");
-
   const isDark = useColorScheme() === "dark";
 
   const navigation = useNavigation<AuthScreenNavigationType<"Register">>();
@@ -31,12 +27,14 @@ const SignUpScreen = () => {
     control,
     handleSubmit,
     formState: { errors },
+    watch,
+    setValue,
   } = useForm<IUser>({
     defaultValues: {
       username: "",
       email: "",
-      school: "",
-      major: "",
+      school: "SBU",
+      major: "AMS",
     },
   });
 
@@ -156,7 +154,7 @@ const SignUpScreen = () => {
               textAlign="center"
               color="white"
             >
-              {school}
+              {watch("school")}
             </Text>
             <Text textAlign="right" mr="3">
               <Ionicons name={"caret-down"} color={"white"} size={35} />
@@ -182,7 +180,7 @@ const SignUpScreen = () => {
               textAlign="center"
               color="white"
             >
-              {major}
+              {watch("major")}
             </Text>
             <Text textAlign="right" mr="3">
               <Ionicons name={"caret-down"} color={"white"} size={35} />
@@ -220,10 +218,10 @@ const SignUpScreen = () => {
           <TouchableOpacity
             onPress={() => {
               if (pickerContents === "school") {
-                setSchool(school);
+                setValue("school", watch("school"));
                 handleClosePress();
               } else {
-                setMajor(major);
+                setValue("major", watch("major"));
                 handleClosePress();
               }
             }}
@@ -232,27 +230,43 @@ const SignUpScreen = () => {
           </TouchableOpacity>
         </Box>
         {pickerContents === "school" ? (
-          <Picker
-            ref={pickerRef}
-            selectedValue={school}
-            onValueChange={(itemValue, itemIndex) => setSchool(itemValue)}
-          >
-            <Picker.Item label="SBU" value="SBU" />
-            <Picker.Item label="FIT" value="FIT" />
-          </Picker>
+          <Controller
+            name="school"
+            control={control}
+            rules={{
+              required: true,
+            }}
+            render={({ field: { onChange, value } }) => (
+              <Picker
+                ref={pickerRef}
+                selectedValue={value}
+                onValueChange={onChange}
+              >
+                <Picker.Item label="SBU" value="SBU" />
+                <Picker.Item label="FIT" value="FIT" />
+              </Picker>
+            )}
+          />
         ) : (
-          <Picker
-            ref={pickerRef}
-            selectedValue={major}
-            onValueChange={(itemValue, itemIndex) => setMajor(itemValue)}
-          >
-            <Picker.Item label="AMS" value="AMS" />
-            <Picker.Item label="BM" value="BM" />
-            <Picker.Item label="CS" value="CS" />
-            <Picker.Item label="ECE" value="ECE" />
-            <Picker.Item label="MEC" value="MEC" />
-            <Picker.Item label="TSM" value="TSM" />
-          </Picker>
+          <Controller
+            name="major"
+            control={control}
+            rules={{ required: true }}
+            render={({ field: { onChange, value } }) => (
+              <Picker
+                ref={pickerRef}
+                selectedValue={value}
+                onValueChange={onChange}
+              >
+                <Picker.Item label="AMS" value="AMS" />
+                <Picker.Item label="BM" value="BM" />
+                <Picker.Item label="CS" value="CS" />
+                <Picker.Item label="ECE" value="ECE" />
+                <Picker.Item label="MEC" value="MEC" />
+                <Picker.Item label="TSM" value="TSM" />
+              </Picker>
+            )}
+          />
         )}
       </BottomSheet>
     </SafeAreaWrapper>
