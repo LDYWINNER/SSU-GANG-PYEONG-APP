@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useRef, useState } from "react";
 import { SmoothButton, Input } from "../../components";
-import { Pressable, TouchableOpacity } from "react-native";
+import { TouchableOpacity } from "react-native";
 import SafeAreaWrapper from "../../components/SafeAreaWrapper";
 import { AuthScreenNavigationType } from "../../navigation/types";
 import { useNavigation } from "@react-navigation/native";
@@ -188,11 +188,11 @@ const SignUpScreen = () => {
           </Box>
         </TouchableOpacity>
         <Box mb="5.5" />
-        <Pressable onPress={navigateToLoginScreen}>
+        <TouchableOpacity onPress={navigateToLoginScreen}>
           <Text color="primary" textAlign="right">
             Log in?
           </Text>
-        </Pressable>
+        </TouchableOpacity>
         <Box mb="5.5" />
 
         <SmoothButton

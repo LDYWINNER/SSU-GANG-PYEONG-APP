@@ -1,13 +1,47 @@
 import React from "react";
-import { View, Text } from "react-native";
-import { useColorScheme } from "react-native";
+import { Loader, NavigateBack, SafeAreaWrapper } from "../../components";
+import { Task } from "../../components/tasks";
+import { fetcher } from "../../utils/config";
+import { ITask } from "../../types";
+import { Box, Text } from "../../theme";
+import { FlatList } from "react-native";
+import useSWR from "swr";
 
 const CompletedToDo = () => {
-  const isDark = useColorScheme() === "dark";
+  const {
+    data: tasks,
+    isLoading: isLoadingTasks,
+    mutate: mutateTasks,
+  } = useSWR<ITask[]>(`api/v1/todotask/completed`, fetcher, {
+    refreshInterval: 1000,
+  });
+
+  if (isLoadingTasks || !tasks) {
+    return <Loader />;
+  }
+
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>CompletedToDo</Text>
-    </View>
+    <SafeAreaWrapper>
+      <Box flex={1} mx="4">
+        <Box height={16} />
+        <Box flexDirection="row">
+          <Text variant="textXl" fontWeight="700" ml="3">
+            Completed
+          </Text>
+        </Box>
+        <Box height={16} />
+
+        <FlatList
+          data={tasks}
+          showsVerticalScrollIndicator={false}
+          renderItem={({ item, index }) => {
+            return <Task task={item} mutateTasks={mutateTasks} />;
+          }}
+          ItemSeparatorComponent={() => <Box height={14} />}
+          keyExtractor={(item) => item._id}
+        />
+      </Box>
+    </SafeAreaWrapper>
   );
 };
 

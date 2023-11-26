@@ -10,44 +10,62 @@ import {
   NativeStackScreenProps,
 } from "@react-navigation/native-stack";
 
+export type BulletinStackParamList = {
+  Bulletin: undefined;
+};
+
+export type SearchStackParamList = {
+  Search: undefined;
+};
+
+export type HomeStackParamList = {
+  HomeTopTabs: undefined;
+};
+
+export type ToDoStackParamList = {
+  ToDo: undefined;
+  CreateCategory: {
+    category?: ICategory;
+  };
+  Categories: undefined;
+  Category: {
+    id: string;
+  };
+  CompletedToDo: undefined;
+};
+
+export type NotificationStackParamList = {
+  Notification: undefined;
+};
+
 export type AuthStackParamList = {
   Welcome: undefined;
   Register: undefined;
   Login: undefined;
 };
 
-// below are just boiler template that should be modified for use later
-export type RootBottomTabParamList = {
+export type MainTabsParamList = {
+  BulletinStack: NavigatorScreenParams<BulletinStackParamList>;
+  SearchStack: NavigatorScreenParams<SearchStackParamList>;
   HomeStack: NavigatorScreenParams<HomeStackParamList>;
-  Today: undefined;
-  Completed: undefined;
-  CategoriesStack: NavigatorScreenParams<CategoriesStackParamList>;
+  ToDoStack: NavigatorScreenParams<ToDoStackParamList>;
+  MotificationStack: NavigatorScreenParams<NotificationStackParamList>;
 };
 
-export type HomeStackParamList = {
-  Home: undefined;
-  EditTask: {
-    task: ITask;
-  };
+export type MainStackParamList = {
+  CourseDetail: undefined;
+  CourseReview: undefined;
+  WriteReview: undefined;
+  MyAccount: undefined;
 };
 
-export type CategoriesStackParamList = {
-  Categories: undefined;
-  Category: {
-    id: string;
-  };
-  CreateCategory: {
-    category?: ICategory;
-  };
-};
-
-export type AppStackParamList = {
-  Root: NavigatorScreenParams<RootBottomTabParamList>;
-  Settings: undefined;
+export type MainParamList = {
+  MainTabs: NavigatorScreenParams<MainTabsParamList>;
+  MainStack: NavigatorScreenParams<MainStackParamList>;
 };
 
 export type RootStackParamList = {
-  AppStack: NavigatorScreenParams<AppStackParamList>;
+  Root: NavigatorScreenParams<MainParamList>;
   AuthStack: NavigatorScreenParams<AuthStackParamList>;
 };
 
@@ -61,17 +79,17 @@ export type AuthScreenNavigationType<
   RouteName extends keyof AuthStackParamList
 > = CompositeNavigationProp<
   NativeStackNavigationProp<AuthStackParamList, RouteName>,
-  NativeStackNavigationProp<AppStackParamList, "Root">
+  NativeStackNavigationProp<RootStackParamList, "Root">
 >;
 
-export type RootTabScreenProps<Screen extends keyof RootBottomTabParamList> =
+export type RootTabScreenProps<Screen extends keyof MainTabsParamList> =
   CompositeScreenProps<
-    BottomTabScreenProps<RootBottomTabParamList, Screen>,
-    NativeStackScreenProps<RootBottomTabParamList>
+    BottomTabScreenProps<MainTabsParamList, Screen>,
+    NativeStackScreenProps<MainTabsParamList>
   >;
-
-export type CategoriesNavigationType =
-  NativeStackNavigationProp<CategoriesStackParamList>;
 
 export type HomeScreenNavigationType =
   NativeStackNavigationProp<HomeStackParamList>;
+
+export type ToDoScreenNavigationType =
+  NativeStackNavigationProp<ToDoStackParamList>;

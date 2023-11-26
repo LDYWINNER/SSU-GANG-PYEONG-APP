@@ -1,13 +1,45 @@
 import React from "react";
-import { View, Text } from "react-native";
-import { useColorScheme } from "react-native";
+import { fetcher } from "../../utils/config";
+import { ICategory } from "../../types";
+import { Box, Text } from "../../theme";
+import { Loader, SafeAreaWrapper } from "../../components";
+import { Category, CreateNewList } from "../../components/categories";
+import { FlatList } from "react-native";
+import useSWR from "swr";
 
 const Categories = () => {
-  const isDark = useColorScheme() === "dark";
+  const { data, isLoading, error } = useSWR<ICategory[]>(
+    "api/v1/todocategory/",
+    fetcher,
+    {
+      refreshInterval: 1000,
+    }
+  );
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  const renderItem = ({ item }: { item: ICategory }) => (
+    <Category category={item} />
+  );
+
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>Categories</Text>
-    </View>
+    <SafeAreaWrapper>
+      <Box flex={1} px="4">
+        <Text variant="textXl" fontWeight="700" mb="10">
+          Categories
+        </Text>
+        <FlatList
+          data={data}
+          showsVerticalScrollIndicator={false}
+          renderItem={renderItem}
+          ItemSeparatorComponent={() => <Box height={14} />}
+          keyExtractor={(item) => item._id}
+        />
+        <CreateNewList />
+      </Box>
+    </SafeAreaWrapper>
   );
 };
 

@@ -41,6 +41,7 @@ const HomeTopTabs: React.FC<NativeStackScreenProps<any, "HomeTopTabs">> = ({
   const bgColor = isDark ? colors.BLACK_COLOR : "white";
   const [tableView, setTableView] = useState(true);
   const toggleView = () => setTableView((current) => !current);
+
   const sheetRef = useRef<BottomSheet>(null);
   const snapPoints = useMemo(() => ["30%"], []);
   const handleSnapPress = useCallback(() => {
