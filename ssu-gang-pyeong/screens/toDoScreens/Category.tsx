@@ -28,7 +28,7 @@ const Category = () => {
     isLoading: isLoadingTasks,
     mutate: mutateTasks,
   } = useSWR<ITask[]>(`api/v1/todotask/tasks-by-categories/${id}`, fetcher, {
-    refreshInterval: 1000,
+    refreshInterval: 500,
   });
 
   if (isLoadingTasks || isLoadingCategory || !category || !tasks) {
