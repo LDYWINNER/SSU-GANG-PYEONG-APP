@@ -67,7 +67,7 @@ const HomeScreen = () => {
     data: tasks,
     isLoading,
     mutate: mutateTasks,
-  } = useSWR<ITask[]>("api/v1/todotask/", fetcher);
+  } = useSWR<ITask[]>("api/v1/todotask/today", fetcher);
 
   if (isLoading || !tasks) {
     return <Loader />;

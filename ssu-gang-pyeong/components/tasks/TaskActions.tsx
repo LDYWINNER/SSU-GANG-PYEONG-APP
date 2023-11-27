@@ -64,7 +64,7 @@ const TaskActions = ({ categoryId }: TaskActionsProps) => {
     (_category) => _category._id === newTask.categoryId
   );
 
-  console.log(`selectedCategory`, JSON.stringify(selectedCategory, null, 2));
+  // console.log(`selectedCategory`, JSON.stringify(selectedCategory, null, 2));
 
   const onCreateTask = async () => {
     try {
@@ -136,7 +136,9 @@ const TaskActions = ({ categoryId }: TaskActionsProps) => {
               <Text>
                 {isToday(new Date(newTask.date))
                   ? "Today"
-                  : format(new Date(newTask.date), "MMM dd")}
+                  : `${new Date(newTask.date).getMonth() + 1}/${
+                      new Date(newTask.date).getDate() + 1
+                    }`}
               </Text>
             </Box>
           </TouchableOpacity>
