@@ -115,7 +115,11 @@ const HomeScreen = () => {
               Good {greeting} {user?.username}
             </AnimatedText>
             <Text variant="textXl" fontWeight="500">
-              It’s {dateForHeader.toISOString()}- {tasks.length} tasks
+              It’s{" "}
+              {`${new Date(dateForHeader).getFullYear()}.${
+                new Date(dateForHeader).getMonth() + 1
+              }.${new Date(dateForHeader).getDate() + 1}`}{" "}
+              - {tasks.length} tasks
             </Text>
           </Box>
           <Box flexDirection="row">
