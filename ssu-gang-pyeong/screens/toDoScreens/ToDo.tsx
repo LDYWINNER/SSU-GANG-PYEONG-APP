@@ -26,7 +26,8 @@ import MoreMenu from "./MoreMenu";
 
 const today = new Date();
 
-const todayISODate = new Date().setHours(-5, 0, 0, 0);
+const todayISODate = new Date();
+todayISODate.setHours(-5, 0, 0, 0);
 
 const greeting = getGreeting({ hour: new Date().getHours() });
 
@@ -38,7 +39,7 @@ const HomeScreen = () => {
   // date picking
   const [isSelectingDate, setIsSelectingDate] = useState<boolean>(false);
   const [pickedDate, setPickedDate] = useState(String(todayISODate));
-  const [dateForHeader, setDateForHeader] = useState<Date>(today);
+  const [dateForHeader, setDateForHeader] = useState<Date>(todayISODate);
 
   //bottom sheet
   const sheetRef = useRef<BottomSheet>(null);
@@ -92,6 +93,7 @@ const HomeScreen = () => {
     console.log("is it working?");
     trigger();
     console.log(specificDayTasks);
+    console.log(today);
   }, [pickedDate]);
 
   if (isLoading || !tasks) {
@@ -156,14 +158,21 @@ const HomeScreen = () => {
 
                 setIsSelectingDate(false);
                 const selectedDate = new Date(day.dateString).toISOString();
-                // console.log("selected date");
-                // console.log(selectedDate);
                 setPickedDate(selectedDate);
                 console.log("picked date");
                 console.log(pickedDate);
                 setDateForHeader(parseISO(selectedDate));
                 console.log("date for header");
                 console.log(dateForHeader);
+                console.log(todayISODate);
+                console.log(typeof todayISODate);
+                console.log(typeof parseISO(pickedDate));
+                console.log(todayISODate);
+                console.log(parseISO(pickedDate));
+                console.log(isEqual(todayISODate, parseISO(selectedDate)));
+                console.log("today");
+                console.log(today);
+                console.log(new Date("2023-11-27T21:21:23.477Z").getDate());
               }}
             />
             <Box height={26} />
