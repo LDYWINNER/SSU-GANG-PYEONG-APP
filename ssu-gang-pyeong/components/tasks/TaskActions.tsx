@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axiosInstance, { BASE_URL, fetcher } from "../../utils/config";
 import { ICategory, ITaskRequest } from "../../types";
-import { format, isToday } from "date-fns";
+import { format, isEqual, parseISO } from "date-fns";
 import { FlatList, TouchableOpacity, TextInput } from "react-native";
 import { Calendar } from "react-native-calendars";
 import useSWR, { useSWRConfig } from "swr";
@@ -16,7 +16,7 @@ type TaskActionsProps = {
 export const today = new Date();
 
 export const todaysISODate = new Date();
-todaysISODate.setHours(0, 0, 0, 0);
+todaysISODate.setHours(-5, 0, 0, 0);
 
 const createTaskRequest = async (
   url: string,
@@ -124,6 +124,11 @@ const TaskActions = ({ categoryId }: TaskActionsProps) => {
           <TouchableOpacity
             onPress={() => {
               setIsSelectingDate((prev) => !prev);
+              // console.log("start");
+              // console.log(parseISO(newTask.date));
+              // console.log(new Date(today.setHours(0)));
+              // console.log(todaysISODate);
+              // console.log(isEqual(parseISO(newTask.date), todaysISODate));
             }}
           >
             <Box
@@ -134,7 +139,7 @@ const TaskActions = ({ categoryId }: TaskActionsProps) => {
               borderRadius="rounded-xl"
             >
               <Text>
-                {isToday(new Date(newTask.date))
+                {isEqual(todaysISODate, parseISO(newTask.date))
                   ? "Today"
                   : `${new Date(newTask.date).getMonth() + 1}/${
                       new Date(newTask.date).getDate() + 1
@@ -228,6 +233,9 @@ const TaskActions = ({ categoryId }: TaskActionsProps) => {
           <Calendar
             minDate={format(today, "Y-MM-dd")}
             onDayPress={(day) => {
+              // console.log("here day");
+              // console.log(new Date(day.dateString).toISOString());
+
               setIsSelectingDate(false);
               const selectedDate = new Date(day.dateString).toISOString();
               setNewTask((prev) => {
