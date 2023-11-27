@@ -38,7 +38,7 @@ const HomeScreen = () => {
 
   // date picking
   const [isSelectingDate, setIsSelectingDate] = useState<boolean>(false);
-  const [pickedDate, setPickedDate] = useState(String(todayISODate));
+  const [pickedDate, setPickedDate] = useState(todayISODate.toISOString());
   const [dateForHeader, setDateForHeader] = useState<Date>(todayISODate);
 
   //bottom sheet
@@ -78,6 +78,7 @@ const HomeScreen = () => {
     []
   );
 
+  //later change
   const {
     data: tasks,
     isLoading,
@@ -90,13 +91,11 @@ const HomeScreen = () => {
   );
 
   useEffect(() => {
-    console.log("is it working?");
     trigger();
-    console.log(specificDayTasks);
-    console.log(today);
+    // console.log(specificDayTasks);
   }, [pickedDate]);
 
-  if (isLoading || !tasks) {
+  if (isLoading || !specificDayTasks) {
     return <Loader />;
   }
 
@@ -121,7 +120,7 @@ const HomeScreen = () => {
               {`${new Date(dateForHeader).getFullYear()}.${
                 new Date(dateForHeader).getMonth() + 1
               }.${new Date(dateForHeader).getDate() + 1}`}{" "}
-              - {tasks.length} tasks
+              - {specificDayTasks.length} tasks
             </Text>
           </Box>
           <Box flexDirection="row">
@@ -153,26 +152,10 @@ const HomeScreen = () => {
           <Box>
             <Calendar
               onDayPress={(day) => {
-                // console.log("here day");
-                // console.log(new Date(day.dateString).toISOString());
-
                 setIsSelectingDate(false);
                 const selectedDate = new Date(day.dateString).toISOString();
                 setPickedDate(selectedDate);
-                console.log("picked date");
-                console.log(pickedDate);
                 setDateForHeader(parseISO(selectedDate));
-                console.log("date for header");
-                console.log(dateForHeader);
-                console.log(todayISODate);
-                console.log(typeof todayISODate);
-                console.log(typeof parseISO(pickedDate));
-                console.log(todayISODate);
-                console.log(parseISO(pickedDate));
-                console.log(isEqual(todayISODate, parseISO(selectedDate)));
-                console.log("today");
-                console.log(today);
-                console.log(new Date("2023-11-27T21:21:23.477Z").getDate());
               }}
             />
             <Box height={26} />
@@ -181,12 +164,7 @@ const HomeScreen = () => {
         <TaskActions categoryId="" />
         <Box height={26} />
         <FlatList
-          data={
-            specificDayTasks
-            // isEqual(todayISODate, parseISO(pickedDate))
-            //   ? specificDayTasks
-            //   : tasks
-          }
+          data={specificDayTasks}
           renderItem={({ item }) => (
             <Task task={item} mutateTasks={mutateTasks} />
           )}
