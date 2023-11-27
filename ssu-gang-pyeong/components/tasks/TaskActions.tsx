@@ -105,7 +105,7 @@ const TaskActions = ({ categoryId }: TaskActionsProps) => {
             paddingVertical: 8,
             paddingHorizontal: 8,
             fontSize: 16,
-            width: "50%",
+            width: "70%",
           }}
           maxLength={36}
           textAlignVertical="center"

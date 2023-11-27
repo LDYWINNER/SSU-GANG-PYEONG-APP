@@ -76,7 +76,11 @@ const HomeScreen = () => {
   return (
     <SafeAreaWrapper>
       <Box flex={1} mx="4">
-        <Box flexDirection="row">
+        <Box
+          flexDirection="row"
+          justifyContent="space-between"
+          alignItems="center"
+        >
           <Box>
             <AnimatedText
               variant="textXl"
