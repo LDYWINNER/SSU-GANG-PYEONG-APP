@@ -58,3 +58,24 @@ interface ITaskRequest {
   categoryId: string;
   date: string;
 }
+
+interface ICourse {
+  _id: string;
+  classNbr: string;
+  subj: string;
+  crs: string;
+  courseTitle: string;
+  sbc: string;
+  cmp: string;
+  sctn: string;
+  credits: string;
+  day: string;
+  startTime: string;
+  endTime: string;
+  room: string;
+  instructor: [string];
+  instructor_names: string;
+  likes: [string];
+  reviews: Schema.Types.ObjectId[];
+  semesters: [string];
+}
