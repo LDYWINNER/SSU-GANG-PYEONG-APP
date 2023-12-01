@@ -78,4 +78,5 @@ interface ICourse {
   likes: [string];
   reviews: Schema.Types.ObjectId[];
   semesters: [string];
+  avgGrade: number;
 }
