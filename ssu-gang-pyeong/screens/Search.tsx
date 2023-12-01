@@ -117,11 +117,18 @@ const Search = () => {
                     {item.subj} {item.crs}
                   </Text>
                   <Box>
-                    <Text>{instructors[index]}</Text>
+                    {/* <Text>{instructors[index]}</Text> */}
+                    {instructors[index].includes(",") ? (
+                      instructors[index]
+                        .split(", ")
+                        .map((prof, index) => <Text key={index}>{prof}</Text>)
+                    ) : (
+                      <Text>{instructors[index]}</Text>
+                    )}
                   </Box>
                 </Box>
-                <Box>
-                  <Text>
+                <Box justifyContent="center" alignItems="flex-end">
+                  <Text mb="1">
                     {item.avgGrade ? (
                       <Rating
                         rating={Number(item.avgGrade.toFixed(1))}
