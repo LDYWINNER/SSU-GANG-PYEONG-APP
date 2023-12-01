@@ -3,7 +3,7 @@ import useSWR, { useSWRConfig } from "swr";
 import useSWRMutation from "swr/mutation";
 import axiosInstance, { fetcher } from "../utils/config";
 import { Controller, useForm } from "react-hook-form";
-import { SafeAreaWrapper, SmoothButton, Input, Loader } from "../components";
+import { SafeAreaWrapper, Input, Loader } from "../components";
 import { Box, Text } from "../theme";
 import { ICourse } from "../types";
 import { FlatList, TouchableOpacity } from "react-native";
