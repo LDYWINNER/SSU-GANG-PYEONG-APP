@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState, useRef, useMemo } from "react";
 import useSWR, { useSWRConfig } from "swr";
 import useSWRMutation from "swr/mutation";
 import axiosInstance, { fetcher } from "../utils/config";
@@ -8,13 +8,22 @@ import { Box, Text } from "../theme";
 import { ICourse } from "../types";
 import { FlatList, TouchableOpacity } from "react-native";
 import { Rating } from "@kolking/react-native-rating";
+import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
+import { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";
+import { Picker } from "@react-native-picker/picker";
+import { TextInput } from "react-native-gesture-handler";
+import { useTheme } from "@shopify/restyle";
+import { Theme } from "../theme";
+import { Ionicons } from "@expo/vector-icons";
 
 interface ISearch {
   keyword: string;
 }
 
 const Search = () => {
+  const theme = useTheme<Theme>();
   const instructors: string[] = [];
+  const [searchSubj, SetSearchSubj] = useState<string>("AMS");
 
   const {
     control,
@@ -39,6 +48,47 @@ const Search = () => {
 
   const toFindDuplicates = (arr: string[]) =>
     arr.filter((item, index) => arr.indexOf(item) !== index);
+
+  //bottom sheet
+  const sheetRef = useRef<BottomSheet>(null);
+  const snapPoints = useMemo(() => ["30%"], []);
+  const handleSnapPress = useCallback(() => {
+    sheetRef.current?.snapToIndex(0);
+  }, []);
+  const handleClosePress = useCallback(() => {
+    sheetRef.current?.close();
+  }, []);
+  const [picker, setPicker] = useState(true);
+  const [pickerContents, setPickerContents] = useState("");
+  const pickerRef = useRef<Picker<string>>(null);
+  const togglePicker = (index: string) => {
+    if (picker) {
+      handleSnapPress();
+      setPicker(false);
+      setPickerContents(index);
+    } else {
+      handleClosePress();
+      setPicker(true);
+      setPickerContents(index);
+    }
+  };
+  const handleSheetChange = useCallback((index: any) => {
+    if (index == -1) {
+      setPicker(true);
+    }
+  }, []);
+  const renderBackdrop = useCallback(
+    (
+      props: React.JSX.IntrinsicAttributes & BottomSheetDefaultBackdropProps
+    ) => (
+      <BottomSheetBackdrop
+        {...props}
+        disappearsOnIndex={-1}
+        appearsOnIndex={1}
+      />
+    ),
+    []
+  );
 
   if (isCourseLoading) {
     return <Loader />;
@@ -68,24 +118,55 @@ const Search = () => {
 
   return (
     <SafeAreaWrapper>
-      <Controller
-        control={control}
-        rules={{
-          required: true,
-        }}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <Input
-            label="Search keyword"
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-            placeholder="Search keyword"
-            error={errors.keyword}
-          />
-        )}
-        name="keyword"
-      />
+      <Box flexDirection="row" alignItems="center">
+        <TouchableOpacity onPress={() => togglePicker("searchSubj")}>
+          <Box flexDirection="row" alignItems="center" p="4">
+            <Ionicons
+              name="chevron-down"
+              size={24}
+              color={theme.colors.gray5}
+            />
+            <Text variant="text2Xl" marginLeft={"2"}>
+              {searchSubj}
+            </Text>
+          </Box>
+        </TouchableOpacity>
+
+        <Controller
+          control={control}
+          rules={{
+            required: true,
+          }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <Box
+              bg="gray250"
+              borderRadius="rounded-2xl"
+              flexDirection="row"
+              alignItems="center"
+              px="4"
+              width={"70%"}
+            >
+              <Ionicons name="search" size={24} color={theme.colors.gray5} />
+              <TextInput
+                onBlur={onBlur}
+                onChangeText={onChange}
+                placeholder="Search with keywords"
+                style={{
+                  fontSize: 20,
+                  lineHeight: 26,
+                  padding: 16,
+                }}
+                value={value}
+                maxLength={36}
+                placeholderTextColor={theme.colors.gray5}
+              />
+            </Box>
+          )}
+          name="keyword"
+        />
+      </Box>
       <Box mb="6" />
+
       <FlatList
         data={allCourses}
         renderItem={({ item, index }) => {
@@ -147,6 +228,42 @@ const Search = () => {
           );
         }}
       />
+      <BottomSheet
+        index={-1}
+        ref={sheetRef}
+        snapPoints={snapPoints}
+        enablePanDownToClose={true}
+        enableContentPanningGesture={false}
+        onChange={handleSheetChange}
+        backdropComponent={renderBackdrop}
+        // backgroundStyle={{
+        //   backgroundColor: isDark ? colors.DARKER_GREY : "white",
+        // }}
+      >
+        <Box>
+          <TouchableOpacity
+            onPress={() => {
+              SetSearchSubj(searchSubj);
+              handleClosePress();
+            }}
+          >
+            <Text>확인</Text>
+          </TouchableOpacity>
+        </Box>
+        <Picker
+          ref={pickerRef}
+          selectedValue={searchSubj}
+          onValueChange={(itemValue, itemIndex) => SetSearchSubj(itemValue)}
+        >
+          <Picker.Item label="AMS" value="AMS" />
+          <Picker.Item label="ACC/BUS" value="ACC/BUS" />
+          <Picker.Item label="CSE" value="CSE" />
+          <Picker.Item label="ESE" value="ESE" />
+          <Picker.Item label="EST/EMP" value="EST/EMP" />
+          <Picker.Item label="MEC" value="MEC" />
+          <Picker.Item label="교양/Writing" value="SH/Writing" />
+        </Picker>
+      </BottomSheet>
     </SafeAreaWrapper>
   );
 };
