@@ -54,16 +54,11 @@ const Search: React.FC<NativeStackScreenProps<any, "Search">> = ({
     }
   };
 
-  const { data: allCourses, isLoading: isCourseLoading } = useSWR<ICourse[]>(
-    "api/v1/course?searchSubj=ALL",
-    fetcher
-  );
-
   const { data, trigger } = useSWRMutation<{
     queryCourses: ICourse[];
     totalCourses: number;
   }>(
-    watch("keyword") === undefined
+    watch("keyword") === undefined || watch("keyword") === ""
       ? `api/v1/course?searchSubj=${searchSubj}`
       : `api/v1/course?searchSubj=${searchSubj}&keyword=${watch("keyword")}`,
     fetcher
@@ -115,7 +110,11 @@ const Search: React.FC<NativeStackScreenProps<any, "Search">> = ({
     []
   );
 
-  if (isCourseLoading) {
+  useEffect(() => {
+    trigger();
+  }, []);
+
+  if (!data) {
     return <Loader />;
   } else {
     if (isSearching && data?.queryCourses) {
@@ -141,30 +140,7 @@ const Search: React.FC<NativeStackScreenProps<any, "Search">> = ({
         }
       }
       console.log(instructors);
-    } else {
-      for (let index = 0; index < allCourses!.length; index++) {
-        if (allCourses![index].instructor_names.includes(",")) {
-          const duplicateElements = toFindDuplicates(
-            allCourses![index].instructor
-          );
-          if (duplicateElements.length === 0) {
-            instructors.push(allCourses![index].instructor_names);
-          } else {
-            const temp = allCourses![index].instructor;
-            for (let i = 0; i < duplicateElements.length; i++) {
-              const firstIndex = temp.indexOf(duplicateElements[i]);
-              while (temp.lastIndexOf(duplicateElements[i]) !== firstIndex) {
-                temp.splice(temp.lastIndexOf(duplicateElements[i]), 1);
-              }
-            }
-            instructors.push(temp.join(","));
-          }
-        } else {
-          instructors.push(allCourses![index].instructor_names);
-        }
-      }
     }
-    console.log(instructors);
   }
 
   return (
@@ -220,7 +196,7 @@ const Search: React.FC<NativeStackScreenProps<any, "Search">> = ({
       <Box mb="6" />
 
       <FlatList
-        data={isSearching ? data?.queryCourses : allCourses}
+        data={data!.queryCourses}
         renderItem={({ item, index }) => {
           return (
             <TouchableOpacity onPress={() => navigateToCourseDetail(item._id)}>
