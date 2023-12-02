@@ -1,11 +1,17 @@
-import React, { useCallback, useState, useRef, useMemo } from "react";
-import useSWR, { useSWRConfig } from "swr";
+import React, {
+  useCallback,
+  useState,
+  useRef,
+  useMemo,
+  useEffect,
+} from "react";
+import useSWR, { mutate, useSWRConfig } from "swr";
 import useSWRMutation from "swr/mutation";
 import axiosInstance, { fetcher } from "../utils/config";
 import { Controller, useForm } from "react-hook-form";
 import { SafeAreaWrapper, Input, Loader } from "../components";
 import { Box, Text } from "../theme";
-import { ICourse } from "../types";
+import { ICourse, ICourseRequest } from "../types";
 import { FlatList, TouchableOpacity } from "react-native";
 import { Rating } from "@kolking/react-native-rating";
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
@@ -23,13 +29,10 @@ interface ISearch {
 const Search = () => {
   const theme = useTheme<Theme>();
   const instructors: string[] = [];
-  const [searchSubj, SetSearchSubj] = useState<string>("AMS");
+  const [searchSubj, setSearchSubj] = useState<string>("ALL");
+  const [isSearching, setIsSearching] = useState<boolean>(false);
 
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<ISearch>({
+  const { control, handleSubmit, watch } = useForm<ISearch>({
     defaultValues: {
       keyword: "",
     },
@@ -37,14 +40,35 @@ const Search = () => {
 
   const onSubmit = async (data: ISearch) => {
     try {
-      const { keyword } = data;
-    } catch (error) {}
+      await trigger();
+    } catch (error) {
+      console.log("error in submitting search course", error);
+      throw error;
+    }
   };
 
   const { data: allCourses, isLoading: isCourseLoading } = useSWR<ICourse[]>(
-    "api/v1/course/all",
+    "api/v1/course?searchSubj=ALL",
     fetcher
   );
+
+  const { data, trigger } = useSWRMutation<{
+    queryCourses: ICourse[];
+    totalCourses: number;
+  }>(
+    watch("keyword") === undefined
+      ? `api/v1/course?searchSubj=${searchSubj}`
+      : `api/v1/course?searchSubj=${searchSubj}&keyword=${watch("keyword")}`,
+    fetcher
+  );
+
+  useEffect(() => {
+    if (watch("keyword") === undefined || watch("keyword") === "") {
+      setIsSearching(false);
+    } else {
+      setIsSearching(true);
+    }
+  }, [watch("keyword")]);
 
   const toFindDuplicates = (arr: string[]) =>
     arr.filter((item, index) => arr.indexOf(item) !== index);
@@ -76,6 +100,7 @@ const Search = () => {
     if (index == -1) {
       setPicker(true);
     }
+    trigger();
   }, []);
   const renderBackdrop = useCallback(
     (
@@ -159,6 +184,7 @@ const Search = () => {
                 value={value}
                 maxLength={36}
                 placeholderTextColor={theme.colors.gray5}
+                onSubmitEditing={handleSubmit(onSubmit)}
               />
             </Box>
           )}
@@ -168,7 +194,7 @@ const Search = () => {
       <Box mb="6" />
 
       <FlatList
-        data={allCourses}
+        data={isSearching ? data?.queryCourses : allCourses}
         renderItem={({ item, index }) => {
           return (
             <TouchableOpacity>
@@ -243,7 +269,7 @@ const Search = () => {
         <Box>
           <TouchableOpacity
             onPress={() => {
-              SetSearchSubj(searchSubj);
+              setSearchSubj(searchSubj);
               handleClosePress();
             }}
           >
@@ -253,7 +279,7 @@ const Search = () => {
         <Picker
           ref={pickerRef}
           selectedValue={searchSubj}
-          onValueChange={(itemValue, itemIndex) => SetSearchSubj(itemValue)}
+          onValueChange={(itemValue, itemIndex) => setSearchSubj(itemValue)}
         >
           <Picker.Item label="AMS" value="AMS" />
           <Picker.Item label="ACC/BUS" value="ACC/BUS" />

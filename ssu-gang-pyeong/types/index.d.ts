@@ -59,6 +59,11 @@ interface ITaskRequest {
   date: string;
 }
 
+interface ICourseRequest {
+  searchSubj: string;
+  keyword: string;
+}
+
 interface ICourse {
   _id: string;
   classNbr: string;
