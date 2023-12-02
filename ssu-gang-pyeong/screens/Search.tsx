@@ -318,7 +318,7 @@ const Search: React.FC<NativeStackScreenProps<any, "Search">> = ({
           <Picker.Item label="ESE" value="ESE" />
           <Picker.Item label="EST/EMP" value="EST/EMP" />
           <Picker.Item label="MEC" value="MEC" />
-          <Picker.Item label="교양/Writing" value="SH/Writing" />
+          <Picker.Item label="교양/Writing" value="SHCourse" />
         </Picker>
       </BottomSheet>
     </SafeAreaWrapper>
