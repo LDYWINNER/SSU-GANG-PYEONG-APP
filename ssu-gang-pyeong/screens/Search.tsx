@@ -106,9 +106,9 @@ const Search: React.FC<NativeStackScreenProps<any, "Search">> = ({
   const handleSheetChange = useCallback((index: any) => {
     if (index == -1) {
       setPicker(true);
+      setIsSearching(true);
+      trigger();
     }
-    setIsSearching(true);
-    trigger();
   }, []);
   const renderBackdrop = useCallback(
     (
