@@ -249,7 +249,6 @@ const Search = () => {
                     {item.subj} {item.crs}
                   </Text>
                   <Box>
-                    {/* <Text>{instructors[index]}</Text> */}
                     {instructors[index].includes(",") ? (
                       instructors[index]
                         .split(", ")

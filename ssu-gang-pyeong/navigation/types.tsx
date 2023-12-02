@@ -53,7 +53,9 @@ export type MainTabsParamList = {
 };
 
 export type MainStackParamList = {
-  CourseDetail: undefined;
+  CourseDetail: {
+    id: string;
+  };
   CourseReview: undefined;
   WriteReview: undefined;
   MyAccount: undefined;
