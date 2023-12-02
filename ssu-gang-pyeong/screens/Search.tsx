@@ -21,16 +21,23 @@ import { TextInput } from "react-native-gesture-handler";
 import { useTheme } from "@shopify/restyle";
 import { Theme } from "../theme";
 import { Ionicons } from "@expo/vector-icons";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 interface ISearch {
   keyword: string;
 }
 
-const Search = () => {
+const Search: React.FC<NativeStackScreenProps<any, "Search">> = ({
+  navigation: { navigate },
+}) => {
   const theme = useTheme<Theme>();
   const instructors: string[] = [];
   const [searchSubj, setSearchSubj] = useState<string>("ALL");
   const [isSearching, setIsSearching] = useState<boolean>(false);
+
+  const navigateToCourseDetail = (courseId: string) => {
+    navigate("MainStack", { screen: "CourseDetail", params: { id: courseId } });
+  };
 
   const { control, handleSubmit, watch } = useForm<ISearch>({
     defaultValues: {
@@ -222,7 +229,7 @@ const Search = () => {
         data={isSearching ? data?.queryCourses : allCourses}
         renderItem={({ item, index }) => {
           return (
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigateToCourseDetail(item._id)}>
               <Box
                 borderRadius="rounded-xl"
                 bg={

@@ -95,3 +95,6 @@ export type HomeScreenNavigationType =
 
 export type ToDoScreenNavigationType =
   NativeStackNavigationProp<ToDoStackParamList>;
+
+export type MainStackNavigationType =
+  NativeStackNavigationProp<MainStackParamList>;

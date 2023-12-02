@@ -23,7 +23,7 @@ const CourseDetail = () => {
 
   return (
     <Box>
-      <Text>CourseDetail</Text>
+      <Text>{id}</Text>
     </Box>
   );
 };
