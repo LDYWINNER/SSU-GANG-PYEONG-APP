@@ -33,7 +33,7 @@ const Search: React.FC<NativeStackScreenProps<any, "Search">> = ({
   const theme = useTheme<Theme>();
   const instructors: string[] = [];
   const [searchSubj, setSearchSubj] = useState<string>("ALL");
-  const [isSearching, setIsSearching] = useState<boolean>(false);
+  const [isSearching, setIsSearching] = useState<boolean>(true);
 
   const navigateToCourseDetail = (courseId: string) => {
     navigate("MainStack", { screen: "CourseDetail", params: { id: courseId } });
@@ -68,14 +68,6 @@ const Search: React.FC<NativeStackScreenProps<any, "Search">> = ({
       : `api/v1/course?searchSubj=${searchSubj}&keyword=${watch("keyword")}`,
     fetcher
   );
-
-  useEffect(() => {
-    if (watch("keyword") === undefined || watch("keyword") === "") {
-      setIsSearching(false);
-    } else {
-      setIsSearching(true);
-    }
-  }, [watch("keyword")]);
 
   const toFindDuplicates = (arr: string[]) =>
     arr.filter((item, index) => arr.indexOf(item) !== index);
@@ -148,6 +140,7 @@ const Search: React.FC<NativeStackScreenProps<any, "Search">> = ({
           instructors.push(data!.queryCourses![index].instructor_names);
         }
       }
+      console.log(instructors);
     } else {
       for (let index = 0; index < allCourses!.length; index++) {
         if (allCourses![index].instructor_names.includes(",")) {
@@ -171,6 +164,7 @@ const Search: React.FC<NativeStackScreenProps<any, "Search">> = ({
         }
       }
     }
+    console.log(instructors);
   }
 
   return (
