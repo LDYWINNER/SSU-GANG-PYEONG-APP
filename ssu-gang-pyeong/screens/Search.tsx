@@ -100,6 +100,7 @@ const Search = () => {
     if (index == -1) {
       setPicker(true);
     }
+    setIsSearching(true);
     trigger();
   }, []);
   const renderBackdrop = useCallback(
@@ -118,25 +119,49 @@ const Search = () => {
   if (isCourseLoading) {
     return <Loader />;
   } else {
-    for (let index = 0; index < allCourses!.length; index++) {
-      if (allCourses![index].instructor_names.includes(",")) {
-        const duplicateElements = toFindDuplicates(
-          allCourses![index].instructor
-        );
-        if (duplicateElements.length === 0) {
-          instructors.push(allCourses![index].instructor_names);
-        } else {
-          const temp = allCourses![index].instructor;
-          for (let i = 0; i < duplicateElements.length; i++) {
-            const firstIndex = temp.indexOf(duplicateElements[i]);
-            while (temp.lastIndexOf(duplicateElements[i]) !== firstIndex) {
-              temp.splice(temp.lastIndexOf(duplicateElements[i]), 1);
+    if (isSearching && data?.queryCourses) {
+      for (let index = 0; index < data!.queryCourses!.length; index++) {
+        if (data!.queryCourses![index].instructor_names.includes(",")) {
+          const duplicateElements = toFindDuplicates(
+            data!.queryCourses![index].instructor
+          );
+          if (duplicateElements.length === 0) {
+            instructors.push(data!.queryCourses![index].instructor_names);
+          } else {
+            const temp = data!.queryCourses![index].instructor;
+            for (let i = 0; i < duplicateElements.length; i++) {
+              const firstIndex = temp.indexOf(duplicateElements[i]);
+              while (temp.lastIndexOf(duplicateElements[i]) !== firstIndex) {
+                temp.splice(temp.lastIndexOf(duplicateElements[i]), 1);
+              }
             }
+            instructors.push(temp.join(","));
           }
-          instructors.push(temp.join(","));
+        } else {
+          instructors.push(data!.queryCourses![index].instructor_names);
         }
-      } else {
-        instructors.push(allCourses![index].instructor_names);
+      }
+    } else {
+      for (let index = 0; index < allCourses!.length; index++) {
+        if (allCourses![index].instructor_names.includes(",")) {
+          const duplicateElements = toFindDuplicates(
+            allCourses![index].instructor
+          );
+          if (duplicateElements.length === 0) {
+            instructors.push(allCourses![index].instructor_names);
+          } else {
+            const temp = allCourses![index].instructor;
+            for (let i = 0; i < duplicateElements.length; i++) {
+              const firstIndex = temp.indexOf(duplicateElements[i]);
+              while (temp.lastIndexOf(duplicateElements[i]) !== firstIndex) {
+                temp.splice(temp.lastIndexOf(duplicateElements[i]), 1);
+              }
+            }
+            instructors.push(temp.join(","));
+          }
+        } else {
+          instructors.push(allCourses![index].instructor_names);
+        }
       }
     }
   }
