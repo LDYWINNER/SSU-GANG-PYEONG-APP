@@ -8,6 +8,7 @@ import { ICourse } from "../types";
 import { MainStackParamList } from "../navigation/types";
 import { Loader, NavigateBack, SafeAreaWrapper } from "../components";
 import { Rating } from "@kolking/react-native-rating";
+import { Table, Row, Rows } from "react-native-reanimated-table";
 
 type CourseDetailScreenRouteProp = RouteProp<
   MainStackParamList,
@@ -17,6 +18,7 @@ type CourseDetailScreenRouteProp = RouteProp<
 const CourseDetail = () => {
   const theme = useTheme<Theme>();
   const route = useRoute<CourseDetailScreenRouteProp>();
+  const result = [];
 
   const { id } = route.params;
 
@@ -27,6 +29,21 @@ const CourseDetail = () => {
 
   if (isLoadingCourse) {
     return <Loader />;
+  } else {
+    for (let i = 0; i < course!.semesters.length; i++) {
+      const temp = [];
+      if (course?.semesters[i] === "2023_spring") {
+        temp.push("2023 SPR");
+      } else if (course?.semesters[i] === "2022_fall") {
+        temp.push("2022 FA");
+      }
+
+      temp.push(course?.day.split(", ")[i]);
+      temp.push(course?.startTime.split(", ")[i]);
+      temp.push(course?.endTime.split(", ")[i]);
+      temp.push(course?.room);
+      result.unshift(temp);
+    }
   }
   return (
     <SafeAreaWrapper>
@@ -59,11 +76,16 @@ const CourseDetail = () => {
           </Text>
           <Text variant="textBase">Credits: {course?.credits}</Text>
           <Text variant="textBase">Sbc: {course?.sbc}</Text>
-          <Text variant="textBase">
-            Semester: {course?.semesters.join(", ")}
-          </Text>
-          <Text variant="textBase">Day: {course?.courseTitle}</Text>
-          <Text variant="textBase">Time: {course?.courseTitle}</Text>
+          <Box height={16} />
+
+          <Table borderStyle={{ borderWidth: 2, borderColor: "#c8e1ff" }}>
+            <Row
+              data={["Semester", "Day", "Start Time", "End Time", "Location"]}
+              style={{ height: 40, backgroundColor: "#f1f8ff" }}
+              textStyle={{ margin: 6 }}
+            />
+            <Rows data={result} textStyle={{ margin: 6 }} />
+          </Table>
         </Box>
         <Box height={16} />
 
