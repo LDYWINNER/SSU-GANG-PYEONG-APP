@@ -23,7 +23,7 @@ const MainStack = () => {
       <NativeStack.Screen
         name="CourseDetail"
         component={CourseDetail}
-        options={{ presentation: "modal" }}
+        options={{ presentation: "modal", headerShown: false }}
       />
       <NativeStack.Screen
         name="CourseReview"
