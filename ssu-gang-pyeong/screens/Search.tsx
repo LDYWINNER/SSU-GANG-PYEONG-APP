@@ -123,7 +123,7 @@ const Search: React.FC<NativeStackScreenProps<any, "Search">> = ({
               color={theme.colors.gray5}
             />
             <Text variant="text2Xl" marginLeft={"2"}>
-              {searchSubj}
+              {searchSubj === "SHCourse" ? "교양/Writing" : searchSubj}
             </Text>
           </Box>
         </TouchableOpacity>
