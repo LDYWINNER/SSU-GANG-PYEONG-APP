@@ -75,7 +75,9 @@ const CourseDetail = () => {
               : course?.unique_instructor}
           </Text>
           <Text variant="textBase">Credits: {course?.credits}</Text>
-          <Text variant="textBase">Sbc: {course?.sbc}</Text>
+          <Text variant="textBase">
+            Sbc: {course?.sbc === "NaN" ? "X" : course?.sbc}
+          </Text>
           <Box height={16} />
 
           <Table borderStyle={{ borderWidth: 2, borderColor: "#c8e1ff" }}>
