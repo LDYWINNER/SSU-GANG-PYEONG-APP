@@ -80,7 +80,7 @@ const CourseDetail = () => {
 
           <Table borderStyle={{ borderWidth: 2, borderColor: "#c8e1ff" }}>
             <Row
-              data={["Semester", "Day", "Start Time", "End Time", "Location"]}
+              data={["Semester", "Day", "Start", "End", "Location"]}
               style={{ height: 40, backgroundColor: "#f1f8ff" }}
               textStyle={{ margin: 6 }}
             />
