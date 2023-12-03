@@ -31,9 +31,7 @@ const Search: React.FC<NativeStackScreenProps<any, "Search">> = ({
   navigation: { navigate },
 }) => {
   const theme = useTheme<Theme>();
-  const instructors: string[] = [];
   const [searchSubj, setSearchSubj] = useState<string>("ALL");
-  const [isSearching, setIsSearching] = useState<boolean>(true);
 
   const navigateToCourseDetail = (courseId: string) => {
     navigate("MainStack", { screen: "CourseDetail", params: { id: courseId } });
@@ -64,9 +62,6 @@ const Search: React.FC<NativeStackScreenProps<any, "Search">> = ({
     fetcher
   );
 
-  const toFindDuplicates = (arr: string[]) =>
-    arr.filter((item, index) => arr.indexOf(item) !== index);
-
   //bottom sheet
   const sheetRef = useRef<BottomSheet>(null);
   const snapPoints = useMemo(() => ["30%"], []);
@@ -93,7 +88,6 @@ const Search: React.FC<NativeStackScreenProps<any, "Search">> = ({
   const handleSheetChange = useCallback((index: any) => {
     if (index == -1) {
       setPicker(true);
-      setIsSearching(true);
       trigger();
     }
   }, []);
@@ -116,31 +110,6 @@ const Search: React.FC<NativeStackScreenProps<any, "Search">> = ({
 
   if (!data) {
     return <Loader />;
-  } else {
-    if (isSearching && data?.queryCourses) {
-      for (let index = 0; index < data!.queryCourses!.length; index++) {
-        if (data!.queryCourses![index].instructor_names.includes(",")) {
-          const duplicateElements = toFindDuplicates(
-            data!.queryCourses![index].instructor
-          );
-          if (duplicateElements.length === 0) {
-            instructors.push(data!.queryCourses![index].instructor_names);
-          } else {
-            const temp = data!.queryCourses![index].instructor;
-            for (let i = 0; i < duplicateElements.length; i++) {
-              const firstIndex = temp.indexOf(duplicateElements[i]);
-              while (temp.lastIndexOf(duplicateElements[i]) !== firstIndex) {
-                temp.splice(temp.lastIndexOf(duplicateElements[i]), 1);
-              }
-            }
-            instructors.push(temp.join(","));
-          }
-        } else {
-          instructors.push(data!.queryCourses![index].instructor_names);
-        }
-      }
-      console.log(instructors);
-    }
   }
 
   return (
@@ -226,12 +195,14 @@ const Search: React.FC<NativeStackScreenProps<any, "Search">> = ({
                     {item.subj} {item.crs}
                   </Text>
                   <Box>
-                    {instructors[index].includes(",") ? (
-                      instructors[index]
+                    {data.queryCourses[index].unique_instructor.includes(
+                      ","
+                    ) ? (
+                      data.queryCourses[index].unique_instructor
                         .split(", ")
                         .map((prof, index) => <Text key={index}>{prof}</Text>)
                     ) : (
-                      <Text>{instructors[index]}</Text>
+                      <Text>{data.queryCourses[index].unique_instructor}</Text>
                     )}
                   </Box>
                 </Box>

@@ -78,8 +78,9 @@ interface ICourse {
   startTime: string;
   endTime: string;
   room: string;
-  instructor: [string];
-  instructor_names: string;
+  instructor: [string]; //instructor 학기별(순서별)로 써둔거
+  instructor_names: string; //sunytime땜에 냅둠
+  unique_instructor: string; //unique instructor
   likes: [string];
   reviews: Schema.Types.ObjectId[];
   semesters: [string];
