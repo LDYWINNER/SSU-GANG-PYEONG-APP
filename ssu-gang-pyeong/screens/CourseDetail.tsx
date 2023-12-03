@@ -41,7 +41,7 @@ const CourseDetail = () => {
       temp.push(course?.day.split(", ")[i]);
       temp.push(course?.startTime.split(", ")[i]);
       temp.push(course?.endTime.split(", ")[i]);
-      temp.push(course?.room);
+      temp.push(course?.room.split(", ")[i]);
       result.unshift(temp);
     }
   }
