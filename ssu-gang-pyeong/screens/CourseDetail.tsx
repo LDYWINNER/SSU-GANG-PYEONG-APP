@@ -47,6 +47,7 @@ const CourseDetail = () => {
   if (isLoadingCourse) {
     return <Loader />;
   } else {
+    console.log(course);
     //preprocessing for table
     for (let i = 0; i < course!.semesters.length; i++) {
       const temp = [];
@@ -107,19 +108,19 @@ const CourseDetail = () => {
       }
       //testQuantity
       switch (course!.reviews[j].testQuantity) {
-        case "morethan4":
+        case "4":
           testQuantityStore[0]++;
           break;
-        case "three":
+        case "3":
           testQuantityStore[1]++;
           break;
-        case "two":
+        case "2":
           testQuantityStore[2]++;
           break;
-        case "one":
+        case "1":
           testQuantityStore[3]++;
           break;
-        case "none":
+        case "0":
           testQuantityStore[4]++;
           break;
       }
