@@ -9,6 +9,12 @@ import { MainStackParamList } from "../navigation/types";
 import { Loader, NavigateBack, SafeAreaWrapper } from "../components";
 import { Rating } from "@kolking/react-native-rating";
 import { Table, Row, Rows } from "react-native-reanimated-table";
+import {
+  VictoryBar,
+  VictoryChart,
+  VictoryTheme,
+  VictoryTooltip,
+} from "victory-native";
 
 type CourseDetailScreenRouteProp = RouteProp<
   MainStackParamList,
@@ -18,7 +24,17 @@ type CourseDetailScreenRouteProp = RouteProp<
 const CourseDetail = () => {
   const theme = useTheme<Theme>();
   const route = useRoute<CourseDetailScreenRouteProp>();
-  const result = [];
+  //preprocessing for table
+  const tableResult = [];
+  //preprocessing for course reviews
+  const overallGradeStore = [0, 0, 0, 0, 0];
+  const difficultyStore = [0, 0, 0];
+  const generosityStore = [0, 0, 0];
+  const hwQuantityStore = [0, 0, 0];
+  const testQuantityStore = [0, 0, 0, 0, 0];
+  const teamProjectPresenceStore = [0, 0];
+  const quizPresenceStore = [0, 0];
+  const attendanceStore = [0, 0, 0, 0, 0];
 
   const { id } = route.params;
 
@@ -30,6 +46,7 @@ const CourseDetail = () => {
   if (isLoadingCourse) {
     return <Loader />;
   } else {
+    //preprocessing for table
     for (let i = 0; i < course!.semesters.length; i++) {
       const temp = [];
       if (course?.semesters[i] === "2023_spring") {
@@ -42,7 +59,124 @@ const CourseDetail = () => {
       temp.push(course?.startTime.split(", ")[i]);
       temp.push(course?.endTime.split(", ")[i]);
       temp.push(course?.room.split(", ")[i]);
-      result.unshift(temp);
+      tableResult.unshift(temp);
+    }
+
+    //preprocessing for reviews
+    console.log(course?.reviews);
+    for (let j = 0; j < course!.reviews.length; j++) {
+      //overallGrade
+      overallGradeStore[Number(course!.reviews[j].overallGrade) - 1]++;
+      //difficulty
+      switch (course!.reviews[j].difficulty) {
+        case "difficult":
+          difficultyStore[0]++;
+          break;
+        case "soso":
+          difficultyStore[1]++;
+          break;
+        case "easy":
+          difficultyStore[2]++;
+          break;
+      }
+      console.log(difficultyStore);
+      //generosity
+      if (course!.reviews[j].generosity) {
+        switch (course!.reviews[j].generosity) {
+          case "generous":
+            generosityStore[0]++;
+            break;
+          case "normal":
+            generosityStore[1]++;
+            break;
+          case "meticulous":
+            generosityStore[2]++;
+            break;
+        }
+      }
+      //hwQuantity
+      switch (course!.reviews[j].homeworkQuantity) {
+        case "many":
+          hwQuantityStore[0]++;
+          break;
+        case "soso":
+          hwQuantityStore[1]++;
+          break;
+        case "easy":
+          hwQuantityStore[2]++;
+          break;
+      }
+      //testQuantity
+      switch (course!.reviews[j].testQuantity) {
+        case "morethan4":
+          testQuantityStore[0]++;
+          break;
+        case "three":
+          testQuantityStore[1]++;
+          break;
+        case "two":
+          testQuantityStore[2]++;
+          break;
+        case "one":
+          testQuantityStore[3]++;
+          break;
+        case "none":
+          testQuantityStore[4]++;
+          break;
+      }
+      //test
+      // switch (course!.reviews[j].testQuantity) {
+      //   case "mid3final1":
+      //     hwQuantityStore[0]++;
+      //     break;
+      //   case "mid2final1":
+      //     hwQuantityStore[1]++;
+      //     break;
+      //   case "mid1final1":
+      //     hwQuantityStore[2]++;
+      //     break;
+      //   case "only final":
+      //     hwQuantityStore[2]++;
+      //     break;
+      //   case "only midterm":
+      //     hwQuantityStore[2]++;
+      //     break;
+      //   case "none":
+      //     hwQuantityStore[2]++;
+      //     break;
+      // }
+      //teamProject
+      if (course!.reviews[j].teamProjectPresence) {
+        teamProjectPresenceStore[0]++;
+      } else {
+        teamProjectPresenceStore[1]++;
+      }
+      //quiz
+      if (course!.reviews[j].quizPresence) {
+        quizPresenceStore[0]++;
+      } else {
+        quizPresenceStore[1]++;
+      }
+      //attendance
+      if (course!.reviews[j].attendance) {
+        switch (course!.reviews[j].attendance) {
+          case "calloutname":
+            attendanceStore[0]++;
+            break;
+          case "rollpaper":
+            attendanceStore[1]++;
+            break;
+          case "qrcode":
+            attendanceStore[2]++;
+            break;
+          case "googleformone":
+            attendanceStore[3]++;
+            break;
+          case "none":
+            attendanceStore[4]++;
+            break;
+        }
+      }
     }
   }
   return (
@@ -86,7 +220,7 @@ const CourseDetail = () => {
               style={{ height: 40, backgroundColor: "#f1f8ff" }}
               textStyle={{ margin: 6 }}
             />
-            <Rows data={result} textStyle={{ margin: 6 }} />
+            <Rows data={tableResult} textStyle={{ margin: 6 }} />
           </Table>
         </Box>
         <Box height={16} />
@@ -115,7 +249,36 @@ const CourseDetail = () => {
             </Text>
           </Box>
 
-          <Box></Box>
+          <Box justifyContent="center">
+            <Text>Difficulty</Text>
+            <Box ml="1" mt="-6">
+              <VictoryChart
+                theme={VictoryTheme.material}
+                domainPadding={{ y: 45, x: 30 }}
+                height={250}
+                width={400}
+              >
+                <VictoryBar
+                  horizontal
+                  data={[
+                    { x: "많음", y: difficultyStore[0] },
+                    { x: "보통", y: difficultyStore[1] },
+                    { x: "적음", y: difficultyStore[2] },
+                  ]}
+                  categories={{ x: ["적음", "보통", "많음"] }}
+                  barWidth={20}
+                  animate={{
+                    duration: 2000,
+                    onLoad: { duration: 1000 },
+                  }}
+                  style={{
+                    data: { fill: theme.colors.sky200 },
+                  }}
+                  cornerRadius={{ top: 8 }}
+                />
+              </VictoryChart>
+            </Box>
+          </Box>
         </Box>
       </Box>
     </SafeAreaWrapper>

@@ -8,6 +8,9 @@ const theme = createTheme({
   textColor: "",
   colors: colors,
   spacing: {
+    "-1": -4,
+    "-4": -16,
+    "-6": -24,
     "1": 4,
     "2": 8,
     "3": 12,
