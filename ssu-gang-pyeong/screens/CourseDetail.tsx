@@ -259,13 +259,13 @@ const CourseDetail = () => {
                 <VictoryBar
                   horizontal
                   data={[
-                    { x: "5", y: overallGradeStore[0] },
-                    { x: "4", y: overallGradeStore[1] },
+                    { x: "5", y: overallGradeStore[4] },
+                    { x: "4", y: overallGradeStore[3] },
                     { x: "3", y: overallGradeStore[2] },
-                    { x: "2", y: overallGradeStore[3] },
-                    { x: "1", y: overallGradeStore[4] },
+                    { x: "2", y: overallGradeStore[1] },
+                    { x: "1", y: overallGradeStore[0] },
                   ]}
-                  categories={{ x: ["1", "2", "3", "4", "5"] }}
+                  categories={{ x: ["5", "4", "3", "2", "1"] }}
                   barWidth={20}
                   animate={{
                     duration: 2000,
