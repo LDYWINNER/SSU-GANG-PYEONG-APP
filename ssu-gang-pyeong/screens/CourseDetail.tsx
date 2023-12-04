@@ -101,7 +101,7 @@ const CourseDetail = () => {
         case "soso":
           hwQuantityStore[1]++;
           break;
-        case "easy":
+        case "few":
           hwQuantityStore[2]++;
           break;
       }
@@ -279,7 +279,7 @@ const CourseDetail = () => {
             </Box>
 
             <Box>
-              <Text>수업 난이도</Text>
+              <Text variant="textLg">수업 내용 난이도</Text>
               <Box ml="1" mt="-6">
                 <VictoryChart
                   theme={VictoryTheme.material}
@@ -310,7 +310,7 @@ const CourseDetail = () => {
             </Box>
 
             <Box>
-              <Text>점수 너그러운지</Text>
+              <Text variant="textLg">점수 너그러운 정도</Text>
 
               {generosityStore === [0, 0, 0] ? (
                 <Box ml="1" mt="-6">
@@ -341,12 +341,14 @@ const CourseDetail = () => {
                   </VictoryChart>
                 </Box>
               ) : (
-                <Text>No</Text>
+                <Text ml="2" mt="1" mb="4">
+                  아직 관련 데이터가 없습니다 :(
+                </Text>
               )}
             </Box>
 
             <Box>
-              <Text>과제량</Text>
+              <Text variant="textLg">과제량</Text>
               <Box ml="1" mt="-6">
                 <VictoryChart
                   theme={VictoryTheme.material}
@@ -377,7 +379,7 @@ const CourseDetail = () => {
             </Box>
 
             <Box>
-              <Text>시험 수</Text>
+              <Text variant="textLg">시험 수</Text>
               <Box ml="1" mt="-6">
                 <VictoryChart
                   theme={VictoryTheme.material}
@@ -410,7 +412,7 @@ const CourseDetail = () => {
             </Box>
 
             <Box>
-              <Text>팀플 유무</Text>
+              <Text variant="textLg">팀플 유무</Text>
               <Box ml="1" mt="-6">
                 <VictoryChart
                   theme={VictoryTheme.material}
@@ -440,7 +442,7 @@ const CourseDetail = () => {
             </Box>
 
             <Box>
-              <Text>퀴즈 유무</Text>
+              <Text variant="textLg">퀴즈 유무</Text>
               <Box ml="1" mt="-6">
                 <VictoryChart
                   theme={VictoryTheme.material}
@@ -470,7 +472,7 @@ const CourseDetail = () => {
             </Box>
 
             <Box>
-              <Text>출석</Text>
+              <Text variant="textLg">출석</Text>
 
               {attendanceStore === [0, 0, 0, 0, 0] ? (
                 <Box ml="1" mt="-6">
@@ -486,8 +488,12 @@ const CourseDetail = () => {
                         { x: "너그러움", y: attendanceStore[0] },
                         { x: "보통", y: attendanceStore[1] },
                         { x: "까다로움", y: attendanceStore[2] },
+                        { x: "보통", y: attendanceStore[1] },
+                        { x: "까다로움", y: attendanceStore[2] },
                       ]}
-                      categories={{ x: ["까다로움", "보통", "너그러움"] }}
+                      categories={{
+                        x: ["까다로움", "보통", "너그러움", "보통", "너그러움"],
+                      }}
                       barWidth={20}
                       animate={{
                         duration: 2000,
@@ -501,7 +507,9 @@ const CourseDetail = () => {
                   </VictoryChart>
                 </Box>
               ) : (
-                <Text>No</Text>
+                <Text ml="2" mt="1">
+                  아직 관련 데이터가 없습니다 :(
+                </Text>
               )}
             </Box>
           </Box>
