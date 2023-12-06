@@ -28,7 +28,7 @@ const MainStack = () => {
       <NativeStack.Screen
         name="CourseReview"
         component={CourseReview}
-        options={{ presentation: "card" }}
+        options={{ presentation: "card", headerShown: false }}
       />
       <NativeStack.Screen
         name="WriteReview"

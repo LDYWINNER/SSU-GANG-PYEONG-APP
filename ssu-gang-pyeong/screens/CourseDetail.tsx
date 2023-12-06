@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import useSWR from "swr";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import axiosInstance, { fetcher } from "../utils/config";
@@ -12,13 +12,17 @@ import { Table, Row, Rows } from "react-native-reanimated-table";
 import { VictoryBar, VictoryChart, VictoryTheme } from "victory-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { FontAwesome5 } from "@expo/vector-icons";
+import { TouchableOpacity } from "react-native";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 type CourseDetailScreenRouteProp = RouteProp<
   MainStackParamList,
   "CourseDetail"
 >;
 
-const CourseDetail = () => {
+const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
+  navigation: { navigate },
+}) => {
   const theme = useTheme<Theme>();
   const route = useRoute<CourseDetailScreenRouteProp>();
   //preprocessing for table
@@ -33,7 +37,7 @@ const CourseDetail = () => {
   const quizPresenceStore = [0, 0];
   const attendanceStore = [0, 0, 0, 0, 0];
   //storing for overallEvaluations
-  const overallEvaluations = [];
+  const overallEvaluations: number[] = [];
 
   const { id } = route.params;
 
@@ -41,6 +45,13 @@ const CourseDetail = () => {
     `/api/v1/course/${id}`,
     fetcher
   );
+
+  const navigateToCourseReview = (overallEvaluations: number[]) => {
+    navigate("MainStack", {
+      screen: "CourseReview",
+      params: { courseIndex: overallEvaluations },
+    });
+  };
 
   if (isLoadingCourse) {
     return <Loader />;
@@ -612,7 +623,23 @@ const CourseDetail = () => {
                       {course!.reviews[overallEvaluations[1]].overallEvaluation}
                     </Text>
                   </Box>
-                  <Box></Box>
+                  <Box height={16} />
+                  <TouchableOpacity
+                    onPress={() => navigateToCourseReview(overallEvaluations)}
+                  >
+                    <Box
+                      style={{
+                        backgroundColor: theme.colors.gray300,
+                      }}
+                      width="auto"
+                      height={36}
+                      borderRadius="rounded-xl"
+                      justifyContent="center"
+                      alignItems="center"
+                    >
+                      <Text>강의평 더 보기</Text>
+                    </Box>
+                  </TouchableOpacity>
                 </>
               )}
             </Box>
