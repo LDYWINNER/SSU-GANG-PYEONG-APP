@@ -253,6 +253,7 @@ const Search: React.FC<NativeStackScreenProps<any, "Search">> = ({
           selectedValue={searchSubj}
           onValueChange={(itemValue, itemIndex) => setSearchSubj(itemValue)}
         >
+          <Picker.Item label="ALL" value="ALL" />
           <Picker.Item label="AMS" value="AMS" />
           <Picker.Item label="ACC/BUS" value="ACC/BUS" />
           <Picker.Item label="CSE" value="CSE" />
