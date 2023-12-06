@@ -6,16 +6,12 @@ import { Box, Text, Theme } from "../theme";
 import { useTheme } from "@shopify/restyle";
 import { ICourse } from "../types";
 import { MainStackParamList } from "../navigation/types";
-import { Loader, NavigateBack, SafeAreaWrapper } from "../components";
+import { Divider, Loader, NavigateBack, SafeAreaWrapper } from "../components";
 import { Rating } from "@kolking/react-native-rating";
 import { Table, Row, Rows } from "react-native-reanimated-table";
-import {
-  VictoryBar,
-  VictoryChart,
-  VictoryTheme,
-  VictoryTooltip,
-} from "victory-native";
+import { VictoryBar, VictoryChart, VictoryTheme } from "victory-native";
 import { ScrollView } from "react-native-gesture-handler";
+import { FontAwesome5 } from "@expo/vector-icons";
 
 type CourseDetailScreenRouteProp = RouteProp<
   MainStackParamList,
@@ -36,6 +32,8 @@ const CourseDetail = () => {
   const teamProjectPresenceStore = [0, 0];
   const quizPresenceStore = [0, 0];
   const attendanceStore = [0, 0, 0, 0, 0];
+  //storing for overallEvaluations
+  const overallEvaluations = [];
 
   const { id } = route.params;
 
@@ -47,7 +45,7 @@ const CourseDetail = () => {
   if (isLoadingCourse) {
     return <Loader />;
   } else {
-    console.log(course);
+    // console.log(course);
     //preprocessing for table
     for (let i = 0; i < course!.semesters.length; i++) {
       const temp = [];
@@ -66,6 +64,11 @@ const CourseDetail = () => {
 
     //preprocessing for reviews
     for (let j = 0; j < course!.reviews.length; j++) {
+      //storing overallEvaluations
+      if (course!.reviews[j].overallEvaluation !== "") {
+        overallEvaluations.push(j);
+      }
+
       //overallGrade
       overallGradeStore[Number(course!.reviews[j].overallGrade) - 1]++;
       //difficulty
@@ -511,6 +514,106 @@ const CourseDetail = () => {
                 <Text ml="2" mt="1">
                   아직 관련 데이터가 없습니다 :(
                 </Text>
+              )}
+            </Box>
+            <Box height={30} />
+            <Divider />
+            <Box height={10} />
+
+            <Box>
+              {overallEvaluations.length === 0 && (
+                <Text>작성된 자세한 수강평이 아직 없습니다 :(</Text>
+              )}
+              {overallEvaluations.length >= 1 && (
+                <>
+                  <Box mb="2">
+                    <Text variant="textLg">더 자세한 수강평</Text>
+                  </Box>
+                  <Box>
+                    <Box flexDirection="row" alignItems="center">
+                      <Rating
+                        size={22}
+                        rating={Number(
+                          course!.reviews[overallEvaluations[0]].overallGrade
+                        )}
+                        disabled
+                      />
+                      <Box width={10} />
+                      <FontAwesome5
+                        name="thumbs-up"
+                        size={20}
+                        color={theme.colors.sbuRed}
+                      />
+                      <Box width={4} />
+                      <Text
+                        variant="textLg"
+                        style={{
+                          color: theme.colors.sbuRed,
+                        }}
+                      >
+                        {course!.reviews[overallEvaluations[0]].likes.length}
+                      </Text>
+                    </Box>
+                    <Text
+                      mt="1"
+                      mb="1"
+                      style={{
+                        color: theme.colors.gray650,
+                      }}
+                    >
+                      {course!.reviews[overallEvaluations[0]].semester}
+                    </Text>
+                    <Text>
+                      {course!.reviews[overallEvaluations[0]].overallEvaluation}
+                    </Text>
+                  </Box>
+                </>
+              )}
+              {overallEvaluations.length >= 2 && (
+                <>
+                  <Box height={15} />
+                  <Divider />
+                  <Box height={10} />
+                  <Box>
+                    <Box flexDirection="row" alignItems="center">
+                      <Rating
+                        size={22}
+                        rating={Number(
+                          course!.reviews[overallEvaluations[1]].overallGrade
+                        )}
+                        disabled
+                      />
+                      <Box width={10} />
+                      <FontAwesome5
+                        name="thumbs-up"
+                        size={20}
+                        color={theme.colors.sbuRed}
+                      />
+                      <Box width={4} />
+                      <Text
+                        variant="textLg"
+                        style={{
+                          color: theme.colors.sbuRed,
+                        }}
+                      >
+                        {course!.reviews[overallEvaluations[1]].likes.length}
+                      </Text>
+                    </Box>
+                    <Text
+                      mt="1"
+                      mb="1"
+                      style={{
+                        color: theme.colors.gray650,
+                      }}
+                    >
+                      {course!.reviews[overallEvaluations[1]].semester}
+                    </Text>
+                    <Text>
+                      {course!.reviews[overallEvaluations[1]].overallEvaluation}
+                    </Text>
+                  </Box>
+                  <Box></Box>
+                </>
               )}
             </Box>
           </Box>

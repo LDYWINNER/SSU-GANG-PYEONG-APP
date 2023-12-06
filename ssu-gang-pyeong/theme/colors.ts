@@ -3,6 +3,7 @@ export const palette = {
   primary: "#007AFF",
   lightGray: "#EDECEF",
   ratingYellow: "#FF9500",
+  sbuRed: "#CC0001",
 
   gray550: "#939292",
   gray650: "#8a8a8a",
@@ -198,6 +199,8 @@ export const colors = {
   white: palette.white,
   lightGray: palette.lightGray,
   ratingYellow: palette.ratingYellow,
+  sbuRed: palette.sbuRed,
+
   gray550: palette.gray550,
   gray650: palette.gray650,
   gray4: palette.gray4,
