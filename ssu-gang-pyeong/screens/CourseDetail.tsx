@@ -565,17 +565,33 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
                         {course!.reviews[overallEvaluations[0]].likes.length}
                       </Text>
                     </Box>
-                    <Text
-                      mt="1"
-                      mb="1"
-                      style={{
-                        color: theme.colors.gray650,
-                      }}
-                    >
-                      {course!.reviews[overallEvaluations[0]].semester === "-1"
-                        ? "?"
-                        : course!.reviews[overallEvaluations[0]].semester}
-                    </Text>
+                    <Box flexDirection="row">
+                      <Text
+                        mt="1"
+                        mb="1"
+                        style={{
+                          color: theme.colors.gray650,
+                        }}
+                      >
+                        {course!.reviews[overallEvaluations[0]].semester ===
+                        "-1"
+                          ? "?"
+                          : course!.reviews[overallEvaluations[0]].semester}
+                      </Text>
+                      <Box width={6} />
+                      <Text
+                        mt="1"
+                        mb="1"
+                        style={{
+                          color: theme.colors.gray650,
+                        }}
+                      >
+                        {course!.reviews[overallEvaluations[0]].instructor ===
+                        "-1"
+                          ? "?"
+                          : course!.reviews[overallEvaluations[0]].instructor}
+                      </Text>
+                    </Box>
                     <Text>
                       {course!.reviews[overallEvaluations[0]].overallEvaluation}
                     </Text>
@@ -612,17 +628,33 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
                         {course!.reviews[overallEvaluations[1]].likes.length}
                       </Text>
                     </Box>
-                    <Text
-                      mt="1"
-                      mb="1"
-                      style={{
-                        color: theme.colors.gray650,
-                      }}
-                    >
-                      {course!.reviews[overallEvaluations[1]].semester === "-1"
-                        ? "?"
-                        : course!.reviews[overallEvaluations[1]].semester}
-                    </Text>
+                    <Box flexDirection="row">
+                      <Text
+                        mt="1"
+                        mb="1"
+                        style={{
+                          color: theme.colors.gray650,
+                        }}
+                      >
+                        {course!.reviews[overallEvaluations[0]].semester ===
+                        "-1"
+                          ? "?"
+                          : course!.reviews[overallEvaluations[0]].semester}
+                      </Text>
+                      <Box width={6} />
+                      <Text
+                        mt="1"
+                        mb="1"
+                        style={{
+                          color: theme.colors.gray650,
+                        }}
+                      >
+                        {course!.reviews[overallEvaluations[0]].instructor ===
+                        "-1"
+                          ? "?"
+                          : course!.reviews[overallEvaluations[0]].instructor}
+                      </Text>
+                    </Box>
                     <Text>
                       {course!.reviews[overallEvaluations[1]].overallEvaluation}
                     </Text>

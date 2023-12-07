@@ -129,15 +129,29 @@ const CourseReview = () => {
                     </Box>
                   </TouchableOpacity>
                 </Box>
-                <Text
-                  mt="1"
-                  mb="1"
-                  style={{
-                    color: theme.colors.gray650,
-                  }}
-                >
-                  {reviewItem.semester === "-1" ? "?" : reviewItem.semester}
-                </Text>
+                <Box flexDirection="row">
+                  <Text
+                    mt="1"
+                    mb="1"
+                    style={{
+                      color: theme.colors.gray650,
+                    }}
+                  >
+                    {reviewItem.semester === "-1" ? "?" : reviewItem.semester}
+                  </Text>
+                  <Box width={6} />
+                  <Text
+                    mt="1"
+                    mb="1"
+                    style={{
+                      color: theme.colors.gray650,
+                    }}
+                  >
+                    {reviewItem.instructor === "-1"
+                      ? "?"
+                      : reviewItem.instructor}
+                  </Text>
+                </Box>
                 <Text>{reviewItem.overallEvaluation}</Text>
                 {reviewList.length >= 2 && (
                   <>
