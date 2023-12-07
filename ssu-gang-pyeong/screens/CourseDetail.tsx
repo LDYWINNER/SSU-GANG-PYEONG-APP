@@ -49,7 +49,7 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
   const navigateToCourseReview = (overallEvaluations: number[]) => {
     navigate("MainStack", {
       screen: "CourseReview",
-      params: { courseIndex: overallEvaluations },
+      params: { courseIndex: overallEvaluations, id },
     });
   };
 

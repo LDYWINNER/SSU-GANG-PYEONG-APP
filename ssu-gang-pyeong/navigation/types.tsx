@@ -56,7 +56,10 @@ export type MainStackParamList = {
   CourseDetail: {
     id: string;
   };
-  CourseReview: undefined;
+  CourseReview: {
+    courseIndex: number[];
+    id: string;
+  };
   WriteReview: undefined;
   MyAccount: undefined;
 };
