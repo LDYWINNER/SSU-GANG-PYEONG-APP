@@ -1,6 +1,5 @@
 import React, { useRef, useState, useCallback, useMemo } from "react";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import { CourseDetail } from "../screens";
 import styled from "styled-components/native";
 import { Dimensions, TouchableOpacity } from "react-native";
 import { useColorScheme } from "react-native";
@@ -84,7 +83,7 @@ const HomeTopTabs: React.FC<NativeStackScreenProps<any, "HomeTopTabs">> = ({
         <Title color={color}>@USERNAME</Title>
         <Row>
           <TouchableOpacity
-            onPress={() => navigate("MainStack", { screen: "WriteReview" })}
+            onPress={() => navigate("HomeStack", { screen: "AddCourse" })}
           >
             <Ionicons
               name={isDark ? "add-circle-outline" : "add-circle"}

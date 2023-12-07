@@ -20,6 +20,7 @@ export type SearchStackParamList = {
 
 export type HomeStackParamList = {
   HomeTopTabs: undefined;
+  AddCourse: undefined;
 };
 
 export type ToDoStackParamList = {
