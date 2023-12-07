@@ -12,8 +12,9 @@ import { Table, Row, Rows } from "react-native-reanimated-table";
 import { VictoryBar, VictoryChart, VictoryTheme } from "victory-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { FontAwesome5 } from "@expo/vector-icons";
-import { TouchableOpacity } from "react-native";
+import { TouchableOpacity, Dimensions } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 type CourseDetailScreenRouteProp = RouteProp<
   MainStackParamList,
@@ -24,6 +25,8 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
   navigation: { navigate },
 }) => {
   const theme = useTheme<Theme>();
+  const windowWidth = Dimensions.get("window").width;
+  const windowHeight = Dimensions.get("window").height;
   const route = useRoute<CourseDetailScreenRouteProp>();
   //preprocessing for table
   const tableResult = [];
@@ -50,6 +53,12 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
     navigate("MainStack", {
       screen: "CourseReview",
       params: { courseIndex: overallEvaluations, id },
+    });
+  };
+
+  const navigateToWriteReview = () => {
+    navigate("MainStack", {
+      screen: "WriteReview",
     });
   };
 
@@ -587,7 +596,7 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
                         }}
                       >
                         {course!.reviews[overallEvaluations[0]].instructor ===
-                        "-1"
+                        "-2"
                           ? "?"
                           : course!.reviews[overallEvaluations[0]].instructor}
                       </Text>
@@ -650,7 +659,7 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
                         }}
                       >
                         {course!.reviews[overallEvaluations[0]].instructor ===
-                        "-1"
+                        "-2"
                           ? "?"
                           : course!.reviews[overallEvaluations[0]].instructor}
                       </Text>
@@ -681,6 +690,33 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
             </Box>
           </Box>
         </ScrollView>
+        <TouchableOpacity onPress={navigateToWriteReview}>
+          <Box
+            flexDirection="row"
+            alignItems="center"
+            position="absolute"
+            right={windowWidth * 0.005}
+            bottom={windowHeight * 0.855}
+            style={{ backgroundColor: theme.colors.sbuRed }}
+            p="2"
+            borderRadius="rounded-2xl"
+          >
+            <MaterialCommunityIcons
+              name="pencil-plus-outline"
+              size={24}
+              color={theme.colors.white}
+            />
+            <Box width={6} />
+            <Text
+              fontWeight="700"
+              style={{
+                color: theme.colors.white,
+              }}
+            >
+              평가하기
+            </Text>
+          </Box>
+        </TouchableOpacity>
       </Box>
     </SafeAreaWrapper>
   );

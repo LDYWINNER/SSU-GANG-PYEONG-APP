@@ -11,7 +11,9 @@ import { MainStackParamList } from "../navigation/types";
 import { Rating } from "@kolking/react-native-rating";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { ScrollView } from "react-native-gesture-handler";
-import { TouchableOpacity } from "react-native";
+import { TouchableOpacity, Dimensions } from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 type CourseReviewScreenRouteProp = RouteProp<
   MainStackParamList,
@@ -30,11 +32,20 @@ const likeReviewRequest = async (
   }
 };
 
-const CourseReview = () => {
+const CourseReview: React.FC<NativeStackScreenProps<any, "CourseReview">> = ({
+  navigation: { navigate },
+}) => {
   const theme = useTheme<Theme>();
+  const windowWidth = Dimensions.get("window").width;
   const route = useRoute<CourseReviewScreenRouteProp>();
   const { courseIndex, id } = route.params;
   const reviewList = [];
+
+  const navigateToWriteReview = () => {
+    navigate("MainStack", {
+      screen: "WriteReview",
+    });
+  };
 
   const { trigger } = useSWRMutation(
     "/api/v1/course/review",
@@ -147,7 +158,7 @@ const CourseReview = () => {
                       color: theme.colors.gray650,
                     }}
                   >
-                    {reviewItem.instructor === "-1"
+                    {reviewItem.instructor === "-2"
                       ? "?"
                       : reviewItem.instructor}
                   </Text>
@@ -165,6 +176,33 @@ const CourseReview = () => {
           })}
         </Box>
       </ScrollView>
+      <TouchableOpacity onPress={navigateToWriteReview}>
+        <Box
+          flexDirection="row"
+          alignItems="center"
+          position="absolute"
+          right={windowWidth * 0.4}
+          bottom={15}
+          style={{ backgroundColor: theme.colors.sbuRed }}
+          p="2"
+          borderRadius="rounded-2xl"
+        >
+          <MaterialCommunityIcons
+            name="pencil-plus-outline"
+            size={24}
+            color={theme.colors.white}
+          />
+          <Box width={6} />
+          <Text
+            fontWeight="700"
+            style={{
+              color: theme.colors.white,
+            }}
+          >
+            평가하기
+          </Text>
+        </Box>
+      </TouchableOpacity>
     </SafeAreaWrapper>
   );
 };
