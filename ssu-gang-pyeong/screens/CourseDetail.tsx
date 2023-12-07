@@ -572,7 +572,9 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
                         color: theme.colors.gray650,
                       }}
                     >
-                      {course!.reviews[overallEvaluations[0]].semester}
+                      {course!.reviews[overallEvaluations[0]].semester === "-1"
+                        ? "?"
+                        : course!.reviews[overallEvaluations[0]].semester}
                     </Text>
                     <Text>
                       {course!.reviews[overallEvaluations[0]].overallEvaluation}
@@ -617,7 +619,9 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
                         color: theme.colors.gray650,
                       }}
                     >
-                      {course!.reviews[overallEvaluations[1]].semester}
+                      {course!.reviews[overallEvaluations[1]].semester === "-1"
+                        ? "?"
+                        : course!.reviews[overallEvaluations[1]].semester}
                     </Text>
                     <Text>
                       {course!.reviews[overallEvaluations[1]].overallEvaluation}
