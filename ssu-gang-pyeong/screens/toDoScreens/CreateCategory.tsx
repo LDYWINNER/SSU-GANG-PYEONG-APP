@@ -10,7 +10,6 @@ import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { useTheme } from "@shopify/restyle";
 import { TouchableOpacity, TextInput } from "react-native";
 import { useSWRConfig } from "swr";
-
 import useSWRMutation from "swr/mutation";
 
 const COLORS = getColors();

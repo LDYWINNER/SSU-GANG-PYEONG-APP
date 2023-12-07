@@ -1,7 +1,8 @@
 import React from "react";
 import useSWR from "swr";
+import useSWRMutation from "swr/mutation";
 import { RouteProp, useRoute } from "@react-navigation/native";
-import { fetcher } from "../utils/config";
+import axiosInstance, { fetcher } from "../utils/config";
 import { Box, Text, Theme } from "../theme";
 import { useTheme } from "@shopify/restyle";
 import { ICourse } from "../types";
@@ -10,11 +11,24 @@ import { MainStackParamList } from "../navigation/types";
 import { Rating } from "@kolking/react-native-rating";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { ScrollView } from "react-native-gesture-handler";
+import { TouchableOpacity } from "react-native";
 
 type CourseReviewScreenRouteProp = RouteProp<
   MainStackParamList,
   "CourseReview"
 >;
+
+const likeReviewRequest = async (
+  url: string,
+  { arg }: { arg: { reviewId: string } }
+) => {
+  try {
+    await axiosInstance.patch(url + "/" + arg.reviewId);
+  } catch (error) {
+    console.log("error in likeReviewRequest", error);
+    throw error;
+  }
+};
 
 const CourseReview = () => {
   const theme = useTheme<Theme>();
@@ -22,9 +36,17 @@ const CourseReview = () => {
   const { courseIndex, id } = route.params;
   const reviewList = [];
 
+  const { trigger } = useSWRMutation(
+    "/api/v1/course/review",
+    likeReviewRequest
+  );
+
   const { data: course, isLoading: isLoadingCourse } = useSWR<ICourse>(
     `/api/v1/course/${id}`,
-    fetcher
+    fetcher,
+    {
+      refreshInterval: 100,
+    }
   );
 
   if (isLoadingCourse) {
@@ -54,27 +76,58 @@ const CourseReview = () => {
           {reviewList.map((reviewItem) => {
             return (
               <Box key={reviewItem._id}>
-                <Box flexDirection="row" alignItems="center">
+                <Box
+                  flexDirection="row"
+                  alignItems="center"
+                  justifyContent="space-between"
+                >
                   <Rating
                     size={22}
                     rating={Number(reviewItem.overallGrade)}
                     disabled
                   />
-                  <Box width={10} />
-                  <FontAwesome5
-                    name="thumbs-up"
-                    size={20}
-                    color={theme.colors.sbuRed}
-                  />
-                  <Box width={4} />
-                  <Text
-                    variant="textLg"
-                    style={{
-                      color: theme.colors.sbuRed,
-                    }}
+                  <TouchableOpacity
+                    onPress={() =>
+                      trigger({
+                        reviewId: reviewItem._id,
+                      })
+                    }
                   >
-                    {reviewItem.likes.length}
-                  </Text>
+                    <Box
+                      flexDirection="row"
+                      alignItems="center"
+                      borderRadius="rounded-xl"
+                      style={{
+                        backgroundColor: theme.colors.gray300,
+                      }}
+                      p="1"
+                    >
+                      <FontAwesome5
+                        name="thumbs-up"
+                        size={20}
+                        color={theme.colors.sbuRed}
+                      />
+                      <Box width={4} />
+                      <Text
+                        variant="textLg"
+                        style={{
+                          color: theme.colors.sbuRed,
+                        }}
+                      >
+                        {reviewItem.likes.length}
+                      </Text>
+                      <Box width={6} />
+                      <Text
+                        variant="textBase"
+                        fontWeight="600"
+                        style={{
+                          color: theme.colors.sbuRed,
+                        }}
+                      >
+                        추천
+                      </Text>
+                    </Box>
+                  </TouchableOpacity>
                 </Box>
                 <Text
                   mt="1"
