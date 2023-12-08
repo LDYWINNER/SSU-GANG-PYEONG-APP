@@ -9,6 +9,8 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ListView, MoreMenu, TableView } from "../screens/homeScreens/index";
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";
+import useUserGlobalStore from "../store/useUserGlobal";
+import { Loader } from "../components";
 
 const Row = styled.View`
   flex-direction: row;
@@ -28,13 +30,12 @@ const Title = styled.Text<{ color: string }>`
   margin-left: 10px;
 `;
 
-const semesters = ["2023-fall", "2023-spring", "2022-fall"];
-
 const Tab = createMaterialTopTabNavigator();
 
 const HomeTopTabs: React.FC<NativeStackScreenProps<any, "HomeTopTabs">> = ({
   navigation: { navigate },
 }) => {
+  const { user } = useUserGlobalStore();
   const isDark = useColorScheme() === "dark";
   const color = isDark ? "white" : colors.BLACK_COLOR;
   const bgColor = isDark ? colors.BLACK_COLOR : "white";
@@ -77,6 +78,11 @@ const HomeTopTabs: React.FC<NativeStackScreenProps<any, "HomeTopTabs">> = ({
     []
   );
 
+  if (!user) {
+    return <Loader />;
+  } else {
+    console.log(user!.classHistory);
+  }
   return (
     <>
       <BigRow bgColor={bgColor}>
@@ -144,10 +150,10 @@ const HomeTopTabs: React.FC<NativeStackScreenProps<any, "HomeTopTabs">> = ({
               swipeEnabled: true,
             }}
           >
-            {semesters.map((semester) => (
+            {Object.keys(user?.classHistory).map((classHistoryKey) => (
               <Tab.Screen
-                key={semester}
-                name={semester}
+                key={classHistoryKey}
+                name={classHistoryKey}
                 component={TableView}
               />
             ))}

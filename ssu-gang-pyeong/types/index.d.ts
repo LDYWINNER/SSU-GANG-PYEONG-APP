@@ -14,6 +14,9 @@ interface IAuthenticatedUser {
   major: string;
   courseReviewNum: number;
   adminAccount: boolean;
+  classHistory: {
+    [index: string]: [ICourse];
+  };
 }
 
 export interface IColor {

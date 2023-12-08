@@ -31,8 +31,9 @@ const LoginScreen = () => {
   ) => {
     try {
       const { email } = data;
+      const lowerCaseEmail = email.toLowerCase();
       const _user = await loginUser({
-        email,
+        email: lowerCaseEmail,
       });
       updateUser({
         username: _user.username,
@@ -41,6 +42,7 @@ const LoginScreen = () => {
         major: _user.major,
         courseReviewNum: _user.courseReviewNum,
         adminAccount: _user.adminAccount,
+        classHistory: _user.classHistory,
       });
     } catch (error) {}
   };

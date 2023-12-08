@@ -19,12 +19,14 @@ import { Rating } from "@kolking/react-native-rating";
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";
 import { Picker } from "@react-native-picker/picker";
+import useUserGlobalStore from "../../store/useUserGlobal";
 
 interface ISearch {
   keyword: string;
 }
 
 const SelectCourses = () => {
+  const { user } = useUserGlobalStore();
   const theme = useTheme<Theme>();
   const [searchSubj, setSearchSubj] = useState<string>("ALL");
 
