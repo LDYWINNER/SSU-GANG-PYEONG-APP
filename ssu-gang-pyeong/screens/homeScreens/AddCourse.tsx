@@ -61,7 +61,7 @@ const AddCourse = () => {
           />
         </Box>
 
-        <Box height={windowHeight * 0.45} style={{ borderWidth: 3 }}>
+        <Box height={windowHeight * 0.5}>
           <Tab.Navigator
             initialRouteName="학교 수업 추가"
             sceneContainerStyle={{

@@ -5,13 +5,12 @@ import React, {
   useMemo,
   useEffect,
 } from "react";
-import useSWR, { mutate, useSWRConfig } from "swr";
 import useSWRMutation from "swr/mutation";
-import axiosInstance, { fetcher } from "../utils/config";
+import { fetcher } from "../utils/config";
 import { Controller, useForm } from "react-hook-form";
-import { SafeAreaWrapper, Input, Loader } from "../components";
+import { SafeAreaWrapper, Loader } from "../components";
 import { Box, Text } from "../theme";
-import { ICourse, ICourseRequest } from "../types";
+import { ICourse } from "../types";
 import { FlatList, TouchableOpacity } from "react-native";
 import { Rating } from "@kolking/react-native-rating";
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
