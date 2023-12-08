@@ -10,6 +10,7 @@ import colors from "../../colors";
 import { useColorScheme } from "react-native";
 import Search from "../Search";
 import SelectCourses from "./SelectCourses";
+import EasyPick from "./EasyPick";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -17,8 +18,6 @@ const AddCourse = () => {
   const theme = useTheme<Theme>();
   const isDark = useColorScheme() === "dark";
   const windowHeight = Dimensions.get("window").height;
-
-  const options = ["학교 수업 추가", "직접 추가"];
 
   return (
     <SafeAreaWrapper>
@@ -84,13 +83,16 @@ const AddCourse = () => {
               swipeEnabled: true,
             }}
           >
-            {options.map((option) => (
-              <Tab.Screen
-                key={option}
-                name={option}
-                component={SelectCourses}
-              />
-            ))}
+            <Tab.Screen
+              key={"학교 수업 추가"}
+              name={"학교 수업 추가"}
+              component={EasyPick}
+            />
+            <Tab.Screen
+              key={"직접 추가"}
+              name={"직접 추가"}
+              component={SelectCourses}
+            />
           </Tab.Navigator>
         </Box>
       </Box>
