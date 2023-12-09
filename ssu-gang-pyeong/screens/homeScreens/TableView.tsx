@@ -2,6 +2,10 @@ import * as React from "react";
 import { Alert, StatusBar, StyleSheet, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import TimeTable from "@mikezzb/react-native-timetable";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import useGlobalToggle from "../../store/useGlobalToggle";
+import useUserGlobalStore from "../../store/useUserGlobal";
+import { useEffect } from "react";
 
 const eventGroups = [
   {
@@ -285,7 +289,20 @@ const events = [
   },
 ];
 
-export default function App() {
+const TableView: React.FC<NativeStackScreenProps<any, "TableView">> = ({
+  navigation,
+}) => {
+  const { user } = useUserGlobalStore();
+  const { updateToggleInfo } = useGlobalToggle();
+
+  useEffect(() => {
+    updateToggleInfo({
+      currentTableView: Object.keys(user!.classHistory)[
+        navigation.getState().index
+      ],
+    });
+  }, []);
+
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.safeAreaContainer}>
@@ -300,7 +317,7 @@ export default function App() {
       </SafeAreaView>
     </SafeAreaProvider>
   );
-}
+};
 
 const styles = StyleSheet.create({
   safeAreaContainer: {
@@ -310,3 +327,5 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
+
+export default TableView;

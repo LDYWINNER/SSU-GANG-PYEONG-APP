@@ -1,7 +1,7 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeTopTabs from "../HomeTopTabs";
-import { AddCourse } from "../../screens/homeScreens";
+import { AddCourse, EasyPick } from "../../screens/homeScreens";
 
 const NativeStack = createNativeStackNavigator();
 
@@ -14,6 +14,7 @@ const HomeStack = () => {
     >
       <NativeStack.Screen name="HomeTopTabs" component={HomeTopTabs} />
       <NativeStack.Screen name="AddCourse" component={AddCourse} />
+      <NativeStack.Screen name="EasyPick" component={EasyPick} />
     </NativeStack.Navigator>
   );
 };

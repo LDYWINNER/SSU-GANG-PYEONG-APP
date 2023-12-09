@@ -1,10 +1,4 @@
-import React, {
-  useRef,
-  useState,
-  useCallback,
-  useMemo,
-  useEffect,
-} from "react";
+import React, { useRef, useState, useCallback, useMemo } from "react";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import styled from "styled-components/native";
 import { Dimensions, TouchableOpacity } from "react-native";
@@ -17,7 +11,7 @@ import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";
 import useUserGlobalStore from "../store/useUserGlobal";
 import { Loader } from "../components";
-import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
+import useGlobalToggle from "../store/useGlobalToggle";
 
 const Row = styled.View`
   flex-direction: row;
@@ -43,7 +37,6 @@ const HomeTopTabs: React.FC<NativeStackScreenProps<any, "HomeTopTabs">> = ({
   navigation: { navigate },
 }) => {
   const { user } = useUserGlobalStore();
-  const [currentTopTab, setCurrentTopTab] = useState("");
 
   const isDark = useColorScheme() === "dark";
   const color = isDark ? "white" : colors.BLACK_COLOR;
@@ -99,7 +92,6 @@ const HomeTopTabs: React.FC<NativeStackScreenProps<any, "HomeTopTabs">> = ({
             onPress={() =>
               navigate("HomeStack", {
                 screen: "AddCourse",
-                params: { currentTopTab },
               })
             }
           >
@@ -148,23 +140,18 @@ const HomeTopTabs: React.FC<NativeStackScreenProps<any, "HomeTopTabs">> = ({
             initialLayout={{
               width: Dimensions.get("window").width,
             }}
-            screenOptions={({ route }) => {
-              useEffect(() => {
-                setCurrentTopTab(route.name);
-              }, [route]);
-              return {
-                tabBarStyle: {
-                  backgroundColor: isDark ? colors.BLACK_COLOR : "white",
-                },
-                tabBarIndicatorStyle: {
-                  backgroundColor: colors.SBU_RED,
-                },
-                tabBarActiveTintColor: colors.SBU_RED,
-                tabBarInactiveTintColor: isDark
-                  ? colors.DARK_GREY
-                  : colors.LIGHT_GREY,
-                swipeEnabled: true,
-              };
+            screenOptions={{
+              tabBarStyle: {
+                backgroundColor: isDark ? colors.BLACK_COLOR : "white",
+              },
+              tabBarIndicatorStyle: {
+                backgroundColor: colors.SBU_RED,
+              },
+              tabBarActiveTintColor: colors.SBU_RED,
+              tabBarInactiveTintColor: isDark
+                ? colors.DARK_GREY
+                : colors.LIGHT_GREY,
+              swipeEnabled: true,
             }}
           >
             {Object.keys(user?.classHistory).map((classHistoryKey) => (

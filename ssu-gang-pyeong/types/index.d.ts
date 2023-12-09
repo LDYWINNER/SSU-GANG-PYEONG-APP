@@ -15,7 +15,7 @@ interface IAuthenticatedUser {
   courseReviewNum: number;
   adminAccount: boolean;
   classHistory: {
-    [index: string]: [ICourse];
+    [index: string]: [string];
   };
 }
 
@@ -88,4 +88,8 @@ interface ICourse {
   reviews: Schema.Types.ObjectId[];
   semesters: [string];
   avgGrade: number;
+}
+
+interface IGlobalToggle {
+  currentTableView: string;
 }
