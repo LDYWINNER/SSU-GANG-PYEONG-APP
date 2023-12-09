@@ -6,6 +6,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import useGlobalToggle from "../../store/useGlobalToggle";
 import useUserGlobalStore from "../../store/useUserGlobal";
 import { useEffect } from "react";
+import { useRoute } from "@react-navigation/native";
 
 const eventGroups = [
   {
@@ -293,7 +294,8 @@ const TableView: React.FC<NativeStackScreenProps<any, "TableView">> = ({
   navigation,
 }) => {
   const { user } = useUserGlobalStore();
-  const { updateToggleInfo } = useGlobalToggle();
+  const { toggleInfo, updateToggleInfo } = useGlobalToggle();
+  const route = useRoute();
 
   useEffect(() => {
     updateToggleInfo({
@@ -301,7 +303,7 @@ const TableView: React.FC<NativeStackScreenProps<any, "TableView">> = ({
         navigation.getState().index
       ],
     });
-  }, []);
+  }, [route]);
 
   return (
     <SafeAreaProvider>

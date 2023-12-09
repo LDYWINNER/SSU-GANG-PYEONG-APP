@@ -11,7 +11,6 @@ import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";
 import useUserGlobalStore from "../store/useUserGlobal";
 import { Loader } from "../components";
-import useGlobalToggle from "../store/useGlobalToggle";
 
 const Row = styled.View`
   flex-direction: row;
