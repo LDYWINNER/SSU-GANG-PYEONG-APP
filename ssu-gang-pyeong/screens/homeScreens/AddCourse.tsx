@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useState, useRef, useMemo } from "react";
 import { NavigateBack, SafeAreaWrapper } from "../../components";
 import { useTheme } from "@shopify/restyle";
 import { Box, Text, Theme } from "../../theme";
@@ -9,6 +9,9 @@ import colors from "../../colors";
 import { useColorScheme } from "react-native";
 import SelectCourses from "./SelectCourses";
 import EasyPick from "./EasyPick";
+import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
+import { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";
+import { Picker } from "@react-native-picker/picker";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -16,6 +19,45 @@ const AddCourse = () => {
   const theme = useTheme<Theme>();
   const isDark = useColorScheme() === "dark";
   const windowHeight = Dimensions.get("window").height;
+
+  //bottom sheet
+  const sheetRef = useRef<BottomSheet>(null);
+  const snapPoints = useMemo(() => ["90%"], []);
+  const handleSnapPress = useCallback(() => {
+    sheetRef.current?.snapToIndex(0);
+  }, []);
+  const handleClosePress = useCallback(() => {
+    sheetRef.current?.close();
+  }, []);
+  const [picker, setPicker] = useState(true);
+  const pickerRef = useRef<Picker<string>>(null);
+  const togglePicker = () => {
+    if (picker) {
+      handleSnapPress();
+      setPicker(false);
+    } else {
+      handleClosePress();
+      setPicker(true);
+    }
+  };
+  const handleSheetChange = useCallback((index: any) => {
+    if (index == -1) {
+      setPicker(true);
+      // mutate();
+    }
+  }, []);
+  const renderBackdrop = useCallback(
+    (
+      props: React.JSX.IntrinsicAttributes & BottomSheetDefaultBackdropProps
+    ) => (
+      <BottomSheetBackdrop
+        {...props}
+        disappearsOnIndex={-1}
+        appearsOnIndex={1}
+      />
+    ),
+    []
+  );
 
   return (
     <SafeAreaWrapper>
@@ -85,6 +127,7 @@ const AddCourse = () => {
               key={"학교 수업 추가"}
               name={"학교 수업 추가"}
               component={EasyPick}
+              initialParams={{ togglePicker }}
             />
             <Tab.Screen
               key={"직접 추가"}
@@ -94,6 +137,20 @@ const AddCourse = () => {
           </Tab.Navigator>
         </Box>
       </Box>
+      <BottomSheet
+        index={-1}
+        ref={sheetRef}
+        snapPoints={snapPoints}
+        enablePanDownToClose={true}
+        enableContentPanningGesture={false}
+        onChange={handleSheetChange}
+        backdropComponent={renderBackdrop}
+        // backgroundStyle={{
+        //   backgroundColor: isDark ? colors.DARKER_GREY : "white",
+        // }}
+      >
+        <SelectCourses />
+      </BottomSheet>
     </SafeAreaWrapper>
   );
 };

@@ -10,11 +10,18 @@ import { Box, Text, Theme } from "../../theme";
 import { ICourse } from "../../types";
 import { fetcher } from "../../utils/config";
 import { useTheme } from "@shopify/restyle";
-import { useNavigation } from "@react-navigation/native";
-import { MainStackNavigationType } from "../../navigation/types";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import {
+  HomeStackParamList,
+  MainStackNavigationType,
+} from "../../navigation/types";
+
+type EasyPickScreenRouteProp = RouteProp<HomeStackParamList, "EasyPick">;
 
 const EasyPick = () => {
   const navigation = useNavigation<MainStackNavigationType>();
+  const route = useRoute<EasyPickScreenRouteProp>();
+  const { togglePicker } = route.params;
   const { toggleInfo } = useGlobalToggle();
   const theme = useTheme<Theme>();
   const isDark = useColorScheme() === "dark";
@@ -44,7 +51,7 @@ const EasyPick = () => {
         <Text variant="text2Xl" fontWeight="700" mt="3">
           Table Name: {toggleInfo?.currentTableView}
         </Text>
-        <TouchableOpacity onPress={() => {}}>
+        <TouchableOpacity onPress={() => togglePicker()}>
           <Box mr="2" mt="2">
             <Ionicons
               name={isDark ? "add-circle-outline" : "add-circle"}
