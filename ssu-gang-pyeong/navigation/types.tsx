@@ -64,6 +64,7 @@ export type MainStackParamList = {
   };
   WriteReview: undefined;
   MyAccount: undefined;
+  MainStack: { screen: string; params: { id: string } };
 };
 
 export type MainParamList = {

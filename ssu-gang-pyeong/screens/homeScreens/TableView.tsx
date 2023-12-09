@@ -294,7 +294,7 @@ const TableView: React.FC<NativeStackScreenProps<any, "TableView">> = ({
   navigation,
 }) => {
   const { user } = useUserGlobalStore();
-  const { toggleInfo, updateToggleInfo } = useGlobalToggle();
+  const { updateToggleInfo } = useGlobalToggle();
   const route = useRoute();
 
   useEffect(() => {

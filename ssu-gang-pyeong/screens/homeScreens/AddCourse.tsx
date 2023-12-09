@@ -2,13 +2,11 @@ import React from "react";
 import { NavigateBack, SafeAreaWrapper } from "../../components";
 import { useTheme } from "@shopify/restyle";
 import { Box, Text, Theme } from "../../theme";
-import { ScrollView } from "react-native-gesture-handler";
 import { Alert, TouchableOpacity, Dimensions } from "react-native";
 import TimeTable from "@mikezzb/react-native-timetable";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import colors from "../../colors";
 import { useColorScheme } from "react-native";
-import Search from "../Search";
 import SelectCourses from "./SelectCourses";
 import EasyPick from "./EasyPick";
 
