@@ -45,7 +45,7 @@ const patchTVCourseRequest = async (
   }
 };
 
-const SelectCourses = () => {
+const SelectCourses = ({ togglePicker }: any) => {
   const { user } = useUserGlobalStore();
   const { toggleInfo } = useGlobalToggle();
   const theme = useTheme<Theme>();
@@ -93,7 +93,7 @@ const SelectCourses = () => {
   const [picker, setPicker] = useState(true);
   const [pickerContents, setPickerContents] = useState("");
   const pickerRef = useRef<Picker<string>>(null);
-  const togglePicker = (index: string) => {
+  const toggleSubjPicker = (index: string) => {
     if (picker) {
       handleSnapPress();
       setPicker(false);
@@ -134,7 +134,7 @@ const SelectCourses = () => {
   return (
     <>
       <Box flexDirection="row" alignItems="center" mt="2">
-        <TouchableOpacity onPress={() => togglePicker("searchSubj")}>
+        <TouchableOpacity onPress={() => toggleSubjPicker("searchSubj")}>
           <Box flexDirection="row" alignItems="center" p="4">
             <Ionicons
               name="chevron-down"
@@ -194,6 +194,7 @@ const SelectCourses = () => {
                   tableName: toggleInfo as IGlobalToggle,
                   courseId: item._id,
                 });
+                togglePicker();
               }}
               style={{ width: "50%" }}
             >

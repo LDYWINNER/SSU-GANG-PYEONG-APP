@@ -149,7 +149,7 @@ const AddCourse = () => {
         //   backgroundColor: isDark ? colors.DARKER_GREY : "white",
         // }}
       >
-        <SelectCourses />
+        <SelectCourses togglePicker={togglePicker} />
       </BottomSheet>
     </SafeAreaWrapper>
   );
