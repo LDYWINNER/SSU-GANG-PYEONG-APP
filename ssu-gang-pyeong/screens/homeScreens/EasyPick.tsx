@@ -36,7 +36,9 @@ const EasyPick = () => {
 
   const { data: courses, isLoading: isLoadingCourses } = useSWR<{
     takingCourses: ICourse[];
-  }>(`/api/v1/course/tableView/${toggleInfo?.currentTableView}`, fetcher);
+  }>(`/api/v1/course/tableView/${toggleInfo?.currentTableView}`, fetcher, {
+    refreshInterval: 1000,
+  });
 
   if (isLoadingCourses) {
     return <Loader />;
