@@ -6,12 +6,12 @@ import React, {
   useEffect,
 } from "react";
 import useSWRMutation from "swr/mutation";
-import { fetcher } from "../../utils/config";
+import axiosInstance, { fetcher } from "../../utils/config";
 import { Controller, useForm } from "react-hook-form";
 import { Box, Text, Theme } from "../../theme";
 import { useTheme } from "@shopify/restyle";
 import { Ionicons } from "@expo/vector-icons";
-import { ICourse } from "../../types";
+import { ICourse, IGlobalToggle } from "../../types";
 import { Loader, SafeAreaWrapper } from "../../components";
 import { FlatList, TouchableOpacity } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
@@ -20,13 +20,34 @@ import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";
 import { Picker } from "@react-native-picker/picker";
 import useUserGlobalStore from "../../store/useUserGlobal";
+import useGlobalToggle from "../../store/useGlobalToggle";
 
 interface ISearch {
   keyword: string;
 }
 
+interface ITVAuthRequest {
+  tableName: IGlobalToggle;
+  courseId: string;
+}
+
+const patchTVCourseRequest = async (
+  url: string,
+  { arg }: { arg: ITVAuthRequest }
+) => {
+  try {
+    await axiosInstance.patch(url, {
+      ...arg,
+    });
+  } catch (error) {
+    console.log("error in patchTVCourseRequest", error);
+    throw error;
+  }
+};
+
 const SelectCourses = () => {
   const { user } = useUserGlobalStore();
+  const { toggleInfo } = useGlobalToggle();
   const theme = useTheme<Theme>();
   const [searchSubj, setSearchSubj] = useState<string>("ALL");
 
@@ -53,6 +74,11 @@ const SelectCourses = () => {
       ? `api/v1/course?searchSubj=${searchSubj}`
       : `api/v1/course?searchSubj=${searchSubj}&keyword=${watch("keyword")}`,
     fetcher
+  );
+
+  const { trigger: patchTVCourse, isMutating } = useSWRMutation(
+    "api/v1/course/patchTVCourse",
+    patchTVCourseRequest
   );
 
   //bottom sheet
@@ -162,7 +188,15 @@ const SelectCourses = () => {
         numColumns={2}
         renderItem={({ item, index }) => {
           return (
-            <TouchableOpacity onPress={() => {}} style={{ width: "50%" }}>
+            <TouchableOpacity
+              onPress={() => {
+                patchTVCourse({
+                  tableName: toggleInfo as IGlobalToggle,
+                  courseId: item._id,
+                });
+              }}
+              style={{ width: "50%" }}
+            >
               <Box
                 borderRadius="rounded-xl"
                 bg={"lightGray"}
