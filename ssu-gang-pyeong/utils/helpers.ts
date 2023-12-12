@@ -186,9 +186,6 @@ export const formatCourses = (courses: ICourse[]) => {
       });
     }
   }
-  console.log(formattedCourses);
-  console.log(formattedCourses[0].sections);
-  console.log(formattedCourses[1].sections);
 
   return formattedCourses;
 };
