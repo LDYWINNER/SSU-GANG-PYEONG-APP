@@ -93,3 +93,19 @@ interface ICourse {
 interface IGlobalToggle {
   currentTableView: string;
 }
+
+interface ITVCourse {
+  courseId: string;
+  title: string;
+  sections: {
+    [string]: ITVItem;
+  };
+}
+
+interface ITVItem {
+  day: number;
+  startTime: string;
+  endTime: string;
+  location: string;
+  color: string;
+}

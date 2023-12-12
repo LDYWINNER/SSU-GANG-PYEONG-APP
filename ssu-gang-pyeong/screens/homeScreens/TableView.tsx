@@ -7,6 +7,11 @@ import useGlobalToggle from "../../store/useGlobalToggle";
 import useUserGlobalStore from "../../store/useUserGlobal";
 import { useEffect } from "react";
 import { useRoute } from "@react-navigation/native";
+import { ICourse } from "../../types";
+import useSWR from "swr";
+import { fetcher } from "../../utils/config";
+import { formatCourses } from "../../utils/helpers";
+import { Loader } from "../../components";
 
 const eventGroups = [
   {
@@ -137,156 +142,18 @@ const eventGroups = [
   },
 ];
 
-const events = [
+const newEventGroup = [
   {
-    courseId: "AIST3020",
-    title: "Intro to Computer Systems",
-    section: "- - LEC",
-    day: 2,
-    startTime: "11:30",
-    endTime: "12:15",
-    location: "Online Teaching",
-    color: "rgba(253,149,141,1)",
-  },
-  {
-    courseId: "AIST3020",
-    title: "Intro to Computer Systems",
-    section: "- - LEC",
-    day: 3,
-    startTime: "16:30",
-    endTime: "18:15",
-    location: "Online Teaching",
-    color: "rgba(253,149,141,1)",
-  },
-  {
-    courseId: "AIST3020",
-    title: "Intro to Computer Systems",
-    section: "-L01 - LAB",
-    day: 2,
-    startTime: "16:30",
-    endTime: "17:15",
-    location: "Online Teaching",
-    color: "rgba(253,149,141,1)",
-  },
-  {
-    courseId: "CSCI2100",
-    title: "Data Structures",
-    section: "A - LEC",
-    day: 1,
-    startTime: "16:30",
-    endTime: "17:15",
-    location: "Online Teaching",
-    color: "rgba(241,153,40,1)",
-  },
-  {
-    courseId: "CSCI2100",
-    title: "Data Structures",
-    section: "A - LEC",
-    day: 3,
-    startTime: "14:30",
-    endTime: "16:15",
-    location: "Online Teaching",
-    color: "rgba(241,153,40,1)",
-  },
-  {
-    courseId: "CSCI2100",
-    title: "Data Structures",
-    section: "AT02 - TUT",
-    day: 4,
-    startTime: "17:30",
-    endTime: "18:15",
-    location: "Online Teaching",
-    color: "rgba(241,153,40,1)",
-  },
-  {
-    courseId: "ELTU2014",
-    title: "English for ERG Stds I",
-    section: "BEC1 - CLW",
-    day: 2,
-    startTime: "10:30",
-    endTime: "11:15",
-    location: "Online Teaching",
-    color: "rgba(3,218,197,1)",
-  },
-  {
-    courseId: "ELTU2014",
-    title: "English for ERG Stds I",
-    section: "BEC1 - CLW",
-    day: 4,
-    startTime: "8:30",
-    endTime: "10:15",
-    location: "Online Teaching",
-    color: "rgba(3,218,197,1)",
-  },
-  {
-    courseId: "ENGG2780",
-    title: "Statistics for Engineers",
-    section: "B - LEC",
-    day: 1,
-    startTime: "12:30",
-    endTime: "14:15",
-    location: "Online Teaching",
-    color: "rgba(0,142,204,1)",
-  },
-  {
-    courseId: "ENGG2780",
-    title: "Statistics for Engineers",
-    section: "BT01 - TUT",
-    day: 3,
-    startTime: "12:30",
-    endTime: "14:15",
-    location: "Online Teaching",
-    color: "rgba(0,142,204,1)",
-  },
-  {
-    courseId: "GESC1000",
-    title: "College Assembly",
-    section: "-A01 - ASB",
-    day: 5,
-    startTime: "11:30",
-    endTime: "13:15",
-    location: "Online Teaching",
-    color: "rgba(187,134,252,1)",
-  },
-  {
-    courseId: "UGEB1492",
-    title: "Data Expl - Stat in Daily Life",
-    section: "- - LEC",
-    day: 4,
-    startTime: "14:30",
-    endTime: "17:15",
-    location: "Lady Shaw Bldg LT5",
-    color: "rgba(102,204,255,1)",
-  },
-  {
-    courseId: "UGEC1685",
-    title: "Drugs and Culture",
-    section: "- - LEC",
-    day: 4,
-    startTime: "11:30",
-    endTime: "13:15",
-    location: "Lee Shau Kee Building LT5",
-    color: "rgba(255,111,199,1)",
-  },
-  {
-    courseId: "Eat!",
-    title: "No work on SUNDAY!",
-    section: "",
-    day: 7,
-    startTime: "12:30",
-    endTime: "13:15",
-    location: "Home",
-    color: "rgba(50,144,144,1)",
-  },
-  {
-    courseId: "Manga!",
-    title: "",
-    section: "",
-    day: 6,
-    startTime: "16:30",
-    endTime: "19:15",
-    location: "Home",
-    color: "rgba(211,124,177,1)",
+    courseId: "AMS 151",
+    sections: {
+      "": {
+        days: [1, 3],
+        endTimes: ["16:50", "16:50"],
+        locations: ["C107", "C107"],
+        startTimes: ["15:30", "15:30"],
+      },
+    },
+    title: "Applied Calculus I",
   },
 ];
 
@@ -294,8 +161,14 @@ const TableView: React.FC<NativeStackScreenProps<any, "TableView">> = ({
   navigation,
 }) => {
   const { user } = useUserGlobalStore();
-  const { updateToggleInfo } = useGlobalToggle();
+  const { toggleInfo, updateToggleInfo } = useGlobalToggle();
   const route = useRoute();
+
+  const { data: courses, isLoading: isLoadingCourses } = useSWR<{
+    takingCourses: ICourse[];
+  }>(`/api/v1/course/tableView/${toggleInfo?.currentTableView}`, fetcher, {
+    refreshInterval: 1000,
+  });
 
   useEffect(() => {
     updateToggleInfo({
@@ -310,11 +183,15 @@ const TableView: React.FC<NativeStackScreenProps<any, "TableView">> = ({
       <SafeAreaView style={styles.safeAreaContainer}>
         <StatusBar backgroundColor="rgba(21,101,192,1)" />
         <View style={styles.container}>
-          <TimeTable
-            eventGroups={eventGroups}
-            // events={events}
-            eventOnPress={(event) => Alert.alert(`${JSON.stringify(event)}`)}
-          />
+          {isLoadingCourses ? (
+            <Loader />
+          ) : (
+            <TimeTable
+              eventGroups={formatCourses(courses!.takingCourses)}
+              // eventGroups={newEventGroup}
+              eventOnPress={(event) => Alert.alert(`${JSON.stringify(event)}`)}
+            />
+          )}
         </View>
       </SafeAreaView>
     </SafeAreaProvider>

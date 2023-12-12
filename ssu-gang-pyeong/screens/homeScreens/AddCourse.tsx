@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useRef, useMemo } from "react";
-import { NavigateBack, SafeAreaWrapper } from "../../components";
+import { Loader, NavigateBack, SafeAreaWrapper } from "../../components";
 import { useTheme } from "@shopify/restyle";
 import { Box, Text, Theme } from "../../theme";
 import { Alert, TouchableOpacity, Dimensions } from "react-native";
@@ -12,6 +12,11 @@ import EasyPick from "./EasyPick";
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";
 import { Picker } from "@react-native-picker/picker";
+import useGlobalToggle from "../../store/useGlobalToggle";
+import { fetcher } from "../../utils/config";
+import useSWR from "swr";
+import { ICourse } from "../../types";
+import { formatCourses } from "../../utils/helpers";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -19,6 +24,8 @@ const AddCourse = () => {
   const theme = useTheme<Theme>();
   const isDark = useColorScheme() === "dark";
   const windowHeight = Dimensions.get("window").height;
+
+  const { toggleInfo } = useGlobalToggle();
 
   //bottom sheet
   const sheetRef = useRef<BottomSheet>(null);
@@ -59,6 +66,12 @@ const AddCourse = () => {
     []
   );
 
+  const { data: courses, isLoading: isLoadingCourses } = useSWR<{
+    takingCourses: ICourse[];
+  }>(`/api/v1/course/tableView/${toggleInfo?.currentTableView}`, fetcher, {
+    refreshInterval: 1000,
+  });
+
   return (
     <SafeAreaWrapper>
       <Box mx="4">
@@ -93,11 +106,14 @@ const AddCourse = () => {
         <Box height={16} />
 
         <Box height={windowHeight * 0.3}>
-          <TimeTable
-            eventGroups={[]}
-            // events={events}
-            eventOnPress={(event) => Alert.alert(`${JSON.stringify(event)}`)}
-          />
+          {isLoadingCourses ? (
+            <Loader />
+          ) : (
+            <TimeTable
+              eventGroups={formatCourses(courses!.takingCourses)}
+              eventOnPress={(event) => Alert.alert(`${JSON.stringify(event)}`)}
+            />
+          )}
         </Box>
 
         <Box height={windowHeight * 0.5}>
