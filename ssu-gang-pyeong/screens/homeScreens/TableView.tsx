@@ -136,7 +136,7 @@ const TableView: React.FC<NativeStackScreenProps<any, "TableView">> = ({
             <MaterialCommunityIcons
               name="pencil-plus-outline"
               size={24}
-              color={theme.colors.black}
+              color="black"
             />
             <TouchableOpacity
               onPress={() => {
