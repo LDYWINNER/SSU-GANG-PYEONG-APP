@@ -54,7 +54,10 @@ const ListView: React.FC<NativeStackScreenProps<any, "ListView">> = ({
   return (
     <Box>
       {courses!.takingCourses.map((item, index) => (
-        <TouchableOpacity onPress={() => navigateToCourseDetail(item._id)}>
+        <TouchableOpacity
+          key={item._id}
+          onPress={() => navigateToCourseDetail(item._id)}
+        >
           <Box
             borderRadius="rounded-xl"
             bg={
