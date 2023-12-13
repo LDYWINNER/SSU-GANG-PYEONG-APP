@@ -85,7 +85,7 @@ const HomeTopTabs: React.FC<NativeStackScreenProps<any, "HomeTopTabs">> = ({
   return (
     <>
       <BigRow bgColor={bgColor}>
-        <Title color={color}>@USERNAME</Title>
+        <Title color={color}>{`@${user.username}`}</Title>
         <Row>
           <TouchableOpacity
             onPress={() =>

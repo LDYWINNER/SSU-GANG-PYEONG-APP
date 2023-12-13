@@ -1,7 +1,7 @@
 import React from "react";
 import useSWR from "swr";
 import { RouteProp, useRoute } from "@react-navigation/native";
-import axiosInstance, { fetcher } from "../utils/config";
+import { fetcher } from "../utils/config";
 import { Box, Text, Theme } from "../theme";
 import { useTheme } from "@shopify/restyle";
 import { ICourse } from "../types";
