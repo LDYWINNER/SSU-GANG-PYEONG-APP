@@ -11,14 +11,14 @@ import { Controller, useForm } from "react-hook-form";
 import { Box, Text, Theme } from "../../theme";
 import { useTheme } from "@shopify/restyle";
 import { Ionicons } from "@expo/vector-icons";
-import { ICourse, IGlobalToggle } from "../../types";
+import { ICategory, ICourse, IGlobalToggle } from "../../types";
 import { Loader } from "../../components";
 import { FlatList, TouchableOpacity } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
-import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
-import { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";
+import BottomSheet from "@gorhom/bottom-sheet";
 import { Picker } from "@react-native-picker/picker";
 import useGlobalToggle from "../../store/useGlobalToggle";
+import useSWR, { mutate } from "swr";
 
 interface ISearch {
   keyword: string;
@@ -78,6 +78,8 @@ const SelectCourses = ({ togglePicker, courses }: any) => {
     "api/v1/course/patchTVCourse",
     patchTVCourseRequest
   );
+
+  const { mutate } = useSWR<ICategory[]>("api/v1/todocategory/", fetcher);
 
   //bottom sheet
   const sheetRef = useRef<BottomSheet>(null);
@@ -187,6 +189,7 @@ const SelectCourses = ({ togglePicker, courses }: any) => {
                   courseId: item._id,
                 });
                 togglePicker();
+                mutate();
               }}
               style={{ width: "50%" }}
             >
