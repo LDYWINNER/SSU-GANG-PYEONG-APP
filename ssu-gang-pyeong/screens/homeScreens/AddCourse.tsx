@@ -110,7 +110,11 @@ const AddCourse = () => {
             <Loader />
           ) : (
             <TimeTable
-              eventGroups={formatCourses(courses!.takingCourses)}
+              eventGroups={
+                courses?.takingCourses.length === 0
+                  ? []
+                  : formatCourses(courses!.takingCourses)
+              }
               eventOnPress={(event) => Alert.alert(`${JSON.stringify(event)}`)}
             />
           )}

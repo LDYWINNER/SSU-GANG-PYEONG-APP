@@ -12,6 +12,7 @@ import useSWR from "swr";
 import { fetcher } from "../../utils/config";
 import { formatCourses } from "../../utils/helpers";
 import { Loader } from "../../components";
+import { useIsFocused } from "@react-navigation/native";
 
 const TableView: React.FC<NativeStackScreenProps<any, "TableView">> = ({
   navigation,
@@ -19,20 +20,42 @@ const TableView: React.FC<NativeStackScreenProps<any, "TableView">> = ({
   const { user } = useUserGlobalStore();
   const { toggleInfo, updateToggleInfo } = useGlobalToggle();
   const route = useRoute();
+  const isFocused = useIsFocused();
 
-  const { data: courses, isLoading: isLoadingCourses } = useSWR<{
+  const {
+    data: courses,
+    isLoading: isLoadingCourses,
+    mutate,
+  } = useSWR<{
     takingCourses: ICourse[];
   }>(`/api/v1/course/tableView/${toggleInfo?.currentTableView}`, fetcher, {
     refreshInterval: 1000,
   });
 
   useEffect(() => {
-    updateToggleInfo({
-      currentTableView: Object.keys(user!.classHistory)[
-        navigation.getState().index
-      ],
-    });
-  }, [route]);
+    if (isFocused) {
+      const currentRoute =
+        navigation.getState().routes[navigation.getState().index];
+      updateToggleInfo({
+        currentTableView: Object.keys(user!.classHistory)[
+          navigation.getState().index
+        ],
+      });
+      console.log("Current tab:", currentRoute.name);
+      mutate();
+    }
+    // const currentRoute =
+    //   navigation.getState().routes[navigation.getState().index];
+    // updateToggleInfo({
+    //   currentTableView: Object.keys(user!.classHistory)[
+    //     navigation.getState().index
+    //   ],
+    // });
+    // // console.log(toggleInfo);
+    // console.log(route);
+    // // console.log(currentRoute);
+    // mutate();
+  }, [isFocused, navigation]);
 
   return (
     <SafeAreaProvider>
@@ -43,8 +66,11 @@ const TableView: React.FC<NativeStackScreenProps<any, "TableView">> = ({
             <Loader />
           ) : (
             <TimeTable
-              eventGroups={formatCourses(courses!.takingCourses)}
-              // eventGroups={newEventGroup}
+              eventGroups={
+                courses?.takingCourses.length === 0
+                  ? []
+                  : formatCourses(courses!.takingCourses)
+              }
               eventOnPress={(event) => Alert.alert(`${JSON.stringify(event)}`)}
             />
           )}
