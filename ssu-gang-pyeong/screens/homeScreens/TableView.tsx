@@ -41,7 +41,7 @@ const TableView: React.FC<NativeStackScreenProps<any, "TableView">> = ({
           navigation.getState().index
         ],
       });
-      console.log("Current tab:", currentRoute.name);
+      // console.log("Current tab:", currentRoute.name);
       mutate();
     }
   }, [isFocused, navigation]);

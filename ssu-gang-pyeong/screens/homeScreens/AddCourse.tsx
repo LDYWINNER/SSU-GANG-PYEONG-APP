@@ -17,6 +17,7 @@ import { fetcher } from "../../utils/config";
 import useSWR from "swr";
 import { ICourse } from "../../types";
 import { formatCourses } from "../../utils/helpers";
+import { useNavigation } from "@react-navigation/native";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -24,6 +25,10 @@ const AddCourse = () => {
   const theme = useTheme<Theme>();
   const isDark = useColorScheme() === "dark";
   const windowHeight = Dimensions.get("window").height;
+  const navigation = useNavigation();
+  const navigateBack = () => {
+    navigation.goBack();
+  };
 
   const { toggleInfo } = useGlobalToggle();
 
@@ -84,7 +89,7 @@ const AddCourse = () => {
           <Text ml="13" variant="textXl" fontWeight="600" mr="10">
             수업추가
           </Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={navigateBack}>
             <Box
               style={{
                 backgroundColor: theme.colors.sbuRed,
