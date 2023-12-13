@@ -44,17 +44,6 @@ const TableView: React.FC<NativeStackScreenProps<any, "TableView">> = ({
       console.log("Current tab:", currentRoute.name);
       mutate();
     }
-    // const currentRoute =
-    //   navigation.getState().routes[navigation.getState().index];
-    // updateToggleInfo({
-    //   currentTableView: Object.keys(user!.classHistory)[
-    //     navigation.getState().index
-    //   ],
-    // });
-    // // console.log(toggleInfo);
-    // console.log(route);
-    // // console.log(currentRoute);
-    // mutate();
   }, [isFocused, navigation]);
 
   return (
