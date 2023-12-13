@@ -215,7 +215,7 @@ const formatDays = (target: string) => {
 const formatTimes = (target: string) => {
   const result: string[] = [];
   //["3:30 PM"]
-  if (Number(target.split(":")[0]) < 12) {
+  if (Number(target.split(":")[0]) < 8) {
     const hour = Number(target.split(":")[0]) + 12;
     result.push(String(hour) + ":" + target.split(":")[1].slice(0, 2));
   } else {
@@ -265,12 +265,12 @@ const formatRecTimes = (target: string) => {
   const result: [string[], string[]] = [[], []];
   //["3:30 PM", "12:30 PM"]
   const temp = target.slice(0, -1).split("(");
-  if (temp[0].includes("PM") && Number(temp[0].split(":")[0]) < 12) {
+  if (temp[0].includes("PM") && Number(temp[0].split(":")[0]) < 8) {
     const hour = Number(temp[0].split(":")[0]) + 12;
     result[0].push(String(hour) + temp[0].split(":")[1].slice(0, 2));
   }
 
-  if (temp[1].includes("PM") && Number(temp[1].split(":")[0]) < 12) {
+  if (temp[1].includes("PM") && Number(temp[1].split(":")[0]) < 8) {
     const hour = Number(temp[1].split(":")[0]) + 12;
     result[0].push(String(hour) + temp[1].split(":")[1].slice(0, 2));
   }
