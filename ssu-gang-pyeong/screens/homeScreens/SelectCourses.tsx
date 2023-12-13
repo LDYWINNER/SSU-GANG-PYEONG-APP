@@ -108,18 +108,6 @@ const SelectCourses = ({ togglePicker, courses }: any) => {
       trigger();
     }
   }, []);
-  const renderBackdrop = useCallback(
-    (
-      props: React.JSX.IntrinsicAttributes & BottomSheetDefaultBackdropProps
-    ) => (
-      <BottomSheetBackdrop
-        {...props}
-        disappearsOnIndex={-1}
-        appearsOnIndex={1}
-      />
-    ),
-    []
-  );
 
   useEffect(() => {
     trigger();
@@ -237,7 +225,6 @@ const SelectCourses = ({ togglePicker, courses }: any) => {
         enablePanDownToClose={true}
         enableContentPanningGesture={false}
         onChange={handleSheetChange}
-        backdropComponent={renderBackdrop}
         // backgroundStyle={{
         //   backgroundColor: isDark ? colors.DARKER_GREY : "white",
         // }}
