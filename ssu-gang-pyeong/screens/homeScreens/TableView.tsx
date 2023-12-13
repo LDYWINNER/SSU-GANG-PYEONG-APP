@@ -6,7 +6,6 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import useGlobalToggle from "../../store/useGlobalToggle";
 import useUserGlobalStore from "../../store/useUserGlobal";
 import { useEffect } from "react";
-import { useRoute } from "@react-navigation/native";
 import { ICourse } from "../../types";
 import useSWR from "swr";
 import { fetcher } from "../../utils/config";
@@ -19,7 +18,6 @@ const TableView: React.FC<NativeStackScreenProps<any, "TableView">> = ({
 }) => {
   const { user } = useUserGlobalStore();
   const { toggleInfo, updateToggleInfo } = useGlobalToggle();
-  const route = useRoute();
   const isFocused = useIsFocused();
 
   const {
@@ -34,8 +32,6 @@ const TableView: React.FC<NativeStackScreenProps<any, "TableView">> = ({
 
   useEffect(() => {
     if (isFocused) {
-      const currentRoute =
-        navigation.getState().routes[navigation.getState().index];
       updateToggleInfo({
         currentTableView: Object.keys(user!.classHistory)[
           navigation.getState().index
