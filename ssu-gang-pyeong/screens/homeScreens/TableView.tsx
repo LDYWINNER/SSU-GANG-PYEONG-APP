@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Alert, StatusBar, StyleSheet, View } from "react-native";
+import { Alert, StyleSheet, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import TimeTable from "@mikezzb/react-native-timetable";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -45,7 +45,6 @@ const TableView: React.FC<NativeStackScreenProps<any, "TableView">> = ({
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.safeAreaContainer}>
-        <StatusBar backgroundColor="rgba(21,101,192,1)" />
         <View style={styles.container}>
           {isLoadingCourses ? (
             <Loader />

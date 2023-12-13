@@ -129,73 +129,54 @@ const HomeTopTabs: React.FC<NativeStackScreenProps<any, "HomeTopTabs">> = ({
           </TouchableOpacity>
         </Row>
       </BigRow>
-      {tableView ? (
-        <>
-          <Tab.Navigator
-            initialRouteName="2023-fall"
-            sceneContainerStyle={{
-              backgroundColor: isDark ? colors.BLACK_COLOR : "white",
-            }}
-            initialLayout={{
-              width: Dimensions.get("window").width,
-            }}
-            screenOptions={{
-              tabBarStyle: {
-                backgroundColor: isDark ? colors.BLACK_COLOR : "white",
-              },
-              tabBarIndicatorStyle: {
-                backgroundColor: colors.SBU_RED,
-              },
-              tabBarActiveTintColor: colors.SBU_RED,
-              tabBarInactiveTintColor: isDark
-                ? colors.DARK_GREY
-                : colors.LIGHT_GREY,
-              swipeEnabled: true,
-            }}
-          >
-            {Object.keys(user?.classHistory).map((classHistoryKey) => (
-              <Tab.Screen
-                key={classHistoryKey}
-                name={classHistoryKey}
-                component={TableView}
-              />
-            ))}
-          </Tab.Navigator>
 
-          <BottomSheet
-            index={-1}
-            ref={sheetRef}
-            snapPoints={snapPoints}
-            enablePanDownToClose={true}
-            enableContentPanningGesture={false}
-            onChange={handleSheetChange}
-            backdropComponent={renderBackdrop}
-            backgroundStyle={{
+      <>
+        <Tab.Navigator
+          initialRouteName="2023-fall"
+          sceneContainerStyle={{
+            backgroundColor: isDark ? colors.BLACK_COLOR : "white",
+          }}
+          initialLayout={{
+            width: Dimensions.get("window").width,
+          }}
+          screenOptions={{
+            tabBarStyle: {
               backgroundColor: isDark ? colors.BLACK_COLOR : "white",
-            }}
-          >
-            <MoreMenu />
-          </BottomSheet>
-        </>
-      ) : (
-        <>
-          <ListView />
-          <BottomSheet
-            index={-1}
-            ref={sheetRef}
-            snapPoints={snapPoints}
-            enablePanDownToClose={true}
-            enableContentPanningGesture={false}
-            backdropComponent={renderBackdrop}
-            onChange={handleSheetChange}
-            backgroundStyle={{
-              backgroundColor: isDark ? colors.BLACK_COLOR : "white",
-            }}
-          >
-            <MoreMenu />
-          </BottomSheet>
-        </>
-      )}
+            },
+            tabBarIndicatorStyle: {
+              backgroundColor: colors.SBU_RED,
+            },
+            tabBarActiveTintColor: colors.SBU_RED,
+            tabBarInactiveTintColor: isDark
+              ? colors.DARK_GREY
+              : colors.LIGHT_GREY,
+            swipeEnabled: true,
+          }}
+        >
+          {Object.keys(user?.classHistory).map((classHistoryKey) => (
+            <Tab.Screen
+              key={classHistoryKey}
+              name={classHistoryKey}
+              component={tableView ? TableView : ListView}
+            />
+          ))}
+        </Tab.Navigator>
+
+        <BottomSheet
+          index={-1}
+          ref={sheetRef}
+          snapPoints={snapPoints}
+          enablePanDownToClose={true}
+          enableContentPanningGesture={false}
+          onChange={handleSheetChange}
+          backdropComponent={renderBackdrop}
+          backgroundStyle={{
+            backgroundColor: isDark ? colors.BLACK_COLOR : "white",
+          }}
+        >
+          <MoreMenu />
+        </BottomSheet>
+      </>
     </>
   );
 };
