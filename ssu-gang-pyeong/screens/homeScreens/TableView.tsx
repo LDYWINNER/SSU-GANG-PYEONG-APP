@@ -56,6 +56,11 @@ const TableView: React.FC<NativeStackScreenProps<any, "TableView">> = ({
                   : formatCourses(courses!.takingCourses)
               }
               eventOnPress={(event) => Alert.alert(`${JSON.stringify(event)}`)}
+              disableTicker
+              configs={{
+                startHour: 8,
+                endHour: 20,
+              }}
             />
           )}
         </View>
