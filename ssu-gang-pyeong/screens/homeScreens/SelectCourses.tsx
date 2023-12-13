@@ -12,14 +12,12 @@ import { Box, Text, Theme } from "../../theme";
 import { useTheme } from "@shopify/restyle";
 import { Ionicons } from "@expo/vector-icons";
 import { ICourse, IGlobalToggle } from "../../types";
-import { Loader, SafeAreaWrapper } from "../../components";
+import { Loader } from "../../components";
 import { FlatList, TouchableOpacity } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
-import { Rating } from "@kolking/react-native-rating";
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";
 import { Picker } from "@react-native-picker/picker";
-import useUserGlobalStore from "../../store/useUserGlobal";
 import useGlobalToggle from "../../store/useGlobalToggle";
 
 interface ISearch {
@@ -45,11 +43,11 @@ const patchTVCourseRequest = async (
   }
 };
 
-const SelectCourses = ({ togglePicker }: any) => {
-  const { user } = useUserGlobalStore();
+const SelectCourses = ({ togglePicker, courses }: any) => {
   const { toggleInfo } = useGlobalToggle();
   const theme = useTheme<Theme>();
   const [searchSubj, setSearchSubj] = useState<string>("ALL");
+  let tvCoursesId: string[] = [];
 
   const { control, handleSubmit, watch } = useForm<ISearch>({
     defaultValues: {
@@ -127,8 +125,14 @@ const SelectCourses = ({ togglePicker }: any) => {
     trigger();
   }, []);
 
-  if (!data) {
+  if (!data || !courses) {
     return <Loader />;
+  } else {
+    // console.log(courses);
+    for (let i = 0; i < courses.length; i++) {
+      tvCoursesId.push(courses[i]._id);
+    }
+    // console.log(tvCoursesId);
   }
 
   return (
@@ -200,7 +204,7 @@ const SelectCourses = ({ togglePicker }: any) => {
             >
               <Box
                 borderRadius="rounded-xl"
-                bg={"lightGray"}
+                bg={tvCoursesId.includes(item._id) ? "red400" : "lightGray"}
                 px="4"
                 py="6"
                 m="3"
