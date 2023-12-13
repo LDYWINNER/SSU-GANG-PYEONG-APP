@@ -51,6 +51,13 @@ const ListView: React.FC<NativeStackScreenProps<any, "ListView">> = ({
   if (isLoadingCourses) {
     return <Loader />;
   }
+  if (courses?.takingCourses.length === 0) {
+    return (
+      <Box flex={1} justifyContent="center" alignItems="center">
+        <Text variant="text2Xl">No course yet :(</Text>
+      </Box>
+    );
+  }
   return (
     <Box>
       {courses!.takingCourses.map((item, index) => (
