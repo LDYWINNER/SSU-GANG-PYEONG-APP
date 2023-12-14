@@ -1,6 +1,6 @@
-import AppLoading from "expo-app-loading";
+import React, { useEffect, useState } from "react";
+import * as SplashScreen from "expo-splash-screen";
 import * as Font from "expo-font";
-import React, { useState } from "react";
 import { AppState, Image, useColorScheme } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Asset } from "expo-asset";
@@ -12,6 +12,9 @@ import Root from "./navigation/Root";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { SWRConfig } from "swr";
+import { Loader } from "./components";
+
+// SplashScreen.preventAutoHideAsync(); // prevent the splash screen from auto-hiding
 
 const queryClient = new QueryClient();
 
@@ -32,29 +35,31 @@ const loadImages = (images: any[]) =>
 
 export default function App({ Ionicons }: Props) {
   const [ready, setReady] = useState(false);
-  const onFinish = () => {
-    setReady(true);
-  };
+  const isDark = useColorScheme() === "dark";
+
   const startLoading = async () => {
     const images = loadImages([
       require("./assets/images/logo.png"),
       require("./assets/images/logo-transparent.png"),
     ]);
+
+    // Create a promise that resolves after 1 second
+    const delay = new Promise((resolve) => setTimeout(resolve, 500)); // 1000 milliseconds = 1 second
+
     // font preload not working
     //const fonts = loadFonts([Ionicons.font]);
     //await Promise.all([...fonts, ...images]);
-    await Promise.all([...images]);
+    await Promise.all([...images, delay]);
   };
-  const isDark = useColorScheme() === "dark";
-  if (!ready) {
-    return (
-      <AppLoading
-        startAsync={startLoading}
-        onFinish={onFinish}
-        onError={console.error}
-      />
-    );
-  }
+
+  useEffect(() => {
+    SplashScreen.preventAutoHideAsync(); // Prevent the splash screen from hiding
+    startLoading().then(() => {
+      setReady(true);
+      SplashScreen.hideAsync(); // Hide the splash screen once loading is complete
+    });
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={isDark ? darkTheme : lightTheme}>

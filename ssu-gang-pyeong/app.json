@@ -3,9 +3,7 @@
     "name": "ssu-gang-pyeong",
     "slug": "ssu-gang-pyeong",
     "version": "1.0.0",
-    "assetBundlePatterns": [
-      "**/*"
-    ]
+    "assetBundlePatterns": ["**/*"]
   },
   "name": "ssu-gang-pyeong"
 }
