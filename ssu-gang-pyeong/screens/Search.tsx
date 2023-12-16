@@ -237,14 +237,20 @@ const Search: React.FC<NativeStackScreenProps<any, "Search">> = ({
         //   backgroundColor: isDark ? colors.DARKER_GREY : "white",
         // }}
       >
-        <Box>
+        <Box flexDirection="row" justifyContent="flex-end" mr="5">
           <TouchableOpacity
             onPress={() => {
               setSearchSubj(searchSubj);
               handleClosePress();
             }}
           >
-            <Text>확인</Text>
+            <Text
+              variant="textLg"
+              fontWeight="600"
+              style={{ color: theme.colors.sbuRed }}
+            >
+              확인
+            </Text>
           </TouchableOpacity>
         </Box>
         <Picker
