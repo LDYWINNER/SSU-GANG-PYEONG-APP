@@ -157,7 +157,7 @@ const HomeTopTabs: React.FC<NativeStackScreenProps<any, "HomeTopTabs">> = ({
             <Tab.Screen
               key={classHistoryKey}
               name={classHistoryKey}
-              component={tableView ? TableView : ListView}
+              component={tableView ? TableView : (ListView as any)}
             />
           ))}
         </Tab.Navigator>
