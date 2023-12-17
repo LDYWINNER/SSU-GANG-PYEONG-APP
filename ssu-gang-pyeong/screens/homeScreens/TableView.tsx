@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useRef, useMemo } from "react";
 import { Alert, TouchableOpacity } from "react-native";
-import TimeTable from "@mikezzb/react-native-timetable";
+import TimeTable, { EventGroup } from "@mikezzb/react-native-timetable";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import useGlobalToggle from "../../store/useGlobalToggle";
 import useUserGlobalStore from "../../store/useUserGlobal";
@@ -104,7 +104,9 @@ const TableView: React.FC<NativeStackScreenProps<any, "TableView">> = ({
           eventGroups={
             courses?.takingCourses.length === 0
               ? []
-              : formatCourses(courses!.takingCourses)
+              : (formatCourses(
+                  courses!.takingCourses
+                ) as unknown as EventGroup[])
           }
           // eventOnPress={(event) => Alert.alert(`${JSON.stringify(event)}`)}
           eventOnPress={(event) => {

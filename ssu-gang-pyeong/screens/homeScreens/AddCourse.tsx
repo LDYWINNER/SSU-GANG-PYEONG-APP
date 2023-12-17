@@ -3,7 +3,7 @@ import { Loader, NavigateBack, SafeAreaWrapper } from "../../components";
 import { useTheme } from "@shopify/restyle";
 import { Box, Text, Theme } from "../../theme";
 import { Alert, TouchableOpacity, Dimensions } from "react-native";
-import TimeTable from "@mikezzb/react-native-timetable";
+import TimeTable, { EventGroup } from "@mikezzb/react-native-timetable";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import colors from "../../colors";
 import { useColorScheme } from "react-native";
@@ -119,7 +119,9 @@ const AddCourse = () => {
               eventGroups={
                 courses?.takingCourses.length === 0
                   ? []
-                  : formatCourses(courses!.takingCourses)
+                  : (formatCourses(
+                      courses!.takingCourses
+                    ) as unknown as EventGroup[])
               }
               eventOnPress={(event) => Alert.alert(`${JSON.stringify(event)}`)}
             />
