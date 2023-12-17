@@ -228,9 +228,6 @@ const SelectCourses = ({ togglePicker, courses }: any) => {
         enablePanDownToClose={true}
         enableContentPanningGesture={false}
         onChange={handleSheetChange}
-        // backgroundStyle={{
-        //   backgroundColor: isDark ? colors.DARKER_GREY : "white",
-        // }}
       >
         <Box flexDirection="row" justifyContent="flex-end" mr="5">
           <TouchableOpacity
