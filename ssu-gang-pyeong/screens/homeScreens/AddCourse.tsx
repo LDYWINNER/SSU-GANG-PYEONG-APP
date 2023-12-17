@@ -115,6 +115,7 @@ const AddCourse = () => {
             <Loader />
           ) : (
             <TimeTable
+              disableTicker
               eventGroups={
                 courses?.takingCourses.length === 0
                   ? []
