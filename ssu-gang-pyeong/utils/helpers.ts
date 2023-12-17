@@ -90,9 +90,13 @@ export const formatCourses = (courses: ICourse[]) => {
       const targetStartTime = courses[i].startTime.split(", ")[sl - 1];
       const targetEndTime = courses[i].endTime.split(", ")[sl - 1];
 
+      //console.log(targetDay, targetStartTime, targetEndTime);
+      //MW(RECM) 3:30 PM(12:30 PM) 4:50 PM(1:25 PM)
+
       const formattedDays: any = formatRecDays(targetDay);
       const formattedST: any = formatRecTimes(targetStartTime);
       const formattedET: any = formatRecTimes(targetEndTime);
+      //console.log(formattedST, formattedET);
 
       formattedCourses.push({
         courseId: `${courses[i].subj} ${courses[i].crs}`,
@@ -106,8 +110,8 @@ export const formatCourses = (courses: ICourse[]) => {
                 : formattedST[0].concat(formattedST[0]),
             endTimes:
               courses[i].day === "F"
-                ? formattedST[1]
-                : formattedST[1].concat(formattedST[1]),
+                ? formattedET[0]
+                : formattedET[0].concat(formattedET[0]),
             locations:
               courses[i].day === "F"
                 ? [targetLocation]
@@ -115,14 +119,8 @@ export const formatCourses = (courses: ICourse[]) => {
           },
           REC: {
             days: formattedDays[1],
-            startTimes:
-              courses[i].day === "F"
-                ? formattedET[0]
-                : formattedET[0].concat(formattedET[0]),
-            endTimes:
-              courses[i].day === "F"
-                ? formattedET[1]
-                : formattedET[1].concat(formattedET[1]),
+            startTimes: formattedST[1],
+            endTimes: formattedET[1],
             locations:
               courses[i].day === "F"
                 ? [targetLocation]
@@ -265,14 +263,21 @@ const formatRecTimes = (target: string) => {
   const result: [string[], string[]] = [[], []];
   //["3:30 PM", "12:30 PM"]
   const temp = target.slice(0, -1).split("(");
+  //console.log("temp", temp);
   if (temp[0].includes("PM") && Number(temp[0].split(":")[0]) < 8) {
     const hour = Number(temp[0].split(":")[0]) + 12;
-    result[0].push(String(hour) + temp[0].split(":")[1].slice(0, 2));
+    result[0].push(String(hour) + ":" + temp[0].split(":")[1].slice(0, 2));
+  } else {
+    const hour = Number(temp[0].split(":")[0]);
+    result[0].push(String(hour) + ":" + temp[0].split(":")[1].slice(0, 2));
   }
 
   if (temp[1].includes("PM") && Number(temp[1].split(":")[0]) < 8) {
     const hour = Number(temp[1].split(":")[0]) + 12;
-    result[0].push(String(hour) + temp[1].split(":")[1].slice(0, 2));
+    result[1].push(String(hour) + ":" + temp[1].split(":")[1].slice(0, 2));
+  } else {
+    const hour = Number(temp[1].split(":")[0]);
+    result[1].push(String(hour) + ":" + temp[1].split(":")[1].slice(0, 2));
   }
 
   return result;
