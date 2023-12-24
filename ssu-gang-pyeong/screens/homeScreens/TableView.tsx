@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useRef, useMemo } from "react";
-import { Alert, TouchableOpacity } from "react-native";
+import { TouchableOpacity } from "react-native";
 import TimeTable, { EventGroup } from "@mikezzb/react-native-timetable";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import useGlobalToggle from "../../store/useGlobalToggle";
