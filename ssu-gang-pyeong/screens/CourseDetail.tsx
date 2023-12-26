@@ -69,10 +69,12 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
     //preprocessing for table
     for (let i = 0; i < course!.semesters.length; i++) {
       const temp = [];
-      if (course?.semesters[i] === "2023_spring") {
-        temp.push(`2023 SPR (${course.instructor[i]})`);
-      } else if (course?.semesters[i] === "2022_fall") {
+      if (course?.semesters[i] === "2022_fall") {
         temp.push(`2022 FA (${course.instructor[i]})`);
+      } else if (course?.semesters[i] === "2023_spring") {
+        temp.push(`2023 SPR (${course.instructor[i]})`);
+      } else if (course?.semesters[i] === "2023_fall") {
+        temp.push(`2023 FA (${course.instructor[i]})`);
       }
 
       temp.push(course?.day.split(", ")[i]);
