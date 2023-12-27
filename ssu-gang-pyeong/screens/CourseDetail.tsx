@@ -75,6 +75,8 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
         temp.push(`2023 SPR (${course.instructor[i]})`);
       } else if (course?.semesters[i] === "2023_fall") {
         temp.push(`2023 FA (${course.instructor[i]})`);
+      } else if (course?.semesters[i] === "2024_spring") {
+        temp.push(`2024 SPR (${course.instructor[i]})`);
       }
 
       temp.push(course?.day.split(", ")[i]);
