@@ -1,8 +1,11 @@
 import React from "react";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { TouchableOpacity, Text } from "react-native";
+import { TouchableOpacity } from "react-native";
 import { BulletinStackParamList } from "../../navigation/types";
+import { NavigateBack, SafeAreaWrapper } from "../../components";
+import { Box, Text } from "../../theme";
+import { Ionicons } from "@expo/vector-icons";
 
 type BulletinDetailScreenRouteProp = RouteProp<
   BulletinStackParamList,
@@ -16,11 +19,37 @@ const BulletinDetail: React.FC<
   const { name } = route.params;
 
   return (
-    <TouchableOpacity
-      style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-    >
-      <Text>{name}</Text>
-    </TouchableOpacity>
+    <SafeAreaWrapper>
+      <Box flex={1} mx="4">
+        <Box
+          flexDirection="row"
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          <NavigateBack />
+          <Text variant="textXl" fontWeight="600" mr="2">
+            {name === "Free"
+              ? "자유 게시판"
+              : name === "courseRegister"
+              ? "수강신청 게시판"
+              : name === "Secret"
+              ? "비밀 게시판"
+              : name === "Freshmen"
+              ? "새내기 게시판"
+              : name === "Promotion"
+              ? "홍보 게시판"
+              : name === "Club"
+              ? "동아리 게시판"
+              : "본교 게시판"}
+          </Text>
+          <Box>
+            <TouchableOpacity onPress={() => navigate("BulletinSearch")}>
+              <Ionicons name="md-search" size={30} color="black" />
+            </TouchableOpacity>
+          </Box>
+        </Box>
+      </Box>
+    </SafeAreaWrapper>
   );
 };
 
