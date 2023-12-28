@@ -14,6 +14,7 @@ export type BulletinStackParamList = {
   BulletinMain: undefined;
   BulletinDetail: undefined;
   BulletinPost: undefined;
+  BulletinSearch: undefined;
 };
 
 export type SearchStackParamList = {
