@@ -1,4 +1,4 @@
-import { ICategory, ITask } from "../types";
+import { ICategory } from "../types";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import {
   CompositeNavigationProp,
@@ -11,7 +11,9 @@ import {
 } from "@react-navigation/native-stack";
 
 export type BulletinStackParamList = {
-  Bulletin: undefined;
+  BulletinMain: undefined;
+  BulletinDetail: undefined;
+  BulletinPost: undefined;
 };
 
 export type SearchStackParamList = {

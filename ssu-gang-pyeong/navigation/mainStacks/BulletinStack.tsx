@@ -1,26 +1,35 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { useColorScheme } from "react-native";
-import colors from "../../colors";
-import { Bulletin } from "../../screens";
+import {
+  BulletinMain,
+  BulletinDetail,
+  BulletinPost,
+} from "../../screens/bulletinScreens";
 
 const NativeStack = createNativeStackNavigator();
 
 const BulletinStack = () => {
-  const isDark = useColorScheme() === "dark";
   return (
     <NativeStack.Navigator
       screenOptions={{
-        headerBackTitleVisible: false,
-        headerStyle: {
-          backgroundColor: isDark ? colors.BLACK_COLOR : "white",
-        },
-        headerTitleStyle: {
-          color: isDark ? "white" : colors.BLACK_COLOR,
-        },
+        headerShown: false,
       }}
     >
-      <NativeStack.Screen name="Bulletin" component={Bulletin} />
+      <NativeStack.Screen
+        name="BulletinMain"
+        component={BulletinMain}
+        options={{ presentation: "card" }}
+      />
+      <NativeStack.Screen
+        name="BulletinDetail"
+        component={BulletinDetail}
+        options={{ presentation: "card" }}
+      />
+      <NativeStack.Screen
+        name="BulletinPost"
+        component={BulletinPost}
+        options={{ presentation: "card" }}
+      />
     </NativeStack.Navigator>
   );
 };

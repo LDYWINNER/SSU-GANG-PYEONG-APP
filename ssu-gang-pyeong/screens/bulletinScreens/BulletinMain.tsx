@@ -1,17 +1,15 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React from "react";
 import { TouchableOpacity, Text } from "react-native";
-import styled from "styled-components/native";
 
-const Bulletin: React.FC<NativeStackScreenProps<any, "Bulletin">> = ({
+const BulletinMain: React.FC<NativeStackScreenProps<any, "BulletinMain">> = ({
   navigation: { navigate },
 }) => (
   <TouchableOpacity
-    onPress={() => navigate("MainStack", { screen: "CourseDetail" })}
     style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
   >
-    <Text>Bulletin</Text>
+    <Text>BulletinMain</Text>
   </TouchableOpacity>
 );
 
-export default Bulletin;
+export default BulletinMain;
