@@ -4,6 +4,7 @@ import {
   BulletinMain,
   BulletinDetail,
   BulletinPost,
+  BulletinSearch,
 } from "../../screens/bulletinScreens";
 
 const NativeStack = createNativeStackNavigator();
@@ -23,6 +24,11 @@ const BulletinStack = () => {
       <NativeStack.Screen
         name="BulletinDetail"
         component={BulletinDetail}
+        options={{ presentation: "card" }}
+      />
+      <NativeStack.Screen
+        name="BulletinSearch"
+        component={BulletinSearch}
         options={{ presentation: "card" }}
       />
       <NativeStack.Screen

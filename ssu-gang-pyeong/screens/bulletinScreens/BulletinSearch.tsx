@@ -11,9 +11,9 @@ interface ISearch {
   keyword: string;
 }
 
-const BulletinMain: React.FC<NativeStackScreenProps<any, "BulletinMain">> = ({
-  navigation: { navigate },
-}) => {
+const BulletinSearch: React.FC<
+  NativeStackScreenProps<any, "BulletinSearch">
+> = ({ navigation: { navigate } }) => {
   const theme = useTheme<Theme>();
 
   const { control, handleSubmit, watch } = useForm<ISearch>({
@@ -72,4 +72,4 @@ const BulletinMain: React.FC<NativeStackScreenProps<any, "BulletinMain">> = ({
   );
 };
 
-export default BulletinMain;
+export default BulletinSearch;
