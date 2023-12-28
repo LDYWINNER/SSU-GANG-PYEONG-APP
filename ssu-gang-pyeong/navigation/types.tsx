@@ -12,7 +12,9 @@ import {
 
 export type BulletinStackParamList = {
   BulletinMain: undefined;
-  BulletinDetail: undefined;
+  BulletinDetail: {
+    name: string;
+  };
   BulletinPost: undefined;
   BulletinSearch: undefined;
 };

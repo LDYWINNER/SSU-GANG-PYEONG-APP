@@ -9,6 +9,13 @@ import { FontAwesome } from "@expo/vector-icons";
 const BulletinMain: React.FC<NativeStackScreenProps<any, "BulletinMain">> = ({
   navigation: { navigate },
 }) => {
+  const navigateToBulletinDetail = (BulletinName: string) => {
+    navigate("BulletinStack", {
+      screen: "BulletinDetail",
+      params: { name: BulletinName },
+    });
+  };
+
   return (
     <SafeAreaWrapper>
       <Box bg="gray200" height={"105%"}>
@@ -49,7 +56,7 @@ const BulletinMain: React.FC<NativeStackScreenProps<any, "BulletinMain">> = ({
             height={380}
             borderRadius="rounded-2xl"
           >
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigateToBulletinDetail("Free")}>
               <Box mb="3">
                 <Text variant="textLg" fontWeight="600">
                   자유 게시판
@@ -57,7 +64,9 @@ const BulletinMain: React.FC<NativeStackScreenProps<any, "BulletinMain">> = ({
               </Box>
             </TouchableOpacity>
             <Divider />
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => navigateToBulletinDetail("courseRegister")}
+            >
               <Box mb="3" mt="3">
                 <Text variant="textLg" fontWeight="600">
                   수강신청 게시판
@@ -65,7 +74,9 @@ const BulletinMain: React.FC<NativeStackScreenProps<any, "BulletinMain">> = ({
               </Box>
             </TouchableOpacity>
             <Divider />
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => navigateToBulletinDetail("Secret")}
+            >
               <Box mb="3" mt="3">
                 <Text variant="textLg" fontWeight="600">
                   비밀 게시판
@@ -73,7 +84,9 @@ const BulletinMain: React.FC<NativeStackScreenProps<any, "BulletinMain">> = ({
               </Box>
             </TouchableOpacity>
             <Divider />
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => navigateToBulletinDetail("Freshmen")}
+            >
               <Box mb="3" mt="3">
                 <Text variant="textLg" fontWeight="600">
                   새내기 게시판
@@ -81,7 +94,9 @@ const BulletinMain: React.FC<NativeStackScreenProps<any, "BulletinMain">> = ({
               </Box>
             </TouchableOpacity>
             <Divider />
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => navigateToBulletinDetail("Promotion")}
+            >
               <Box mb="3" mt="3">
                 <Text variant="textLg" fontWeight="600">
                   홍보 게시판
@@ -89,7 +104,7 @@ const BulletinMain: React.FC<NativeStackScreenProps<any, "BulletinMain">> = ({
               </Box>
             </TouchableOpacity>
             <Divider />
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigateToBulletinDetail("Club")}>
               <Box mb="3" mt="3">
                 <Text variant="textLg" fontWeight="600">
                   동아리 게시판
@@ -97,7 +112,7 @@ const BulletinMain: React.FC<NativeStackScreenProps<any, "BulletinMain">> = ({
               </Box>
             </TouchableOpacity>
             <Divider />
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigateToBulletinDetail("Sbu")}>
               <Box mb="3" mt="3">
                 <Text variant="textLg" fontWeight="600">
                   본교 게시판
