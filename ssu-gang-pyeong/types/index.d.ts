@@ -109,3 +109,15 @@ interface ITVItem {
   location: string;
   color: string;
 }
+
+interface IBulletinPosts {
+  title: string;
+  content: string;
+  board: string;
+  anonymity: boolean;
+  likes: string[];
+  comments: Schema.Types.ObjectId[];
+  createdBy: Schema.Types.ObjectId;
+  createdByUsername: string;
+  createdAt: string;
+}

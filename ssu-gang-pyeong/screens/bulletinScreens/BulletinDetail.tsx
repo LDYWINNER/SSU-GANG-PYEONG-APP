@@ -3,9 +3,20 @@ import { RouteProp, useRoute } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { TouchableOpacity } from "react-native";
 import { BulletinStackParamList } from "../../navigation/types";
-import { NavigateBack, SafeAreaWrapper } from "../../components";
-import { Box, Text } from "../../theme";
+import {
+  Divider,
+  Loader,
+  NavigateBack,
+  SafeAreaWrapper,
+} from "../../components";
+import { Box, Text, Theme } from "../../theme";
 import { Ionicons } from "@expo/vector-icons";
+import useSWR from "swr";
+import { fetcher } from "../../utils/config";
+import { IBulletinPosts } from "../../types";
+import { ScrollView } from "react-native-gesture-handler";
+import { useTheme } from "@shopify/restyle";
+import moment from "moment";
 
 type BulletinDetailScreenRouteProp = RouteProp<
   BulletinStackParamList,
@@ -15,12 +26,22 @@ type BulletinDetailScreenRouteProp = RouteProp<
 const BulletinDetail: React.FC<
   NativeStackScreenProps<any, "BulletinDetail">
 > = ({ navigation: { navigate } }) => {
+  const theme = useTheme<Theme>();
+
   const route = useRoute<BulletinDetailScreenRouteProp>();
   const { name } = route.params;
 
+  const { data: posts, isLoading: isLoadingPosts } = useSWR<{
+    bulletinAllPosts: IBulletinPosts[];
+    bulletinTotalPosts: number;
+  }>(`/api/v1/bulletin?board=${name}`, fetcher);
+
+  if (isLoadingPosts) {
+    return <Loader />;
+  }
   return (
     <SafeAreaWrapper>
-      <Box flex={1} mx="4">
+      <Box flex={1} mx="2">
         <Box
           flexDirection="row"
           justifyContent="space-between"
@@ -42,12 +63,91 @@ const BulletinDetail: React.FC<
               ? "동아리 게시판"
               : "본교 게시판"}
           </Text>
-          <Box>
+          <Box mr="1">
             <TouchableOpacity onPress={() => navigate("BulletinSearch")}>
               <Ionicons name="md-search" size={30} color="black" />
             </TouchableOpacity>
           </Box>
         </Box>
+
+        <Box mt="3" ml="3">
+          <Text variant="textLg" fontWeight="600">
+            {posts?.bulletinTotalPosts} posts
+          </Text>
+        </Box>
+
+        <ScrollView>
+          {posts?.bulletinAllPosts.map((post) => (
+            <Box key={post.title}>
+              <TouchableOpacity>
+                <Box my="5" mx="4">
+                  <Text variant="textBase" fontWeight="600">
+                    {post.title}
+                  </Text>
+                  <Text
+                    variant="textBase"
+                    fontWeight="500"
+                    style={{
+                      color: theme.colors.gray600,
+                    }}
+                  >
+                    {post.content.substring(0, 43)}
+                    {post.content.length > 43 && "..."}
+                  </Text>
+
+                  <Box flexDirection="row" alignItems="center" mt="1">
+                    <Text>
+                      <Ionicons
+                        name="chatbubble-outline"
+                        size={16}
+                        color={theme.colors.blu600}
+                      />
+                      <Box width={2} />
+                      <Text
+                        style={{
+                          color: theme.colors.blu600,
+                        }}
+                      >
+                        {post.comments.length}
+                      </Text>
+                    </Text>
+                    <Text
+                      style={{
+                        color: theme.colors.gray400,
+                      }}
+                    >
+                      {" "}
+                      |{" "}
+                    </Text>
+                    <Text
+                      style={{
+                        color: theme.colors.gray500,
+                      }}
+                    >
+                      {moment(post.createdAt).format("MMMM Do, h:mm a")}
+                    </Text>
+                    <Text
+                      style={{
+                        color: theme.colors.gray400,
+                      }}
+                    >
+                      {" "}
+                      |{" "}
+                    </Text>
+                    <Text
+                      style={{
+                        color: theme.colors.gray500,
+                      }}
+                    >
+                      {post.anonymity ? "익명" : post.createdByUsername}
+                    </Text>
+                  </Box>
+                </Box>
+              </TouchableOpacity>
+              <Divider />
+            </Box>
+          ))}
+        </ScrollView>
       </Box>
     </SafeAreaWrapper>
   );
