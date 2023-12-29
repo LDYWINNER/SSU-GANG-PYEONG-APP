@@ -15,7 +15,9 @@ export type BulletinStackParamList = {
   BulletinDetail: {
     name: string;
   };
-  BulletinPost: undefined;
+  BulletinPost: {
+    id: string;
+  };
   BulletinSearch: undefined;
 };
 

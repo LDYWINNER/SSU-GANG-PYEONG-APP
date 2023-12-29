@@ -110,7 +110,8 @@ interface ITVItem {
   color: string;
 }
 
-interface IBulletinPosts {
+interface IBulletinPost {
+  _id: string;
   title: string;
   content: string;
   board: string;

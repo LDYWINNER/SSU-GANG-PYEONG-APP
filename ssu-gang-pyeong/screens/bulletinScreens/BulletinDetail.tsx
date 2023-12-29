@@ -13,7 +13,7 @@ import { Box, Text, Theme } from "../../theme";
 import { FontAwesome5, Ionicons } from "@expo/vector-icons";
 import useSWR from "swr";
 import { fetcher } from "../../utils/config";
-import { IBulletinPosts } from "../../types";
+import { IBulletinPost } from "../../types";
 import { ScrollView } from "react-native-gesture-handler";
 import { useTheme } from "@shopify/restyle";
 import moment from "moment";
@@ -31,8 +31,15 @@ const BulletinDetail: React.FC<
   const route = useRoute<BulletinDetailScreenRouteProp>();
   const { name } = route.params;
 
+  const navigateToBulletinPost = (postId: string) => {
+    navigate("BulletinStack", {
+      screen: "BulletinPost",
+      params: { id: postId },
+    });
+  };
+
   const { data: posts, isLoading: isLoadingPosts } = useSWR<{
-    bulletinAllPosts: IBulletinPosts[];
+    bulletinAllPosts: IBulletinPost[];
     bulletinTotalPosts: number;
   }>(`/api/v1/bulletin?board=${name}`, fetcher);
 
@@ -78,8 +85,10 @@ const BulletinDetail: React.FC<
 
         <ScrollView>
           {posts?.bulletinAllPosts.map((post) => (
-            <Box key={post.title}>
-              <TouchableOpacity>
+            <Box key={post._id}>
+              <TouchableOpacity
+                onPress={() => navigateToBulletinPost(post._id)}
+              >
                 <Box my="5" mx="4">
                   <Text variant="textBase" fontWeight="600">
                     {post.title}
