@@ -10,7 +10,7 @@ import {
   SafeAreaWrapper,
 } from "../../components";
 import { Box, Text, Theme } from "../../theme";
-import { Ionicons } from "@expo/vector-icons";
+import { FontAwesome5, Ionicons } from "@expo/vector-icons";
 import useSWR from "swr";
 import { fetcher } from "../../utils/config";
 import { IBulletinPosts } from "../../types";
@@ -97,6 +97,20 @@ const BulletinDetail: React.FC<
 
                   <Box flexDirection="row" alignItems="center" mt="1">
                     <Text>
+                      <FontAwesome5
+                        name="thumbs-up"
+                        size={16}
+                        color={theme.colors.sbuRed}
+                      />
+                      <Box width={1} />
+                      <Text
+                        style={{
+                          color: theme.colors.sbuRed,
+                        }}
+                      >
+                        {post.likes.length}
+                      </Text>
+                      <Box width={4} />
                       <Ionicons
                         name="chatbubble-outline"
                         size={16}
