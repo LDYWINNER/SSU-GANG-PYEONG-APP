@@ -165,30 +165,32 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
                     </Box>
 
                     <Box>
-                      <TouchableOpacity>
-                        <Box
-                          bg="gray300"
-                          px="3"
-                          py="2"
-                          borderRadius="rounded-xl"
-                          flexDirection="row"
-                          alignItems="center"
-                        >
+                      <Box
+                        bg="gray300"
+                        px="3"
+                        py="2"
+                        borderRadius="rounded-xl"
+                        flexDirection="row"
+                        alignItems="center"
+                      >
+                        <TouchableOpacity>
                           <Ionicons
                             name="chatbubble-outline"
                             size={16}
                             color={theme.colors.gray500}
                           />
-                          <Text>
-                            {"   "}| {"  "}
-                          </Text>
+                        </TouchableOpacity>
+                        <Text>
+                          {"   "}| {"  "}
+                        </Text>
+                        <TouchableOpacity>
                           <FontAwesome5
                             name="thumbs-up"
                             size={16}
                             color={theme.colors.gray500}
                           />
-                        </Box>
-                      </TouchableOpacity>
+                        </TouchableOpacity>
+                      </Box>
                     </Box>
                   </Box>
                   <Text variant="textBase">{comment.text}</Text>
@@ -201,7 +203,7 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
                     >
                       {moment(comment.createdAt).format("MMMM Do, h:mm a")}
                     </Text>
-                    <Box width={8} />
+                    <Box width={10} />
                     <FontAwesome5
                       name="thumbs-up"
                       size={16}
