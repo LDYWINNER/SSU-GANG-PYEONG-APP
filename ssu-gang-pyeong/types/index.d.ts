@@ -117,7 +117,18 @@ interface IBulletinPost {
   board: string;
   anonymity: boolean;
   likes: string[];
-  comments: Schema.Types.ObjectId[];
+  comments: IBulletinPostComment[];
+  createdBy: Schema.Types.ObjectId;
+  createdByUsername: string;
+  createdAt: string;
+}
+
+interface IBulletinPostComment {
+  _id: string;
+  text: string;
+  anonymity: boolean;
+  likes: string[];
+  bulletin: string;
   createdBy: Schema.Types.ObjectId;
   createdByUsername: string;
   createdAt: string;
