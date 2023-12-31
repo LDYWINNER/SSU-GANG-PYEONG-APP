@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import {
   Divider,
@@ -13,10 +13,16 @@ import { BulletinStackParamList } from "../../navigation/types";
 import useSWR from "swr";
 import { fetcher } from "../../utils/config";
 import { IBulletinPost } from "../../types";
-import { TouchableOpacity } from "react-native";
-import { FontAwesome, FontAwesome5, Ionicons } from "@expo/vector-icons";
+import { Dimensions, TextInput, TouchableOpacity } from "react-native";
+import {
+  FontAwesome,
+  FontAwesome5,
+  Ionicons,
+  MaterialIcons,
+} from "@expo/vector-icons";
 import moment from "moment";
 import { ScrollView } from "react-native-gesture-handler";
+import BouncyCheckbox from "react-native-bouncy-checkbox";
 
 type BulletinPostScreenRouteProp = RouteProp<
   BulletinStackParamList,
@@ -27,6 +33,9 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
   navigation: { navigate },
 }) => {
   const theme = useTheme<Theme>();
+  const windowHeight = Dimensions.get("window").height;
+
+  const [isSelected, setSelection] = useState(true);
 
   const route = useRoute<BulletinPostScreenRouteProp>();
   const { id } = route.params;
@@ -43,14 +52,14 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
   }
   return (
     <SafeAreaWrapper>
-      <Box flex={1} mx="2">
+      <Box flex={1} mx="2" mb="-6">
         <Box
           flexDirection="row"
           justifyContent="space-between"
           alignItems="center"
         >
           <NavigateBack />
-          <Text variant="textXl" fontWeight="600" mr="10">
+          <Text variant="textXl" fontWeight="600" mr="2">
             {post.board === "Free"
               ? "자유 게시판"
               : post.board === "courseRegister"
@@ -65,7 +74,11 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
               ? "동아리 게시판"
               : "본교 게시판"}
           </Text>
-          <Box></Box>
+          <TouchableOpacity>
+            <Box>
+              <MaterialIcons name="more-vert" size={30} color="black" />
+            </Box>
+          </TouchableOpacity>
         </Box>
 
         <ScrollView>
@@ -223,6 +236,57 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
             </Box>
           </Box>
         </ScrollView>
+        <Box
+          flexDirection="row"
+          alignItems="center"
+          position="absolute"
+          bottom={windowHeight * 0}
+          style={{ backgroundColor: theme.colors.gray400 }}
+          p="2"
+          borderRadius="rounded-2xl"
+          width={"100%"}
+        >
+          <TouchableOpacity onPress={() => setSelection(!isSelected)}>
+            <Box flexDirection="row" alignItems="center">
+              <BouncyCheckbox
+                size={25}
+                fillColor="red"
+                unfillColor="#FFFFFF"
+                text="익명"
+                iconStyle={{ borderColor: "red" }}
+                innerIconStyle={{
+                  // borderRadius: 0, // to make it a little round increase the value accordingly
+                  borderWidth: 2,
+                }}
+                disableText
+                isChecked={isSelected}
+                disableBuiltInState
+                onPress={() => setSelection(!isSelected)}
+              />
+
+              <Text
+                ml="1"
+                variant="textBase"
+                style={{ color: theme.colors.sbuRed }}
+              >
+                익명
+              </Text>
+            </Box>
+          </TouchableOpacity>
+          <TextInput
+            placeholder="Write a comment."
+            style={{
+              padding: 16,
+              borderColor: theme.colors.grey,
+              borderRadius: theme.borderRadii["rounded-7xl"],
+              width: "75%",
+            }}
+          />
+          <Box width={6} />
+          <TouchableOpacity>
+            <FontAwesome name="send" size={24} color={theme.colors.sbuRed} />
+          </TouchableOpacity>
+        </Box>
       </Box>
     </SafeAreaWrapper>
   );
