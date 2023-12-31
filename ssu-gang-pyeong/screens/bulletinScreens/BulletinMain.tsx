@@ -1,14 +1,21 @@
 import React from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
-import { Divider, SafeAreaWrapper } from "../../components";
-import { Box, Text } from "../../theme";
-import { Ionicons } from "@expo/vector-icons";
+import { Divider, Loader, SafeAreaWrapper } from "../../components";
+import { Box, Text, Theme } from "../../theme";
+import { FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
+import useSWR from "swr";
+import { fetcher } from "../../utils/config";
+import { IBulletinPost } from "../../types";
+import { useTheme } from "@shopify/restyle";
+import moment from "moment";
 
 const BulletinMain: React.FC<NativeStackScreenProps<any, "BulletinMain">> = ({
   navigation: { navigate },
 }) => {
+  const theme = useTheme<Theme>();
+
   const navigateToBulletinDetail = (BulletinName: string) => {
     navigate("BulletinStack", {
       screen: "BulletinDetail",
@@ -16,6 +23,21 @@ const BulletinMain: React.FC<NativeStackScreenProps<any, "BulletinMain">> = ({
     });
   };
 
+  const navigateToBulletinPost = (postId: string) => {
+    navigate("BulletinStack", {
+      screen: "BulletinPost",
+      params: { id: postId },
+    });
+  };
+
+  const { data: posts, isLoading: isLoadingPosts } = useSWR<{
+    bulletinAllPosts: IBulletinPost[];
+    bulletinTotalPosts: number;
+  }>("/api/v1/bulletin?board=Promotion", fetcher);
+
+  if (isLoadingPosts) {
+    return <Loader />;
+  }
   return (
     <SafeAreaWrapper>
       <Box bg="gray200" height={"105%"}>
@@ -128,7 +150,95 @@ const BulletinMain: React.FC<NativeStackScreenProps<any, "BulletinMain">> = ({
               홍보
             </Text>
             <Box>
-              <Text></Text>
+              {posts?.bulletinAllPosts.slice(0, 2).map((promotionPost) => (
+                <Box key={promotionPost._id}>
+                  <TouchableOpacity
+                    onPress={() => navigateToBulletinPost(promotionPost._id)}
+                  >
+                    <Box my="5" mx="4">
+                      <Text variant="textBase" fontWeight="600">
+                        {promotionPost.title}
+                      </Text>
+                      <Text
+                        variant="textBase"
+                        fontWeight="500"
+                        style={{
+                          color: theme.colors.gray600,
+                        }}
+                      >
+                        {promotionPost.content}
+                      </Text>
+
+                      <Box flexDirection="row" alignItems="center" mt="1">
+                        <Text>
+                          <FontAwesome5
+                            name="thumbs-up"
+                            size={16}
+                            color={theme.colors.sbuRed}
+                          />
+                          <Box width={1} />
+                          <Text
+                            style={{
+                              color: theme.colors.sbuRed,
+                            }}
+                          >
+                            {promotionPost.likes.length}
+                          </Text>
+                          <Box width={4} />
+                          <Ionicons
+                            name="chatbubble-outline"
+                            size={16}
+                            color={theme.colors.blu600}
+                          />
+                          <Box width={2} />
+                          <Text
+                            style={{
+                              color: theme.colors.blu600,
+                            }}
+                          >
+                            {promotionPost.comments.length}
+                          </Text>
+                        </Text>
+                        <Text
+                          style={{
+                            color: theme.colors.gray400,
+                          }}
+                        >
+                          {" "}
+                          |{" "}
+                        </Text>
+                        <Text
+                          style={{
+                            color: theme.colors.gray500,
+                          }}
+                        >
+                          {moment(promotionPost.createdAt).format(
+                            "MMMM Do, h:mm a"
+                          )}
+                        </Text>
+                        <Text
+                          style={{
+                            color: theme.colors.gray400,
+                          }}
+                        >
+                          {" "}
+                          |{" "}
+                        </Text>
+                        <Text
+                          style={{
+                            color: theme.colors.gray500,
+                          }}
+                        >
+                          {promotionPost.anonymity
+                            ? "익명"
+                            : promotionPost.createdByUsername}
+                        </Text>
+                      </Box>
+                    </Box>
+                  </TouchableOpacity>
+                  <Divider />
+                </Box>
+              ))}
             </Box>
           </Box>
         </ScrollView>
