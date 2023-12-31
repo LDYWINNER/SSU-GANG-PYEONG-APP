@@ -1,7 +1,7 @@
 import React from "react";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { TouchableOpacity } from "react-native";
+import { Dimensions, TouchableOpacity } from "react-native";
 import { BulletinStackParamList } from "../../navigation/types";
 import {
   Divider,
@@ -10,7 +10,11 @@ import {
   SafeAreaWrapper,
 } from "../../components";
 import { Box, Text, Theme } from "../../theme";
-import { FontAwesome5, Ionicons } from "@expo/vector-icons";
+import {
+  FontAwesome5,
+  Ionicons,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
 import useSWR from "swr";
 import { fetcher } from "../../utils/config";
 import { IBulletinPost } from "../../types";
@@ -28,6 +32,9 @@ const BulletinDetail: React.FC<
 > = ({ navigation: { navigate } }) => {
   const theme = useTheme<Theme>();
 
+  const windowWidth = Dimensions.get("window").width;
+  const windowHeight = Dimensions.get("window").height;
+
   const route = useRoute<BulletinDetailScreenRouteProp>();
   const { name } = route.params;
 
@@ -35,6 +42,12 @@ const BulletinDetail: React.FC<
     navigate("BulletinStack", {
       screen: "BulletinPost",
       params: { id: postId },
+    });
+  };
+
+  const navigateToWritePost = () => {
+    navigate("BulletinStack", {
+      screen: "WritePost",
     });
   };
 
@@ -48,7 +61,7 @@ const BulletinDetail: React.FC<
   }
   return (
     <SafeAreaWrapper>
-      <Box flex={1} mx="2">
+      <Box flex={1} mx="2" mb="-6">
         <Box
           flexDirection="row"
           justifyContent="space-between"
@@ -171,6 +184,33 @@ const BulletinDetail: React.FC<
             </Box>
           ))}
         </ScrollView>
+        <TouchableOpacity onPress={navigateToWritePost}>
+          <Box
+            flexDirection="row"
+            alignItems="center"
+            position="absolute"
+            right={windowWidth * 0.38}
+            bottom={windowHeight * 0}
+            style={{ backgroundColor: theme.colors.sbuRed }}
+            p="2"
+            borderRadius="rounded-2xl"
+          >
+            <MaterialCommunityIcons
+              name="pencil-plus-outline"
+              size={24}
+              color={theme.colors.white}
+            />
+            <Box width={6} />
+            <Text
+              fontWeight="700"
+              style={{
+                color: theme.colors.white,
+              }}
+            >
+              글 쓰기
+            </Text>
+          </Box>
+        </TouchableOpacity>
       </Box>
     </SafeAreaWrapper>
   );

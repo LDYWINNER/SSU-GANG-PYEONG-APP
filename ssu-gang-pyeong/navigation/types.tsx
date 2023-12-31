@@ -19,6 +19,7 @@ export type BulletinStackParamList = {
     id: string;
   };
   BulletinSearch: undefined;
+  WritePost: undefined;
 };
 
 export type SearchStackParamList = {
