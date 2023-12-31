@@ -250,12 +250,11 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
             <Box flexDirection="row" alignItems="center">
               <BouncyCheckbox
                 size={25}
-                fillColor="red"
+                fillColor={theme.colors.sbuRed}
                 unfillColor="#FFFFFF"
                 text="익명"
-                iconStyle={{ borderColor: "red" }}
+                iconStyle={{ borderColor: theme.colors.sbuRed }}
                 innerIconStyle={{
-                  // borderRadius: 0, // to make it a little round increase the value accordingly
                   borderWidth: 2,
                 }}
                 disableText
@@ -263,7 +262,6 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
                 disableBuiltInState
                 onPress={() => setSelection(!isSelected)}
               />
-
               <Text
                 ml="1"
                 variant="textBase"
@@ -273,15 +271,23 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
               </Text>
             </Box>
           </TouchableOpacity>
-          <TextInput
-            placeholder="Write a comment."
-            style={{
-              padding: 16,
-              borderColor: theme.colors.grey,
-              borderRadius: theme.borderRadii["rounded-7xl"],
-              width: "75%",
-            }}
-          />
+          <Box width={"75%"}>
+            <Box height={5} />
+            <TextInput
+              placeholder="Write a comment."
+              style={{
+                padding: 16,
+                borderColor: theme.colors.grey,
+                borderRadius: theme.borderRadii["rounded-7xl"],
+                height: "100%",
+                marginBottom: -6,
+              }}
+              multiline
+              autoComplete={"off"}
+              autoCorrect={false}
+              keyboardAppearance={"default"}
+            />
+          </Box>
           <Box width={6} />
           <TouchableOpacity>
             <FontAwesome name="send" size={24} color={theme.colors.sbuRed} />
