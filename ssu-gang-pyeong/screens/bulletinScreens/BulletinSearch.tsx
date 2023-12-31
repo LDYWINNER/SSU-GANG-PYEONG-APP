@@ -55,7 +55,6 @@ const BulletinSearch: React.FC<
   const onSubmit = async (data: ISearch) => {
     try {
       await trigger();
-      console.log(posts);
     } catch (error) {
       console.log("error in submitting search course", error);
       throw error;
@@ -101,7 +100,7 @@ const BulletinSearch: React.FC<
                 <TextInput
                   onBlur={onBlur}
                   onChangeText={onChange}
-                  placeholder="Search with keywords"
+                  placeholder="글 제목, 내용"
                   style={{
                     fontSize: 18,
                     lineHeight: 20,
@@ -119,9 +118,31 @@ const BulletinSearch: React.FC<
         </Box>
         <Box mb="6" />
         {!isSubmitSuccessful ? (
-          <Text>oh</Text>
-        ) : posts?.bulletinTotalPosts !== 0 ||
-          posts.bulletinTotalPosts !== undefined ? (
+          <Box height={"80%"} justifyContent="center" alignItems="center">
+            <Ionicons name="search" size={50} color={theme.colors.gray400} />
+            <Box height={5} />
+            <Text
+              variant="textXl"
+              style={{ color: theme.colors.gray500 }}
+              fontWeight="600"
+            >
+              게시판의 글을 검색해보세요
+            </Text>
+          </Box>
+        ) : posts?.bulletinTotalPosts === 0 ||
+          posts?.bulletinTotalPosts === undefined ? (
+          <Box height={"80%"} justifyContent="center" alignItems="center">
+            <Ionicons name="search" size={50} color={theme.colors.gray400} />
+            <Box height={5} />
+            <Text
+              variant="textXl"
+              style={{ color: theme.colors.gray500 }}
+              fontWeight="600"
+            >
+              해당 키워드로 검색된 글이 없습니다.
+            </Text>
+          </Box>
+        ) : (
           <ScrollView>
             {posts?.bulletinAllPosts.map((post) => (
               <Box key={post._id}>
@@ -210,8 +231,6 @@ const BulletinSearch: React.FC<
               </Box>
             ))}
           </ScrollView>
-        ) : (
-          <Text>No posts</Text>
         )}
       </Box>
     </SafeAreaWrapper>
