@@ -45,9 +45,10 @@ const BulletinDetail: React.FC<
     });
   };
 
-  const navigateToWritePost = () => {
+  const navigateToWritePost = (name: string) => {
     navigate("BulletinStack", {
       screen: "WritePost",
+      params: { board: name },
     });
   };
 
@@ -184,7 +185,7 @@ const BulletinDetail: React.FC<
             </Box>
           ))}
         </ScrollView>
-        <TouchableOpacity onPress={navigateToWritePost}>
+        <TouchableOpacity onPress={() => navigateToWritePost(name)}>
           <Box
             flexDirection="row"
             alignItems="center"
