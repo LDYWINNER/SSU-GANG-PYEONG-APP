@@ -1,16 +1,21 @@
 import React from "react";
-import { Ionicons } from "@expo/vector-icons";
+import { FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useTheme } from "@shopify/restyle";
 import { Controller, useForm } from "react-hook-form";
-import { TextInput } from "react-native-gesture-handler";
-import { NavigateBack, SafeAreaWrapper } from "../../components";
+import {
+  ScrollView,
+  TextInput,
+  TouchableOpacity,
+} from "react-native-gesture-handler";
+import { Divider, NavigateBack, SafeAreaWrapper } from "../../components";
 import { Box, Text, Theme } from "../../theme";
 import useSWRMutation from "swr/mutation";
 import { IBulletinPost } from "../../types";
 import { fetcher } from "../../utils/config";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { BulletinStackParamList } from "../../navigation/types";
+import moment from "moment";
 
 interface ISearch {
   keyword: string;
@@ -29,7 +34,19 @@ const BulletinSearch: React.FC<
   const route = useRoute<BulletinSearchScreenRouteProp>();
   const { board } = route.params;
 
-  const { control, handleSubmit, watch } = useForm<ISearch>({
+  const navigateToBulletinPost = (postId: string) => {
+    navigate("BulletinStack", {
+      screen: "BulletinPost",
+      params: { id: postId },
+    });
+  };
+
+  const {
+    control,
+    handleSubmit,
+    watch,
+    formState: { isSubmitSuccessful },
+  } = useForm<ISearch>({
     defaultValues: {
       keyword: "",
     },
@@ -38,16 +55,20 @@ const BulletinSearch: React.FC<
   const onSubmit = async (data: ISearch) => {
     try {
       await trigger();
+      console.log(posts);
     } catch (error) {
       console.log("error in submitting search course", error);
       throw error;
     }
   };
 
-  const { data, trigger } = useSWRMutation<IBulletinPost>(
+  const { data: posts, trigger } = useSWRMutation<{
+    bulletinAllPosts: IBulletinPost[];
+    bulletinTotalPosts: number;
+  }>(
     watch("keyword") === undefined || watch("keyword") === ""
-      ? `api/v1/course?board=${board}`
-      : `api/v1/course?board=${board}&keyword=${watch("keyword")}`,
+      ? `api/v1/bulletin?board=${board}`
+      : `api/v1/bulletin?board=${board}&search=${watch("keyword")}`,
     fetcher
   );
 
@@ -82,7 +103,7 @@ const BulletinSearch: React.FC<
                   onChangeText={onChange}
                   placeholder="Search with keywords"
                   style={{
-                    fontSize: 20,
+                    fontSize: 18,
                     lineHeight: 20,
                     padding: 16,
                   }}
@@ -97,7 +118,101 @@ const BulletinSearch: React.FC<
           />
         </Box>
         <Box mb="6" />
-        <Text>{board}</Text>
+        {!isSubmitSuccessful ? (
+          <Text>oh</Text>
+        ) : posts?.bulletinTotalPosts !== 0 ||
+          posts.bulletinTotalPosts !== undefined ? (
+          <ScrollView>
+            {posts?.bulletinAllPosts.map((post) => (
+              <Box key={post._id}>
+                <TouchableOpacity
+                  onPress={() => navigateToBulletinPost(post._id)}
+                >
+                  <Box my="5" mx="4">
+                    <Text variant="textBase" fontWeight="600">
+                      {post.title}
+                    </Text>
+                    <Text
+                      variant="textBase"
+                      fontWeight="500"
+                      style={{
+                        color: theme.colors.gray600,
+                      }}
+                    >
+                      {post.content.substring(0, 43)}
+                      {post.content.length > 43 && "..."}
+                    </Text>
+
+                    <Box flexDirection="row" alignItems="center" mt="1">
+                      <Text>
+                        <FontAwesome5
+                          name="thumbs-up"
+                          size={16}
+                          color={theme.colors.sbuRed}
+                        />
+                        <Box width={1} />
+                        <Text
+                          style={{
+                            color: theme.colors.sbuRed,
+                          }}
+                        >
+                          {post.likes.length}
+                        </Text>
+                        <Box width={4} />
+                        <Ionicons
+                          name="chatbubble-outline"
+                          size={16}
+                          color={theme.colors.blu600}
+                        />
+                        <Box width={2} />
+                        <Text
+                          style={{
+                            color: theme.colors.blu600,
+                          }}
+                        >
+                          {post.comments.length}
+                        </Text>
+                      </Text>
+                      <Text
+                        style={{
+                          color: theme.colors.gray400,
+                        }}
+                      >
+                        {" "}
+                        |{" "}
+                      </Text>
+                      <Text
+                        style={{
+                          color: theme.colors.gray500,
+                        }}
+                      >
+                        {moment(post.createdAt).format("MMMM Do, h:mm a")}
+                      </Text>
+                      <Text
+                        style={{
+                          color: theme.colors.gray400,
+                        }}
+                      >
+                        {" "}
+                        |{" "}
+                      </Text>
+                      <Text
+                        style={{
+                          color: theme.colors.gray500,
+                        }}
+                      >
+                        {post.anonymity ? "익명" : post.createdByUsername}
+                      </Text>
+                    </Box>
+                  </Box>
+                </TouchableOpacity>
+                <Divider />
+              </Box>
+            ))}
+          </ScrollView>
+        ) : (
+          <Text>No posts</Text>
+        )}
       </Box>
     </SafeAreaWrapper>
   );
