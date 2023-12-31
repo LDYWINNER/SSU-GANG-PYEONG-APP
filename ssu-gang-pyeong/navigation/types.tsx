@@ -18,7 +18,9 @@ export type BulletinStackParamList = {
   BulletinPost: {
     id: string;
   };
-  BulletinSearch: undefined;
+  BulletinSearch: {
+    board?: string;
+  };
   WritePost: {
     board: string;
   };

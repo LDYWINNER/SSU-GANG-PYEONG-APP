@@ -6,15 +6,28 @@ import { Controller, useForm } from "react-hook-form";
 import { TextInput } from "react-native-gesture-handler";
 import { NavigateBack, SafeAreaWrapper } from "../../components";
 import { Box, Text, Theme } from "../../theme";
+import useSWRMutation from "swr/mutation";
+import { IBulletinPost } from "../../types";
+import { fetcher } from "../../utils/config";
+import { RouteProp, useRoute } from "@react-navigation/native";
+import { BulletinStackParamList } from "../../navigation/types";
 
 interface ISearch {
   keyword: string;
 }
 
+type BulletinSearchScreenRouteProp = RouteProp<
+  BulletinStackParamList,
+  "BulletinSearch"
+>;
+
 const BulletinSearch: React.FC<
   NativeStackScreenProps<any, "BulletinSearch">
 > = ({ navigation: { navigate } }) => {
   const theme = useTheme<Theme>();
+
+  const route = useRoute<BulletinSearchScreenRouteProp>();
+  const { board } = route.params;
 
   const { control, handleSubmit, watch } = useForm<ISearch>({
     defaultValues: {
@@ -24,11 +37,19 @@ const BulletinSearch: React.FC<
 
   const onSubmit = async (data: ISearch) => {
     try {
+      await trigger();
     } catch (error) {
       console.log("error in submitting search course", error);
       throw error;
     }
   };
+
+  const { data, trigger } = useSWRMutation<IBulletinPost>(
+    watch("keyword") === undefined || watch("keyword") === ""
+      ? `api/v1/course?board=${board}`
+      : `api/v1/course?board=${board}&keyword=${watch("keyword")}`,
+    fetcher
+  );
 
   return (
     <SafeAreaWrapper>
@@ -76,7 +97,7 @@ const BulletinSearch: React.FC<
           />
         </Box>
         <Box mb="6" />
-        <Text>hello</Text>
+        <Text>{board}</Text>
       </Box>
     </SafeAreaWrapper>
   );

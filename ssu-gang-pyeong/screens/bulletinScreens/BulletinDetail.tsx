@@ -52,6 +52,13 @@ const BulletinDetail: React.FC<
     });
   };
 
+  const navigateToBulletinSearch = (name: string) => {
+    navigate("BulletinStack", {
+      screen: "BulletinSearch",
+      params: { board: name },
+    });
+  };
+
   const { data: posts, isLoading: isLoadingPosts } = useSWR<{
     bulletinAllPosts: IBulletinPost[];
     bulletinTotalPosts: number;
@@ -85,7 +92,7 @@ const BulletinDetail: React.FC<
               : "본교 게시판"}
           </Text>
           <Box mr="1">
-            <TouchableOpacity onPress={() => navigate("BulletinSearch")}>
+            <TouchableOpacity onPress={() => navigateToBulletinSearch(name)}>
               <Ionicons name="md-search" size={30} color="black" />
             </TouchableOpacity>
           </Box>

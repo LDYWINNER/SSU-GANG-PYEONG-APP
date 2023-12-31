@@ -30,6 +30,13 @@ const BulletinMain: React.FC<NativeStackScreenProps<any, "BulletinMain">> = ({
     });
   };
 
+  const navigateToBulletinSearch = (name: string) => {
+    navigate("BulletinStack", {
+      screen: "BulletinSearch",
+      params: { board: name },
+    });
+  };
+
   const { data: posts, isLoading: isLoadingPosts } = useSWR<{
     bulletinAllPosts: IBulletinPost[];
     bulletinTotalPosts: number;
@@ -57,7 +64,7 @@ const BulletinMain: React.FC<NativeStackScreenProps<any, "BulletinMain">> = ({
             alignItems="center"
           >
             <Box mr="3">
-              <TouchableOpacity onPress={() => navigate("BulletinSearch")}>
+              <TouchableOpacity onPress={() => navigateToBulletinSearch("ALL")}>
                 <Ionicons name="md-search" size={30} color="black" />
               </TouchableOpacity>
             </Box>
