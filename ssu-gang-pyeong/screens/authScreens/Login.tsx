@@ -36,6 +36,7 @@ const LoginScreen = () => {
         email: lowerCaseEmail,
       });
       updateUser({
+        _id: _user._id,
         username: _user.username,
         email: _user.email,
         school: _user.school,

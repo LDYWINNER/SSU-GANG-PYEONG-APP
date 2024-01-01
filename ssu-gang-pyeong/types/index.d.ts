@@ -8,6 +8,7 @@ interface IUser {
 
 // literally authenticated user
 interface IAuthenticatedUser {
+  _id: any;
   username: string;
   email: string;
   school: string;

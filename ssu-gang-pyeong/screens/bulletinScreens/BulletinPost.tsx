@@ -23,6 +23,7 @@ import {
 import moment from "moment";
 import { ScrollView } from "react-native-gesture-handler";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
+import useUserGlobalStore from "../../store/useUserGlobal";
 
 type BulletinPostScreenRouteProp = RouteProp<
   BulletinStackParamList,
@@ -34,6 +35,8 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
 }) => {
   const theme = useTheme<Theme>();
   const windowHeight = Dimensions.get("window").height;
+
+  const { user } = useUserGlobalStore();
 
   const [isSelected, setSelection] = useState(true);
 
@@ -59,7 +62,11 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
           alignItems="center"
         >
           <NavigateBack />
-          <Text variant="textXl" fontWeight="600" mr="2">
+          <Text
+            variant="textXl"
+            fontWeight="600"
+            mr={post.createdBy === user?._id ? "2" : "10"}
+          >
             {post.board === "Free"
               ? "자유 게시판"
               : post.board === "courseRegister"
@@ -74,11 +81,15 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
               ? "동아리 게시판"
               : "본교 게시판"}
           </Text>
-          <TouchableOpacity>
-            <Box>
-              <MaterialIcons name="more-vert" size={30} color="black" />
-            </Box>
-          </TouchableOpacity>
+          {post.createdBy === user?._id ? (
+            <TouchableOpacity>
+              <Box>
+                <MaterialIcons name="more-vert" size={30} color="black" />
+              </Box>
+            </TouchableOpacity>
+          ) : (
+            <Box />
+          )}
         </Box>
 
         <ScrollView>
