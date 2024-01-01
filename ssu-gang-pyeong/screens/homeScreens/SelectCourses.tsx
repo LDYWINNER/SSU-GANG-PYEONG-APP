@@ -18,7 +18,7 @@ import { TextInput } from "react-native-gesture-handler";
 import BottomSheet from "@gorhom/bottom-sheet";
 import { Picker } from "@react-native-picker/picker";
 import useGlobalToggle from "../../store/useGlobalToggle";
-import useSWR, { mutate } from "swr";
+import useSWR from "swr";
 
 interface ISearch {
   keyword: string;
@@ -74,7 +74,7 @@ const SelectCourses = ({ togglePicker, courses }: any) => {
     fetcher
   );
 
-  const { trigger: patchTVCourse, isMutating } = useSWRMutation(
+  const { trigger: patchTVCourse } = useSWRMutation(
     "api/v1/course/patchTVCourse",
     patchTVCourseRequest
   );

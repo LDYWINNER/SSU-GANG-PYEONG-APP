@@ -31,6 +31,7 @@ const createCategoryRequest = async (
     throw error;
   }
 };
+
 const updateCategoryRequest = async (
   url: string,
   { arg }: { arg: ICategoryRequest }

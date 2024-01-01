@@ -1,28 +1,41 @@
 import React, { useState } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import {
-  Divider,
-  Loader,
-  NavigateBack,
-  SafeAreaWrapper,
-} from "../../components";
+import { NavigateBack, SafeAreaWrapper } from "../../components";
 import { Box, Text, Theme } from "../../theme";
 import { useTheme } from "@shopify/restyle";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { BulletinStackParamList } from "../../navigation/types";
-import { Dimensions, TextInput, TouchableOpacity } from "react-native";
-import {
-  FontAwesome,
-  FontAwesome5,
-  Ionicons,
-  MaterialIcons,
-} from "@expo/vector-icons";
+import { TextInput, TouchableOpacity } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
+import useSWRMutation from "swr/mutation";
+import { Controller, useForm } from "react-hook-form";
+import axiosInstance, { fetcher } from "../../utils/config";
+import { IBulletinPost, IBulletinPostRequest } from "../../types";
+import useSWR from "swr";
 
 type WritePostScreenRouteProp = RouteProp<BulletinStackParamList, "WritePost">;
 
+interface IPost {
+  title: string;
+  content: string;
+}
+
+const addBulletinPostRequest = async (
+  url: string,
+  { arg }: { arg: IBulletinPostRequest }
+) => {
+  try {
+    await axiosInstance.post(url, {
+      ...arg,
+    });
+  } catch (error) {
+    console.log("error in addBulletinPostRequest", error);
+    throw error;
+  }
+};
+
 const WritePost: React.FC<NativeStackScreenProps<any, "WritePost">> = ({
-  navigation: { navigate },
+  navigation: { goBack },
 }) => {
   const theme = useTheme<Theme>();
 
@@ -30,6 +43,39 @@ const WritePost: React.FC<NativeStackScreenProps<any, "WritePost">> = ({
 
   const route = useRoute<WritePostScreenRouteProp>();
   const { board } = route.params;
+
+  const { control, watch } = useForm<IPost>({
+    defaultValues: {
+      title: "",
+      content: "",
+    },
+  });
+
+  const { trigger: addBulletinPost } = useSWRMutation(
+    "api/v1/bulletin/",
+    addBulletinPostRequest
+  );
+
+  const createNewPost = async () => {
+    try {
+      await addBulletinPost({
+        title: watch("title"),
+        content: watch("content"),
+        anonymity: isSelected,
+        board,
+      });
+      goBack();
+      mutate();
+    } catch (error) {
+      console.log("error in createNewPost", error);
+      throw error;
+    }
+  };
+
+  const { mutate } = useSWR<{
+    bulletinAllPosts: IBulletinPost[];
+    bulletinTotalPosts: number;
+  }>(`/api/v1/bulletin?board=${board}`, fetcher);
 
   return (
     <SafeAreaWrapper>
@@ -56,7 +102,7 @@ const WritePost: React.FC<NativeStackScreenProps<any, "WritePost">> = ({
               ? "동아리 게시판"
               : "본교 게시판"}
           </Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={createNewPost}>
             <Box
               p="2"
               px="3"
@@ -80,35 +126,60 @@ const WritePost: React.FC<NativeStackScreenProps<any, "WritePost">> = ({
 
         <Box height={"88%"} mx="3">
           <Box height={"90%"}>
-            <TextInput
-              placeholder="Title"
-              style={{
-                padding: 16,
-                height: "10%",
-                color: "black",
-                borderBottomWidth: 1,
-                borderBottomColor: theme.colors.gray200,
-                marginBottom: 20,
-                fontSize: 20,
+            <Controller
+              name="title"
+              control={control}
+              rules={{
+                required: true,
               }}
-              autoComplete={"off"}
-              autoCorrect={false}
-              keyboardAppearance={"default"}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  placeholder="Title"
+                  style={{
+                    padding: 16,
+                    height: "10%",
+                    color: "black",
+                    borderBottomWidth: 1,
+                    borderBottomColor: theme.colors.gray200,
+                    marginBottom: 20,
+                    fontSize: 20,
+                  }}
+                  value={value}
+                  onChangeText={onChange}
+                  onBlur={onBlur}
+                  autoComplete={"off"}
+                  autoCorrect={false}
+                  keyboardAppearance={"default"}
+                />
+              )}
             />
-            <TextInput
-              placeholder="Fill the content."
-              style={{
-                padding: 16,
-                color: "black",
-                fontSize: 16,
-                textAlignVertical: "top", // to align text to the top on Android
-                flex: 1,
+            <Controller
+              name="content"
+              control={control}
+              rules={{
+                required: true,
               }}
-              multiline
-              autoComplete={"off"}
-              autoCorrect={false}
-              keyboardAppearance={"default"}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  placeholder="Fill the content."
+                  style={{
+                    padding: 16,
+                    color: "black",
+                    fontSize: 16,
+                    textAlignVertical: "top", // to align text to the top on Android
+                    flex: 1,
+                  }}
+                  multiline
+                  value={value}
+                  onChangeText={onChange}
+                  onBlur={onBlur}
+                  autoComplete={"off"}
+                  autoCorrect={false}
+                  keyboardAppearance={"default"}
+                />
+              )}
             />
+
             <Text mb="2">
               SSUGANGPYEONG established rules to operate the community where
               anyone can use without any discomfort. Violations may result in

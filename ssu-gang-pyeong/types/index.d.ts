@@ -133,3 +133,10 @@ interface IBulletinPostComment {
   createdByUsername: string;
   createdAt: string;
 }
+
+interface IBulletinPostRequest {
+  title: string;
+  content: string;
+  board: string;
+  anonymity: boolean;
+}
