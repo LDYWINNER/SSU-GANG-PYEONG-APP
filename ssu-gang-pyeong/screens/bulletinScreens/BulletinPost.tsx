@@ -18,12 +18,14 @@ import {
   FontAwesome,
   FontAwesome5,
   Ionicons,
+  MaterialCommunityIcons,
   MaterialIcons,
 } from "@expo/vector-icons";
 import moment from "moment";
 import { ScrollView } from "react-native-gesture-handler";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import useUserGlobalStore from "../../store/useUserGlobal";
+import { Menu, MenuItem, MenuDivider } from "react-native-material-menu";
 
 type BulletinPostScreenRouteProp = RouteProp<
   BulletinStackParamList,
@@ -49,6 +51,10 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
   );
 
   const { post } = data || {};
+
+  const [visible, setVisible] = useState(false);
+  const hideMenu = () => setVisible(false);
+  const showMenu = () => setVisible(true);
 
   if (isLoadingPost || !post) {
     return <Loader />;
@@ -82,11 +88,36 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
               : "본교 게시판"}
           </Text>
           {post.createdBy === user?._id ? (
-            <TouchableOpacity>
-              <Box>
-                <MaterialIcons name="more-vert" size={30} color="black" />
-              </Box>
-            </TouchableOpacity>
+            <Menu
+              visible={visible}
+              anchor={
+                <Text onPress={showMenu}>
+                  <MaterialIcons name="more-vert" size={30} color="black" />
+                </Text>
+              }
+              onRequestClose={hideMenu}
+            >
+              <MenuItem onPress={hideMenu}>
+                <Box flexDirection="row" alignItems="center">
+                  <Box width={10} />
+                  <MaterialCommunityIcons
+                    name="pencil-outline"
+                    size={28}
+                    color="black"
+                  />
+                  <Box width={6} />
+                  <Text>글 수정하기</Text>
+                </Box>
+              </MenuItem>
+              <MenuItem onPress={hideMenu}>
+                <Box flexDirection="row" alignItems="center">
+                  <Box width={14} />
+                  <FontAwesome5 name="trash" size={24} color="black" />
+                  <Box width={10} />
+                  <Text>글 삭제하기</Text>
+                </Box>
+              </MenuItem>
+            </Menu>
           ) : (
             <Box />
           )}
