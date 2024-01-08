@@ -75,7 +75,7 @@ const BulletinMain: React.FC<NativeStackScreenProps<any, "BulletinMain">> = ({
             </Box>
           </Box>
         </Box>
-        <ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
           <Box
             // bg="gray550"
             bg="white"

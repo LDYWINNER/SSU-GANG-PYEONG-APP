@@ -141,3 +141,20 @@ interface IBulletinPostRequest {
   board: string;
   anonymity: boolean;
 }
+
+interface ICourseEvalPostRequest {
+  overallGrade: number;
+  overallEvaluation: string;
+  anonymity: boolean;
+  semester: string;
+  instructor: string;
+  myLetterGrade: string;
+  difficulty: string;
+  homeworkQuantity: string;
+  testQuantity: string;
+  teamProjectPresence: string;
+  quizPresence: string;
+  //new - 1. 성적은 어떻게 주시나요 2. 출석은 어떻게 확인하나요
+  generosity: string;
+  attendance: string;
+}

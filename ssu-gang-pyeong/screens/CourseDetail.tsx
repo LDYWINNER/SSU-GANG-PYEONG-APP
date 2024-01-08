@@ -59,6 +59,7 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
   const navigateToWriteReview = () => {
     navigate("MainStack", {
       screen: "WriteReview",
+      params: { id },
     });
   };
 

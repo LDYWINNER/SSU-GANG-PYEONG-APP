@@ -1,57 +1,68 @@
 import React, { useCallback, useState, useRef, useMemo } from "react";
-import { ScrollView, TouchableOpacity } from "react-native";
-import styled from "styled-components/native";
+import { TextInput, TouchableOpacity } from "react-native";
 import { useColorScheme } from "react-native";
 import colors from "../colors";
 import { Rating } from "@kolking/react-native-rating";
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";
 import { Picker } from "@react-native-picker/picker";
+import { Divider, NavigateBack, SafeAreaWrapper } from "../components";
+import { Box, Text, Theme } from "../theme";
+import { Controller, useForm } from "react-hook-form";
+import axiosInstance from "../utils/config";
+import useSWRMutation from "swr/mutation";
+import { ICourseEvalPostRequest } from "../types";
+import { MainStackParamList } from "../navigation/types";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import { useTheme } from "@shopify/restyle";
+import { Ionicons } from "@expo/vector-icons";
+import { ScrollView } from "react-native-gesture-handler";
+import BouncyCheckbox from "react-native-bouncy-checkbox";
 
-const Wrapper = styled.View<{ isDark: boolean }>`
-  flex: 1;
-  background-color: ${(props) => (props.isDark ? colors.BLACK_COLOR : "white")};
-  padding: 0px 20px;
-  padding-top: 70px;
-`;
+interface ICourseEval {
+  overallGrade: number;
+  overallEvaluation: string;
+  anonymity: boolean;
+  semester: string;
+  instructor: string;
+  myLetterGrade: string;
+  difficulty: string;
+  homeworkQuantity: string;
+  testQuantity: string;
+  teamProjectPresence: string;
+  quizPresence: string;
+  //new - 1. 성적은 어떻게 주시나요 2. 출석은 어떻게 확인하나요
+  generosity: string;
+  attendance: string;
+}
 
-const Row = styled.View`
-  flex-direction: row;
-  width: 50%;
-`;
+type WriteReviewScreenRouteProp = RouteProp<MainStackParamList, "WriteReview">;
 
-const Col = styled.View``;
-
-const Contents = styled.Text<{ isDark: boolean }>`
-  color: ${(props) => (props.isDark ? "white" : colors.BLACK_COLOR)};
-`;
-
-const Btn = styled.TouchableOpacity<{ isDark: boolean; selected: boolean }>`
-  padding: 10px;
-  margin: 5px;
-  border-width: 1px;
-  border-color: ${(props) => (props.isDark ? "white" : colors.BLACK_COLOR)};
-  border-radius: 5px;
-  background-color: ${(props) =>
-    props.selected ? colors.SBU_RED : "transparent"};
-`;
-
-const EvalInput = styled.TextInput<{ isDark: boolean }>`
-  border-width: 1px;
-  border-color: ${(props) => (props.isDark ? "white" : colors.BLACK_COLOR)};
-  border-radius: 5px;
-  padding: 10px;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  min-height: 100px;
-  color: ${(props) => (props.isDark ? "white" : colors.BLACK_COLOR)};
-`;
+const addCourseEvalRequest = async (
+  url: string,
+  { arg }: { arg: ICourseEvalPostRequest }
+) => {
+  try {
+    await axiosInstance.post(url, {
+      ...arg,
+    });
+  } catch (error) {
+    console.log("error in addCourseEvalRequest", error);
+    throw error;
+  }
+};
 
 const WriteReview = () => {
   const isDark = useColorScheme() === "dark";
-  const [overallGrade, setOverallGrade] = useState(0);
-  const [overallEvaluation, setOverallEvaluation] = useState("");
-  const [anonymity, setAnonymity] = useState(false);
+  const theme = useTheme<Theme>();
+  const route = useRoute<WriteReviewScreenRouteProp>();
+  const { id } = route.params;
+  const navigation = useNavigation();
+
+  const [semester, setSemester] = useState("2024-spring");
+  const [instructor, setInstructor] = useState("Pick the instructor");
+  const [myLetterGrade, setMyLetterGrade] = useState("Pick an item");
+  const [anonymity, setAnonymity] = useState(true);
 
   const questions = {
     difficulty: ["difficult", "soso", "easy"],
@@ -65,19 +76,50 @@ const WriteReview = () => {
     quizPresence: ["Yes", "No"],
   };
 
-  const [semester, setSemester] = useState("2024-spring");
-  const [instructor, setInstructor] = useState("Pick an item");
-  const [myLetterGrade, setMyLetterGrade] = useState("Pick an item");
-  const [difficulty, setDifficulty] = useState("");
-  const [homeworkQuantity, setHomeworkQuantity] = useState("");
-  const [testQuantity, setTestQuantity] = useState("");
-  const [teamProjectPresence, setTeamProjectPresence] = useState("");
-  const [quizPresence, setQuizPresence] = useState("");
-  //new - 1. 성적은 어떻게 주시나요 2. 출석은 어떻게 확인하나요
-  const [generosity, setGenerosity] = useState("");
-  const [attendance, setAttendance] = useState("");
+  const { control, watch } = useForm<ICourseEval>({
+    defaultValues: {
+      overallGrade: 0,
+      overallEvaluation: "",
+      anonymity: false,
+      difficulty: "",
+      homeworkQuantity: "",
+      testQuantity: "",
+      teamProjectPresence: "",
+      quizPresence: "",
+      generosity: "",
+      attendance: "",
+    },
+  });
 
-  const handleOGChange = (value: number) => setOverallGrade(value);
+  const { trigger: addCourseEval } = useSWRMutation(
+    `api/v1/course/${id}`,
+    addCourseEvalRequest
+  );
+
+  const createCourseEval = async () => {
+    try {
+      await addCourseEval({
+        overallGrade: watch("overallGrade"),
+        overallEvaluation: watch("overallEvaluation"),
+        anonymity: watch("anonymity"),
+        semester: watch("semester"),
+        instructor: watch("instructor"),
+        myLetterGrade: watch("myLetterGrade"),
+        difficulty: watch("difficulty"),
+        homeworkQuantity: watch("homeworkQuantity"),
+        testQuantity: watch("testQuantity"),
+        teamProjectPresence: watch("teamProjectPresence"),
+        quizPresence: watch("quizPresence"),
+        //new - 1. 성적은 어떻게 주시나요 2. 출석은 어떻게 확인하나요
+        generosity: watch("generosity"),
+        attendance: watch("attendance"),
+      });
+      navigation.goBack();
+    } catch (error) {
+      console.log("error in createNewPost", error);
+      throw error;
+    }
+  };
 
   //bottom sheet
   const sheetRef = useRef<BottomSheet>(null);
@@ -121,151 +163,467 @@ const WriteReview = () => {
   );
 
   return (
-    <>
-      <Wrapper isDark={isDark}>
-        <ScrollView>
-          <Contents isDark={isDark}>총 평점</Contents>
-          <Rating
-            size={40}
-            rating={overallGrade}
-            onChange={handleOGChange}
-            spacing={30}
-          />
-          <Contents isDark={isDark}>총평</Contents>
-          <EvalInput
-            placeholder="이 곳에 대한 총평을 자유롭게 적어주세요."
-            isDark={isDark}
-            value={overallEvaluation}
-            onChangeText={setOverallEvaluation}
-            multiline
-          />
+    <SafeAreaWrapper>
+      <Box flex={1} mx="2">
+        <Box
+          flexDirection="row"
+          justifyContent="space-between"
+          alignItems="center"
+          mb="3"
+        >
+          <NavigateBack />
+          <Text variant="textXl" fontWeight="600" mr="10">
+            강의평 등록
+          </Text>
+          <Box></Box>
+        </Box>
 
-          <Row>
-            <Col>
-              <Contents isDark={isDark}>수강학기</Contents>
-              <TouchableOpacity onPress={() => togglePicker("semester")}>
-                <Contents isDark={isDark}>{semester}</Contents>
-              </TouchableOpacity>
-            </Col>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <Box mx="3" style={{ marginBottom: "33%" }}>
+            <Box mb="4">
+              <Text variant="textBase" mb="2" fontWeight="600">
+                총 평점
+              </Text>
+              <Controller
+                control={control}
+                name="overallGrade"
+                render={({ field: { onChange, value } }) => (
+                  <Rating
+                    size={40}
+                    rating={value}
+                    onChange={onChange}
+                    spacing={30}
+                  />
+                )}
+              />
+            </Box>
 
-            <Col>
-              <Contents isDark={isDark}>교수님</Contents>
-              <TouchableOpacity onPress={() => togglePicker("instructor")}>
-                <Contents isDark={isDark}>{instructor}</Contents>
-              </TouchableOpacity>
-            </Col>
-          </Row>
-
-          <Contents isDark={isDark}>받은 Letter Grade(optional)</Contents>
-          <TouchableOpacity onPress={() => togglePicker("myLetterGrade")}>
-            <Contents isDark={isDark}>{myLetterGrade}</Contents>
-          </TouchableOpacity>
-
-          <Contents isDark={isDark}>수업 내용 난이도</Contents>
-          <Row>
-            {questions.difficulty.map((option, index) => (
-              <Btn
-                key={index}
-                isDark={isDark}
-                selected={difficulty === option}
-                onPress={() => setDifficulty(option)}
-              >
-                <Contents isDark={isDark}>{option}</Contents>
-              </Btn>
-            ))}
-          </Row>
-
-          <Contents isDark={isDark}>성적은 어떻게 주시나요?</Contents>
-          <Row>
-            {questions.generosity.map((option, index) => (
-              <Btn
-                key={index}
-                isDark={isDark}
-                selected={generosity === option}
-                onPress={() => setGenerosity(option)}
-              >
-                <Contents isDark={isDark}>{option}</Contents>
-              </Btn>
-            ))}
-          </Row>
-
-          <Contents isDark={isDark}>시험 개수(미드텀 & 파이널)</Contents>
-          <Row>
-            {questions.testQuantity.map((option, index) => (
-              <Btn
-                key={index}
-                isDark={isDark}
-                selected={testQuantity === option}
-                onPress={() => setTestQuantity(option)}
-              >
-                <Contents isDark={isDark}>{option}</Contents>
-              </Btn>
-            ))}
-          </Row>
-
-          <Contents isDark={isDark}>과제량</Contents>
-          <Row>
-            {questions.homeworkQuantity.map((option, index) => (
-              <Btn
-                key={index}
-                isDark={isDark}
-                selected={homeworkQuantity === option}
-                onPress={() => setHomeworkQuantity(option)}
-              >
-                <Contents isDark={isDark}>{option}</Contents>
-              </Btn>
-            ))}
-          </Row>
-
-          <Contents isDark={isDark}>퀴즈 유무</Contents>
-          <Row>
-            {questions.quizPresence.map((option, index) => (
-              <Btn
-                key={index}
-                isDark={isDark}
-                selected={quizPresence === option}
-                onPress={() => {
-                  setQuizPresence(option);
+            <Box mb="4" height={"15%"}>
+              <Text variant="textBase" mb="2" fontWeight="600">
+                총평
+              </Text>
+              <Controller
+                name="overallEvaluation"
+                control={control}
+                rules={{
+                  required: true,
                 }}
-              >
-                <Contents isDark={isDark}>{option}</Contents>
-              </Btn>
-            ))}
-          </Row>
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    placeholder="Fill the content."
+                    style={{
+                      paddingTop: 16,
+                      padding: 16,
+                      color: "black",
+                      fontSize: 16,
+                      textAlignVertical: "top", // to align text to the top on Android
+                      flex: 1,
+                      backgroundColor: theme.colors.gray300,
+                      borderRadius: 10,
+                    }}
+                    multiline
+                    value={value}
+                    onChangeText={onChange}
+                    onBlur={onBlur}
+                    autoComplete={"off"}
+                    autoCorrect={false}
+                    keyboardAppearance={"default"}
+                  />
+                )}
+              />
+            </Box>
+            <Divider />
 
-          <Contents isDark={isDark}>출석은 어떻게 확인하나요?</Contents>
-          <Row>
-            {questions.attendance.map((option, index) => (
-              <Btn
-                key={index}
-                isDark={isDark}
-                selected={attendance === option}
-                onPress={() => setAttendance(option)}
-              >
-                <Contents isDark={isDark}>{option}</Contents>
-              </Btn>
-            ))}
-          </Row>
+            <Box my="4">
+              <Text variant="textBase" mb="2" fontWeight="600">
+                수강학기
+              </Text>
+              <Box flexDirection="row">
+                <TouchableOpacity onPress={() => togglePicker("semester")}>
+                  <Box
+                    style={{
+                      backgroundColor: theme.colors.gray300,
+                      borderRadius: 10,
+                    }}
+                    flexDirection="row"
+                    alignItems="center"
+                    p="2"
+                  >
+                    <Text
+                      fontWeight="600"
+                      style={{
+                        color: theme.colors.gray600,
+                      }}
+                    >
+                      {semester}
+                    </Text>
+                    <Box width={1} />
+                    <Ionicons
+                      name="chevron-down"
+                      size={20}
+                      color={theme.colors.gray5}
+                    />
+                  </Box>
+                </TouchableOpacity>
+              </Box>
+            </Box>
 
-          <Contents isDark={isDark}>팀플 유무</Contents>
-          <Row>
-            {questions.teamProjectPresence.map((option, index) => (
-              <Btn
-                key={index}
-                isDark={isDark}
-                selected={teamProjectPresence === option}
-                onPress={() => {
-                  setTeamProjectPresence(option);
+            <Box mb="4">
+              <Text variant="textBase" mb="2" fontWeight="600">
+                교수님
+              </Text>
+              <Box flexDirection="row">
+                <TouchableOpacity onPress={() => togglePicker("instructor")}>
+                  <Box
+                    style={{
+                      backgroundColor: theme.colors.gray300,
+                      borderRadius: 10,
+                    }}
+                    flexDirection="row"
+                    alignItems="center"
+                    p="2"
+                  >
+                    <Text
+                      fontWeight="600"
+                      style={{
+                        color: theme.colors.gray600,
+                      }}
+                    >
+                      {instructor}
+                    </Text>
+                    <Box width={1} />
+                    <Ionicons
+                      name="chevron-down"
+                      size={20}
+                      color={theme.colors.gray5}
+                    />
+                  </Box>
+                </TouchableOpacity>
+              </Box>
+            </Box>
+
+            <Box mb="4">
+              <Text variant="textBase" mb="2" fontWeight="600">
+                받은 Letter Grade(optional)
+              </Text>
+              <Box flexDirection="row">
+                <TouchableOpacity onPress={() => togglePicker("myLetterGrade")}>
+                  <Box
+                    style={{
+                      backgroundColor: theme.colors.gray300,
+                      borderRadius: 10,
+                    }}
+                    flexDirection="row"
+                    alignItems="center"
+                    p="2"
+                  >
+                    <Text
+                      fontWeight="600"
+                      style={{
+                        color: theme.colors.gray600,
+                      }}
+                    >
+                      {myLetterGrade}
+                    </Text>
+                    <Box width={1} />
+                    <Ionicons
+                      name="chevron-down"
+                      size={20}
+                      color={theme.colors.gray5}
+                    />
+                  </Box>
+                </TouchableOpacity>
+              </Box>
+            </Box>
+
+            <Box mb="4">
+              <Text variant="textBase" mb="2" fontWeight="600">
+                수업 내용 난이도
+              </Text>
+              <Controller
+                control={control}
+                name="difficulty"
+                render={({ field: { onChange, value } }) => (
+                  <Box flexDirection="row" alignItems="center">
+                    {questions.difficulty.map((option, index) => (
+                      <TouchableOpacity
+                        key={index}
+                        onPress={() => onChange(option)}
+                      >
+                        <Box
+                          style={{
+                            backgroundColor: value === option ? "red" : "white",
+                          }}
+                          p="3"
+                          mx="1"
+                          borderRadius="rounded-xl"
+                          borderColor="gray4"
+                          borderWidth={1}
+                        >
+                          <Text>{option}</Text>
+                        </Box>
+                      </TouchableOpacity>
+                    ))}
+                  </Box>
+                )}
+              />
+            </Box>
+
+            <Box mb="4">
+              <Text variant="textBase" mb="2" fontWeight="600">
+                성적은 어떻게 주시나요?
+              </Text>
+              <Controller
+                control={control}
+                name="generosity"
+                render={({ field: { onChange, value } }) => (
+                  <Box flexDirection="row" alignItems="center">
+                    {questions.generosity.map((option, index) => (
+                      <TouchableOpacity
+                        key={index}
+                        onPress={() => onChange(option)}
+                      >
+                        <Box
+                          style={{
+                            backgroundColor: value === option ? "red" : "white",
+                          }}
+                          p="3"
+                          mx="1"
+                          borderRadius="rounded-xl"
+                          borderColor="gray4"
+                          borderWidth={1}
+                        >
+                          <Text>{option}</Text>
+                        </Box>
+                      </TouchableOpacity>
+                    ))}
+                  </Box>
+                )}
+              />
+            </Box>
+
+            <Box mb="4">
+              <Text variant="textBase" mb="2" fontWeight="600">
+                시험 개수(미드텀 & 파이널)
+              </Text>
+              <Controller
+                control={control}
+                name="testQuantity"
+                render={({ field: { onChange, value } }) => (
+                  <Box flexDirection="row" alignItems="center">
+                    {questions.testQuantity.map((option, index) => (
+                      <TouchableOpacity
+                        key={index}
+                        onPress={() => onChange(option)}
+                      >
+                        <Box
+                          style={{
+                            backgroundColor: value === option ? "red" : "white",
+                          }}
+                          p="3"
+                          mx="1"
+                          borderRadius="rounded-xl"
+                          borderColor="gray4"
+                          borderWidth={1}
+                        >
+                          <Text>{option}</Text>
+                        </Box>
+                      </TouchableOpacity>
+                    ))}
+                  </Box>
+                )}
+              />
+            </Box>
+
+            <Box mb="4">
+              <Text variant="textBase" mb="2" fontWeight="600">
+                과제량
+              </Text>
+              <Controller
+                control={control}
+                name="homeworkQuantity"
+                render={({ field: { onChange, value } }) => (
+                  <Box flexDirection="row" alignItems="center">
+                    {questions.homeworkQuantity.map((option, index) => (
+                      <TouchableOpacity
+                        key={index}
+                        onPress={() => onChange(option)}
+                      >
+                        <Box
+                          style={{
+                            backgroundColor: value === option ? "red" : "white",
+                          }}
+                          p="3"
+                          mx="1"
+                          borderRadius="rounded-xl"
+                          borderColor="gray4"
+                          borderWidth={1}
+                        >
+                          <Text>{option}</Text>
+                        </Box>
+                      </TouchableOpacity>
+                    ))}
+                  </Box>
+                )}
+              />
+            </Box>
+
+            <Box mb="4">
+              <Text variant="textBase" mb="2" fontWeight="600">
+                퀴즈 유무
+              </Text>
+              <Controller
+                control={control}
+                name="quizPresence"
+                render={({ field: { onChange, value } }) => (
+                  <Box flexDirection="row" alignItems="center">
+                    {questions.quizPresence.map((option, index) => (
+                      <TouchableOpacity
+                        key={index}
+                        onPress={() => onChange(option)}
+                      >
+                        <Box
+                          style={{
+                            backgroundColor: value === option ? "red" : "white",
+                          }}
+                          p="3"
+                          mx="1"
+                          borderRadius="rounded-xl"
+                          borderColor="gray4"
+                          borderWidth={1}
+                        >
+                          <Text>{option}</Text>
+                        </Box>
+                      </TouchableOpacity>
+                    ))}
+                  </Box>
+                )}
+              />
+            </Box>
+
+            <Box mb="4">
+              <Text variant="textBase" mb="2" fontWeight="600">
+                출석은 어떻게 확인하나요?
+              </Text>
+              <Controller
+                control={control}
+                name="attendance"
+                render={({ field: { onChange, value } }) => (
+                  <Box flexDirection="row" alignItems="center">
+                    {questions.attendance.map((option, index) => (
+                      <TouchableOpacity
+                        key={index}
+                        onPress={() => onChange(option)}
+                      >
+                        <Box
+                          style={{
+                            backgroundColor: value === option ? "red" : "white",
+                          }}
+                          p="3"
+                          mx="1"
+                          borderRadius="rounded-xl"
+                          borderColor="gray4"
+                          borderWidth={1}
+                        >
+                          <Text>{option}</Text>
+                        </Box>
+                      </TouchableOpacity>
+                    ))}
+                  </Box>
+                )}
+              />
+            </Box>
+
+            <Box mb="6">
+              <Text variant="textBase" mb="2" fontWeight="600">
+                팀플 유무
+              </Text>
+              <Controller
+                control={control}
+                name="teamProjectPresence"
+                render={({ field: { onChange, value } }) => (
+                  <Box flexDirection="row" alignItems="center">
+                    {questions.teamProjectPresence.map((option, index) => (
+                      <TouchableOpacity
+                        key={index}
+                        onPress={() => onChange(option)}
+                      >
+                        <Box
+                          style={{
+                            backgroundColor: value === option ? "red" : "white",
+                          }}
+                          p="3"
+                          mx="1"
+                          borderRadius="rounded-xl"
+                          borderColor="gray4"
+                          borderWidth={1}
+                        >
+                          <Text>{option}</Text>
+                        </Box>
+                      </TouchableOpacity>
+                    ))}
+                  </Box>
+                )}
+              />
+            </Box>
+
+            <TouchableOpacity onPress={() => setAnonymity(!anonymity)}>
+              <Box flexDirection="row" alignItems="center">
+                <BouncyCheckbox
+                  size={25}
+                  fillColor={theme.colors.sbuRed}
+                  unfillColor="#FFFFFF"
+                  text="익명"
+                  iconStyle={{ borderColor: theme.colors.sbuRed }}
+                  innerIconStyle={{
+                    borderWidth: 2,
+                  }}
+                  disableText
+                  isChecked={anonymity}
+                  disableBuiltInState
+                  onPress={() => setAnonymity(!anonymity)}
+                />
+                <Text
+                  ml="1"
+                  variant="textBase"
+                  style={{ color: theme.colors.sbuRed }}
+                >
+                  익명
+                </Text>
+              </Box>
+            </TouchableOpacity>
+
+            <Box my="4" mb="10">
+              <Text mb="1">수정 및 삭제가 불가능한 점 유의 바랍니다.</Text>
+              <Text>
+                비판은 괜찮지만 지나친 비난 혹은 수강평과 관련 없는 내용을
+                작성할 경우 서비스 이용이 제한될 수 있습니다.
+              </Text>
+            </Box>
+
+            <TouchableOpacity>
+              <Box
+                style={{
+                  backgroundColor: theme.colors.sbuRed,
                 }}
+                p="3"
+                justifyContent="center"
+                alignItems="center"
+                borderRadius="rounded"
               >
-                <Contents isDark={isDark}>{option}</Contents>
-              </Btn>
-            ))}
-          </Row>
-
-          <Contents isDark={isDark}>익명</Contents>
+                <Text
+                  variant="textBase"
+                  fontWeight="700"
+                  style={{ color: "white" }}
+                >
+                  평가하기
+                </Text>
+              </Box>
+            </TouchableOpacity>
+          </Box>
         </ScrollView>
-      </Wrapper>
+      </Box>
+
       <BottomSheet
         index={-1}
         ref={sheetRef}
@@ -278,7 +636,7 @@ const WriteReview = () => {
           backgroundColor: isDark ? colors.DARKER_GREY : "white",
         }}
       >
-        <Row>
+        <Box>
           <TouchableOpacity
             onPress={() => {
               if (pickerContents === "semester") {
@@ -293,9 +651,9 @@ const WriteReview = () => {
               }
             }}
           >
-            <Contents isDark={isDark}>확인</Contents>
+            <Text>확인</Text>
           </TouchableOpacity>
-        </Row>
+        </Box>
         {pickerContents === "semester" ? (
           <Picker
             ref={pickerRef}
@@ -343,7 +701,7 @@ const WriteReview = () => {
           </Picker>
         )}
       </BottomSheet>
-    </>
+    </SafeAreaWrapper>
   );
 };
 
