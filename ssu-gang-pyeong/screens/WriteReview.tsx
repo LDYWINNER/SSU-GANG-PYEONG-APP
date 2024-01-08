@@ -509,27 +509,30 @@ const WriteReview = () => {
                 control={control}
                 name="attendance"
                 render={({ field: { onChange, value } }) => (
-                  <Box flexDirection="row" alignItems="center">
-                    {questions.attendance.map((option, index) => (
-                      <TouchableOpacity
-                        key={index}
-                        onPress={() => onChange(option)}
-                      >
-                        <Box
-                          style={{
-                            backgroundColor: value === option ? "red" : "white",
-                          }}
-                          p="3"
-                          mx="1"
-                          borderRadius="rounded-xl"
-                          borderColor="gray4"
-                          borderWidth={1}
+                  <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                    <Box flexDirection="row" alignItems="center">
+                      {questions.attendance.map((option, index) => (
+                        <TouchableOpacity
+                          key={index}
+                          onPress={() => onChange(option)}
                         >
-                          <Text>{option}</Text>
-                        </Box>
-                      </TouchableOpacity>
-                    ))}
-                  </Box>
+                          <Box
+                            style={{
+                              backgroundColor:
+                                value === option ? "red" : "white",
+                            }}
+                            p="3"
+                            mx="1"
+                            borderRadius="rounded-xl"
+                            borderColor="gray4"
+                            borderWidth={1}
+                          >
+                            <Text>{option}</Text>
+                          </Box>
+                        </TouchableOpacity>
+                      ))}
+                    </Box>
+                  </ScrollView>
                 )}
               />
             </Box>
