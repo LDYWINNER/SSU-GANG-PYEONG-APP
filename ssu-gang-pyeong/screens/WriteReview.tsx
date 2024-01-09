@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useRef, useMemo } from "react";
-import { TextInput, TouchableOpacity } from "react-native";
+import { Alert, TextInput, TouchableOpacity } from "react-native";
 import { useColorScheme } from "react-native";
 import colors from "../colors";
 import { Rating } from "@kolking/react-native-rating";
@@ -18,6 +18,7 @@ import { useTheme } from "@shopify/restyle";
 import { Ionicons } from "@expo/vector-icons";
 import { ScrollView } from "react-native-gesture-handler";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
+import { AxiosError } from "axios";
 
 interface ICourseEval {
   overallGrade: number;
@@ -50,8 +51,24 @@ const addCourseEvalRequest = async (
       quizPresence: "Yes" ? true : false,
     });
   } catch (error) {
-    console.log("error in addCourseEvalRequest", error);
-    throw error;
+    // console.log("error in addCourseEvalRequest", error);
+    // throw error;
+    const axiosError = error as any;
+    // Check if the error has a response and a message
+    if (
+      axiosError.response &&
+      axiosError.response.data &&
+      axiosError.response.data.error
+    ) {
+      // Extract the error message
+      const errorMessage = axiosError.response.data.error;
+      // Display the error message
+      Alert.alert(errorMessage);
+    } else {
+      console.log("Error in createCourseEval", error);
+      // Fallback error message if the structure is different
+      Alert.alert("An unexpected error occurred.");
+    }
   }
 };
 
@@ -87,7 +104,11 @@ const WriteReview = () => {
     ],
   };
 
-  const { control, watch } = useForm<ICourseEval>({
+  const {
+    control,
+    watch,
+    formState: { isSubmitSuccessful },
+  } = useForm<ICourseEval>({
     defaultValues: {
       overallGrade: 0,
       overallEvaluation: "",
@@ -127,9 +148,11 @@ const WriteReview = () => {
         myLetterGrade,
         anonymity,
       });
-      navigation.goBack();
+      if (isSubmitSuccessful) {
+        navigation.goBack();
+      }
     } catch (error) {
-      console.log("error in createNewPost", error);
+      console.log("error in createCourseEval", error);
       throw error;
     }
   };
