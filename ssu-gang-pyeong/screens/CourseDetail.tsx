@@ -553,10 +553,10 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
                         { x: "수기", y: attendanceStore[1] },
                         { x: "QR코드", y: attendanceStore[2] },
                         { x: "구글폼", y: attendanceStore[3] },
-                        { x: "기타", y: attendanceStore[4] },
+                        { x: "없음", y: attendanceStore[4] },
                       ]}
                       categories={{
-                        x: ["기타", "구글폼", "QR코드", "수기", "호명"],
+                        x: ["없음", "구글폼", "QR코드", "수기", "호명"],
                       }}
                       barWidth={20}
                       animate={{
