@@ -322,7 +322,7 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
 
             <Box>
               <Text variant="textLg">수업 내용 난이도</Text>
-              {generosityStore.toString() !== "0,0,0" ? (
+              {difficultyStore.toString() !== "0,0,0" ? (
                 <Box ml="1" mt="-6">
                   <VictoryChart
                     theme={VictoryTheme.material}
