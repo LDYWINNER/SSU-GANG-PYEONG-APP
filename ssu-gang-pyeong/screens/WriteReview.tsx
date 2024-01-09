@@ -45,6 +45,8 @@ const addCourseEvalRequest = async (
   try {
     await axiosInstance.post(url, {
       ...arg,
+      teamProjectPresence: "Yes" ? true : false,
+      quizPresence: "Yes" ? true : false,
     });
   } catch (error) {
     console.log("error in addCourseEvalRequest", error);
@@ -101,10 +103,6 @@ const WriteReview = () => {
       await addCourseEval({
         overallGrade: watch("overallGrade"),
         overallEvaluation: watch("overallEvaluation"),
-        anonymity: watch("anonymity"),
-        semester: watch("semester"),
-        instructor: watch("instructor"),
-        myLetterGrade: watch("myLetterGrade"),
         difficulty: watch("difficulty"),
         homeworkQuantity: watch("homeworkQuantity"),
         testQuantity: watch("testQuantity"),
@@ -113,6 +111,10 @@ const WriteReview = () => {
         //new - 1. 성적은 어떻게 주시나요 2. 출석은 어떻게 확인하나요
         generosity: watch("generosity"),
         attendance: watch("attendance"),
+        semester,
+        instructor,
+        myLetterGrade,
+        anonymity,
       });
       navigation.goBack();
     } catch (error) {
@@ -187,6 +189,9 @@ const WriteReview = () => {
               <Controller
                 control={control}
                 name="overallGrade"
+                rules={{
+                  required: true,
+                }}
                 render={({ field: { onChange, value } }) => (
                   <Rating
                     size={40}
@@ -343,6 +348,9 @@ const WriteReview = () => {
               <Controller
                 control={control}
                 name="difficulty"
+                rules={{
+                  required: true,
+                }}
                 render={({ field: { onChange, value } }) => (
                   <Box flexDirection="row" alignItems="center">
                     {questions.difficulty.map((option, index) => (
@@ -376,6 +384,9 @@ const WriteReview = () => {
               <Controller
                 control={control}
                 name="generosity"
+                rules={{
+                  required: true,
+                }}
                 render={({ field: { onChange, value } }) => (
                   <Box flexDirection="row" alignItems="center">
                     {questions.generosity.map((option, index) => (
@@ -409,6 +420,9 @@ const WriteReview = () => {
               <Controller
                 control={control}
                 name="testQuantity"
+                rules={{
+                  required: true,
+                }}
                 render={({ field: { onChange, value } }) => (
                   <Box flexDirection="row" alignItems="center">
                     {questions.testQuantity.map((option, index) => (
@@ -442,6 +456,9 @@ const WriteReview = () => {
               <Controller
                 control={control}
                 name="homeworkQuantity"
+                rules={{
+                  required: true,
+                }}
                 render={({ field: { onChange, value } }) => (
                   <Box flexDirection="row" alignItems="center">
                     {questions.homeworkQuantity.map((option, index) => (
@@ -475,6 +492,9 @@ const WriteReview = () => {
               <Controller
                 control={control}
                 name="quizPresence"
+                rules={{
+                  required: true,
+                }}
                 render={({ field: { onChange, value } }) => (
                   <Box flexDirection="row" alignItems="center">
                     {questions.quizPresence.map((option, index) => (
@@ -508,6 +528,9 @@ const WriteReview = () => {
               <Controller
                 control={control}
                 name="attendance"
+                rules={{
+                  required: true,
+                }}
                 render={({ field: { onChange, value } }) => (
                   <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                     <Box flexDirection="row" alignItems="center">
@@ -544,6 +567,9 @@ const WriteReview = () => {
               <Controller
                 control={control}
                 name="teamProjectPresence"
+                rules={{
+                  required: true,
+                }}
                 render={({ field: { onChange, value } }) => (
                   <Box flexDirection="row" alignItems="center">
                     {questions.teamProjectPresence.map((option, index) => (
@@ -604,7 +630,7 @@ const WriteReview = () => {
               </Text>
             </Box>
 
-            <TouchableOpacity>
+            <TouchableOpacity onPress={createCourseEval}>
               <Box
                 style={{
                   backgroundColor: theme.colors.sbuRed,

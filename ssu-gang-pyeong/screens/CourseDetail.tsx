@@ -46,7 +46,10 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
 
   const { data: course, isLoading: isLoadingCourse } = useSWR<ICourse>(
     `/api/v1/course/${id}`,
-    fetcher
+    fetcher,
+    {
+      refreshInterval: 2000,
+    }
   );
 
   const navigateToCourseReview = (overallEvaluations: number[]) => {
