@@ -280,71 +280,80 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
                   : "(0개)"}
               </Text>
             </Box>
-            <Box ml="1" mt="-6">
-              <VictoryChart
-                theme={VictoryTheme.material}
-                domainPadding={{ y: 45, x: 20 }}
-                height={250}
-                width={400}
-              >
-                <VictoryBar
-                  horizontal
-                  data={[
-                    { x: "5", y: overallGradeStore[4] },
-                    { x: "4", y: overallGradeStore[3] },
-                    { x: "3", y: overallGradeStore[2] },
-                    { x: "2", y: overallGradeStore[1] },
-                    { x: "1", y: overallGradeStore[0] },
-                  ]}
-                  categories={{ x: ["5", "4", "3", "2", "1"] }}
-                  barWidth={20}
-                  animate={{
-                    duration: 2000,
-                    onLoad: { duration: 1000 },
-                  }}
-                  style={{
-                    data: { fill: theme.colors.ratingYellow },
-                  }}
-                  cornerRadius={{ top: 8 }}
-                />
-              </VictoryChart>
-            </Box>
-
-            <Box>
-              <Text variant="textLg">수업 내용 난이도</Text>
+            {overallGradeStore.toString() !== "0,0,0,0,0" ? (
               <Box ml="1" mt="-6">
                 <VictoryChart
                   theme={VictoryTheme.material}
-                  domainPadding={{ y: 45, x: 30 }}
+                  domainPadding={{ y: 45, x: 20 }}
                   height={250}
                   width={400}
                 >
                   <VictoryBar
                     horizontal
                     data={[
-                      { x: "많음", y: difficultyStore[0] },
-                      { x: "보통", y: difficultyStore[1] },
-                      { x: "적음", y: difficultyStore[2] },
+                      { x: "5", y: overallGradeStore[4] },
+                      { x: "4", y: overallGradeStore[3] },
+                      { x: "3", y: overallGradeStore[2] },
+                      { x: "2", y: overallGradeStore[1] },
+                      { x: "1", y: overallGradeStore[0] },
                     ]}
-                    categories={{ x: ["적음", "보통", "많음"] }}
+                    categories={{ x: ["5", "4", "3", "2", "1"] }}
                     barWidth={20}
                     animate={{
                       duration: 2000,
                       onLoad: { duration: 1000 },
                     }}
                     style={{
-                      data: { fill: theme.colors.sky200 },
+                      data: { fill: theme.colors.ratingYellow },
                     }}
                     cornerRadius={{ top: 8 }}
                   />
                 </VictoryChart>
               </Box>
+            ) : (
+              <Box height={"4%"} />
+            )}
+
+            <Box>
+              <Text variant="textLg">수업 내용 난이도</Text>
+              {generosityStore.toString() !== "0,0,0" ? (
+                <Box ml="1" mt="-6">
+                  <VictoryChart
+                    theme={VictoryTheme.material}
+                    domainPadding={{ y: 45, x: 30 }}
+                    height={250}
+                    width={400}
+                  >
+                    <VictoryBar
+                      horizontal
+                      data={[
+                        { x: "많음", y: difficultyStore[0] },
+                        { x: "보통", y: difficultyStore[1] },
+                        { x: "적음", y: difficultyStore[2] },
+                      ]}
+                      categories={{ x: ["적음", "보통", "많음"] }}
+                      barWidth={20}
+                      animate={{
+                        duration: 2000,
+                        onLoad: { duration: 1000 },
+                      }}
+                      style={{
+                        data: { fill: theme.colors.sky200 },
+                      }}
+                      cornerRadius={{ top: 8 }}
+                    />
+                  </VictoryChart>
+                </Box>
+              ) : (
+                <Text ml="2" mt="1" mb="4">
+                  아직 관련 데이터가 없습니다 :(
+                </Text>
+              )}
             </Box>
 
             <Box>
               <Text variant="textLg">점수 너그러운 정도</Text>
-
-              {generosityStore === [0, 0, 0] ? (
+              {generosityStore.toString() !== "0,0,0" ? (
                 <Box ml="1" mt="-6">
                   <VictoryChart
                     theme={VictoryTheme.material}
@@ -381,132 +390,7 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
 
             <Box>
               <Text variant="textLg">과제량</Text>
-              <Box ml="1" mt="-6">
-                <VictoryChart
-                  theme={VictoryTheme.material}
-                  domainPadding={{ y: 45, x: 30 }}
-                  height={250}
-                  width={400}
-                >
-                  <VictoryBar
-                    horizontal
-                    data={[
-                      { x: "많음", y: hwQuantityStore[0] },
-                      { x: "보통", y: hwQuantityStore[1] },
-                      { x: "적음", y: hwQuantityStore[2] },
-                    ]}
-                    categories={{ x: ["적음", "보통", "많음"] }}
-                    barWidth={20}
-                    animate={{
-                      duration: 2000,
-                      onLoad: { duration: 1000 },
-                    }}
-                    style={{
-                      data: { fill: theme.colors.sky200 },
-                    }}
-                    cornerRadius={{ top: 8 }}
-                  />
-                </VictoryChart>
-              </Box>
-            </Box>
-
-            <Box>
-              <Text variant="textLg">시험 수</Text>
-              <Box ml="1" mt="-6">
-                <VictoryChart
-                  theme={VictoryTheme.material}
-                  domainPadding={{ y: 45, x: 20 }}
-                  height={250}
-                  width={400}
-                >
-                  <VictoryBar
-                    horizontal
-                    data={[
-                      { x: "4+", y: testQuantityStore[0] },
-                      { x: "3", y: testQuantityStore[1] },
-                      { x: "2", y: testQuantityStore[2] },
-                      { x: "1", y: testQuantityStore[3] },
-                      { x: "없음", y: testQuantityStore[4] },
-                    ]}
-                    categories={{ x: ["없음", "1", "2", "3", "4+"] }}
-                    barWidth={20}
-                    animate={{
-                      duration: 2000,
-                      onLoad: { duration: 1000 },
-                    }}
-                    style={{
-                      data: { fill: theme.colors.sky200 },
-                    }}
-                    cornerRadius={{ top: 8 }}
-                  />
-                </VictoryChart>
-              </Box>
-            </Box>
-
-            <Box>
-              <Text variant="textLg">팀플 유무</Text>
-              <Box ml="1" mt="-6">
-                <VictoryChart
-                  theme={VictoryTheme.material}
-                  domainPadding={{ y: 45, x: 50 }}
-                  height={250}
-                  width={400}
-                >
-                  <VictoryBar
-                    horizontal
-                    data={[
-                      { x: "있음", y: teamProjectPresenceStore[0] },
-                      { x: "없음", y: teamProjectPresenceStore[1] },
-                    ]}
-                    categories={{ x: ["없음", "있음"] }}
-                    barWidth={20}
-                    animate={{
-                      duration: 2000,
-                      onLoad: { duration: 1000 },
-                    }}
-                    style={{
-                      data: { fill: theme.colors.sky200 },
-                    }}
-                    cornerRadius={{ top: 8 }}
-                  />
-                </VictoryChart>
-              </Box>
-            </Box>
-
-            <Box>
-              <Text variant="textLg">퀴즈 유무</Text>
-              <Box ml="1" mt="-6">
-                <VictoryChart
-                  theme={VictoryTheme.material}
-                  domainPadding={{ y: 45, x: 50 }}
-                  height={250}
-                  width={400}
-                >
-                  <VictoryBar
-                    horizontal
-                    data={[
-                      { x: "있음", y: quizPresenceStore[0] },
-                      { x: "없음", y: quizPresenceStore[1] },
-                    ]}
-                    categories={{ x: ["없음", "있음"] }}
-                    barWidth={20}
-                    animate={{
-                      duration: 2000,
-                      onLoad: { duration: 1000 },
-                    }}
-                    style={{
-                      data: { fill: theme.colors.sky200 },
-                    }}
-                    cornerRadius={{ top: 8 }}
-                  />
-                </VictoryChart>
-              </Box>
-            </Box>
-
-            <Box>
-              <Text variant="textLg">출석</Text>
-
-              {attendanceStore === [0, 0, 0, 0, 0] ? (
+              {hwQuantityStore.toString() !== "0,0,0" ? (
                 <Box ml="1" mt="-6">
                   <VictoryChart
                     theme={VictoryTheme.material}
@@ -517,14 +401,162 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
                     <VictoryBar
                       horizontal
                       data={[
-                        { x: "너그러움", y: attendanceStore[0] },
-                        { x: "보통", y: attendanceStore[1] },
-                        { x: "까다로움", y: attendanceStore[2] },
-                        { x: "보통", y: attendanceStore[1] },
-                        { x: "까다로움", y: attendanceStore[2] },
+                        { x: "많음", y: hwQuantityStore[0] },
+                        { x: "보통", y: hwQuantityStore[1] },
+                        { x: "적음", y: hwQuantityStore[2] },
+                      ]}
+                      categories={{ x: ["적음", "보통", "많음"] }}
+                      barWidth={20}
+                      animate={{
+                        duration: 2000,
+                        onLoad: { duration: 1000 },
+                      }}
+                      style={{
+                        data: { fill: theme.colors.sky200 },
+                      }}
+                      cornerRadius={{ top: 8 }}
+                    />
+                  </VictoryChart>
+                </Box>
+              ) : (
+                <Text ml="2" mt="1" mb="4">
+                  아직 관련 데이터가 없습니다 :(
+                </Text>
+              )}
+            </Box>
+
+            <Box>
+              <Text variant="textLg">시험 수</Text>
+              {testQuantityStore.toString() !== "0,0,0,0,0" ? (
+                <Box ml="1" mt="-6">
+                  <VictoryChart
+                    theme={VictoryTheme.material}
+                    domainPadding={{ y: 45, x: 20 }}
+                    height={250}
+                    width={400}
+                  >
+                    <VictoryBar
+                      horizontal
+                      data={[
+                        { x: "4+", y: testQuantityStore[0] },
+                        { x: "3", y: testQuantityStore[1] },
+                        { x: "2", y: testQuantityStore[2] },
+                        { x: "1", y: testQuantityStore[3] },
+                        { x: "없음", y: testQuantityStore[4] },
+                      ]}
+                      categories={{ x: ["없음", "1", "2", "3", "4+"] }}
+                      barWidth={20}
+                      animate={{
+                        duration: 2000,
+                        onLoad: { duration: 1000 },
+                      }}
+                      style={{
+                        data: { fill: theme.colors.sky200 },
+                      }}
+                      cornerRadius={{ top: 8 }}
+                    />
+                  </VictoryChart>
+                </Box>
+              ) : (
+                <Text ml="2" mt="1" mb="4">
+                  아직 관련 데이터가 없습니다 :(
+                </Text>
+              )}
+            </Box>
+
+            <Box>
+              <Text variant="textLg">팀플 유무</Text>
+              {teamProjectPresenceStore.toString() !== "0,0" ? (
+                <Box ml="1" mt="-6">
+                  <VictoryChart
+                    theme={VictoryTheme.material}
+                    domainPadding={{ y: 45, x: 50 }}
+                    height={250}
+                    width={400}
+                  >
+                    <VictoryBar
+                      horizontal
+                      data={[
+                        { x: "있음", y: teamProjectPresenceStore[0] },
+                        { x: "없음", y: teamProjectPresenceStore[1] },
+                      ]}
+                      categories={{ x: ["없음", "있음"] }}
+                      barWidth={20}
+                      animate={{
+                        duration: 2000,
+                        onLoad: { duration: 1000 },
+                      }}
+                      style={{
+                        data: { fill: theme.colors.sky200 },
+                      }}
+                      cornerRadius={{ top: 8 }}
+                    />
+                  </VictoryChart>
+                </Box>
+              ) : (
+                <Text ml="2" mt="1" mb="4">
+                  아직 관련 데이터가 없습니다 :(
+                </Text>
+              )}
+            </Box>
+
+            <Box>
+              <Text variant="textLg">퀴즈 유무</Text>
+              {quizPresenceStore.toString() !== "0,0" ? (
+                <Box ml="1" mt="-6">
+                  <VictoryChart
+                    theme={VictoryTheme.material}
+                    domainPadding={{ y: 45, x: 50 }}
+                    height={250}
+                    width={400}
+                  >
+                    <VictoryBar
+                      horizontal
+                      data={[
+                        { x: "있음", y: quizPresenceStore[0] },
+                        { x: "없음", y: quizPresenceStore[1] },
+                      ]}
+                      categories={{ x: ["없음", "있음"] }}
+                      barWidth={20}
+                      animate={{
+                        duration: 2000,
+                        onLoad: { duration: 1000 },
+                      }}
+                      style={{
+                        data: { fill: theme.colors.sky200 },
+                      }}
+                      cornerRadius={{ top: 8 }}
+                    />
+                  </VictoryChart>
+                </Box>
+              ) : (
+                <Text ml="2" mt="1" mb="4">
+                  아직 관련 데이터가 없습니다 :(
+                </Text>
+              )}
+            </Box>
+
+            <Box>
+              <Text variant="textLg">출석</Text>
+              {attendanceStore.toString() !== "0,0,0,0,0" ? (
+                <Box ml="1" mt="-6">
+                  <VictoryChart
+                    theme={VictoryTheme.material}
+                    domainPadding={{ y: 45, x: 30 }}
+                    height={250}
+                    width={400}
+                  >
+                    <VictoryBar
+                      horizontal
+                      data={[
+                        { x: "호명", y: attendanceStore[0] },
+                        { x: "수기", y: attendanceStore[1] },
+                        { x: "QR코드", y: attendanceStore[2] },
+                        { x: "구글폼", y: attendanceStore[3] },
+                        { x: "기타", y: attendanceStore[4] },
                       ]}
                       categories={{
-                        x: ["까다로움", "보통", "너그러움", "보통", "너그러움"],
+                        x: ["기타", "구글폼", "QR코드", "수기", "호명"],
                       }}
                       barWidth={20}
                       animate={{
