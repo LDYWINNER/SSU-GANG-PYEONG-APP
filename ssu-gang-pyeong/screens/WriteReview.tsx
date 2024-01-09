@@ -29,6 +29,7 @@ interface ICourseEval {
   difficulty: string;
   homeworkQuantity: string;
   testQuantity: string;
+  testType: string;
   teamProjectPresence: string;
   quizPresence: string;
   //new - 1. 성적은 어떻게 주시나요 2. 출석은 어떻게 확인하나요
@@ -71,11 +72,19 @@ const WriteReview = () => {
     homeworkQuantity: ["many", "soso", "few"],
     //test quantity was orignially number type in sunytime
     testQuantity: ["morethan4", "three", "two", "one", "none"],
+    teamProjectPresence: ["Yes", "No"],
+    quizPresence: ["Yes", "No"],
     //new
     generosity: ["generous", "normal", "meticulous"],
     attendance: ["calloutname", "rollpaper", "qrcode", "googleform", "none"],
-    teamProjectPresence: ["Yes", "No"],
-    quizPresence: ["Yes", "No"],
+    testType: [
+      "mid3final1",
+      "mid2final1",
+      "mid1final1",
+      "only final",
+      "only midterm",
+      "none",
+    ],
   };
 
   const { control, watch } = useForm<ICourseEval>({
@@ -86,6 +95,7 @@ const WriteReview = () => {
       difficulty: "",
       homeworkQuantity: "",
       testQuantity: "",
+      testType: "",
       teamProjectPresence: "",
       quizPresence: "",
       generosity: "",
@@ -106,6 +116,7 @@ const WriteReview = () => {
         difficulty: watch("difficulty"),
         homeworkQuantity: watch("homeworkQuantity"),
         testQuantity: watch("testQuantity"),
+        testType: watch("testType"),
         teamProjectPresence: watch("teamProjectPresence"),
         quizPresence: watch("quizPresence"),
         //new - 1. 성적은 어떻게 주시나요 2. 출석은 어떻게 확인하나요
@@ -451,6 +462,45 @@ const WriteReview = () => {
 
             <Box mb="4">
               <Text variant="textBase" mb="2" fontWeight="600">
+                시험 종류
+              </Text>
+              <Controller
+                control={control}
+                name="testType"
+                rules={{
+                  required: true,
+                }}
+                render={({ field: { onChange, value } }) => (
+                  <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                    <Box flexDirection="row" alignItems="center">
+                      {questions.testType.map((option, index) => (
+                        <TouchableOpacity
+                          key={index}
+                          onPress={() => onChange(option)}
+                        >
+                          <Box
+                            style={{
+                              backgroundColor:
+                                value === option ? "red" : "white",
+                            }}
+                            p="3"
+                            mx="1"
+                            borderRadius="rounded-xl"
+                            borderColor="gray4"
+                            borderWidth={1}
+                          >
+                            <Text>{option}</Text>
+                          </Box>
+                        </TouchableOpacity>
+                      ))}
+                    </Box>
+                  </ScrollView>
+                )}
+              />
+            </Box>
+
+            <Box mb="4">
+              <Text variant="textBase" mb="2" fontWeight="600">
                 과제량
               </Text>
               <Controller
@@ -713,7 +763,6 @@ const WriteReview = () => {
               setMyLetterGrade(itemValue)
             }
           >
-            <Picker.Item label="A+" value="A+" />
             <Picker.Item label="A" value="A" />
             <Picker.Item label="A-" value="A-" />
             <Picker.Item label="B+" value="B+" />

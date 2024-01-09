@@ -152,6 +152,7 @@ interface ICourseEvalPostRequest {
   difficulty: string;
   homeworkQuantity: string;
   testQuantity: string;
+  testType: string;
   teamProjectPresence: string;
   quizPresence: string;
   //new - 1. 성적은 어떻게 주시나요 2. 출석은 어떻게 확인하나요

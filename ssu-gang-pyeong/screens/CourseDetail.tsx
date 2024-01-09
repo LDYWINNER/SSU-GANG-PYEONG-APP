@@ -36,6 +36,7 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
   const generosityStore = [0, 0, 0];
   const hwQuantityStore = [0, 0, 0];
   const testQuantityStore = [0, 0, 0, 0, 0];
+  const testTypeStore = [0, 0, 0, 0, 0, 0];
   const teamProjectPresenceStore = [0, 0];
   const quizPresenceStore = [0, 0];
   const attendanceStore = [0, 0, 0, 0, 0];
@@ -140,42 +141,47 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
       //testQuantity
       switch (course!.reviews[j].testQuantity) {
         case "4":
+        case "morethan4":
           testQuantityStore[0]++;
           break;
         case "3":
+        case "three":
           testQuantityStore[1]++;
           break;
         case "2":
+        case "two":
           testQuantityStore[2]++;
           break;
         case "1":
+        case "one":
           testQuantityStore[3]++;
           break;
         case "0":
+        case "none":
           testQuantityStore[4]++;
           break;
       }
-      //test
-      // switch (course!.reviews[j].testQuantity) {
-      //   case "mid3final1":
-      //     hwQuantityStore[0]++;
-      //     break;
-      //   case "mid2final1":
-      //     hwQuantityStore[1]++;
-      //     break;
-      //   case "mid1final1":
-      //     hwQuantityStore[2]++;
-      //     break;
-      //   case "only final":
-      //     hwQuantityStore[2]++;
-      //     break;
-      //   case "only midterm":
-      //     hwQuantityStore[2]++;
-      //     break;
-      //   case "none":
-      //     hwQuantityStore[2]++;
-      //     break;
-      // }
+      //new test type
+      switch (course!.reviews[j].testType) {
+        case "mid3final1":
+          testTypeStore[0]++;
+          break;
+        case "mid2final1":
+          testTypeStore[1]++;
+          break;
+        case "mid1final1":
+          testTypeStore[2]++;
+          break;
+        case "only final":
+          testTypeStore[3]++;
+          break;
+        case "only midterm":
+          testTypeStore[4]++;
+          break;
+        case "none":
+          testTypeStore[5]++;
+          break;
+      }
       //teamProject
       if (course!.reviews[j].teamProjectPresence) {
         teamProjectPresenceStore[0]++;
@@ -445,6 +451,55 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
                         { x: "없음", y: testQuantityStore[4] },
                       ]}
                       categories={{ x: ["없음", "1", "2", "3", "4+"] }}
+                      barWidth={20}
+                      animate={{
+                        duration: 2000,
+                        onLoad: { duration: 1000 },
+                      }}
+                      style={{
+                        data: { fill: theme.colors.sky200 },
+                      }}
+                      cornerRadius={{ top: 8 }}
+                    />
+                  </VictoryChart>
+                </Box>
+              ) : (
+                <Text ml="2" mt="1" mb="4">
+                  아직 관련 데이터가 없습니다 :(
+                </Text>
+              )}
+            </Box>
+
+            <Box>
+              <Text variant="textLg">시험 종류</Text>
+              {testTypeStore.toString() !== "0,0,0,0,0,0" ? (
+                <Box ml="1" mt="-6">
+                  <VictoryChart
+                    theme={VictoryTheme.material}
+                    domainPadding={{ y: 45, x: 20 }}
+                    height={250}
+                    width={400}
+                  >
+                    <VictoryBar
+                      horizontal
+                      data={[
+                        { x: "mid3final1", y: testTypeStore[0] },
+                        { x: "mid2final1", y: testTypeStore[1] },
+                        { x: "mid1final1", y: testTypeStore[2] },
+                        { x: "only final", y: testTypeStore[3] },
+                        { x: "only midterm", y: testTypeStore[4] },
+                        { x: "none", y: testTypeStore[5] },
+                      ]}
+                      categories={{
+                        x: [
+                          "none",
+                          "only midterm",
+                          "only final",
+                          "mid1final1",
+                          "mid2final1",
+                          "mid3final1",
+                        ],
+                      }}
                       barWidth={20}
                       animate={{
                         duration: 2000,
