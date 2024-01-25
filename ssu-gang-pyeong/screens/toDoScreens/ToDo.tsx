@@ -91,10 +91,11 @@ const HomeScreen = () => {
     mutate: mutateTasks,
   } = useSWR<ITask[]>("api/v1/todotask/today", fetcher);
 
-  const { data: specificDayTasks, trigger } = useSWRMutation<ITask[]>(
-    `api/v1/todotask/${pickedDate}`,
-    fetcher
-  );
+  const {
+    data: specificDayTasks,
+    trigger,
+    isMutating,
+  } = useSWRMutation<ITask[]>(`api/v1/todotask/${pickedDate}`, fetcher);
 
   useEffect(() => {
     trigger();
@@ -189,15 +190,19 @@ const HomeScreen = () => {
         )}
         <TaskActions categoryId="" />
         <Box height={26} />
-        <FlatList
-          data={specificDayTasks}
-          renderItem={({ item }) => (
-            <Task task={item} mutateTasks={mutateTasks} />
-          )}
-          ItemSeparatorComponent={() => <Box height={14} />}
-          showsVerticalScrollIndicator={false}
-          keyExtractor={(item) => item._id}
-        />
+        {isMutating ? (
+          <Loader />
+        ) : (
+          <FlatList
+            data={specificDayTasks}
+            renderItem={({ item }) => (
+              <Task task={item} mutateTasks={mutateTasks} />
+            )}
+            ItemSeparatorComponent={() => <Box height={14} />}
+            showsVerticalScrollIndicator={false}
+            keyExtractor={(item) => item._id}
+          />
+        )}
       </Box>
 
       <BottomSheet
