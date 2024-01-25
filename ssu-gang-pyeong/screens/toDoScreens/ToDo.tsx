@@ -42,6 +42,11 @@ const HomeScreen = () => {
   const [dateForHeader, setDateForHeader] = useState<Date>(todayISODate);
   const [selected, setSelected] = useState("");
 
+  // const koreaDate = new Date().toLocaleString("en-US", {
+  //   timeZone: "Asia/Seoul",
+  // });
+  // console.log(koreaDate); // This will show the current date and time in South Korea.
+
   //bottom sheet
   const sheetRef = useRef<BottomSheet>(null);
   const snapPoints = useMemo(() => ["30%"], []);
@@ -116,12 +121,21 @@ const HomeScreen = () => {
             >
               Good {greeting} {user?.username}
             </AnimatedText>
-            <Text variant="textXl" fontWeight="500">
+            {/* <Text variant="textXl" fontWeight="500">
               It’s{" "}
               {`${new Date(dateForHeader).getFullYear()}.${
                 new Date(dateForHeader).getMonth() + 1
               }.${new Date(dateForHeader).getDate() + 1}`}{" "}
               - {specificDayTasks.length} tasks
+            </Text>
+            <Text variant="textXl" fontWeight="500">
+              It’s {format(new Date(dateForHeader), "yyyy.MM.dd")} -{" "}
+              {specificDayTasks.length} tasks
+            </Text> */}
+            <Text variant="textXl" fontWeight="500">
+              It’s{" "}
+              {format(new Date(selected).setHours(29, 0, 0, 0), "yyyy.MM.dd")} -{" "}
+              {specificDayTasks.length} tasks
             </Text>
           </Box>
           <Box flexDirection="row">
