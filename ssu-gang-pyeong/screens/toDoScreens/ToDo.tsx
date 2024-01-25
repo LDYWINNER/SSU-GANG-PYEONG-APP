@@ -37,9 +37,10 @@ const HomeScreen = () => {
   const color = isDark ? "white" : colors.BLACK_COLOR;
 
   // date picking
-  const [isSelectingDate, setIsSelectingDate] = useState<boolean>(false);
+  const [isSelectingDate, setIsSelectingDate] = useState<boolean>(true);
   const [pickedDate, setPickedDate] = useState(todayISODate.toISOString());
   const [dateForHeader, setDateForHeader] = useState<Date>(todayISODate);
+  const [selected, setSelected] = useState("");
 
   //bottom sheet
   const sheetRef = useRef<BottomSheet>(null);
@@ -152,10 +153,18 @@ const HomeScreen = () => {
           <Box>
             <Calendar
               onDayPress={(day) => {
-                setIsSelectingDate(false);
                 const selectedDate = new Date(day.dateString).toISOString();
                 setPickedDate(selectedDate);
                 setDateForHeader(parseISO(selectedDate));
+                setSelected(day.dateString);
+              }}
+              markedDates={{
+                [selected]: {
+                  selected: true,
+                  disableTouchEvent: true,
+                  selectedColor: "orange",
+                  selectedTextColor: "blue",
+                },
               }}
             />
             <Box height={26} />
