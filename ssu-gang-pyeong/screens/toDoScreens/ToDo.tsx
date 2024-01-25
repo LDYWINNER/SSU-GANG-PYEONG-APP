@@ -86,10 +86,10 @@ const HomeScreen = () => {
 
   //later change
   const {
-    data: tasks,
+    data: monthlyTasks,
     isLoading,
     mutate: mutateTasks,
-  } = useSWR<ITask[]>("api/v1/todotask/today", fetcher);
+  } = useSWR<ITask[]>("api/v1/todotask/", fetcher);
 
   const {
     data: specificDayTasks,
@@ -170,6 +170,7 @@ const HomeScreen = () => {
         {isSelectingDate && (
           <Box>
             <Calendar
+              displayLoadingIndicator={isMutating}
               onDayPress={(day) => {
                 const selectedDate = new Date(day.dateString).toISOString();
                 setPickedDate(selectedDate);
