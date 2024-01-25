@@ -134,8 +134,11 @@ const HomeScreen = () => {
             </Text> */}
             <Text variant="textXl" fontWeight="500">
               It’s{" "}
-              {format(new Date(selected).setHours(29, 0, 0, 0), "yyyy.MM.dd")} -{" "}
-              {specificDayTasks.length} tasks
+              {format(
+                new Date(dateForHeader).setHours(29, 0, 0, 0),
+                "yyyy.MM.dd"
+              )}{" "}
+              - {specificDayTasks.length} tasks
             </Text>
           </Box>
           <Box flexDirection="row">
