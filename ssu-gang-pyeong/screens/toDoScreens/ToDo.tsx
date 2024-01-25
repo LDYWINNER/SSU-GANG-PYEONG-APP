@@ -89,7 +89,7 @@ const HomeScreen = () => {
     data: monthlyTasks,
     isLoading,
     mutate: mutateTasks,
-  } = useSWR<ITask[]>("api/v1/todotask/", fetcher);
+  } = useSWR<ITask[]>(`api/v1/todotask/month/${pickedDate}`, fetcher);
 
   const {
     data: specificDayTasks,
@@ -105,6 +105,7 @@ const HomeScreen = () => {
   if (isLoading || !specificDayTasks) {
     return <Loader />;
   }
+  console.log(monthlyTasks);
 
   return (
     <SafeAreaWrapper>
