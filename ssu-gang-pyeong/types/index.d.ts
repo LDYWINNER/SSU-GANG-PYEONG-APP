@@ -52,6 +52,7 @@ interface ITask {
   name: string;
   isCompleted: boolean;
   categoryId: string;
+  categoryTitle: string;
   createdAt: string;
   date: string;
 }

@@ -8,12 +8,11 @@ import React, {
 import { Loader, SafeAreaWrapper } from "../../components";
 import { Task, TaskActions } from "../../components/tasks";
 import { fetcher } from "../../utils/config";
-import { format, isEqual, parseISO } from "date-fns";
+import { format, parseISO } from "date-fns";
 import { FlatList, TouchableOpacity, useColorScheme } from "react-native";
-import { ZoomInEasyDown } from "react-native-reanimated";
 import { ITask } from "../../types";
 import useUserGlobalStore from "../../store/useUserGlobal";
-import { AnimatedText, Box, Text } from "../../theme";
+import { Box, Text } from "../../theme";
 import { getGreeting } from "../../utils/helpers";
 import { Ionicons } from "@expo/vector-icons";
 import { Calendar } from "react-native-calendars";
@@ -24,12 +23,20 @@ import useSWRMutation from "swr/mutation";
 import colors from "../../colors";
 import MoreMenu from "./MoreMenu";
 
-const today = new Date();
-
 const todayISODate = new Date();
 todayISODate.setHours(-5, 0, 0, 0);
 
 const greeting = getGreeting({ hour: new Date().getHours() });
+
+const AMS = { key: "AMS", color: "red", selectedDotColor: "red" };
+const ACC = { key: "ACC", color: "orange", selectedDotColor: "orange" };
+const BUS = { key: "BUS", color: "orange", selectedDotColor: "orange" };
+const CSE = { key: "CSE", color: "yellow", selectedDotColor: "yellow" };
+const ESE = { key: "ESE", color: "green", selectedDotColor: "green" };
+const EST = { key: "EST", color: "blue", selectedDotColor: "blue" };
+const EMP = { key: "EMP", color: "blue", selectedDotColor: "blue" };
+const MEC = { key: "MEC", color: "purple", selectedDotColor: "purple" };
+const OTHER = { key: "OTHER", color: "black", selectedDotColor: "black" };
 
 const HomeScreen = () => {
   const { user } = useUserGlobalStore();
@@ -41,6 +48,8 @@ const HomeScreen = () => {
   const [pickedDate, setPickedDate] = useState(todayISODate.toISOString());
   const [dateForHeader, setDateForHeader] = useState<Date>(todayISODate);
   const [selected, setSelected] = useState("");
+
+  const presetTasks: any = {};
 
   // const koreaDate = new Date().toLocaleString("en-US", {
   //   timeZone: "Asia/Seoul",
@@ -84,7 +93,6 @@ const HomeScreen = () => {
     []
   );
 
-  //later change
   const {
     data: monthlyTasks,
     isLoading,
@@ -104,8 +112,44 @@ const HomeScreen = () => {
 
   if (isLoading || !specificDayTasks) {
     return <Loader />;
+  } else {
+    //preset tasks for calendar dots representation
+    // Loop over the monthlyTasks array
+    monthlyTasks!.forEach((task) => {
+      // Extract the date part from the task's date
+      const taskDate = task.date.split("T")[0];
+      // Initialize the array for the date if it doesn't exist
+      if (!presetTasks[taskDate]) {
+        presetTasks[taskDate] = {
+          dots: [],
+          selected: selected === taskDate,
+          selectedColor: "orange",
+          selectedTextColor: "blue",
+        };
+      }
+      // Push the category color object to the dots array
+      // assuming you have a function getCategoryColor that returns the color object for a category
+      presetTasks[taskDate].dots.push(
+        task.categoryTitle === "AMS"
+          ? AMS
+          : task.categoryTitle === "ACC"
+          ? ACC
+          : task.categoryTitle === "BUS"
+          ? BUS
+          : task.categoryTitle === "CSE"
+          ? CSE
+          : task.categoryTitle === "ESE"
+          ? ESE
+          : task.categoryTitle === "EST"
+          ? EST
+          : task.categoryTitle === "EMP"
+          ? EMP
+          : task.categoryTitle === "MEC"
+          ? MEC
+          : OTHER
+      );
+    });
   }
-  console.log(monthlyTasks);
 
   return (
     <SafeAreaWrapper>
@@ -116,24 +160,9 @@ const HomeScreen = () => {
           alignItems="center"
         >
           <Box>
-            <AnimatedText
-              variant="textXl"
-              fontWeight="500"
-              entering={ZoomInEasyDown.delay(500).duration(700)}
-            >
-              Good {greeting} {user?.username}
-            </AnimatedText>
-            {/* <Text variant="textXl" fontWeight="500">
-              It’s{" "}
-              {`${new Date(dateForHeader).getFullYear()}.${
-                new Date(dateForHeader).getMonth() + 1
-              }.${new Date(dateForHeader).getDate() + 1}`}{" "}
-              - {specificDayTasks.length} tasks
-            </Text>
             <Text variant="textXl" fontWeight="500">
-              It’s {format(new Date(dateForHeader), "yyyy.MM.dd")} -{" "}
-              {specificDayTasks.length} tasks
-            </Text> */}
+              Good {greeting} {user?.username}
+            </Text>
             <Text variant="textXl" fontWeight="500">
               It’s{" "}
               {format(
@@ -178,6 +207,7 @@ const HomeScreen = () => {
                 setDateForHeader(parseISO(selectedDate));
                 setSelected(day.dateString);
               }}
+              markingType={"multi-dot"}
               markedDates={{
                 [selected]: {
                   selected: true,
@@ -185,6 +215,7 @@ const HomeScreen = () => {
                   selectedColor: "orange",
                   selectedTextColor: "blue",
                 },
+                ...presetTasks,
               }}
             />
             <Box height={26} />
