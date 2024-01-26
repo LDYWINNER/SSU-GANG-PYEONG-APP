@@ -12,7 +12,7 @@ import { format, parseISO } from "date-fns";
 import { FlatList, TouchableOpacity, useColorScheme } from "react-native";
 import { ITask } from "../../types";
 import useUserGlobalStore from "../../store/useUserGlobal";
-import { Box, Text } from "../../theme";
+import { Box, Text, Theme } from "../../theme";
 import { getGreeting } from "../../utils/helpers";
 import { Ionicons } from "@expo/vector-icons";
 import { Calendar } from "react-native-calendars";
@@ -22,6 +22,7 @@ import useSWR from "swr";
 import useSWRMutation from "swr/mutation";
 import colors from "../../colors";
 import MoreMenu from "./MoreMenu";
+import { useTheme } from "@shopify/restyle";
 
 const todayISODate = new Date();
 todayISODate.setHours(-5, 0, 0, 0);
@@ -42,6 +43,7 @@ const HomeScreen = () => {
   const { user } = useUserGlobalStore();
   const isDark = useColorScheme() === "dark";
   const color = isDark ? "white" : colors.BLACK_COLOR;
+  const theme = useTheme<Theme>();
 
   // date picking
   const [isSelectingDate, setIsSelectingDate] = useState<boolean>(true);
@@ -123,8 +125,8 @@ const HomeScreen = () => {
         presetTasks[taskDate] = {
           dots: [],
           selected: selected === taskDate,
-          selectedColor: "orange",
-          selectedTextColor: "blue",
+          selectedColor: theme.colors.iconBlue,
+          selectedTextColor: "white",
         };
       }
       // Push the category color object to the dots array
@@ -212,8 +214,8 @@ const HomeScreen = () => {
                 [selected]: {
                   selected: true,
                   disableTouchEvent: true,
-                  selectedColor: "orange",
-                  selectedTextColor: "blue",
+                  selectedColor: theme.colors.sbuRed,
+                  selectedTextColor: "white",
                 },
                 ...presetTasks,
               }}
