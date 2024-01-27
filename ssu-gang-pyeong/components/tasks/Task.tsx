@@ -1,6 +1,6 @@
 import React from "react";
 import { HomeScreenNavigationType } from "../../navigation/types";
-import axiosInstance from "../../utils/config";
+import axiosInstance, { fetcher } from "../../utils/config";
 import { ITask } from "../../types";
 import { AnimatedBox, Box, Text } from "../../theme";
 import { Ionicons } from "@expo/vector-icons";
@@ -14,10 +14,13 @@ import {
   withSpring,
 } from "react-native-reanimated";
 import useSWRMutation from "swr/mutation";
+import Loader from "../Loader";
 
 type TaskProps = {
   task: ITask;
-  mutateTasks: () => Promise<ITask[] | undefined>;
+  date: string;
+  // mutateTasks: () => Promise<ITask[] | undefined>;
+  updateTaskStatus: () => Promise<ITask[] | undefined>;
 };
 
 interface ITaskStatusRequest {
@@ -39,16 +42,21 @@ const toggleTaskStatusRequest = async (
   }
 };
 
-const Task = ({ task, mutateTasks }: TaskProps) => {
-  const { trigger } = useSWRMutation(
+const Task = ({ task, date, updateTaskStatus }: TaskProps) => {
+  const offset = useSharedValue(1);
+  const checkmarkIconSize = useSharedValue(0.8);
+
+  // const navigation = useNavigation<HomeScreenNavigationType>();
+
+  const { trigger, isMutating: isUpdating } = useSWRMutation(
     "api/v1/todotask/update",
     toggleTaskStatusRequest
   );
 
-  const offset = useSharedValue(1);
-  const checkmarkIconSize = useSharedValue(0.8);
-
-  const navigation = useNavigation<HomeScreenNavigationType>();
+  const { trigger: mutateTasks, isMutating } = useSWRMutation<ITask[]>(
+    `api/v1/todotask/`,
+    fetcher
+  );
 
   const toggleTaskStatus = async () => {
     try {
@@ -56,8 +64,13 @@ const Task = ({ task, mutateTasks }: TaskProps) => {
         id: task._id,
         isCompleted: !task.isCompleted,
       };
+      console.log(isUpdating);
+      console.log(_updatedTask);
+      console.log(task.isCompleted);
       await trigger(_updatedTask);
-      await mutateTasks();
+      console.log(isUpdating);
+      console.log(task.isCompleted);
+
       if (!_updatedTask.isCompleted) {
         offset.value = 1;
         checkmarkIconSize.value = 0;
@@ -65,6 +78,8 @@ const Task = ({ task, mutateTasks }: TaskProps) => {
         offset.value = 1.1;
         checkmarkIconSize.value = 1;
       }
+      await updateTaskStatus();
+      console.log(task.isCompleted);
     } catch (error) {
       console.log("error in toggleTaskStatus", error);
       throw error;
@@ -111,7 +126,7 @@ const Task = ({ task, mutateTasks }: TaskProps) => {
               <Box
                 height={26}
                 width={26}
-                bg={task.isCompleted ? "gray9" : "gray300"}
+                bg={task.isCompleted ? "iconBlue" : "gray300"}
                 borderRadius="rounded-xl"
                 alignItems="center"
                 justifyContent="center"

@@ -231,11 +231,7 @@ const TaskActions = ({ categoryId }: TaskActionsProps) => {
       {isSelectingDate && (
         <Box>
           <Calendar
-            // minDate={format(today, "Y-MM-dd")}
             onDayPress={(day) => {
-              // console.log("here day");
-              // console.log(new Date(day.dateString).toISOString());
-
               setIsSelectingDate(false);
               const selectedDate = new Date(day.dateString).toISOString();
               setNewTask((prev) => {

@@ -95,11 +95,10 @@ const HomeScreen = () => {
     []
   );
 
-  const {
-    data: monthlyTasks,
-    isLoading,
-    mutate: mutateTasks,
-  } = useSWR<ITask[]>(`api/v1/todotask/month/${pickedDate}`, fetcher);
+  const { data: monthlyTasks, isLoading } = useSWR<ITask[]>(
+    `api/v1/todotask/`,
+    fetcher
+  );
 
   const {
     data: specificDayTasks,
@@ -130,7 +129,6 @@ const HomeScreen = () => {
         };
       }
       // Push the category color object to the dots array
-      // assuming you have a function getCategoryColor that returns the color object for a category
       presetTasks[taskDate].dots.push(
         task.categoryTitle === "AMS"
           ? AMS
@@ -231,7 +229,7 @@ const HomeScreen = () => {
           <FlatList
             data={specificDayTasks}
             renderItem={({ item }) => (
-              <Task task={item} mutateTasks={mutateTasks} />
+              <Task task={item} updateTaskStatus={trigger} date={pickedDate} />
             )}
             ItemSeparatorComponent={() => <Box height={14} />}
             showsVerticalScrollIndicator={false}
