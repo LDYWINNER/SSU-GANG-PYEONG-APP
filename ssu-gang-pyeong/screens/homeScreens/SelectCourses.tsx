@@ -13,7 +13,7 @@ import { useTheme } from "@shopify/restyle";
 import { Ionicons } from "@expo/vector-icons";
 import { ICategory, IColor, ICourse, IGlobalToggle } from "../../types";
 import { Loader } from "../../components";
-import { FlatList, TouchableOpacity } from "react-native";
+import { FlatList, Image, TouchableOpacity } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import BottomSheet from "@gorhom/bottom-sheet";
 import { Picker } from "@react-native-picker/picker";
@@ -187,6 +187,7 @@ const SelectCourses = ({ togglePicker, courses }: any) => {
         data={data!.queryCourses}
         numColumns={2}
         renderItem={({ item, index }) => {
+          const isSelected = tvCoursesId.includes(item._id);
           return (
             <TouchableOpacity
               onPress={() => {
@@ -202,10 +203,13 @@ const SelectCourses = ({ togglePicker, courses }: any) => {
             >
               <Box
                 borderRadius="rounded-xl"
-                bg={tvCoursesId.includes(item._id) ? "red400" : "lightGray"}
+                bg={"lightGray"}
                 px="4"
                 py="6"
                 m="3"
+                borderWidth={isSelected ? 2 : 0}
+                borderColor="sbuRed"
+                position="relative" //for woolfie image
               >
                 <Box>
                   <Text variant="text2Xl" mb="1">
@@ -223,6 +227,19 @@ const SelectCourses = ({ togglePicker, courses }: any) => {
                     )}
                   </Box>
                 </Box>
+                {isSelected && (
+                  <Image
+                    source={require("../../assets/images/woolfie.png")} // replace with the actual path to your wolf image
+                    style={{
+                      position: "absolute", // Position the image absolutely
+                      top: 0,
+                      right: 10,
+                      width: 50,
+                      height: 50,
+                      resizeMode: "contain", // Ensure the entire image is visible and maintains aspect ratio
+                    }}
+                  />
+                )}
               </Box>
             </TouchableOpacity>
           );
