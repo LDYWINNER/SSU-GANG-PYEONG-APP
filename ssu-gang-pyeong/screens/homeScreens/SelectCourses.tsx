@@ -229,9 +229,9 @@ const SelectCourses = ({ togglePicker, courses }: any) => {
                 </Box>
                 {isSelected && (
                   <Image
-                    source={require("../../assets/images/woolfie.png")} // replace with the actual path to your wolf image
+                    source={require("../../assets/images/woolfie.png")}
                     style={{
-                      position: "absolute", // Position the image absolutely
+                      position: "absolute",
                       top: 0,
                       right: 10,
                       width: 50,
