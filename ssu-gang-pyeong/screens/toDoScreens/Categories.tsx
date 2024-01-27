@@ -37,6 +37,7 @@ const Categories = () => {
           ItemSeparatorComponent={() => <Box height={14} />}
           keyExtractor={(item) => item._id}
         />
+        <Box height={4} />
         <CreateNewList />
       </Box>
     </SafeAreaWrapper>
