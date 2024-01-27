@@ -14,13 +14,12 @@ import {
   withSpring,
 } from "react-native-reanimated";
 import useSWRMutation from "swr/mutation";
-import Loader from "../Loader";
 
 type TaskProps = {
   task: ITask;
-  date: string;
-  // mutateTasks: () => Promise<ITask[] | undefined>;
-  updateTaskStatus: () => Promise<ITask[] | undefined>;
+  date?: string;
+  mutateTasks?: () => Promise<ITask[] | undefined>;
+  updateTaskStatus?: () => Promise<ITask[] | undefined>;
 };
 
 interface ITaskStatusRequest {
@@ -42,7 +41,7 @@ const toggleTaskStatusRequest = async (
   }
 };
 
-const Task = ({ task, date, updateTaskStatus }: TaskProps) => {
+const Task = ({ task, mutateTasks, updateTaskStatus }: TaskProps) => {
   const offset = useSharedValue(1);
   const checkmarkIconSize = useSharedValue(0.8);
 
@@ -53,23 +52,13 @@ const Task = ({ task, date, updateTaskStatus }: TaskProps) => {
     toggleTaskStatusRequest
   );
 
-  const { trigger: mutateTasks, isMutating } = useSWRMutation<ITask[]>(
-    `api/v1/todotask/`,
-    fetcher
-  );
-
   const toggleTaskStatus = async () => {
     try {
       const _updatedTask = {
         id: task._id,
         isCompleted: !task.isCompleted,
       };
-      console.log(isUpdating);
-      console.log(_updatedTask);
-      console.log(task.isCompleted);
       await trigger(_updatedTask);
-      console.log(isUpdating);
-      console.log(task.isCompleted);
 
       if (!_updatedTask.isCompleted) {
         offset.value = 1;
@@ -78,8 +67,12 @@ const Task = ({ task, date, updateTaskStatus }: TaskProps) => {
         offset.value = 1.1;
         checkmarkIconSize.value = 1;
       }
-      await updateTaskStatus();
-      console.log(task.isCompleted);
+      if (mutateTasks) {
+        await mutateTasks();
+      }
+      if (updateTaskStatus) {
+        await updateTaskStatus();
+      }
     } catch (error) {
       console.log("error in toggleTaskStatus", error);
       throw error;

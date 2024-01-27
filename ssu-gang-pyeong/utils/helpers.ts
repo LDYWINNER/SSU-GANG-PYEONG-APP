@@ -33,6 +33,15 @@ const ICON_SET = {
   grinning: "😀",
   partying_face: "🥳",
   beach_umbrella: "🏖️",
+  ams: "📐",
+  acc: "📈",
+  bus: "💰",
+  cse: "💻",
+  ese: "💡",
+  estoremp: "👥",
+  mec: "🔋",
+  wrtorwae: "📝",
+  others: "🎧",
 };
 
 export const getIcons = () => {

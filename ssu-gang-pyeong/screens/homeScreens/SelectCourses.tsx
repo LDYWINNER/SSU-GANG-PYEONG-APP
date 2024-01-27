@@ -11,7 +11,7 @@ import { Controller, useForm } from "react-hook-form";
 import { Box, Text, Theme } from "../../theme";
 import { useTheme } from "@shopify/restyle";
 import { Ionicons } from "@expo/vector-icons";
-import { ICategory, ICourse, IGlobalToggle } from "../../types";
+import { ICategory, IColor, ICourse, IGlobalToggle } from "../../types";
 import { Loader } from "../../components";
 import { FlatList, TouchableOpacity } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
@@ -19,6 +19,11 @@ import BottomSheet from "@gorhom/bottom-sheet";
 import { Picker } from "@react-native-picker/picker";
 import useGlobalToggle from "../../store/useGlobalToggle";
 import useSWR from "swr";
+import { getColors } from "../../utils/helpers";
+
+const COLORS = getColors();
+
+const DEFAULT_COLOR = COLORS[0];
 
 interface ISearch {
   keyword: string;
@@ -27,6 +32,7 @@ interface ISearch {
 interface ITVAuthRequest {
   tableName: IGlobalToggle;
   courseId: string;
+  color: IColor;
 }
 
 const patchTVCourseRequest = async (
@@ -187,6 +193,7 @@ const SelectCourses = ({ togglePicker, courses }: any) => {
                 patchTVCourse({
                   tableName: toggleInfo as IGlobalToggle,
                   courseId: item._id,
+                  color: DEFAULT_COLOR,
                 });
                 togglePicker();
                 mutate();
