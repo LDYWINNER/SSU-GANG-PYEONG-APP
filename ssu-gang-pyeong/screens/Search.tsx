@@ -139,7 +139,8 @@ const Search: React.FC<NativeStackScreenProps<any, "Search">> = ({
               flexDirection="row"
               alignItems="center"
               px="4"
-              width={"70%"}
+              flex={1}
+              mr="4"
             >
               <Ionicons name="search" size={24} color={theme.colors.gray5} />
               <TextInput
