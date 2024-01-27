@@ -88,21 +88,6 @@ const MainTabs = () => {
           },
         }}
       />
-      <Tab.Screen
-        name="NotificationStack"
-        component={NotificationStack}
-        options={{
-          tabBarIcon: ({ focused, color, size }) => {
-            return (
-              <Ionicons
-                name={focused ? "notifications" : "notifications-outline"}
-                color={color}
-                size={size}
-              />
-            );
-          },
-        }}
-      />
     </Tab.Navigator>
   );
 };
