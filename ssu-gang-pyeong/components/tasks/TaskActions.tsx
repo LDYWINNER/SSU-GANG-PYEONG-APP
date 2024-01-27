@@ -7,7 +7,9 @@ import { Calendar } from "react-native-calendars";
 import useSWR, { useSWRConfig } from "swr";
 import useSWRMutation from "swr/mutation";
 import { Loader } from "../../components";
-import { Box, Text } from "../../theme";
+import { Box, Text, Theme } from "../../theme";
+import { Ionicons } from "@expo/vector-icons";
+import { useTheme } from "@shopify/restyle";
 
 type TaskActionsProps = {
   categoryId: string;
@@ -33,6 +35,8 @@ const createTaskRequest = async (
 };
 
 const TaskActions = ({ categoryId }: TaskActionsProps) => {
+  const theme = useTheme<Theme>();
+
   const [newTask, setNewTask] = useState<ITaskRequest>({
     categoryId: categoryId,
     date: todaysISODate.toISOString(),
@@ -97,6 +101,7 @@ const TaskActions = ({ categoryId }: TaskActionsProps) => {
         py="3.5"
         borderRadius="rounded-5xl"
         flexDirection="row"
+        justifyContent="space-between"
         position="relative"
       >
         <TextInput
@@ -105,7 +110,6 @@ const TaskActions = ({ categoryId }: TaskActionsProps) => {
             paddingVertical: 8,
             paddingHorizontal: 8,
             fontSize: 16,
-            width: "70%",
           }}
           maxLength={36}
           textAlignVertical="center"
@@ -160,16 +164,13 @@ const TaskActions = ({ categoryId }: TaskActionsProps) => {
               p="2"
               borderRadius="rounded-xl"
             >
-              <Box
-                width={12}
-                height={12}
-                borderRadius="rounded"
-                borderWidth={2}
-                mr="1"
-                style={{
-                  borderColor: selectedCategory?.color.code,
-                }}
-              ></Box>
+              <Box mr="1">
+                <Ionicons
+                  name="chevron-down"
+                  size={16}
+                  color={selectedCategory?.color.code}
+                />
+              </Box>
               <Text
                 style={{
                   color: selectedCategory?.color.code,
