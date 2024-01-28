@@ -31,7 +31,7 @@ const MoreMenu = () => {
   const color = isDark ? "white" : colors.BLACK_COLOR;
   return (
     <Wrapper>
-      <TouchableOpacity>
+      {/* <TouchableOpacity>
         <Row>
           <Ionicons
             name={isDark ? "image-outline" : "image"}
@@ -60,7 +60,7 @@ const MoreMenu = () => {
           />
           <Title color={color}>카카오톡으로 공유</Title>
         </Row>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
       <TouchableOpacity>
         <Row>
           <Ionicons
