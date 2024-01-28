@@ -37,6 +37,12 @@ const BulletinMain: React.FC<NativeStackScreenProps<any, "BulletinMain">> = ({
     });
   };
 
+  const navigateToUserMain = () => {
+    navigate("MainStack", {
+      screen: "UserMain",
+    });
+  };
+
   const { data: posts, isLoading: isLoadingPosts } = useSWR<{
     bulletinAllPosts: IBulletinPost[];
     bulletinTotalPosts: number;
@@ -69,7 +75,7 @@ const BulletinMain: React.FC<NativeStackScreenProps<any, "BulletinMain">> = ({
               </TouchableOpacity>
             </Box>
             <Box>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => navigateToUserMain()}>
                 <FontAwesome name="user-circle" size={30} color="black" />
               </TouchableOpacity>
             </Box>
