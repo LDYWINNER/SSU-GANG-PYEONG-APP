@@ -18,7 +18,6 @@ import { useTheme } from "@shopify/restyle";
 import { Ionicons } from "@expo/vector-icons";
 import { ScrollView } from "react-native-gesture-handler";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
-import { AxiosError } from "axios";
 
 interface ICourseEval {
   overallGrade: number;

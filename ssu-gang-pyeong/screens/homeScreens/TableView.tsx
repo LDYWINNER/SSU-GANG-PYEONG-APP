@@ -9,7 +9,7 @@ import { ICourse } from "../../types";
 import useSWR from "swr";
 import { fetcher } from "../../utils/config";
 import { formatCourses } from "../../utils/helpers";
-import { Loader } from "../../components";
+import { Divider, Loader } from "../../components";
 import { useIsFocused } from "@react-navigation/native";
 import { Box, Text, Theme } from "../../theme";
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
@@ -29,7 +29,7 @@ const TableView: React.FC<NativeStackScreenProps<any, "TableView">> = ({
 
   //bottom sheet
   const sheetRef = useRef<BottomSheet>(null);
-  const snapPoints = useMemo(() => ["30%"], []);
+  const snapPoints = useMemo(() => ["45%"], []);
   const handleSnapPress = useCallback(() => {
     sheetRef.current?.snapToIndex(0);
   }, []);
@@ -112,7 +112,8 @@ const TableView: React.FC<NativeStackScreenProps<any, "TableView">> = ({
           eventOnPress={(event) => {
             togglePicker();
             setCourseIndex(event.groupIndex);
-            console.log(courseIndex);
+            // console.log(courses?.takingCourses[courseIndex as number]);
+            // console.log(courseIndex);
           }}
           disableTicker
           configs={{
@@ -134,7 +135,37 @@ const TableView: React.FC<NativeStackScreenProps<any, "TableView">> = ({
         // }}
       >
         <Box mx="3" my="2">
-          <Box flexDirection="row" mb="4">
+          <Box mb="5">
+            <Text variant="textXl" fontWeight="600" mb="2">
+              {courses?.takingCourses[courseIndex as number]?.subj}{" "}
+              {courses?.takingCourses[courseIndex as number]?.crs} -{" "}
+              {courses?.takingCourses[courseIndex as number]?.instructor.at(-1)}
+            </Text>
+
+            <Text>
+              {courses?.takingCourses[courseIndex as number]?.day
+                .split(", ")
+                .at(-1)}
+              {": "}
+              {courses?.takingCourses[courseIndex as number]?.startTime
+                .split(", ")
+                .at(-1)}{" "}
+              ~{" "}
+              {courses?.takingCourses[courseIndex as number]?.endTime
+                .split(", ")
+                .at(-1)}
+            </Text>
+
+            <Text>
+              Location:{" "}
+              {courses?.takingCourses[courseIndex as number]?.room
+                .split(", ")
+                .at(-1)}
+            </Text>
+          </Box>
+          <Divider />
+
+          <Box flexDirection="row" mb="4" mt="6">
             <MaterialCommunityIcons
               name="pencil-plus-outline"
               size={24}
