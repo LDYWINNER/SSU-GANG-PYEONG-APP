@@ -296,7 +296,7 @@ const SchoolInfo = () => {
                 alignItems="center"
               >
                 <MaterialCommunityIcons
-                  name="robot-angry"
+                  name="robot-dead"
                   size={24}
                   color="black"
                 />
