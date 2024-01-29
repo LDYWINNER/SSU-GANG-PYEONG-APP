@@ -1,4 +1,5 @@
 import React from "react";
+import * as WebBrowser from "expo-web-browser";
 import { Box, Text } from "../../theme";
 import { Divider, NavigateBack, SafeAreaWrapper } from "../../components";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
@@ -9,6 +10,10 @@ import {
 } from "@expo/vector-icons";
 
 const UserMain = () => {
+  const openLink = async (url: string) => {
+    await WebBrowser.openBrowserAsync(url);
+  };
+
   return (
     <SafeAreaWrapper>
       <ScrollView>
@@ -69,6 +74,7 @@ const UserMain = () => {
               </Box>
             </TouchableOpacity>
           </Box>
+          <Divider />
 
           <Text variant="textXl" fontWeight="600" mb="2">
             커뮤니티
@@ -94,6 +100,7 @@ const UserMain = () => {
               </Box>
             </TouchableOpacity>
           </Box>
+          <Divider />
 
           <Text variant="textXl" fontWeight="600" mb="2">
             앱 설정
@@ -119,6 +126,7 @@ const UserMain = () => {
               </Box>
             </TouchableOpacity>
           </Box>
+          <Divider />
 
           <Text variant="textXl" fontWeight="600" mb="2">
             이용안내
@@ -143,7 +151,9 @@ const UserMain = () => {
                 </Text>
               </Box>
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => openLink("https://forms.gle/C1KPvABMzFSGCUVM6")}
+            >
               <Box
                 bg="gray200"
                 borderRadius="rounded-2xl"
