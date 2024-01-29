@@ -3,13 +3,14 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
   HomeStack,
   BulletinStack,
-  NotificationStack,
   SearchStack,
   ToDoStack,
 } from "./mainStacks/index";
 import { useColorScheme } from "react-native";
 import colors from "../colors";
 import { Ionicons } from "@expo/vector-icons";
+import SchoolInfo from "../screens/SchoolInfo";
+import { Feather } from "@expo/vector-icons";
 
 const Tab = createBottomTabNavigator();
 
@@ -85,6 +86,15 @@ const MainTabs = () => {
                 size={size}
               />
             );
+          },
+        }}
+      />
+      <Tab.Screen
+        name="SchoolInfo"
+        component={SchoolInfo}
+        options={{
+          tabBarIcon: ({ focused, color, size }) => {
+            return <Feather name="more-vertical" color={color} size={size} />;
           },
         }}
       />
