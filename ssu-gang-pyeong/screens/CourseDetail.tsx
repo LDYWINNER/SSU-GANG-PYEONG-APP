@@ -12,9 +12,10 @@ import { Table, Row, Rows } from "react-native-reanimated-table";
 import { VictoryBar, VictoryChart, VictoryTheme } from "victory-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { FontAwesome5 } from "@expo/vector-icons";
-import { TouchableOpacity, Dimensions } from "react-native";
+import { TouchableOpacity, Dimensions, Image } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import * as WebBrowser from "expo-web-browser";
 
 type CourseDetailScreenRouteProp = RouteProp<
   MainStackParamList,
@@ -65,6 +66,53 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
       screen: "WriteReview",
       params: { id },
     });
+  };
+
+  const openLink = async (index: string) => {
+    let baseUrl = "";
+    if (index === "degree") {
+      baseUrl = "https://it.stonybrook.edu/services/degree-works";
+    } else if (index === "classie") {
+      baseUrl = `https://classie-evals.stonybrook.edu/?SearchKeyword=${course?.subj}${course?.crs}&SearchTerm=ALL`;
+    } else {
+      switch (course?.subj) {
+        case "AMS":
+          baseUrl =
+            "https://www.stonybrook.edu/sb/bulletin/current/academicprograms/ams/";
+          break;
+        case "ACC":
+          baseUrl =
+            "https://www.stonybrook.edu/sb/bulletin/current/academicprograms/bus/";
+          break;
+        case "BUS":
+          baseUrl =
+            "https://www.stonybrook.edu/sb/bulletin/current/academicprograms/bus/";
+          break;
+        case "CSE":
+          baseUrl =
+            "https://www.stonybrook.edu/sb/bulletin/current/academicprograms/cse/";
+          break;
+        case "ESE":
+          baseUrl =
+            "https://www.stonybrook.edu/sb/bulletin/current/academicprograms/ese/";
+          break;
+        case "EST":
+          baseUrl =
+            "https://www.stonybrook.edu/sb/bulletin/current/academicprograms/tsm/";
+          break;
+        case "EMP":
+          baseUrl =
+            "https://www.stonybrook.edu/sb/bulletin/current/academicprograms/tsm/";
+          break;
+        case "MEC":
+          baseUrl =
+            "https://www.stonybrook.edu/sb/bulletin/current/academicprograms/mec/";
+          break;
+      }
+    }
+
+    // await Linking.openURL(baseUrl);
+    await WebBrowser.openBrowserAsync(baseUrl);
   };
 
   if (isLoadingCourse) {
@@ -783,6 +831,71 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
                 </>
               )}
             </Box>
+          </Box>
+          <Box height={16} />
+
+          <Box
+            borderRadius="rounded-xl"
+            borderWidth={1}
+            borderColor={"gray550"}
+            p={"3"}
+            mb="10"
+          >
+            <TouchableOpacity onPress={() => openLink("classie")}>
+              <Box
+                bg="iconBlue"
+                p="3"
+                borderRadius="rounded-2xl"
+                flexDirection="row"
+                alignItems="center"
+              >
+                <Image
+                  source={require("../assets/images/woolfie.png")}
+                  style={{ width: 36, height: 24 }}
+                />
+                <Text variant="textBase" fontWeight="600" ml="2">
+                  Go to Classie Eval
+                </Text>
+              </Box>
+            </TouchableOpacity>
+            <Box height={24} />
+
+            <TouchableOpacity onPress={() => openLink("bulletin")}>
+              <Box
+                bg="sbuRed"
+                p="3"
+                borderRadius="rounded-2xl"
+                flexDirection="row"
+                alignItems="center"
+              >
+                <Image
+                  source={require("../assets/images/woolfie.png")}
+                  style={{ width: 36, height: 24 }}
+                />
+                <Text variant="textBase" fontWeight="600" ml="2">
+                  Go to {course?.subj.toUpperCase()} Bulletin
+                </Text>
+              </Box>
+            </TouchableOpacity>
+            <Box height={24} />
+
+            <TouchableOpacity onPress={() => openLink("degree")}>
+              <Box
+                bg="iconBlue"
+                p="3"
+                borderRadius="rounded-2xl"
+                flexDirection="row"
+                alignItems="center"
+              >
+                <Image
+                  source={require("../assets/images/woolfie.png")}
+                  style={{ width: 36, height: 24 }}
+                />
+                <Text variant="textBase" fontWeight="600" ml="2">
+                  Go to Degree Works
+                </Text>
+              </Box>
+            </TouchableOpacity>
           </Box>
         </ScrollView>
         <TouchableOpacity onPress={navigateToWriteReview}>
