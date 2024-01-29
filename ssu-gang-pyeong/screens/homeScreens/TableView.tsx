@@ -5,9 +5,9 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import useGlobalToggle from "../../store/useGlobalToggle";
 import useUserGlobalStore from "../../store/useUserGlobal";
 import { useEffect } from "react";
-import { ICourse } from "../../types";
+import { ICourse, IGlobalToggle } from "../../types";
 import useSWR from "swr";
-import { fetcher } from "../../utils/config";
+import axiosInstance, { fetcher } from "../../utils/config";
 import { formatCourses } from "../../utils/helpers";
 import { Divider, Loader } from "../../components";
 import { useIsFocused } from "@react-navigation/native";
@@ -15,8 +15,32 @@ import { Box, Text, Theme } from "../../theme";
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";
 import { Picker } from "@react-native-picker/picker";
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import {
+  FontAwesome5,
+  Ionicons,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
 import { useTheme } from "@shopify/restyle";
+import useSWRMutation from "swr/mutation";
+
+interface ITVAuthRequest {
+  tableName: IGlobalToggle;
+  courseId: string;
+}
+
+const deleteTVCourseRequest = async (
+  url: string,
+  { arg }: { arg: ITVAuthRequest }
+) => {
+  try {
+    await axiosInstance.patch(url, {
+      ...arg,
+    });
+  } catch (error) {
+    console.log("error in patchTVCourseRequest", error);
+    throw error;
+  }
+};
 
 const TableView: React.FC<NativeStackScreenProps<any, "TableView">> = ({
   navigation,
@@ -72,6 +96,11 @@ const TableView: React.FC<NativeStackScreenProps<any, "TableView">> = ({
       params: { id: courseId },
     });
   };
+
+  const { trigger: deleteTVCourse } = useSWRMutation(
+    "api/v1/course/deleteTVCourse",
+    deleteTVCourseRequest
+  );
 
   const {
     data: courses,
@@ -184,7 +213,7 @@ const TableView: React.FC<NativeStackScreenProps<any, "TableView">> = ({
             </TouchableOpacity>
           </Box>
 
-          <Box flexDirection="row">
+          <Box flexDirection="row" mb="4">
             <Ionicons name="search" size={24} color="black" />
             <TouchableOpacity
               onPress={() =>
@@ -195,6 +224,26 @@ const TableView: React.FC<NativeStackScreenProps<any, "TableView">> = ({
             >
               <Box ml="2">
                 <Text variant="textXl">수업 정보 자세히 보기</Text>
+              </Box>
+            </TouchableOpacity>
+          </Box>
+
+          <Box flexDirection="row">
+            <FontAwesome5 name="trash" size={24} color="black" />
+            <TouchableOpacity
+              onPress={() => {
+                deleteTVCourse({
+                  tableName: toggleInfo as IGlobalToggle,
+                  courseId: courses?.takingCourses[courseIndex as number]
+                    ._id as string,
+                });
+                //close bottom sheet
+                handleClosePress();
+                setPicker(true);
+              }}
+            >
+              <Box ml="3">
+                <Text variant="textXl">수업 삭제하기</Text>
               </Box>
             </TouchableOpacity>
           </Box>
