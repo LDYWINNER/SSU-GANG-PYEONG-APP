@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axiosInstance, { BASE_URL, fetcher } from "../../utils/config";
-import { ICategory, ITaskRequest } from "../../types";
+import { ICategory, ITask, ITaskRequest } from "../../types";
 import { format, isEqual, parseISO } from "date-fns";
 import { FlatList, TouchableOpacity, TextInput } from "react-native";
 import { Calendar } from "react-native-calendars";
@@ -13,6 +13,7 @@ import { useTheme } from "@shopify/restyle";
 
 type TaskActionsProps = {
   categoryId: string;
+  updateTaskStatus: () => Promise<ITask[] | undefined>;
 };
 
 export const today = new Date();
@@ -34,7 +35,7 @@ const createTaskRequest = async (
   }
 };
 
-const TaskActions = ({ categoryId }: TaskActionsProps) => {
+const TaskActions = ({ categoryId, updateTaskStatus }: TaskActionsProps) => {
   const theme = useTheme<Theme>();
 
   const [newTask, setNewTask] = useState<ITaskRequest>({
@@ -85,7 +86,7 @@ const TaskActions = ({ categoryId }: TaskActionsProps) => {
           date: todaysISODate.toISOString(),
           name: "",
         });
-        await mutate("api/v1/todotask/");
+        await updateTaskStatus();
       }
     } catch (error) {
       console.log("error in onCreateTask", error);

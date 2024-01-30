@@ -229,7 +229,7 @@ const HomeScreen = () => {
             <Box height={26} />
           </Box>
         )}
-        <TaskActions categoryId="" />
+        <TaskActions categoryId="" updateTaskStatus={trigger} />
         <Box height={26} />
         {isMutating ? (
           <Loader />
