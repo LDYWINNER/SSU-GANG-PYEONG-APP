@@ -128,26 +128,34 @@ const HomeScreen = () => {
           selectedTextColor: "white",
         };
       }
+
       // Push the category color object to the dots array
-      presetTasks[taskDate].dots.push(
-        task.categoryTitle === "AMS"
-          ? AMS
-          : task.categoryTitle === "ACC"
-          ? ACC
-          : task.categoryTitle === "BUS"
-          ? BUS
-          : task.categoryTitle === "CSE"
-          ? CSE
-          : task.categoryTitle === "ESE"
-          ? ESE
-          : task.categoryTitle === "EST"
-          ? EST
-          : task.categoryTitle === "EMP"
-          ? EMP
-          : task.categoryTitle === "MEC"
-          ? MEC
-          : OTHER
-      );
+      if (
+        !presetTasks[taskDate].dots
+          .map((obj: any) => obj.key)
+          .join()
+          .includes(task.categoryTitle)
+      ) {
+        presetTasks[taskDate].dots.push(
+          task.categoryTitle === "AMS"
+            ? AMS
+            : task.categoryTitle === "ACC"
+            ? ACC
+            : task.categoryTitle === "BUS"
+            ? BUS
+            : task.categoryTitle === "CSE"
+            ? CSE
+            : task.categoryTitle === "ESE"
+            ? ESE
+            : task.categoryTitle === "EST"
+            ? EST
+            : task.categoryTitle === "EMP"
+            ? EMP
+            : task.categoryTitle === "MEC"
+            ? MEC
+            : OTHER
+        );
+      }
     });
   }
 
