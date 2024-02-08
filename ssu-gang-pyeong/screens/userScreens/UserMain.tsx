@@ -8,11 +8,14 @@ import {
   MaterialIcons,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
+import useUserGlobalStore from "../../store/useUserGlobal";
 
 const UserMain = () => {
   const openLink = async (url: string) => {
     await WebBrowser.openBrowserAsync(url);
   };
+
+  const { logout } = useUserGlobalStore();
 
   return (
     <SafeAreaWrapper>
@@ -58,7 +61,7 @@ const UserMain = () => {
               </Box>
             </TouchableOpacity>
 
-            <TouchableOpacity>
+            <TouchableOpacity onPress={logout}>
               <Box
                 bg="gray200"
                 borderRadius="rounded-2xl"

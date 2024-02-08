@@ -6,6 +6,7 @@ import { createJSONStorage, persist } from "zustand/middleware";
 interface IUserGlobalStore {
   user: IAuthenticatedUser | null;
   updateUser: (user: IAuthenticatedUser | null) => void;
+  logout: () => void;
 }
 
 const useUserGlobalStore = create<IUserGlobalStore>()(
@@ -16,6 +17,10 @@ const useUserGlobalStore = create<IUserGlobalStore>()(
         set({
           user,
         });
+      },
+      logout: () => {
+        set({ user: null });
+        // Add any additional cleanup logic if needed
       },
     }),
     {
