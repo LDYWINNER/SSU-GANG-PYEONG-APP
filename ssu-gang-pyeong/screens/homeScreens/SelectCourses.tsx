@@ -15,11 +15,12 @@ import { ICategory, IColor, ICourse, IGlobalToggle } from "../../types";
 import { Loader } from "../../components";
 import { FlatList, Image, TouchableOpacity } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
-import BottomSheet from "@gorhom/bottom-sheet";
+import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import { Picker } from "@react-native-picker/picker";
 import useGlobalToggle from "../../store/useGlobalToggle";
 import useSWR from "swr";
 import { getColors } from "../../utils/helpers";
+import { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";
 
 const COLORS = getColors();
 
@@ -89,7 +90,7 @@ const SelectCourses = ({ togglePicker, courses }: any) => {
 
   //bottom sheet
   const sheetRef = useRef<BottomSheet>(null);
-  const snapPoints = useMemo(() => ["30%"], []);
+  const snapPoints = useMemo(() => ["35%"], []);
   const handleSnapPress = useCallback(() => {
     sheetRef.current?.snapToIndex(0);
   }, []);
@@ -116,6 +117,18 @@ const SelectCourses = ({ togglePicker, courses }: any) => {
       trigger();
     }
   }, []);
+  const renderBackdrop = useCallback(
+    (
+      props: React.JSX.IntrinsicAttributes & BottomSheetDefaultBackdropProps
+    ) => (
+      <BottomSheetBackdrop
+        {...props}
+        disappearsOnIndex={-1}
+        appearsOnIndex={1}
+      />
+    ),
+    []
+  );
 
   useEffect(() => {
     trigger();
@@ -260,6 +273,7 @@ const SelectCourses = ({ togglePicker, courses }: any) => {
         enablePanDownToClose={true}
         enableContentPanningGesture={false}
         onChange={handleSheetChange}
+        backdropComponent={renderBackdrop}
       >
         <Box flexDirection="row" justifyContent="space-between" mr="5" ml="4">
           <TouchableOpacity
