@@ -1,14 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import * as WebBrowser from "expo-web-browser";
-import { Box, Text } from "../../theme";
+import { Box, Text, Theme } from "../../theme";
 import { Divider, NavigateBack, SafeAreaWrapper } from "../../components";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import {
+  ScrollView,
+  Switch,
+  TouchableOpacity,
+} from "react-native-gesture-handler";
 import {
   FontAwesome5,
   MaterialIcons,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
 import useUserGlobalStore from "../../store/useUserGlobal";
+import { useTheme } from "@shopify/restyle";
 
 const UserMain = () => {
   const openLink = async (url: string) => {
@@ -16,6 +21,11 @@ const UserMain = () => {
   };
 
   const { logout } = useUserGlobalStore();
+
+  const [isEnabled, setIsEnabled] = useState(false);
+  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
+
+  const theme = useTheme<Theme>();
 
   return (
     <SafeAreaWrapper>
@@ -109,15 +119,16 @@ const UserMain = () => {
             앱 설정
           </Text>
           <Box>
-            <TouchableOpacity>
-              <Box
-                bg="gray200"
-                borderRadius="rounded-2xl"
-                mb="3"
-                p="3"
-                flexDirection="row"
-                alignItems="center"
-              >
+            <Box
+              bg="gray200"
+              borderRadius="rounded-2xl"
+              mb="3"
+              p="3"
+              flexDirection="row"
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              <Box flexDirection="row" alignItems="center">
                 <MaterialCommunityIcons
                   name="theme-light-dark"
                   size={24}
@@ -127,7 +138,16 @@ const UserMain = () => {
                   다크모드
                 </Text>
               </Box>
-            </TouchableOpacity>
+              <Box mr="3">
+                <Switch
+                  trackColor={{ false: "#767577", true: "#767577" }}
+                  thumbColor={isEnabled ? theme.colors.iconBlue : "#f4f3f4"}
+                  ios_backgroundColor="#3e3e3e"
+                  onValueChange={toggleSwitch}
+                  value={isEnabled}
+                />
+              </Box>
+            </Box>
           </Box>
           <Divider />
 
