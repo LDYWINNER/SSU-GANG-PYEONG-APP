@@ -218,7 +218,7 @@ const UserMain = () => {
               {quote?.content}
             </Text>
             <Box height={8} />
-            <Text textAlign="center" fontWeight="600" fontSize={14}>
+            <Text textAlign="center" fontWeight="600" fontSize={16}>
               - {quote?.author} -
             </Text>
           </Box>
