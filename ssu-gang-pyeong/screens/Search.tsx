@@ -36,7 +36,7 @@ const Search: React.FC<NativeStackScreenProps<any, "Search">> = ({
     navigate("MainStack", { screen: "CourseDetail", params: { id: courseId } });
   };
 
-  const { control, handleSubmit, watch } = useForm<ISearch>({
+  const { control, handleSubmit, watch, setValue } = useForm<ISearch>({
     defaultValues: {
       keyword: "",
     },
@@ -51,7 +51,7 @@ const Search: React.FC<NativeStackScreenProps<any, "Search">> = ({
     }
   };
 
-  const { data, trigger } = useSWRMutation<{
+  const { data, trigger, isMutating } = useSWRMutation<{
     queryCourses: ICourse[];
     totalCourses: number;
   }>(
@@ -162,70 +162,81 @@ const Search: React.FC<NativeStackScreenProps<any, "Search">> = ({
           name="keyword"
         />
       </Box>
-      <Box mb="6" />
+      <Box mb="3" />
 
-      <FlatList
-        data={data!.queryCourses}
-        renderItem={({ item, index }) => {
-          return (
-            <TouchableOpacity onPress={() => navigateToCourseDetail(item._id)}>
-              <Box
-                borderRadius="rounded-xl"
-                bg={
-                  item.avgGrade === null
-                    ? "lightGray"
-                    : item.avgGrade <= 1
-                    ? "red200"
-                    : item.avgGrade <= 2
-                    ? "amber200"
-                    : item.avgGrade <= 3
-                    ? "orange200"
-                    : item.avgGrade <= 4
-                    ? "blu200"
-                    : "green200"
-                }
-                px="4"
-                py="6"
-                m="3"
-                flexDirection="row"
-                justifyContent="space-between"
+      {isMutating ? (
+        <Loader />
+      ) : (
+        <FlatList
+          data={data!.queryCourses}
+          renderItem={({ item, index }) => {
+            return (
+              <TouchableOpacity
+                onPress={() => navigateToCourseDetail(item._id)}
               >
-                <Box>
-                  <Text variant="text2Xl" mb="1">
-                    {item.subj} {item.crs}
-                  </Text>
+                <Box
+                  borderRadius="rounded-xl"
+                  bg={
+                    item.avgGrade === null
+                      ? "lightGray"
+                      : item.avgGrade <= 1
+                      ? "red200"
+                      : item.avgGrade <= 2
+                      ? "amber200"
+                      : item.avgGrade <= 3
+                      ? "orange200"
+                      : item.avgGrade <= 4
+                      ? "blu200"
+                      : "green200"
+                  }
+                  px="4"
+                  py="6"
+                  m="3"
+                  flexDirection="row"
+                  justifyContent="space-between"
+                >
                   <Box>
-                    {data.queryCourses[index].unique_instructor.includes(
-                      ","
-                    ) ? (
-                      data.queryCourses[index].unique_instructor
-                        .split(", ")
-                        .map((prof, index) => <Text key={index}>{prof}</Text>)
-                    ) : (
-                      <Text>{data.queryCourses[index].unique_instructor}</Text>
-                    )}
+                    <Text variant="text2Xl" mb="1">
+                      {item.subj} {item.crs}
+                    </Text>
+                    <Box>
+                      {data.queryCourses[index].unique_instructor.includes(
+                        ","
+                      ) ? (
+                        data.queryCourses[index].unique_instructor
+                          .split(", ")
+                          .map((prof, index) => <Text key={index}>{prof}</Text>)
+                      ) : (
+                        <Text>
+                          {data.queryCourses[index].unique_instructor}
+                        </Text>
+                      )}
+                    </Box>
+                  </Box>
+                  <Box justifyContent="center" alignItems="flex-end">
+                    <Text mb="1">
+                      {item.avgGrade ? (
+                        <Rating
+                          rating={Number(item.avgGrade.toFixed(1))}
+                          disabled
+                        />
+                      ) : (
+                        <Rating rating={0} disabled />
+                      )}
+                    </Text>
+                    <Text>
+                      {item.avgGrade
+                        ? "(" + item.avgGrade.toFixed(1) + ")"
+                        : ""}
+                    </Text>
                   </Box>
                 </Box>
-                <Box justifyContent="center" alignItems="flex-end">
-                  <Text mb="1">
-                    {item.avgGrade ? (
-                      <Rating
-                        rating={Number(item.avgGrade.toFixed(1))}
-                        disabled
-                      />
-                    ) : (
-                      <Rating rating={0} disabled />
-                    )}
-                  </Text>
-                  <Text>
-                    {item.avgGrade ? "(" + item.avgGrade.toFixed(1) + ")" : ""}
-                  </Text>
-                </Box>
-              </Box>
-            </TouchableOpacity>
-          );
-        }}
-      />
+              </TouchableOpacity>
+            );
+          }}
+        />
+      )}
+
       <BottomSheet
         index={-1}
         ref={sheetRef}
@@ -238,7 +249,22 @@ const Search: React.FC<NativeStackScreenProps<any, "Search">> = ({
         //   backgroundColor: isDark ? colors.DARKER_GREY : "white",
         // }}
       >
-        <Box flexDirection="row" justifyContent="flex-end" mr="5">
+        <Box flexDirection="row" justifyContent="space-between" mr="5" ml="4">
+          <TouchableOpacity
+            onPress={() => {
+              setSearchSubj("ALL");
+              setValue("keyword", "");
+              handleClosePress();
+            }}
+          >
+            <Text
+              variant="textLg"
+              fontWeight="600"
+              style={{ color: theme.colors.sbuRed }}
+            >
+              초기화
+            </Text>
+          </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
               setSearchSubj(searchSubj);
