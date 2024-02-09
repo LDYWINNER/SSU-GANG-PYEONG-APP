@@ -14,6 +14,7 @@ import {
 } from "@expo/vector-icons";
 import useUserGlobalStore from "../../store/useUserGlobal";
 import { useTheme } from "@shopify/restyle";
+import { Alert } from "react-native";
 
 const UserMain = () => {
   const openLink = async (url: string) => {
@@ -155,7 +156,15 @@ const UserMain = () => {
             이용안내
           </Text>
           <Box>
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() =>
+                Alert.alert(
+                  "문의하기",
+                  "sunytime-auth@naver.com 으로 문의사항을 보내주시면 신속한 처리 도와드리겠습니다.",
+                  [{ text: "OK", onPress: () => {} }]
+                )
+              }
+            >
               <Box
                 bg="gray200"
                 borderRadius="rounded-2xl"
