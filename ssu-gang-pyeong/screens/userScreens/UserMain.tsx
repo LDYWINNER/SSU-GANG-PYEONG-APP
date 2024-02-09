@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as WebBrowser from "expo-web-browser";
 import { Box, Text, Theme } from "../../theme";
 import { Divider, NavigateBack, SafeAreaWrapper } from "../../components";
@@ -15,6 +15,12 @@ import {
 import useUserGlobalStore from "../../store/useUserGlobal";
 import { useTheme } from "@shopify/restyle";
 import { Alert } from "react-native";
+import { quotes } from "../../assets/asset";
+
+interface IQuote {
+  content: string;
+  author: string;
+}
 
 const UserMain = () => {
   const openLink = async (url: string) => {
@@ -27,6 +33,11 @@ const UserMain = () => {
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
 
   const theme = useTheme<Theme>();
+
+  const [quote, setQuote] = useState<IQuote>();
+  useEffect(() => {
+    setQuote(quotes[Math.floor(Math.random() * quotes.length)]);
+  }, []);
 
   return (
     <SafeAreaWrapper>
@@ -200,6 +211,16 @@ const UserMain = () => {
                 </Text>
               </Box>
             </TouchableOpacity>
+          </Box>
+
+          <Box mt="10">
+            <Text textAlign="center" fontWeight="600" fontSize={16}>
+              {quote?.content}
+            </Text>
+            <Box height={8} />
+            <Text textAlign="center" fontWeight="600" fontSize={14}>
+              - {quote?.author} -
+            </Text>
           </Box>
         </Box>
       </ScrollView>
