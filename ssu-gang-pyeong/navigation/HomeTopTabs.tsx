@@ -100,7 +100,7 @@ const HomeTopTabs: React.FC<NativeStackScreenProps<any, "HomeTopTabs">> = ({
               size={35}
             />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => toggleMoreMenu()}>
+          {/* <TouchableOpacity onPress={() => toggleMoreMenu()}>
             <Ionicons
               name={
                 isDark
@@ -111,7 +111,7 @@ const HomeTopTabs: React.FC<NativeStackScreenProps<any, "HomeTopTabs">> = ({
               size={35}
               style={{ marginRight: 1 }}
             />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <TouchableOpacity onPress={() => toggleView()} disabled={tableView}>
             <Ionicons
               name={!tableView ? "grid-outline" : "grid"}

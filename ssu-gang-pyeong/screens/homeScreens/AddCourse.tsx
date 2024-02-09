@@ -13,13 +13,32 @@ import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";
 import { Picker } from "@react-native-picker/picker";
 import useGlobalToggle from "../../store/useGlobalToggle";
-import { fetcher } from "../../utils/config";
+import axiosInstance, { fetcher } from "../../utils/config";
 import useSWR from "swr";
-import { ICourse } from "../../types";
+import { ICourse, IGlobalToggle } from "../../types";
 import { formatCourses } from "../../utils/helpers";
 import { useNavigation } from "@react-navigation/native";
+import useSWRMutation from "swr/mutation";
 
 const Tab = createMaterialTopTabNavigator();
+
+interface ITVAuthRequest {
+  tableName: IGlobalToggle;
+}
+
+const deleteAllTVCourseRequest = async (
+  url: string,
+  { arg }: { arg: ITVAuthRequest }
+) => {
+  try {
+    await axiosInstance.patch(url, {
+      ...arg,
+    });
+  } catch (error) {
+    console.log("error in patchTVCourseRequest", error);
+    throw error;
+  }
+};
 
 const AddCourse = () => {
   const theme = useTheme<Theme>();
@@ -77,6 +96,11 @@ const AddCourse = () => {
     refreshInterval: 1000,
   });
 
+  const { trigger: deleteAllTVCourse } = useSWRMutation(
+    "api/v1/course/deleteAllTVCourse",
+    deleteAllTVCourseRequest
+  );
+
   return (
     <SafeAreaWrapper>
       <Box mx="4">
@@ -86,10 +110,16 @@ const AddCourse = () => {
           alignItems="center"
         >
           <NavigateBack />
-          <Text ml="13" variant="textXl" fontWeight="600" mr="10">
+          <Text ml="13" variant="textXl" fontWeight="600" mr="6">
             수업추가
           </Text>
-          <TouchableOpacity onPress={navigateBack}>
+          <TouchableOpacity
+            onPress={() => {
+              deleteAllTVCourse({
+                tableName: toggleInfo as IGlobalToggle,
+              });
+            }}
+          >
             <Box
               style={{
                 backgroundColor: theme.colors.sbuRed,
@@ -103,7 +133,7 @@ const AddCourse = () => {
                 fontWeight="600"
                 style={{ color: "white" }}
               >
-                완료
+                초기화
               </Text>
             </Box>
           </TouchableOpacity>

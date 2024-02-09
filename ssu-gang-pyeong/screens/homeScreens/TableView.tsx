@@ -151,6 +151,7 @@ const TableView: React.FC<NativeStackScreenProps<any, "TableView">> = ({
           }}
         />
       )}
+
       <BottomSheet
         index={-1}
         ref={sheetRef}
