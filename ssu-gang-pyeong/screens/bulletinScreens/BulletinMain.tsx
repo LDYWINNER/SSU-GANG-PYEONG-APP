@@ -88,13 +88,23 @@ const BulletinMain: React.FC<NativeStackScreenProps<any, "BulletinMain">> = ({
             mt="10"
             mx="4"
             p="4"
-            height={380}
+            height={"34%"}
             borderRadius="rounded-2xl"
           >
             <TouchableOpacity onPress={() => navigateToBulletinDetail("Free")}>
               <Box mb="3">
                 <Text variant="textLg" fontWeight="600">
                   자유 게시판
+                </Text>
+              </Box>
+            </TouchableOpacity>
+            <Divider />
+            <TouchableOpacity
+              onPress={() => navigateToBulletinDetail("course")}
+            >
+              <Box mb="3" mt="3">
+                <Text variant="textLg" fontWeight="600">
+                  수업별 게시판
                 </Text>
               </Box>
             </TouchableOpacity>

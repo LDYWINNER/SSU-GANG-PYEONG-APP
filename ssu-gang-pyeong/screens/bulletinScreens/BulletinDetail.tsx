@@ -79,6 +79,8 @@ const BulletinDetail: React.FC<
           <Text variant="textXl" fontWeight="600" mr="2">
             {name === "Free"
               ? "자유 게시판"
+              : name === "course"
+              ? "수업별 게시판"
               : name === "courseRegister"
               ? "수강신청 게시판"
               : name === "Secret"
