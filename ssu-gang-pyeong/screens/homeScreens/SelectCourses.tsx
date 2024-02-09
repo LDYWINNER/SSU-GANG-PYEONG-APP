@@ -55,7 +55,7 @@ const SelectCourses = ({ togglePicker, courses }: any) => {
   const [searchSubj, setSearchSubj] = useState<string>("ALL");
   let tvCoursesId: string[] = [];
 
-  const { control, handleSubmit, watch } = useForm<ISearch>({
+  const { control, handleSubmit, watch, setValue } = useForm<ISearch>({
     defaultValues: {
       keyword: "",
     },
@@ -70,7 +70,7 @@ const SelectCourses = ({ togglePicker, courses }: any) => {
     }
   };
 
-  const { data, trigger } = useSWRMutation<{
+  const { data, trigger, isMutating } = useSWRMutation<{
     queryCourses: ICourse[];
     totalCourses: number;
   }>(
@@ -159,7 +159,8 @@ const SelectCourses = ({ togglePicker, courses }: any) => {
               flexDirection="row"
               alignItems="center"
               px="4"
-              width={"70%"}
+              flex={1}
+              mr="4"
             >
               <Ionicons name="search" size={24} color={theme.colors.gray5} />
               <TextInput
@@ -183,68 +184,75 @@ const SelectCourses = ({ togglePicker, courses }: any) => {
       </Box>
       <Box mb="2" />
 
-      <FlatList
-        data={data!.queryCourses}
-        numColumns={2}
-        renderItem={({ item, index }) => {
-          const isSelected = tvCoursesId.includes(item._id);
-          return (
-            <TouchableOpacity
-              onPress={() => {
-                patchTVCourse({
-                  tableName: toggleInfo as IGlobalToggle,
-                  courseId: item._id,
-                  color: DEFAULT_COLOR,
-                });
-                togglePicker();
-                mutate();
-              }}
-              style={{ width: "50%" }}
-            >
-              <Box
-                borderRadius="rounded-xl"
-                bg={"lightGray"}
-                px="4"
-                py="6"
-                m="3"
-                borderWidth={isSelected ? 2 : 0}
-                borderColor="sbuRed"
-                position="relative" //for woolfie image
+      {isMutating ? (
+        <Loader />
+      ) : (
+        <FlatList
+          data={data!.queryCourses}
+          numColumns={2}
+          renderItem={({ item, index }) => {
+            const isSelected = tvCoursesId.includes(item._id);
+            return (
+              <TouchableOpacity
+                onPress={() => {
+                  patchTVCourse({
+                    tableName: toggleInfo as IGlobalToggle,
+                    courseId: item._id,
+                    color: DEFAULT_COLOR,
+                  });
+                  togglePicker();
+                  mutate();
+                }}
+                style={{ width: "50%" }}
               >
-                <Box>
-                  <Text variant="text2Xl" mb="1">
-                    {item.subj} {item.crs}
-                  </Text>
+                <Box
+                  borderRadius="rounded-xl"
+                  bg={"lightGray"}
+                  px="4"
+                  py="6"
+                  m="3"
+                  borderWidth={isSelected ? 2 : 0}
+                  borderColor="sbuRed"
+                  position="relative" //for woolfie image
+                >
                   <Box>
-                    {data.queryCourses[index].unique_instructor.includes(
-                      ","
-                    ) ? (
-                      data.queryCourses[index].unique_instructor
-                        .split(", ")
-                        .map((prof, index) => <Text key={index}>{prof}</Text>)
-                    ) : (
-                      <Text>{data.queryCourses[index].unique_instructor}</Text>
-                    )}
+                    <Text variant="text2Xl" mb="1">
+                      {item.subj} {item.crs}
+                    </Text>
+                    <Box>
+                      {data.queryCourses[index].unique_instructor.includes(
+                        ","
+                      ) ? (
+                        data.queryCourses[index].unique_instructor
+                          .split(", ")
+                          .map((prof, index) => <Text key={index}>{prof}</Text>)
+                      ) : (
+                        <Text>
+                          {data.queryCourses[index].unique_instructor}
+                        </Text>
+                      )}
+                    </Box>
                   </Box>
+                  {isSelected && (
+                    <Image
+                      source={require("../../assets/images/woolfie.png")}
+                      style={{
+                        position: "absolute",
+                        top: 0,
+                        right: 10,
+                        width: 50,
+                        height: 50,
+                        resizeMode: "contain", // Ensure the entire image is visible and maintains aspect ratio
+                      }}
+                    />
+                  )}
                 </Box>
-                {isSelected && (
-                  <Image
-                    source={require("../../assets/images/woolfie.png")}
-                    style={{
-                      position: "absolute",
-                      top: 0,
-                      right: 10,
-                      width: 50,
-                      height: 50,
-                      resizeMode: "contain", // Ensure the entire image is visible and maintains aspect ratio
-                    }}
-                  />
-                )}
-              </Box>
-            </TouchableOpacity>
-          );
-        }}
-      />
+              </TouchableOpacity>
+            );
+          }}
+        />
+      )}
+
       <BottomSheet
         index={-1}
         ref={sheetRef}
@@ -253,7 +261,22 @@ const SelectCourses = ({ togglePicker, courses }: any) => {
         enableContentPanningGesture={false}
         onChange={handleSheetChange}
       >
-        <Box flexDirection="row" justifyContent="flex-end" mr="5">
+        <Box flexDirection="row" justifyContent="space-between" mr="5" ml="4">
+          <TouchableOpacity
+            onPress={() => {
+              setSearchSubj("ALL");
+              setValue("keyword", "");
+              handleClosePress();
+            }}
+          >
+            <Text
+              variant="textLg"
+              fontWeight="600"
+              style={{ color: theme.colors.sbuRed }}
+            >
+              초기화
+            </Text>
+          </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
               setSearchSubj(searchSubj);
