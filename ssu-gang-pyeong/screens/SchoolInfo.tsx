@@ -29,6 +29,7 @@ const SchoolInfo = () => {
       case "Forms":
         baseUrl = "https://www.sunykorea.ac.kr/en/html/sub03/030505.html";
         break;
+
       case "CDCMeeting":
         baseUrl = "https://sunykoreacdc.youcanbook.me/";
         break;
@@ -38,6 +39,17 @@ const SchoolInfo = () => {
       case "CE":
         baseUrl = "https://www.sunykorea.ac.kr/en/html/sub04/040404.html";
         break;
+
+      case "Housing":
+        baseUrl = "https://housing.igc.or.kr/";
+        break;
+      case "MR":
+        baseUrl = "https://housing.igc.or.kr/house/requests.do";
+        break;
+      case "Menu":
+        baseUrl = "https://housing.igc.or.kr/about/cafeteria_menu.do";
+        break;
+
       case "AMS":
         baseUrl = "https://www.sunykorea.ac.kr/en/html/sub03/030101.html";
         break;
@@ -59,6 +71,7 @@ const SchoolInfo = () => {
       case "SciHum":
         baseUrl = "https://www.sunykorea.ac.kr/en/html/sub03/0303.html";
         break;
+
       case "SUNYK":
         baseUrl = "https://www.sunykorea.ac.kr/en/";
         break;
@@ -207,6 +220,58 @@ const SchoolInfo = () => {
                 <MaterialIcons name="event" size={24} color="black" />
                 <Text variant="textBase" fontWeight="500" ml="3">
                   Career Events
+                </Text>
+              </Box>
+            </TouchableOpacity>
+          </Box>
+          <Divider />
+
+          <Text variant="textXl" fontWeight="500" mb="2">
+            Housing
+          </Text>
+          <Box>
+            <TouchableOpacity onPress={() => openLink("Housing")}>
+              <Box
+                bg="gray200"
+                borderRadius="rounded-2xl"
+                mb="3"
+                p="3"
+                flexDirection="row"
+                alignItems="center"
+              >
+                <MaterialIcons name="apartment" size={24} color="black" />
+                <Text variant="textBase" fontWeight="500" ml="2">
+                  Housing Website
+                </Text>
+              </Box>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => openLink("MR")}>
+              <Box
+                bg="gray200"
+                borderRadius="rounded-2xl"
+                mb="3"
+                p="3"
+                flexDirection="row"
+                alignItems="center"
+              >
+                <AntDesign name="exclamationcircleo" size={24} color="black" />
+                <Text variant="textBase" fontWeight="500" ml="2">
+                  Housing Maintenance Request
+                </Text>
+              </Box>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => openLink("Menu")}>
+              <Box
+                bg="gray200"
+                borderRadius="rounded-2xl"
+                mb="3"
+                p="3"
+                flexDirection="row"
+                alignItems="center"
+              >
+                <MaterialIcons name="restaurant-menu" size={24} color="black" />
+                <Text variant="textBase" fontWeight="500" ml="2">
+                  Housing Cafeteria menu
                 </Text>
               </Box>
             </TouchableOpacity>
