@@ -180,28 +180,32 @@ const WritePost: React.FC<NativeStackScreenProps<any, "WritePost">> = ({
               )}
             />
 
-            <Text mb="2">
+            <Text mb="2" color="gray400">
               SSUGANGPYEONG established rules to operate the community where
               anyone can use without any discomfort. Violations may result in
               postings being deleted and use of the service permanently
               restricted.
             </Text>
-            <Text>
+            <Text color="gray400">
               Below is an summary of key content for using the bulletin board
               feature.
             </Text>
-            <Text>- In the case of posting illegaly filmed material, etc.</Text>
-            <Text>
+            <Text color="gray400">
+              - In the case of posting illegaly filmed material, etc.
+            </Text>
+            <Text color="gray400">
               - Acts that infringe on the rights of others or cause discomfort.
             </Text>
-            <Text>
+            <Text color="gray400">
               - Acts that violate law, such as criminal or illegal acts.
             </Text>
-            <Text>
+            <Text color="gray400">
               - Acts of writing posts including content related to profanity,
               demeaning, discrimination, hatred, suicide, and violence.
             </Text>
-            <Text>- Pornography, acts that cause sexual shame.</Text>
+            <Text color="gray400">
+              - Pornography, acts that cause sexual shame.
+            </Text>
           </Box>
         </Box>
 
