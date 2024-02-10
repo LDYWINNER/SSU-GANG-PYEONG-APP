@@ -15,6 +15,9 @@ export type BulletinStackParamList = {
   BulletinDetail: {
     name: string;
   };
+  CourseBulletin: {
+    name: string;
+  };
   BulletinPost: {
     id: string;
   };
@@ -22,6 +25,7 @@ export type BulletinStackParamList = {
     board?: string;
   };
   WritePost: {
+    courseInfo?: string;
     board: string;
   };
 };

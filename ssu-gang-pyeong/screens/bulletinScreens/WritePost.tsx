@@ -42,7 +42,7 @@ const WritePost: React.FC<NativeStackScreenProps<any, "WritePost">> = ({
   const [isSelected, setSelection] = useState(true);
 
   const route = useRoute<WritePostScreenRouteProp>();
-  const { board } = route.params;
+  const { board, courseInfo } = route.params;
 
   const { control, watch } = useForm<IPost>({
     defaultValues: {
@@ -59,13 +59,22 @@ const WritePost: React.FC<NativeStackScreenProps<any, "WritePost">> = ({
   const createNewPost = async () => {
     try {
       await addBulletinPost({
-        title: watch("title"),
+        title:
+          board === "course"
+            ? courseInfo + ": " + watch("title")
+            : watch("title"),
         content: watch("content"),
         anonymity: isSelected,
         board,
       });
+
+      if (board === "course") {
+        courseBulletinMutate();
+      } else {
+        mutate();
+      }
+
       goBack();
-      mutate();
     } catch (error) {
       console.log("error in createNewPost", error);
       throw error;
@@ -76,6 +85,11 @@ const WritePost: React.FC<NativeStackScreenProps<any, "WritePost">> = ({
     bulletinAllPosts: IBulletinPost[];
     bulletinTotalPosts: number;
   }>(`/api/v1/bulletin?board=${board}`, fetcher);
+
+  const { mutate: courseBulletinMutate } = useSWR<{
+    bulletinAllPosts: IBulletinPost[];
+    bulletinTotalPosts: number;
+  }>(`/api/v1/bulletin?board=course&search=${courseInfo}`, fetcher);
 
   return (
     <SafeAreaWrapper>
@@ -90,6 +104,8 @@ const WritePost: React.FC<NativeStackScreenProps<any, "WritePost">> = ({
           <Text variant="textXl" fontWeight="600" mr="-8">
             {board === "Free"
               ? "자유 게시판"
+              : board === "course"
+              ? courseInfo
               : board === "courseRegister"
               ? "수강신청 게시판"
               : board === "Secret"

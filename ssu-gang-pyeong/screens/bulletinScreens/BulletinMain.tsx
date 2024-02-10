@@ -23,6 +23,12 @@ const BulletinMain: React.FC<NativeStackScreenProps<any, "BulletinMain">> = ({
     });
   };
 
+  const navigateToCourseBulletin = () => {
+    navigate("BulletinStack", {
+      screen: "CourseBulletin",
+    });
+  };
+
   const navigateToBulletinPost = (postId: string) => {
     navigate("BulletinStack", {
       screen: "BulletinPost",
@@ -99,9 +105,7 @@ const BulletinMain: React.FC<NativeStackScreenProps<any, "BulletinMain">> = ({
               </Box>
             </TouchableOpacity>
             <Divider />
-            <TouchableOpacity
-              onPress={() => navigateToBulletinDetail("course")}
-            >
+            <TouchableOpacity onPress={() => navigateToCourseBulletin()}>
               <Box mb="3" mt="3">
                 <Text variant="textLg" fontWeight="600">
                   수업별 게시판
