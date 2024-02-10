@@ -25,11 +25,7 @@ import { Controller, useForm } from "react-hook-form";
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import { Picker } from "@react-native-picker/picker";
 import { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";
-
-type BulletinDetailScreenRouteProp = RouteProp<
-  BulletinStackParamList,
-  "CourseBulletin"
->;
+import { useFocusEffect } from "@react-navigation/native";
 
 interface ISearch {
   crsNum: string;
@@ -59,13 +55,7 @@ const CourseBulletin: React.FC<
 
   const [searchSubj, setSearchSubj] = useState<string>("AMS");
 
-  const {
-    control,
-    handleSubmit,
-    watch,
-    formState: { isSubmitSuccessful },
-    setValue,
-  } = useForm<ISearch>({
+  const { control, handleSubmit, watch, setValue } = useForm<ISearch>({
     defaultValues: {
       crsNum: "",
     },
@@ -132,6 +122,12 @@ const CourseBulletin: React.FC<
       />
     ),
     []
+  );
+
+  useFocusEffect(
+    useCallback(() => {
+      trigger();
+    }, [])
   );
 
   return (
