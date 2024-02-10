@@ -55,20 +55,15 @@ const EasyPick = () => {
     });
   };
 
-  const { data: courses, isLoading: isLoadingCourses } = useSWR<{
+  const { data: courses } = useSWR<{
     takingCourses: ICourse[];
-  }>(`/api/v1/course/tableView/${toggleInfo?.currentTableView}`, fetcher, {
-    refreshInterval: 1000,
-  });
+  }>(`/api/v1/course/tableView/${toggleInfo?.currentTableView}`, fetcher);
 
   const { trigger: deleteTVCourse } = useSWRMutation(
     "api/v1/course/deleteTVCourse",
     deleteTVCourseRequest
   );
 
-  if (isLoadingCourses) {
-    return <Loader />;
-  }
   return (
     <Box flex={1}>
       <Box
@@ -90,6 +85,7 @@ const EasyPick = () => {
         </TouchableOpacity>
       </Box>
       <Box height={12} />
+
       <ScrollView>
         {courses!.takingCourses.map((courseItem, courseIndex) => (
           <Box key={courseItem._id}>
