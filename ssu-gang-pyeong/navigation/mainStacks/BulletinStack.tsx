@@ -3,7 +3,6 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import {
   BulletinMain,
   BulletinDetail,
-  CourseBulletin,
   BulletinPost,
   BulletinSearch,
   WritePost,
@@ -28,11 +27,7 @@ const BulletinStack = () => {
         component={BulletinDetail}
         options={{ presentation: "card" }}
       />
-      <NativeStack.Screen
-        name="CourseBulletin"
-        component={CourseBulletin}
-        options={{ presentation: "card" }}
-      />
+
       <NativeStack.Screen
         name="BulletinSearch"
         component={BulletinSearch}

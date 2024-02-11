@@ -68,6 +68,16 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
     });
   };
 
+  const navigateToCourseBulletin = () => {
+    navigate("MainStack", {
+      screen: "CourseBulletin",
+      params: {
+        courseSubj: course!.subj,
+        courseNumber: course!.crs,
+      },
+    });
+  };
+
   const openLink = async (index: string) => {
     let baseUrl = "";
     if (index === "degree") {
@@ -308,6 +318,25 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
               />
               <Rows data={tableResult} textStyle={{ margin: 6 }} />
             </Table>
+            <Box height={16} />
+
+            <TouchableOpacity onPress={() => navigateToCourseBulletin()}>
+              <Box
+                bg="iconBlue"
+                p="3"
+                borderRadius="rounded-2xl"
+                flexDirection="row"
+                alignItems="center"
+              >
+                <Image
+                  source={require("../assets/images/woolfie.png")}
+                  style={{ width: 36, height: 24 }}
+                />
+                <Text variant="textBase" fontWeight="600" ml="2">
+                  Go to Course Bulletin Board
+                </Text>
+              </Box>
+            </TouchableOpacity>
           </Box>
           <Box height={16} />
 

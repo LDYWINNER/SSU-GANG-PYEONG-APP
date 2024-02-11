@@ -15,9 +15,6 @@ export type BulletinStackParamList = {
   BulletinDetail: {
     name: string;
   };
-  CourseBulletin: {
-    name: string;
-  };
   BulletinPost: {
     id: string;
   };
@@ -79,6 +76,10 @@ export type MainStackParamList = {
   CourseReview: {
     courseIndex: number[];
     id: string;
+  };
+  CourseBulletin: {
+    courseSubj: string;
+    courseNumber: string;
   };
   WriteReview: {
     id: string;

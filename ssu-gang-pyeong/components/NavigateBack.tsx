@@ -1,4 +1,4 @@
-import { Box, Text, Theme } from "../theme";
+import { Box, Theme } from "../theme";
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { TouchableOpacity } from "react-native";

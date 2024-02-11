@@ -2,21 +2,16 @@ import React, { useCallback, useMemo, useRef, useState } from "react";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Dimensions, TextInput, TouchableOpacity } from "react-native";
-import { BulletinStackParamList } from "../../navigation/types";
-import {
-  Divider,
-  Loader,
-  NavigateBack,
-  SafeAreaWrapper,
-} from "../../components";
-import { Box, Text, Theme } from "../../theme";
+import { MainStackParamList } from "../navigation/types";
+import { Divider, Loader, NavigateBack, SafeAreaWrapper } from "../components";
+import { Box, Text, Theme } from "../theme";
 import {
   FontAwesome5,
   Ionicons,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
-import { fetcher } from "../../utils/config";
-import { IBulletinPost } from "../../types";
+import { fetcher } from "../utils/config";
+import { IBulletinPost } from "../types";
 import { ScrollView } from "react-native-gesture-handler";
 import { useTheme } from "@shopify/restyle";
 import moment from "moment";
@@ -30,6 +25,11 @@ import { useFocusEffect } from "@react-navigation/native";
 interface ISearch {
   crsNum: string;
 }
+
+type CourseBulletinScreenRouteProp = RouteProp<
+  MainStackParamList,
+  "CourseBulletin"
+>;
 
 const CourseBulletin: React.FC<
   NativeStackScreenProps<any, "CourseBulletin">
@@ -53,11 +53,16 @@ const CourseBulletin: React.FC<
     });
   };
 
-  const [searchSubj, setSearchSubj] = useState<string>("AMS");
+  const route = useRoute<CourseBulletinScreenRouteProp>();
+  const { courseSubj, courseNumber } = route.params;
+
+  const [searchSubj, setSearchSubj] = useState<string>(
+    courseSubj ? courseSubj : "AMS"
+  );
 
   const { control, handleSubmit, watch, setValue } = useForm<ISearch>({
     defaultValues: {
-      crsNum: "",
+      crsNum: courseNumber ? courseNumber : "",
     },
   });
 
@@ -78,7 +83,9 @@ const CourseBulletin: React.FC<
     bulletinAllPosts: IBulletinPost[];
     bulletinTotalPosts: number;
   }>(
-    `api/v1/bulletin?board=course&search=${searchSubj}${watch("crsNum")}`,
+    courseSubj
+      ? `api/v1/bulletin?board=course&search=${courseSubj}${courseNumber}`
+      : `api/v1/bulletin?board=course&search=${searchSubj}${watch("crsNum")}`,
     fetcher
   );
 
