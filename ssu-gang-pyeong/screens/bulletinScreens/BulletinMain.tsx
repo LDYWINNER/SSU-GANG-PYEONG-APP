@@ -24,7 +24,7 @@ const BulletinMain: React.FC<NativeStackScreenProps<any, "BulletinMain">> = ({
   };
 
   const navigateToCourseBulletin = () => {
-    navigate("BulletinStack", {
+    navigate("MainStack", {
       screen: "CourseBulletin",
     });
   };

@@ -78,8 +78,8 @@ export type MainStackParamList = {
     id: string;
   };
   CourseBulletin: {
-    courseSubj: string;
-    courseNumber: string;
+    courseSubj?: string;
+    courseNumber?: string;
   };
   WriteReview: {
     id: string;

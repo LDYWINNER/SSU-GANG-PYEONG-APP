@@ -54,7 +54,10 @@ const CourseBulletin: React.FC<
   };
 
   const route = useRoute<CourseBulletinScreenRouteProp>();
-  const { courseSubj, courseNumber } = route.params;
+  const { courseSubj, courseNumber } = route.params || {
+    courseSubj: null,
+    courseNumber: null,
+  };
 
   const [searchSubj, setSearchSubj] = useState<string>(
     courseSubj ? courseSubj : "AMS"

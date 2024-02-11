@@ -5,7 +5,7 @@ import { Box, Text, Theme } from "../../theme";
 import { useTheme } from "@shopify/restyle";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { BulletinStackParamList } from "../../navigation/types";
-import { TextInput, TouchableOpacity } from "react-native";
+import { Alert, TextInput, TouchableOpacity } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import useSWRMutation from "swr/mutation";
 import { Controller, useForm } from "react-hook-form";
@@ -57,6 +57,19 @@ const WritePost: React.FC<NativeStackScreenProps<any, "WritePost">> = ({
   );
 
   const createNewPost = async () => {
+    const title = watch("title");
+    const content = watch("content");
+
+    // Check if title or content is empty
+    if (!title.trim() || !content.trim()) {
+      Alert.alert(
+        "Empty Fields", // Title of the alert
+        "Both title and content are required.", // Message of the alert
+        [{ text: "OK" }] // Array of buttons
+      );
+      return; // Prevent the rest of the function from running
+    }
+
     try {
       await addBulletinPost({
         title:
