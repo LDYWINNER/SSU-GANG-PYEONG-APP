@@ -7,6 +7,7 @@ import {
   CourseReview,
   CourseBulletin,
   WriteReview,
+  WritePost,
 } from "../screens";
 import { UserMain, MyAccount } from "../screens/userScreens";
 
@@ -39,6 +40,11 @@ const MainStack = () => {
       <NativeStack.Screen
         name="CourseReview"
         component={CourseReview}
+        options={{ presentation: "card", headerShown: false }}
+      />
+      <NativeStack.Screen
+        name="WritePost"
+        component={WritePost}
         options={{ presentation: "card", headerShown: false }}
       />
       <NativeStack.Screen

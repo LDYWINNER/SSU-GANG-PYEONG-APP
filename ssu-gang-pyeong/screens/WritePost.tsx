@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { NavigateBack, SafeAreaWrapper } from "../../components";
-import { Box, Text, Theme } from "../../theme";
+import { NavigateBack, SafeAreaWrapper } from "../components";
+import { Box, Text, Theme } from "../theme";
 import { useTheme } from "@shopify/restyle";
 import { RouteProp, useRoute } from "@react-navigation/native";
-import { BulletinStackParamList } from "../../navigation/types";
+import { BulletinStackParamList } from "../navigation/types";
 import { Alert, TextInput, TouchableOpacity } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import useSWRMutation from "swr/mutation";
 import { Controller, useForm } from "react-hook-form";
-import axiosInstance, { fetcher } from "../../utils/config";
-import { IBulletinPost, IBulletinPostRequest } from "../../types";
+import axiosInstance, { fetcher } from "../utils/config";
+import { IBulletinPost, IBulletinPostRequest } from "../types";
 import useSWR from "swr";
 
 type WritePostScreenRouteProp = RouteProp<BulletinStackParamList, "WritePost">;

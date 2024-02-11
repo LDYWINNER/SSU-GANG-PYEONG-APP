@@ -47,7 +47,7 @@ const CourseBulletin: React.FC<
   };
 
   const navigateToWritePost = (name: string) => {
-    navigate("BulletinStack", {
+    navigate("MainStack", {
       screen: "WritePost",
       params: { board: name, courseInfo: searchSubj + watch("crsNum") },
     });

@@ -5,7 +5,6 @@ import {
   BulletinDetail,
   BulletinPost,
   BulletinSearch,
-  WritePost,
 } from "../../screens/bulletinScreens";
 
 const NativeStack = createNativeStackNavigator();
@@ -36,11 +35,6 @@ const BulletinStack = () => {
       <NativeStack.Screen
         name="BulletinPost"
         component={BulletinPost}
-        options={{ presentation: "card" }}
-      />
-      <NativeStack.Screen
-        name="WritePost"
-        component={WritePost}
         options={{ presentation: "card" }}
       />
     </NativeStack.Navigator>
