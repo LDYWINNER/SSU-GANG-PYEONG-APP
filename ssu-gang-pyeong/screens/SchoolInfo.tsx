@@ -11,7 +11,7 @@ import {
   FontAwesome,
   MaterialIcons,
 } from "@expo/vector-icons";
-import { Image } from "react-native";
+import { Alert, Image } from "react-native";
 
 const SchoolInfo = () => {
   const openLink = async (index: string) => {
@@ -242,6 +242,29 @@ const SchoolInfo = () => {
                 <MaterialIcons name="apartment" size={24} color="black" />
                 <Text variant="textBase" fontWeight="500" ml="2">
                   Housing Website
+                </Text>
+              </Box>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() =>
+                Alert.alert(
+                  "Housing Office Contact",
+                  "1. Office Contact Point \n (TEL) 032-626-4856 \n (KaKaoTalk Channel ID): igchousing \n\n 2. Security Office (After Office Hour) \n (A114) 032-626-0110 \n(B150) 032-626-0111 \n\n 3. Housing Office Location \nHousing A117(1F) \n(In front of Housing A Fitness center) \n\n 4. Office Hour \n-Weekday(Mon-Fri) 9:00 ~ 18:00 \n * Break Time: 12:00 ~ 13:00\n-Weekend(Sat-Sun) Closed",
+                  [{ text: "OK", onPress: () => {} }]
+                )
+              }
+            >
+              <Box
+                bg="gray200"
+                borderRadius="rounded-2xl"
+                mb="3"
+                p="3"
+                flexDirection="row"
+                alignItems="center"
+              >
+                <AntDesign name="contacts" size={24} color="black" />
+                <Text variant="textBase" fontWeight="500" ml="2">
+                  Housing Office Contact
                 </Text>
               </Box>
             </TouchableOpacity>
