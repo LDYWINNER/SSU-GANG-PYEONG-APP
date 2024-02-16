@@ -37,6 +37,10 @@ export type HomeStackParamList = {
     togglePicker: any;
   };
   AddCourse: undefined;
+  Tables: undefined;
+  CreateTable: {
+    category?: ICategory;
+  };
 };
 
 export type ToDoStackParamList = {
