@@ -92,7 +92,14 @@ const UserMain: React.FC<NativeStackScreenProps<any, "UserMain">> = ({
               </Box>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={logout}>
+            <TouchableOpacity
+              onPress={() =>
+                Alert.alert("Logout", "Are you sure you want to logout?", [
+                  { text: "Yes", onPress: () => logout() },
+                  { text: "No", onPress: () => {} },
+                ])
+              }
+            >
               <Box
                 bg="gray200"
                 borderRadius="rounded-2xl"
