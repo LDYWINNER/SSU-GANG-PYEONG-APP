@@ -89,6 +89,7 @@ export type MainStackParamList = {
     id: string;
   };
   MyAccount: undefined;
+  UserMain: undefined;
   MainStack: { screen: string; params: { id: string } };
 };
 

@@ -16,13 +16,16 @@ import useUserGlobalStore from "../../store/useUserGlobal";
 import { useTheme } from "@shopify/restyle";
 import { Alert } from "react-native";
 import { quotes } from "../../assets/asset";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 interface IQuote {
   content: string;
   author: string;
 }
 
-const UserMain = () => {
+const UserMain: React.FC<NativeStackScreenProps<any, "UserMain">> = ({
+  navigation: { navigate },
+}) => {
   const openLink = async (url: string) => {
     await WebBrowser.openBrowserAsync(url);
   };
@@ -33,6 +36,12 @@ const UserMain = () => {
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
 
   const theme = useTheme<Theme>();
+
+  const navigateToMyAccount = () => {
+    navigate("MainStack", {
+      screen: "MyAccount",
+    });
+  };
 
   const [quote, setQuote] = useState<IQuote>();
   useEffect(() => {
@@ -67,7 +76,7 @@ const UserMain = () => {
             계정
           </Text>
           <Box>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={navigateToMyAccount}>
               <Box
                 bg="gray200"
                 borderRadius="rounded-2xl"
