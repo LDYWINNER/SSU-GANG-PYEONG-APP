@@ -1,4 +1,4 @@
-import { ICategory } from "../types";
+import { ICategory, ITable } from "../types";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import {
   CompositeNavigationProp,
@@ -39,7 +39,7 @@ export type HomeStackParamList = {
   AddCourse: undefined;
   Tables: undefined;
   CreateTable: {
-    category?: ICategory;
+    table?: ITable;
   };
 };
 

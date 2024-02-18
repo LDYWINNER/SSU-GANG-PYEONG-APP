@@ -8,7 +8,7 @@ interface IUser {
 
 // literally authenticated user
 interface IAuthenticatedUser {
-  _id: any;
+  _id: string;
   username: string;
   email: string;
   school: string;
@@ -16,7 +16,7 @@ interface IAuthenticatedUser {
   courseReviewNum: number;
   adminAccount: boolean;
   classHistory: {
-    [index: string]: [string];
+    [index: string]: [string] | [];
   };
 }
 
@@ -30,6 +30,19 @@ export interface IIcon {
   name: string;
   id: string;
   symbol: string;
+}
+
+interface ITable {
+  name: string;
+}
+
+interface ITableRequest {
+  name: string;
+}
+
+interface IUpdateTableRequest {
+  name: string;
+  oldName: string;
 }
 
 interface ICategory {
