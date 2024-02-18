@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import { SmoothButton, SafeAreaWrapper, NavigateBack } from "../../components";
 import { HomeStackParamList } from "../../navigation/types";
-import axiosInstance, { BASE_URL } from "../../utils/config";
+import axiosInstance from "../../utils/config";
 import { ITable, ITableRequest, IUpdateTableRequest } from "../../types";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Box, Text, Theme } from "../../theme";
+import { Box, Theme } from "../../theme";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { useTheme } from "@shopify/restyle";
 import { TouchableOpacity, TextInput } from "react-native";
-import { useSWRConfig } from "swr";
 import useSWRMutation from "swr/mutation";
 import useUserGlobalStore from "../../store/useUserGlobal";
 
@@ -93,8 +92,6 @@ const CreateTable = () => {
     deleteTableRequest
   );
 
-  const { mutate } = useSWRConfig();
-
   const { user, updateUser } = useUserGlobalStore();
 
   // console.log(`route.params`, JSON.stringify(route.params, null, 2));
@@ -119,7 +116,6 @@ const CreateTable = () => {
           updatedTableItem.oldName,
           updatedTableItem.name
         );
-
         updateUser({
           ...user!,
           classHistory: updatedClassHistory,
@@ -179,6 +175,7 @@ const CreateTable = () => {
           )}
         </Box>
         <Box height={16} />
+
         <Box bg="gray250" borderRadius="rounded-2xl">
           <TextInput
             style={{

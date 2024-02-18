@@ -82,6 +82,11 @@ interface ICourseRequest {
   keyword: string;
 }
 
+interface IUpdateUserNameRequest {
+  user: string;
+  username: string;
+}
+
 interface ICourse {
   _id: string;
   classNbr: string;
