@@ -19,6 +19,7 @@ import { ICourse, IGlobalToggle } from "../../types";
 import { formatCourses } from "../../utils/helpers";
 import { useNavigation } from "@react-navigation/native";
 import useSWRMutation from "swr/mutation";
+import ManualPick from "./ManualPick";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -190,7 +191,7 @@ const AddCourse = () => {
             <Tab.Screen
               key={"직접 추가"}
               name={"직접 추가"}
-              component={SelectCourses}
+              component={ManualPick}
             />
           </Tab.Navigator>
         </Box>
