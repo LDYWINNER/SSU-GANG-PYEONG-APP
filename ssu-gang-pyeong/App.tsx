@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import * as SplashScreen from "expo-splash-screen";
-import * as Font from "expo-font";
 import { AppState, Image, useColorScheme } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 import { Asset } from "expo-asset";
 import { NavigationContainer } from "@react-navigation/native";
 import { ThemeProvider } from "@shopify/restyle";
@@ -12,17 +10,18 @@ import Root from "./navigation/Root";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { SWRConfig } from "swr";
-import { Loader } from "./components";
+// import * as Font from "expo-font";
+// import { Ionicons } from "@expo/vector-icons";
 
 // SplashScreen.preventAutoHideAsync(); // prevent the splash screen from auto-hiding
 
 const queryClient = new QueryClient();
 
-type Props = {
-  Ionicons: keyof typeof Ionicons.glyphMap | any;
-};
+// type Props = {
+//   Ionicons: keyof typeof Ionicons.glyphMap | any;
+// };
 
-const loadFonts = (fonts: any[]) => fonts.map((font) => Font.loadAsync(font));
+// const loadFonts = (fonts: any[]) => fonts.map((font) => Font.loadAsync(font));
 
 const loadImages = (images: any[]) =>
   images.map((image) => {
@@ -33,8 +32,8 @@ const loadImages = (images: any[]) =>
     }
   });
 
-export default function App({ Ionicons }: Props) {
-  const [ready, setReady] = useState(false);
+export default function App() {
+  // const [ready, setReady] = useState(false);
   const isDark = useColorScheme() === "dark";
 
   const startLoading = async () => {
@@ -55,7 +54,7 @@ export default function App({ Ionicons }: Props) {
   useEffect(() => {
     SplashScreen.preventAutoHideAsync(); // Prevent the splash screen from hiding
     startLoading().then(() => {
-      setReady(true);
+      // setReady(true);
       SplashScreen.hideAsync(); // Hide the splash screen once loading is complete
     });
   }, []);
