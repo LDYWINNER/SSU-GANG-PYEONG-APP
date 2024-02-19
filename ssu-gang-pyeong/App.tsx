@@ -36,6 +36,7 @@ const loadImages = (images: any[]) =>
 export default function App() {
   // const [ready, setReady] = useState(false);
   const { isDarkMode } = useDarkMode();
+  const systemIsDark = useColorScheme() === "dark";
 
   const startLoading = async () => {
     const images = loadImages([
@@ -63,7 +64,15 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider
-        theme={isDarkMode?.mode === "dark" ? darkTheme : lightTheme}
+        theme={
+          isDarkMode?.mode === "system"
+            ? systemIsDark
+              ? darkTheme
+              : lightTheme
+            : isDarkMode?.mode === "dark"
+            ? darkTheme
+            : lightTheme
+        }
       >
         <NavigationContainer>
           <GestureHandlerRootView style={{ flex: 1 }}>

@@ -40,7 +40,6 @@ const UserMain: React.FC<NativeStackScreenProps<any, "UserMain">> = ({
 
   const theme = useTheme<Theme>();
 
-  const systemIsDark = useColorScheme() === "dark";
   const { isDarkMode, updateDarkMode } = useDarkMode();
 
   //bottom sheet
@@ -306,16 +305,7 @@ const UserMain: React.FC<NativeStackScreenProps<any, "UserMain">> = ({
         <Box flexDirection="row" justifyContent="flex-end" mr="5">
           <TouchableOpacity
             onPress={() => {
-              if (isDarkMode?.mode === "system") {
-                if (systemIsDark) {
-                  updateDarkMode({ mode: "dark" });
-                } else {
-                  updateDarkMode({ mode: "light" });
-                }
-              } else {
-                updateDarkMode(isDarkMode);
-              }
-
+              updateDarkMode(isDarkMode);
               handleClosePress();
             }}
           >
@@ -332,15 +322,7 @@ const UserMain: React.FC<NativeStackScreenProps<any, "UserMain">> = ({
           ref={pickerRef}
           selectedValue={isDarkMode?.mode}
           onValueChange={(itemValue, itemIndex) => {
-            if (itemValue === "system") {
-              if (systemIsDark) {
-                updateDarkMode({ mode: "dark" });
-              } else {
-                updateDarkMode({ mode: "light" });
-              }
-            } else {
-              updateDarkMode({ mode: itemValue });
-            }
+            updateDarkMode({ mode: itemValue });
           }}
         >
           <Picker.Item label="시스템 기본값" value="system" />
