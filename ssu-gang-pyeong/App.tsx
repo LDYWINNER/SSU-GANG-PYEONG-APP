@@ -10,6 +10,7 @@ import Root from "./navigation/Root";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { SWRConfig } from "swr";
+import useDarkMode from "./store/useDarkMode";
 // import * as Font from "expo-font";
 // import { Ionicons } from "@expo/vector-icons";
 
@@ -34,7 +35,7 @@ const loadImages = (images: any[]) =>
 
 export default function App() {
   // const [ready, setReady] = useState(false);
-  const isDark = useColorScheme() === "dark";
+  const { isDarkMode } = useDarkMode();
 
   const startLoading = async () => {
     const images = loadImages([
@@ -61,7 +62,9 @@ export default function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
+      <ThemeProvider
+        theme={isDarkMode?.mode === "dark" ? darkTheme : lightTheme}
+      >
         <NavigationContainer>
           <GestureHandlerRootView style={{ flex: 1 }}>
             <SafeAreaProvider>

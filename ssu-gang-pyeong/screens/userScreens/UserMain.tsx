@@ -16,7 +16,7 @@ import {
 } from "@expo/vector-icons";
 import useUserGlobalStore from "../../store/useUserGlobal";
 import { useTheme } from "@shopify/restyle";
-import { Alert } from "react-native";
+import { Alert, useColorScheme } from "react-native";
 import { quotes } from "../../assets/asset";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
@@ -40,6 +40,7 @@ const UserMain: React.FC<NativeStackScreenProps<any, "UserMain">> = ({
 
   const theme = useTheme<Theme>();
 
+  const systemIsDark = useColorScheme() === "dark";
   const { isDarkMode, updateDarkMode } = useDarkMode();
 
   //bottom sheet
@@ -216,7 +217,12 @@ const UserMain: React.FC<NativeStackScreenProps<any, "UserMain">> = ({
                   size={24}
                   color="black"
                 />
-                <Text variant="textBase" fontWeight="600" ml="3">
+                <Text
+                  variant="textBase"
+                  fontWeight="600"
+                  ml="3"
+                  color="mainBgColor"
+                >
                   다크모드: {isDarkMode?.mode}
                 </Text>
               </Box>
@@ -300,7 +306,16 @@ const UserMain: React.FC<NativeStackScreenProps<any, "UserMain">> = ({
         <Box flexDirection="row" justifyContent="flex-end" mr="5">
           <TouchableOpacity
             onPress={() => {
-              updateDarkMode(isDarkMode);
+              if (isDarkMode?.mode === "system") {
+                if (systemIsDark) {
+                  updateDarkMode({ mode: "dark" });
+                } else {
+                  updateDarkMode({ mode: "light" });
+                }
+              } else {
+                updateDarkMode(isDarkMode);
+              }
+
               handleClosePress();
             }}
           >
@@ -316,9 +331,17 @@ const UserMain: React.FC<NativeStackScreenProps<any, "UserMain">> = ({
         <Picker
           ref={pickerRef}
           selectedValue={isDarkMode?.mode}
-          onValueChange={(itemValue, itemIndex) =>
-            updateDarkMode({ mode: itemValue })
-          }
+          onValueChange={(itemValue, itemIndex) => {
+            if (itemValue === "system") {
+              if (systemIsDark) {
+                updateDarkMode({ mode: "dark" });
+              } else {
+                updateDarkMode({ mode: "light" });
+              }
+            } else {
+              updateDarkMode({ mode: itemValue });
+            }
+          }}
         >
           <Picker.Item label="시스템 기본값" value="system" />
           <Picker.Item label="켜짐" value="dark" />

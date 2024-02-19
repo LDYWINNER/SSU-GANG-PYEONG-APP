@@ -1,12 +1,14 @@
 import { createBox, createText, createTheme } from "@shopify/restyle";
 import Animated from "react-native-reanimated";
-import { colors } from "./colors";
+import { colors, palette } from "./colors";
 import { textVariants } from "./text-variants";
 
 const theme = createTheme({
-  mainBgColor: "",
-  textColor: "",
-  colors: colors,
+  colors: {
+    ...colors,
+    mainBgColor: "",
+    textColor: "",
+  },
   spacing: {
     "-1": -4,
     "-4": -16,
@@ -43,14 +45,24 @@ export type Theme = typeof theme;
 
 export const darkTheme: Theme = {
   ...theme,
-  mainBgColor: "#1e272e",
-  textColor: "#d2dae2",
+  // mainBgColor: "#1e272e",
+  // textColor: "#d2dae2",
+  colors: {
+    ...theme.colors,
+    mainBgColor: palette.gray900,
+    textColor: palette.gray100,
+  },
 };
 
 export const lightTheme: Theme = {
   ...theme,
-  mainBgColor: "white",
-  textColor: "#1e272e",
+  // mainBgColor: "white",
+  // textColor: "#1e272e",
+  colors: {
+    ...theme.colors,
+    mainBgColor: palette.amber600,
+    textColor: palette.amber900,
+  },
 };
 
 export const Box = createBox<Theme>();
