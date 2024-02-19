@@ -114,6 +114,10 @@ interface IGlobalToggle {
   currentTableView: string;
 }
 
+interface IDarkMode {
+  mode: string; // "dark" | "light" | "system"
+}
+
 interface ITVCourse {
   courseId: string;
   title: string;

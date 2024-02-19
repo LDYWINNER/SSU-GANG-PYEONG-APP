@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import * as WebBrowser from "expo-web-browser";
 import { Box, Text, Theme } from "../../theme";
 import { Divider, NavigateBack, SafeAreaWrapper } from "../../components";
-import {
-  ScrollView,
-  Switch,
-  TouchableOpacity,
-} from "react-native-gesture-handler";
+import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import {
   FontAwesome5,
   MaterialIcons,
@@ -17,6 +19,10 @@ import { useTheme } from "@shopify/restyle";
 import { Alert } from "react-native";
 import { quotes } from "../../assets/asset";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
+import { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";
+import { Picker } from "@react-native-picker/picker";
+import useDarkMode from "../../store/useDarkMode";
 
 interface IQuote {
   content: string;
@@ -32,10 +38,50 @@ const UserMain: React.FC<NativeStackScreenProps<any, "UserMain">> = ({
 
   const { logout } = useUserGlobalStore();
 
-  const [isEnabled, setIsEnabled] = useState(false);
-  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
-
   const theme = useTheme<Theme>();
+
+  const { isDarkMode, updateDarkMode } = useDarkMode();
+
+  //bottom sheet
+  const sheetRef = useRef<BottomSheet>(null);
+  const snapPoints = useMemo(() => ["30%"], []);
+  const handleSnapPress = useCallback(() => {
+    sheetRef.current?.snapToIndex(0);
+  }, []);
+  const handleClosePress = useCallback(() => {
+    sheetRef.current?.close();
+  }, []);
+  const [picker, setPicker] = useState(true);
+  const [pickerContents, setPickerContents] = useState("");
+  const pickerRef = useRef<Picker<string>>(null);
+  const togglePicker = (index: string) => {
+    if (picker) {
+      handleSnapPress();
+      setPicker(false);
+      setPickerContents(index);
+    } else {
+      handleClosePress();
+      setPicker(true);
+      setPickerContents(index);
+    }
+  };
+  const handleSheetChange = useCallback((index: any) => {
+    if (index == -1) {
+      setPicker(true);
+    }
+  }, []);
+  const renderBackdrop = useCallback(
+    (
+      props: React.JSX.IntrinsicAttributes & BottomSheetDefaultBackdropProps
+    ) => (
+      <BottomSheetBackdrop
+        {...props}
+        disappearsOnIndex={-1}
+        appearsOnIndex={1}
+      />
+    ),
+    []
+  );
 
   const navigateToMyAccount = () => {
     navigate("MainStack", {
@@ -154,7 +200,7 @@ const UserMain: React.FC<NativeStackScreenProps<any, "UserMain">> = ({
           <Text variant="textXl" fontWeight="600" mb="2">
             앱 설정
           </Text>
-          <Box>
+          <TouchableOpacity onPress={() => togglePicker("darkMode")}>
             <Box
               bg="gray200"
               borderRadius="rounded-2xl"
@@ -171,20 +217,11 @@ const UserMain: React.FC<NativeStackScreenProps<any, "UserMain">> = ({
                   color="black"
                 />
                 <Text variant="textBase" fontWeight="600" ml="3">
-                  다크모드
+                  다크모드: {isDarkMode?.mode}
                 </Text>
               </Box>
-              <Box mr="3">
-                <Switch
-                  trackColor={{ false: "#767577", true: "#767577" }}
-                  thumbColor={isEnabled ? theme.colors.iconBlue : "#f4f3f4"}
-                  ios_backgroundColor="#3e3e3e"
-                  onValueChange={toggleSwitch}
-                  value={isEnabled}
-                />
-              </Box>
             </Box>
-          </Box>
+          </TouchableOpacity>
           <Divider />
 
           <Text variant="textXl" fontWeight="600" mb="2">
@@ -243,11 +280,51 @@ const UserMain: React.FC<NativeStackScreenProps<any, "UserMain">> = ({
             </Text>
             <Box height={8} />
             <Text textAlign="center" fontWeight="600" fontSize={16}>
-              - {quote?.author} -
+              - {quote?.author === "" ? "?" : quote?.author} -
             </Text>
           </Box>
         </Box>
       </ScrollView>
+      <BottomSheet
+        index={-1}
+        ref={sheetRef}
+        snapPoints={snapPoints}
+        enablePanDownToClose={true}
+        enableContentPanningGesture={false}
+        onChange={handleSheetChange}
+        backdropComponent={renderBackdrop}
+        // backgroundStyle={{
+        //   backgroundColor: isDark ? colors.DARKER_GREY : "white",
+        // }}
+      >
+        <Box flexDirection="row" justifyContent="flex-end" mr="5">
+          <TouchableOpacity
+            onPress={() => {
+              updateDarkMode(isDarkMode);
+              handleClosePress();
+            }}
+          >
+            <Text
+              variant="textLg"
+              fontWeight="600"
+              style={{ color: theme.colors.sbuRed }}
+            >
+              확인
+            </Text>
+          </TouchableOpacity>
+        </Box>
+        <Picker
+          ref={pickerRef}
+          selectedValue={isDarkMode?.mode}
+          onValueChange={(itemValue, itemIndex) =>
+            updateDarkMode({ mode: itemValue })
+          }
+        >
+          <Picker.Item label="시스템 기본값" value="system" />
+          <Picker.Item label="켜짐" value="dark" />
+          <Picker.Item label="꺼짐" value="light" />
+        </Picker>
+      </BottomSheet>
     </SafeAreaWrapper>
   );
 };
