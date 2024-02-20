@@ -21,6 +21,7 @@ import { IBulletinPost } from "../../types";
 import { ScrollView } from "react-native-gesture-handler";
 import { useTheme } from "@shopify/restyle";
 import moment from "moment";
+import useDarkMode from "../../store/useDarkMode";
 
 type BulletinDetailScreenRouteProp = RouteProp<
   BulletinStackParamList,
@@ -31,6 +32,7 @@ const BulletinDetail: React.FC<
   NativeStackScreenProps<any, "BulletinDetail">
 > = ({ navigation: { navigate } }) => {
   const theme = useTheme<Theme>();
+  const { isDarkMode } = useDarkMode();
 
   const windowWidth = Dimensions.get("window").width;
   const windowHeight = Dimensions.get("window").height;
@@ -76,7 +78,7 @@ const BulletinDetail: React.FC<
           alignItems="center"
         >
           <NavigateBack />
-          <Text variant="textXl" fontWeight="600" mr="2">
+          <Text variant="textXl" fontWeight="600" mr="2" color="textColor">
             {name === "Free"
               ? "자유 게시판"
               : name === "course"
@@ -95,13 +97,17 @@ const BulletinDetail: React.FC<
           </Text>
           <Box mr="1">
             <TouchableOpacity onPress={() => navigateToBulletinSearch(name)}>
-              <Ionicons name="md-search" size={30} color="black" />
+              <Ionicons
+                name="md-search"
+                size={30}
+                color={theme.colors.textColor}
+              />
             </TouchableOpacity>
           </Box>
         </Box>
 
         <Box mt="3" ml="3">
-          <Text variant="textLg" fontWeight="600">
+          <Text variant="textLg" fontWeight="600" color="textColor">
             {posts?.bulletinTotalPosts} posts
           </Text>
         </Box>
@@ -113,15 +119,13 @@ const BulletinDetail: React.FC<
                 onPress={() => navigateToBulletinPost(post._id)}
               >
                 <Box my="5" mx="4">
-                  <Text variant="textBase" fontWeight="600">
+                  <Text variant="textBase" fontWeight="600" color="textColor">
                     {post.title}
                   </Text>
                   <Text
                     variant="textBase"
                     fontWeight="500"
-                    style={{
-                      color: theme.colors.gray600,
-                    }}
+                    color={isDarkMode?.mode === "dark" ? "gray300" : "gray650"}
                   >
                     {post.content.substring(0, 43)}
                     {post.content.length > 43 && "..."}
@@ -200,7 +204,7 @@ const BulletinDetail: React.FC<
             alignItems="center"
             position="absolute"
             right={windowWidth * 0.38}
-            bottom={windowHeight * 0}
+            bottom={windowHeight * 0.03}
             style={{ backgroundColor: theme.colors.sbuRed }}
             p="2"
             borderRadius="rounded-2xl"
