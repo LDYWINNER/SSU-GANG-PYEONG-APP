@@ -1,4 +1,11 @@
 export const palette = {
+  //st: sunytime
+  stYellow: "#ffa801",
+  stBlack: "#1e272e",
+  stDarkGrey: "#d2dae2",
+  stLightGrey: "#808e9b",
+  stDarkerGrey: "#485460",
+
   white: "#ffffff",
   primary: "#007AFF",
   lightGray: "#EDECEF",
@@ -197,6 +204,12 @@ export const palette = {
 };
 
 export const colors = {
+  stYellow: palette.stYellow,
+  stBlack: palette.stBlack,
+  stDarkGrey: palette.stDarkGrey,
+  stLightGrey: palette.stLightGrey,
+  stDarkerGrey: palette.stDarkerGrey,
+
   white: palette.white,
   lightGray: palette.lightGray,
   ratingYellow: palette.ratingYellow,

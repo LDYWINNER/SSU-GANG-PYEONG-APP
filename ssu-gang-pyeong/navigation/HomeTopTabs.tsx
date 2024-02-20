@@ -1,34 +1,16 @@
 import React, { useRef, useState, useCallback, useMemo } from "react";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import styled from "styled-components/native";
 import { Dimensions, TouchableOpacity } from "react-native";
-import { useColorScheme } from "react-native";
-import colors from "../colors";
 import { Ionicons } from "@expo/vector-icons";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ListView, MoreMenu, TableView } from "../screens/homeScreens/index";
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";
 import useUserGlobalStore from "../store/useUserGlobal";
-import { Loader } from "../components";
-
-const Row = styled.View`
-  flex-direction: row;
-  align-items: center;
-`;
-
-const BigRow = styled(Row)<{ bgColor: string }>`
-  justify-content: space-between;
-  background-color: ${(props) => props.bgColor};
-  padding-top: 70px;
-`;
-
-const Title = styled.Text<{ color: string }>`
-  color: ${(props) => props.color};
-  font-weight: 600;
-  font-size: 30px;
-  margin-left: 10px;
-`;
+import { Loader, SafeAreaWrapper } from "../components";
+import { Box, Text, Theme } from "../theme";
+import useDarkMode from "../store/useDarkMode";
+import { useTheme } from "@shopify/restyle";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -37,12 +19,12 @@ const HomeTopTabs: React.FC<NativeStackScreenProps<any, "HomeTopTabs">> = ({
 }) => {
   const { user } = useUserGlobalStore();
 
-  const isDark = useColorScheme() === "dark";
-  const color = isDark ? "white" : colors.BLACK_COLOR;
-  const bgColor = isDark ? colors.BLACK_COLOR : "white";
+  const { isDarkMode } = useDarkMode();
+  const theme = useTheme<Theme>();
   const [tableView, setTableView] = useState(true);
   const toggleView = () => setTableView((current) => !current);
 
+  // bottom sheet
   const sheetRef = useRef<BottomSheet>(null);
   const snapPoints = useMemo(() => ["20%"], []);
   const handleSnapPress = useCallback(() => {
@@ -83,10 +65,21 @@ const HomeTopTabs: React.FC<NativeStackScreenProps<any, "HomeTopTabs">> = ({
     return <Loader />;
   }
   return (
-    <>
-      <BigRow bgColor={bgColor}>
-        <Title color={color}>{`@${user.username}`}</Title>
-        <Row>
+    <SafeAreaWrapper>
+      <Box
+        flexDirection="row"
+        alignItems="center"
+        justifyContent="space-between"
+        pr="2"
+        backgroundColor="mainBgColor"
+      >
+        <Text
+          fontWeight="600"
+          fontSize={30}
+          ml="2"
+          color="textColor"
+        >{`@${user.username}`}</Text>
+        <Box flexDirection="row" alignItems="center">
           <TouchableOpacity
             onPress={() =>
               navigate("HomeStack", {
@@ -95,19 +88,23 @@ const HomeTopTabs: React.FC<NativeStackScreenProps<any, "HomeTopTabs">> = ({
             }
           >
             <Ionicons
-              name={isDark ? "add-circle-outline" : "add-circle"}
-              color={color}
+              name={
+                isDarkMode?.mode === "dark"
+                  ? "add-circle-outline"
+                  : "add-circle"
+              }
+              color={theme.colors.textColor}
               size={35}
             />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => toggleMoreMenu()}>
             <Ionicons
               name={
-                isDark
+                isDarkMode?.mode === "dark"
                   ? "ellipsis-horizontal-circle-outline"
                   : "ellipsis-horizontal-circle-sharp"
               }
-              color={color}
+              color={theme.colors.textColor}
               size={35}
               style={{ marginRight: 1 }}
             />
@@ -115,7 +112,7 @@ const HomeTopTabs: React.FC<NativeStackScreenProps<any, "HomeTopTabs">> = ({
           <TouchableOpacity onPress={() => toggleView()} disabled={tableView}>
             <Ionicons
               name={!tableView ? "grid-outline" : "grid"}
-              color={color}
+              color={theme.colors.textColor}
               size={30}
               style={{ marginRight: 1 }}
             />
@@ -123,33 +120,33 @@ const HomeTopTabs: React.FC<NativeStackScreenProps<any, "HomeTopTabs">> = ({
           <TouchableOpacity onPress={() => toggleView()} disabled={!tableView}>
             <Ionicons
               name={tableView ? "menu-outline" : "menu"}
-              color={color}
+              color={theme.colors.textColor}
               size={45}
             />
           </TouchableOpacity>
-        </Row>
-      </BigRow>
+        </Box>
+      </Box>
 
       <>
         <Tab.Navigator
-          initialRouteName="2023-fall"
           sceneContainerStyle={{
-            backgroundColor: isDark ? colors.BLACK_COLOR : "white",
+            backgroundColor: theme.colors.mainBgColor,
           }}
           initialLayout={{
             width: Dimensions.get("window").width,
           }}
           screenOptions={{
             tabBarStyle: {
-              backgroundColor: isDark ? colors.BLACK_COLOR : "white",
+              backgroundColor: theme.colors.mainBgColor,
             },
             tabBarIndicatorStyle: {
-              backgroundColor: colors.SBU_RED,
+              backgroundColor: theme.colors.sbuRed,
             },
-            tabBarActiveTintColor: colors.SBU_RED,
-            tabBarInactiveTintColor: isDark
-              ? colors.DARK_GREY
-              : colors.LIGHT_GREY,
+            tabBarActiveTintColor: theme.colors.sbuRed,
+            tabBarInactiveTintColor:
+              isDarkMode?.mode === "dark"
+                ? theme.colors.stDarkGrey
+                : theme.colors.stLightGrey,
             swipeEnabled: true,
           }}
         >
@@ -171,13 +168,13 @@ const HomeTopTabs: React.FC<NativeStackScreenProps<any, "HomeTopTabs">> = ({
           onChange={handleSheetChange}
           backdropComponent={renderBackdrop}
           backgroundStyle={{
-            backgroundColor: isDark ? colors.BLACK_COLOR : "white",
+            backgroundColor: theme.colors.mainBgColor,
           }}
         >
           <MoreMenu />
         </BottomSheet>
       </>
-    </>
+    </SafeAreaWrapper>
   );
 };
 

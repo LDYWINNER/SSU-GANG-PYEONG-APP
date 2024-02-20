@@ -45,23 +45,19 @@ export type Theme = typeof theme;
 
 export const darkTheme: Theme = {
   ...theme,
-  // mainBgColor: "#1e272e",
-  // textColor: "#d2dae2",
   colors: {
     ...theme.colors,
-    mainBgColor: palette.gray900,
-    textColor: palette.gray100,
+    mainBgColor: palette.stBlack,
+    textColor: palette.white,
   },
 };
 
 export const lightTheme: Theme = {
   ...theme,
-  // mainBgColor: "white",
-  // textColor: "#1e272e",
   colors: {
     ...theme.colors,
-    mainBgColor: palette.amber600,
-    textColor: palette.amber900,
+    mainBgColor: palette.white,
+    textColor: palette.stBlack,
   },
 };
 

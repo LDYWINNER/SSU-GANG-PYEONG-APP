@@ -20,7 +20,7 @@ import {
   Ionicons,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
-import { useTheme } from "@shopify/restyle";
+import { backgroundColor, useTheme } from "@shopify/restyle";
 import useSWRMutation from "swr/mutation";
 
 interface ITVAuthRequest {
@@ -149,6 +149,13 @@ const TableView: React.FC<NativeStackScreenProps<any, "TableView">> = ({
             startHour: 8,
             endHour: 20,
           }}
+          eventColors={["#FFC107", "#FF9800", "#FF5722", "#795548", "#9E9E9E"]}
+          theme={{
+            primary: theme.colors.mainBgColor,
+            accent: theme.colors.stYellow,
+            background: theme.colors.mainBgColor,
+            text: theme.colors.textColor,
+          }}
         />
       )}
 
@@ -160,19 +167,19 @@ const TableView: React.FC<NativeStackScreenProps<any, "TableView">> = ({
         enableContentPanningGesture={false}
         onChange={handleSheetChange}
         backdropComponent={renderBackdrop}
-        // backgroundStyle={{
-        //   backgroundColor: isDark ? colors.DARKER_GREY : "white",
-        // }}
+        backgroundStyle={{
+          backgroundColor: theme.colors.mainBgColor,
+        }}
       >
         <Box mx="3" my="2">
           <Box mb="5">
-            <Text variant="textXl" fontWeight="600" mb="2">
+            <Text variant="textXl" fontWeight="600" mb="2" color="textColor">
               {courses?.takingCourses[courseIndex as number]?.subj}{" "}
               {courses?.takingCourses[courseIndex as number]?.crs} -{" "}
               {courses?.takingCourses[courseIndex as number]?.instructor.at(-1)}
             </Text>
 
-            <Text>
+            <Text color="textColor">
               {courses?.takingCourses[courseIndex as number]?.day
                 .split(", ")
                 .at(-1)}
@@ -186,7 +193,7 @@ const TableView: React.FC<NativeStackScreenProps<any, "TableView">> = ({
                 .at(-1)}
             </Text>
 
-            <Text>
+            <Text color="textColor">
               Location:{" "}
               {courses?.takingCourses[courseIndex as number]?.room
                 .split(", ")
@@ -199,7 +206,7 @@ const TableView: React.FC<NativeStackScreenProps<any, "TableView">> = ({
             <MaterialCommunityIcons
               name="pencil-plus-outline"
               size={24}
-              color="black"
+              color={theme.colors.textColor}
             />
             <TouchableOpacity
               onPress={() => {
@@ -209,13 +216,15 @@ const TableView: React.FC<NativeStackScreenProps<any, "TableView">> = ({
               }}
             >
               <Box ml="2">
-                <Text variant="textXl">수업 정보 수정</Text>
+                <Text variant="textXl" color="textColor">
+                  수업 정보 수정
+                </Text>
               </Box>
             </TouchableOpacity>
           </Box>
 
           <Box flexDirection="row" mb="4">
-            <Ionicons name="search" size={24} color="black" />
+            <Ionicons name="search" size={24} color={theme.colors.textColor} />
             <TouchableOpacity
               onPress={() =>
                 navigateToCourseDetail(
@@ -224,13 +233,19 @@ const TableView: React.FC<NativeStackScreenProps<any, "TableView">> = ({
               }
             >
               <Box ml="2">
-                <Text variant="textXl">수업 정보 자세히 보기</Text>
+                <Text variant="textXl" color="textColor">
+                  수업 정보 자세히 보기
+                </Text>
               </Box>
             </TouchableOpacity>
           </Box>
 
           <Box flexDirection="row">
-            <FontAwesome5 name="trash" size={24} color="black" />
+            <FontAwesome5
+              name="trash"
+              size={24}
+              color={theme.colors.textColor}
+            />
             <TouchableOpacity
               onPress={() => {
                 deleteTVCourse({
@@ -244,7 +259,9 @@ const TableView: React.FC<NativeStackScreenProps<any, "TableView">> = ({
               }}
             >
               <Box ml="3">
-                <Text variant="textXl">수업 삭제하기</Text>
+                <Text variant="textXl" color="textColor">
+                  수업 삭제하기
+                </Text>
               </Box>
             </TouchableOpacity>
           </Box>
