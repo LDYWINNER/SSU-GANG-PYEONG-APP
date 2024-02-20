@@ -114,7 +114,7 @@ const WritePost: React.FC<NativeStackScreenProps<any, "WritePost">> = ({
           mb="4"
         >
           <NavigateBack />
-          <Text variant="textXl" fontWeight="600" mr="-8">
+          <Text variant="textXl" fontWeight="600" mr="-8" color="textColor">
             {board === "Free"
               ? "자유 게시판"
               : board === "course"
@@ -164,6 +164,7 @@ const WritePost: React.FC<NativeStackScreenProps<any, "WritePost">> = ({
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextInput
                   placeholder="Title"
+                  placeholderTextColor={theme.colors.gray400}
                   style={{
                     padding: 16,
                     height: "10%",
@@ -191,6 +192,7 @@ const WritePost: React.FC<NativeStackScreenProps<any, "WritePost">> = ({
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextInput
                   placeholder="Fill the content."
+                  placeholderTextColor={theme.colors.gray400}
                   style={{
                     padding: 16,
                     color: "black",
@@ -266,6 +268,7 @@ const WritePost: React.FC<NativeStackScreenProps<any, "WritePost">> = ({
           </TouchableOpacity>
         </Box>
       </Box>
+      <Box height={25} />
     </SafeAreaWrapper>
   );
 };
