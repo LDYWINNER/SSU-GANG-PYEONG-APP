@@ -16,6 +16,7 @@ import { fetcher } from "../../utils/config";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { BulletinStackParamList } from "../../navigation/types";
 import moment from "moment";
+import useDarkMode from "../../store/useDarkMode";
 
 interface ISearch {
   keyword: string;
@@ -30,6 +31,7 @@ const BulletinSearch: React.FC<
   NativeStackScreenProps<any, "BulletinSearch">
 > = ({ navigation: { navigate } }) => {
   const theme = useTheme<Theme>();
+  const { isDarkMode } = useDarkMode();
 
   const route = useRoute<BulletinSearchScreenRouteProp>();
   const { board } = route.params;
@@ -117,6 +119,7 @@ const BulletinSearch: React.FC<
           />
         </Box>
         <Box mb="6" />
+
         {!isSubmitSuccessful ? (
           <Box height={"80%"} justifyContent="center" alignItems="center">
             <Ionicons name="search" size={50} color={theme.colors.gray400} />
@@ -150,15 +153,15 @@ const BulletinSearch: React.FC<
                   onPress={() => navigateToBulletinPost(post._id)}
                 >
                   <Box my="5" mx="4">
-                    <Text variant="textBase" fontWeight="600">
+                    <Text variant="textBase" fontWeight="600" color="textColor">
                       {post.title}
                     </Text>
                     <Text
                       variant="textBase"
                       fontWeight="500"
-                      style={{
-                        color: theme.colors.gray600,
-                      }}
+                      color={
+                        isDarkMode?.mode === "dark" ? "gray300" : "gray650"
+                      }
                     >
                       {post.content.substring(0, 43)}
                       {post.content.length > 43 && "..."}
