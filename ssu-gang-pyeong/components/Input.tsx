@@ -14,6 +14,7 @@ const Input = ({ label, error, ...props }: InputProps) => {
         {label}
       </Text>
       <TextInput
+        autoComplete="off"
         style={{
           padding: 16,
           borderWidth: 1,
