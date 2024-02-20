@@ -1,11 +1,10 @@
 import React from "react";
-import { TouchableOpacity, useColorScheme } from "react-native";
+import { TouchableOpacity } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import useSWR from "swr";
-import colors from "../../colors";
 import { Ionicons } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
-import { Divider, Loader } from "../../components";
+import { Divider } from "../../components";
 import useGlobalToggle from "../../store/useGlobalToggle";
 import { Box, Text, Theme } from "../../theme";
 import { ICourse, IGlobalToggle } from "../../types";
@@ -17,6 +16,7 @@ import {
   MainStackNavigationType,
 } from "../../navigation/types";
 import useSWRMutation from "swr/mutation";
+import useDarkMode from "../../store/useDarkMode";
 
 type EasyPickScreenRouteProp = RouteProp<HomeStackParamList, "EasyPick">;
 
@@ -45,8 +45,7 @@ const EasyPick = () => {
   const { togglePicker } = route.params;
   const { toggleInfo } = useGlobalToggle();
   const theme = useTheme<Theme>();
-  const isDark = useColorScheme() === "dark";
-  const color = isDark ? "white" : colors.BLACK_COLOR;
+  const { isDarkMode } = useDarkMode();
 
   const navigateToCourseDetail = (courseId: string) => {
     navigation.navigate("MainStack", {
@@ -71,14 +70,18 @@ const EasyPick = () => {
         justifyContent="space-between"
         alignItems="center"
       >
-        <Text variant="text2Xl" fontWeight="700" mt="3">
+        <Text variant="text2Xl" fontWeight="700" mt="3" color="textColor">
           Table Name: {toggleInfo?.currentTableView}
         </Text>
         <TouchableOpacity onPress={() => togglePicker()}>
           <Box mr="2" mt="2">
             <Ionicons
-              name={isDark ? "add-circle-outline" : "add-circle"}
-              color={color}
+              name={
+                isDarkMode?.mode === "dark"
+                  ? "add-circle-outline"
+                  : "add-circle"
+              }
+              color={theme.colors.textColor}
               size={35}
             />
           </Box>
@@ -96,13 +99,16 @@ const EasyPick = () => {
               mb="5"
             >
               <Box flexDirection="row" alignItems="center">
-                <Text variant="textXl" fontWeight="600">
+                <Text variant="textXl" fontWeight="600" color="textColor">
                   {courseIndex + 1}.{" "}
                 </Text>
-                <Text variant="textXl" fontWeight="600">
+                <Text variant="textXl" fontWeight="600" color="textColor">
                   {courseItem.subj} {courseItem.crs}
                 </Text>
-                <Text ml="2">{`(credits: ${courseItem.credits})`}</Text>
+                <Text
+                  ml="2"
+                  color="textColor"
+                >{`(credits: ${courseItem.credits})`}</Text>
               </Box>
               <Box mr="4">
                 <TouchableOpacity
@@ -113,7 +119,11 @@ const EasyPick = () => {
                     });
                   }}
                 >
-                  <FontAwesome5 name="trash" size={24} color="black" />
+                  <FontAwesome5
+                    name="trash"
+                    size={24}
+                    color={theme.colors.textColor}
+                  />
                 </TouchableOpacity>
               </Box>
             </Box>
@@ -128,12 +138,14 @@ const EasyPick = () => {
                   courseItem.unique_instructor
                     .split(", ")
                     .map((prof, index) => (
-                      <Text key={index} variant="textBase">
+                      <Text key={index} variant="textBase" color="textColor">
                         {prof}
                       </Text>
                     ))
                 ) : (
-                  <Text variant="textBase">{courseItem.unique_instructor}</Text>
+                  <Text variant="textBase" color="textColor">
+                    {courseItem.unique_instructor}
+                  </Text>
                 )}
               </Box>
               <Box alignSelf="flex-end">

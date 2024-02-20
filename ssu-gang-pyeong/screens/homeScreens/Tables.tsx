@@ -16,7 +16,7 @@ const Tables = () => {
           alignItems="center"
         >
           <NavigateBack />
-          <Text variant="textXl" fontWeight="700">
+          <Text variant="textXl" fontWeight="700" color="textColor">
             Tables
           </Text>
           <Box mr="10" />

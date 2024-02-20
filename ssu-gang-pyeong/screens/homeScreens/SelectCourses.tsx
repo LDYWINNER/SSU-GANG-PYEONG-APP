@@ -152,9 +152,9 @@ const SelectCourses = ({ togglePicker, courses }: any) => {
             <Ionicons
               name="chevron-down"
               size={24}
-              color={theme.colors.gray5}
+              color={theme.colors.textColor}
             />
-            <Text variant="text2Xl" marginLeft={"2"}>
+            <Text variant="text2Xl" marginLeft={"2"} color="textColor">
               {searchSubj === "SHCourse" ? "교양/Writing" : searchSubj}
             </Text>
           </Box>
@@ -274,6 +274,12 @@ const SelectCourses = ({ togglePicker, courses }: any) => {
         enableContentPanningGesture={false}
         onChange={handleSheetChange}
         backdropComponent={renderBackdrop}
+        backgroundStyle={{
+          backgroundColor: theme.colors.mainBgColor,
+        }}
+        handleIndicatorStyle={{
+          backgroundColor: theme.colors.textColor,
+        }}
       >
         <Box flexDirection="row" justifyContent="space-between" mr="5" ml="4">
           <TouchableOpacity
@@ -311,14 +317,26 @@ const SelectCourses = ({ togglePicker, courses }: any) => {
           selectedValue={searchSubj}
           onValueChange={(itemValue, itemIndex) => setSearchSubj(itemValue)}
         >
-          <Picker.Item label="ALL" value="ALL" />
-          <Picker.Item label="AMS" value="AMS" />
-          <Picker.Item label="ACC/BUS" value="ACC/BUS" />
-          <Picker.Item label="CSE" value="CSE" />
-          <Picker.Item label="ESE" value="ESE" />
-          <Picker.Item label="EST/EMP" value="EST/EMP" />
-          <Picker.Item label="MEC" value="MEC" />
-          <Picker.Item label="교양/Writing" value="SHCourse" />
+          <Picker.Item label="ALL" value="ALL" color={theme.colors.textColor} />
+          <Picker.Item label="AMS" value="AMS" color={theme.colors.textColor} />
+          <Picker.Item
+            label="ACC/BUS"
+            value="ACC/BUS"
+            color={theme.colors.textColor}
+          />
+          <Picker.Item label="CSE" value="CSE" color={theme.colors.textColor} />
+          <Picker.Item label="ESE" value="ESE" color={theme.colors.textColor} />
+          <Picker.Item
+            label="EST/EMP"
+            value="EST/EMP"
+            color={theme.colors.textColor}
+          />
+          <Picker.Item label="MEC" value="MEC" color={theme.colors.textColor} />
+          <Picker.Item
+            label="교양/Writing"
+            value="SHCourse"
+            color={theme.colors.textColor}
+          />
         </Picker>
       </BottomSheet>
     </>

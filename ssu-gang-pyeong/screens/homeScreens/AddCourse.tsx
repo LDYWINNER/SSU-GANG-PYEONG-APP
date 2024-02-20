@@ -2,11 +2,9 @@ import React, { useCallback, useState, useRef, useMemo } from "react";
 import { Loader, NavigateBack, SafeAreaWrapper } from "../../components";
 import { useTheme } from "@shopify/restyle";
 import { Box, Text, Theme } from "../../theme";
-import { Alert, TouchableOpacity, Dimensions } from "react-native";
+import { TouchableOpacity, Dimensions } from "react-native";
 import TimeTable, { EventGroup } from "@mikezzb/react-native-timetable";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import colors from "../../colors";
-import { useColorScheme } from "react-native";
 import SelectCourses from "./SelectCourses";
 import EasyPick from "./EasyPick";
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
@@ -17,7 +15,6 @@ import axiosInstance, { fetcher } from "../../utils/config";
 import useSWR from "swr";
 import { ICourse, IGlobalToggle } from "../../types";
 import { formatCourses } from "../../utils/helpers";
-import { useNavigation } from "@react-navigation/native";
 import useSWRMutation from "swr/mutation";
 import ManualPick from "./ManualPick";
 
@@ -43,12 +40,7 @@ const deleteAllTVCourseRequest = async (
 
 const AddCourse = () => {
   const theme = useTheme<Theme>();
-  const isDark = useColorScheme() === "dark";
   const windowHeight = Dimensions.get("window").height;
-  const navigation = useNavigation();
-  const navigateBack = () => {
-    navigation.goBack();
-  };
 
   const { toggleInfo } = useGlobalToggle();
 
@@ -111,7 +103,13 @@ const AddCourse = () => {
           alignItems="center"
         >
           <NavigateBack />
-          <Text ml="13" variant="textXl" fontWeight="600" mr="6">
+          <Text
+            ml="13"
+            variant="textXl"
+            fontWeight="600"
+            mr="6"
+            color="textColor"
+          >
             수업추가
           </Text>
           <TouchableOpacity
@@ -154,7 +152,16 @@ const AddCourse = () => {
                       courses!.takingCourses
                     ) as unknown as EventGroup[])
               }
-              eventOnPress={(event) => Alert.alert(`${JSON.stringify(event)}`)}
+              configs={{
+                startHour: 8,
+                endHour: 20,
+              }}
+              theme={{
+                primary: theme.colors.mainBgColor,
+                accent: theme.colors.stYellow,
+                background: theme.colors.mainBgColor,
+                text: theme.colors.textColor,
+              }}
             />
           )}
         </Box>
@@ -163,22 +170,20 @@ const AddCourse = () => {
           <Tab.Navigator
             initialRouteName="학교 수업 추가"
             sceneContainerStyle={{
-              backgroundColor: isDark ? colors.BLACK_COLOR : "white",
+              backgroundColor: theme.colors.mainBgColor,
             }}
             initialLayout={{
               width: Dimensions.get("window").width,
             }}
             screenOptions={{
               tabBarStyle: {
-                backgroundColor: isDark ? colors.BLACK_COLOR : "white",
+                backgroundColor: theme.colors.mainBgColor,
               },
               tabBarIndicatorStyle: {
-                backgroundColor: colors.SBU_RED,
+                backgroundColor: theme.colors.sbuRed,
               },
-              tabBarActiveTintColor: colors.SBU_RED,
-              tabBarInactiveTintColor: isDark
-                ? colors.DARK_GREY
-                : colors.LIGHT_GREY,
+              tabBarActiveTintColor: theme.colors.sbuRed,
+              tabBarInactiveTintColor: theme.colors.textColor,
               swipeEnabled: true,
             }}
           >
@@ -196,6 +201,7 @@ const AddCourse = () => {
           </Tab.Navigator>
         </Box>
       </Box>
+
       <BottomSheet
         index={-1}
         ref={sheetRef}
@@ -204,9 +210,12 @@ const AddCourse = () => {
         enableContentPanningGesture={false}
         onChange={handleSheetChange}
         backdropComponent={renderBackdrop}
-        // backgroundStyle={{
-        //   backgroundColor: isDark ? colors.DARKER_GREY : "white",
-        // }}
+        backgroundStyle={{
+          backgroundColor: theme.colors.mainBgColor,
+        }}
+        handleIndicatorStyle={{
+          backgroundColor: theme.colors.textColor,
+        }}
       >
         <SelectCourses
           togglePicker={togglePicker}

@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import { ICourse } from "../../types";
 import useSWR from "swr";
 import { fetcher } from "../../utils/config";
-import { Loader, SafeAreaWrapper } from "../../components";
+import { Loader } from "../../components";
 import { useIsFocused } from "@react-navigation/native";
 import { Box, Text } from "../../theme";
 import { TouchableOpacity } from "react-native";
@@ -54,7 +54,9 @@ const ListView: React.FC<NativeStackScreenProps<any, "ListView">> = ({
   if (courses?.takingCourses.length === 0) {
     return (
       <Box flex={1} justifyContent="center" alignItems="center">
-        <Text variant="text2Xl">No course yet :(</Text>
+        <Text variant="text2Xl" color="textColor">
+          No enrolled course yet :(
+        </Text>
       </Box>
     );
   }
