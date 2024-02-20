@@ -21,6 +21,7 @@ import { useTheme } from "@shopify/restyle";
 import { Theme } from "../theme";
 import { Ionicons } from "@expo/vector-icons";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import useDarkMode from "../store/useDarkMode";
 
 interface ISearch {
   keyword: string;
@@ -30,6 +31,8 @@ const Search: React.FC<NativeStackScreenProps<any, "Search">> = ({
   navigation: { navigate },
 }) => {
   const theme = useTheme<Theme>();
+  const { isDarkMode } = useDarkMode();
+
   const [searchSubj, setSearchSubj] = useState<string>("ALL");
 
   const navigateToCourseDetail = (courseId: string) => {
@@ -110,7 +113,6 @@ const Search: React.FC<NativeStackScreenProps<any, "Search">> = ({
   if (!data) {
     return <Loader />;
   }
-
   return (
     <SafeAreaWrapper>
       <Box flexDirection="row" alignItems="center">
@@ -119,9 +121,9 @@ const Search: React.FC<NativeStackScreenProps<any, "Search">> = ({
             <Ionicons
               name="chevron-down"
               size={24}
-              color={theme.colors.gray5}
+              color={theme.colors.textColor}
             />
-            <Text variant="text2Xl" marginLeft={"2"}>
+            <Text variant="text2Xl" marginLeft={"2"} color="textColor">
               {searchSubj === "SHCourse" ? "교양/Writing" : searchSubj}
             </Text>
           </Box>
