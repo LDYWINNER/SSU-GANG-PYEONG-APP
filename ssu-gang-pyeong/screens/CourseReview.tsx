@@ -14,6 +14,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import { TouchableOpacity, Dimensions } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import useDarkMode from "../store/useDarkMode";
 
 type CourseReviewScreenRouteProp = RouteProp<
   MainStackParamList,
@@ -36,6 +37,8 @@ const CourseReview: React.FC<NativeStackScreenProps<any, "CourseReview">> = ({
   navigation: { navigate },
 }) => {
   const theme = useTheme<Theme>();
+  const { isDarkMode } = useDarkMode();
+
   const windowWidth = Dimensions.get("window").width;
   const route = useRoute<CourseReviewScreenRouteProp>();
   const { courseIndex, id } = route.params;
@@ -78,12 +81,13 @@ const CourseReview: React.FC<NativeStackScreenProps<any, "CourseReview">> = ({
             alignItems="center"
           >
             <NavigateBack />
-            <Text variant="textXl" fontWeight="600" mr="10">
+            <Text variant="textXl" fontWeight="600" mr="10" color="textColor">
               {course?.subj} {course?.crs}
             </Text>
             <Box></Box>
           </Box>
           <Box height={16} />
+
           {reviewList.map((reviewItem) => {
             return (
               <Box key={reviewItem._id}>
@@ -108,9 +112,9 @@ const CourseReview: React.FC<NativeStackScreenProps<any, "CourseReview">> = ({
                       flexDirection="row"
                       alignItems="center"
                       borderRadius="rounded-xl"
-                      style={{
-                        backgroundColor: theme.colors.gray300,
-                      }}
+                      backgroundColor={
+                        isDarkMode?.mode === "dark" ? "gray300" : "gray650"
+                      }
                       p="1"
                     >
                       <FontAwesome5
@@ -140,13 +144,12 @@ const CourseReview: React.FC<NativeStackScreenProps<any, "CourseReview">> = ({
                     </Box>
                   </TouchableOpacity>
                 </Box>
+
                 <Box flexDirection="row">
                   <Text
                     mt="1"
                     mb="1"
-                    style={{
-                      color: theme.colors.gray650,
-                    }}
+                    color={isDarkMode?.mode === "dark" ? "gray300" : "gray650"}
                   >
                     {reviewItem.semester === "-1" ? "?" : reviewItem.semester}
                   </Text>
@@ -154,16 +157,14 @@ const CourseReview: React.FC<NativeStackScreenProps<any, "CourseReview">> = ({
                   <Text
                     mt="1"
                     mb="1"
-                    style={{
-                      color: theme.colors.gray650,
-                    }}
+                    color={isDarkMode?.mode === "dark" ? "gray300" : "gray650"}
                   >
                     {reviewItem.instructor === "-2"
                       ? "?"
                       : reviewItem.instructor}
                   </Text>
                 </Box>
-                <Text>{reviewItem.overallEvaluation}</Text>
+                <Text color="textColor">{reviewItem.overallEvaluation}</Text>
                 {reviewList.length >= 2 && (
                   <>
                     <Box height={16} />
@@ -176,6 +177,7 @@ const CourseReview: React.FC<NativeStackScreenProps<any, "CourseReview">> = ({
           })}
         </Box>
       </ScrollView>
+
       <TouchableOpacity onPress={navigateToWriteReview}>
         <Box
           flexDirection="row"
