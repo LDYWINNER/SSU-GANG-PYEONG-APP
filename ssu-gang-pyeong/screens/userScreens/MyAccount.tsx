@@ -67,6 +67,7 @@ const MyAccount = () => {
             textDecorationLine="underline"
             textDecorationColor="iconBlue"
             textDecorationStyle="double"
+            color="textColor"
           >
             My Account
           </Text>

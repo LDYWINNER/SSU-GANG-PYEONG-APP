@@ -16,7 +16,7 @@ import {
 } from "@expo/vector-icons";
 import useUserGlobalStore from "../../store/useUserGlobal";
 import { useTheme } from "@shopify/restyle";
-import { Alert, useColorScheme } from "react-native";
+import { Alert } from "react-native";
 import { quotes } from "../../assets/asset";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
@@ -39,7 +39,6 @@ const UserMain: React.FC<NativeStackScreenProps<any, "UserMain">> = ({
   const { logout } = useUserGlobalStore();
 
   const theme = useTheme<Theme>();
-
   const { isDarkMode, updateDarkMode } = useDarkMode();
 
   //bottom sheet
@@ -111,6 +110,7 @@ const UserMain: React.FC<NativeStackScreenProps<any, "UserMain">> = ({
               textDecorationColor="iconBlue"
               textDecorationStyle="double"
               mb="6"
+              color="textColor"
             >
               My Page
             </Text>
@@ -118,7 +118,7 @@ const UserMain: React.FC<NativeStackScreenProps<any, "UserMain">> = ({
           </Box>
           <Box height={16} />
 
-          <Text variant="textXl" fontWeight="600" mb="2">
+          <Text variant="textXl" fontWeight="600" mb="2" color="textColor">
             계정
           </Text>
           <Box>
@@ -163,7 +163,13 @@ const UserMain: React.FC<NativeStackScreenProps<any, "UserMain">> = ({
           </Box>
           <Divider />
 
-          <Text variant="textXl" fontWeight="600" mb="2">
+          <Text
+            variant="textXl"
+            fontWeight="600"
+            mb="2"
+            mt="2"
+            color="textColor"
+          >
             커뮤니티
           </Text>
           <Box>
@@ -197,7 +203,13 @@ const UserMain: React.FC<NativeStackScreenProps<any, "UserMain">> = ({
           </Box>
           <Divider />
 
-          <Text variant="textXl" fontWeight="600" mb="2">
+          <Text
+            variant="textXl"
+            fontWeight="600"
+            mb="2"
+            color="textColor"
+            mt="2"
+          >
             앱 설정
           </Text>
           <TouchableOpacity onPress={() => togglePicker("darkMode")}>
@@ -229,7 +241,13 @@ const UserMain: React.FC<NativeStackScreenProps<any, "UserMain">> = ({
           </TouchableOpacity>
           <Divider />
 
-          <Text variant="textXl" fontWeight="600" mb="2">
+          <Text
+            variant="textXl"
+            fontWeight="600"
+            mb="2"
+            color="textColor"
+            mt="2"
+          >
             이용안내
           </Text>
           <Box>
@@ -280,16 +298,27 @@ const UserMain: React.FC<NativeStackScreenProps<any, "UserMain">> = ({
           </Box>
 
           <Box mt="10">
-            <Text textAlign="center" fontWeight="600" fontSize={16}>
+            <Text
+              textAlign="center"
+              fontWeight="600"
+              fontSize={16}
+              color="textColor"
+            >
               {quote?.content}
             </Text>
             <Box height={8} />
-            <Text textAlign="center" fontWeight="600" fontSize={16}>
+            <Text
+              textAlign="center"
+              fontWeight="600"
+              fontSize={16}
+              color="textColor"
+            >
               - {quote?.author === "" ? "?" : quote?.author} -
             </Text>
           </Box>
         </Box>
       </ScrollView>
+
       <BottomSheet
         index={-1}
         ref={sheetRef}
@@ -298,9 +327,12 @@ const UserMain: React.FC<NativeStackScreenProps<any, "UserMain">> = ({
         enableContentPanningGesture={false}
         onChange={handleSheetChange}
         backdropComponent={renderBackdrop}
-        // backgroundStyle={{
-        //   backgroundColor: isDark ? colors.DARKER_GREY : "white",
-        // }}
+        backgroundStyle={{
+          backgroundColor: theme.colors.mainBgColor,
+        }}
+        handleIndicatorStyle={{
+          backgroundColor: theme.colors.textColor,
+        }}
       >
         <Box flexDirection="row" justifyContent="flex-end" mr="5">
           <TouchableOpacity
@@ -325,9 +357,21 @@ const UserMain: React.FC<NativeStackScreenProps<any, "UserMain">> = ({
             updateDarkMode({ mode: itemValue });
           }}
         >
-          <Picker.Item label="시스템 기본값" value="system" />
-          <Picker.Item label="켜짐" value="dark" />
-          <Picker.Item label="꺼짐" value="light" />
+          <Picker.Item
+            label="시스템 기본값"
+            value="system"
+            color={theme.colors.textColor}
+          />
+          <Picker.Item
+            label="켜짐"
+            value="dark"
+            color={theme.colors.textColor}
+          />
+          <Picker.Item
+            label="꺼짐"
+            value="light"
+            color={theme.colors.textColor}
+          />
         </Picker>
       </BottomSheet>
     </SafeAreaWrapper>
