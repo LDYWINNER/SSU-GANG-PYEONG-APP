@@ -170,6 +170,9 @@ const HomeTopTabs: React.FC<NativeStackScreenProps<any, "HomeTopTabs">> = ({
           backgroundStyle={{
             backgroundColor: theme.colors.mainBgColor,
           }}
+          handleIndicatorStyle={{
+            backgroundColor: theme.colors.textColor,
+          }}
         >
           <MoreMenu />
         </BottomSheet>
