@@ -20,7 +20,7 @@ import {
   Ionicons,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
-import { backgroundColor, useTheme } from "@shopify/restyle";
+import { useTheme } from "@shopify/restyle";
 import useSWRMutation from "swr/mutation";
 
 interface ITVAuthRequest {
@@ -149,7 +149,7 @@ const TableView: React.FC<NativeStackScreenProps<any, "TableView">> = ({
             startHour: 8,
             endHour: 20,
           }}
-          eventColors={["#FFC107", "#FF9800", "#FF5722", "#795548", "#9E9E9E"]}
+          // eventColors={["#FFC107", "#FF9800", "#FF5722", "#795548", "#9E9E9E"]}
           theme={{
             primary: theme.colors.mainBgColor,
             accent: theme.colors.stYellow,
@@ -169,6 +169,9 @@ const TableView: React.FC<NativeStackScreenProps<any, "TableView">> = ({
         backdropComponent={renderBackdrop}
         backgroundStyle={{
           backgroundColor: theme.colors.mainBgColor,
+        }}
+        handleIndicatorStyle={{
+          backgroundColor: theme.colors.textColor,
         }}
       >
         <Box mx="3" my="2">
