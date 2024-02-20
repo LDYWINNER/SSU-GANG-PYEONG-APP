@@ -1,7 +1,5 @@
 import React, { useCallback, useState, useRef, useMemo } from "react";
 import { Alert, TextInput, TouchableOpacity } from "react-native";
-import { useColorScheme } from "react-native";
-import colors from "../colors";
 import { Rating } from "@kolking/react-native-rating";
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";
@@ -18,6 +16,7 @@ import { useTheme } from "@shopify/restyle";
 import { Ionicons } from "@expo/vector-icons";
 import { ScrollView } from "react-native-gesture-handler";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
+import useDarkMode from "../store/useDarkMode";
 
 interface ICourseEval {
   overallGrade: number;
@@ -72,8 +71,9 @@ const addCourseEvalRequest = async (
 };
 
 const WriteReview = () => {
-  const isDark = useColorScheme() === "dark";
   const theme = useTheme<Theme>();
+  const { isDarkMode } = useDarkMode();
+
   const route = useRoute<WriteReviewScreenRouteProp>();
   const { id } = route.params;
   const navigation = useNavigation();
@@ -207,7 +207,7 @@ const WriteReview = () => {
           mb="3"
         >
           <NavigateBack />
-          <Text variant="textXl" fontWeight="600" mr="10">
+          <Text variant="textXl" fontWeight="600" mr="10" color="textColor">
             강의평 등록
           </Text>
           <Box></Box>
@@ -216,7 +216,12 @@ const WriteReview = () => {
         <ScrollView showsVerticalScrollIndicator={false}>
           <Box mx="3" style={{ marginBottom: "33%" }}>
             <Box mb="4">
-              <Text variant="textBase" mb="2" fontWeight="600">
+              <Text
+                variant="textBase"
+                mb="2"
+                fontWeight="600"
+                color="textColor"
+              >
                 총 평점
               </Text>
               <Controller
@@ -237,7 +242,12 @@ const WriteReview = () => {
             </Box>
 
             <Box mb="4" height={"15%"}>
-              <Text variant="textBase" mb="2" fontWeight="600">
+              <Text
+                variant="textBase"
+                mb="2"
+                fontWeight="600"
+                color="textColor"
+              >
                 총평
               </Text>
               <Controller
@@ -273,7 +283,12 @@ const WriteReview = () => {
             <Divider />
 
             <Box my="4">
-              <Text variant="textBase" mb="2" fontWeight="600">
+              <Text
+                variant="textBase"
+                mb="2"
+                fontWeight="600"
+                color="textColor"
+              >
                 수강학기
               </Text>
               <Box flexDirection="row">
@@ -307,7 +322,12 @@ const WriteReview = () => {
             </Box>
 
             <Box mb="4">
-              <Text variant="textBase" mb="2" fontWeight="600">
+              <Text
+                variant="textBase"
+                mb="2"
+                fontWeight="600"
+                color="textColor"
+              >
                 교수님
               </Text>
               <Box flexDirection="row">
@@ -341,7 +361,12 @@ const WriteReview = () => {
             </Box>
 
             <Box mb="4">
-              <Text variant="textBase" mb="2" fontWeight="600">
+              <Text
+                variant="textBase"
+                mb="2"
+                fontWeight="600"
+                color="textColor"
+              >
                 받은 Letter Grade(optional)
               </Text>
               <Box flexDirection="row">
@@ -375,7 +400,12 @@ const WriteReview = () => {
             </Box>
 
             <Box mb="4">
-              <Text variant="textBase" mb="2" fontWeight="600">
+              <Text
+                variant="textBase"
+                mb="2"
+                fontWeight="600"
+                color="textColor"
+              >
                 수업 내용 난이도
               </Text>
               <Controller
@@ -411,7 +441,12 @@ const WriteReview = () => {
             </Box>
 
             <Box mb="4">
-              <Text variant="textBase" mb="2" fontWeight="600">
+              <Text
+                variant="textBase"
+                mb="2"
+                fontWeight="600"
+                color="textColor"
+              >
                 성적은 어떻게 주시나요?
               </Text>
               <Controller
@@ -447,7 +482,12 @@ const WriteReview = () => {
             </Box>
 
             <Box mb="4">
-              <Text variant="textBase" mb="2" fontWeight="600">
+              <Text
+                variant="textBase"
+                mb="2"
+                fontWeight="600"
+                color="textColor"
+              >
                 시험 개수(미드텀 & 파이널)
               </Text>
               <Controller
@@ -483,7 +523,12 @@ const WriteReview = () => {
             </Box>
 
             <Box mb="4">
-              <Text variant="textBase" mb="2" fontWeight="600">
+              <Text
+                variant="textBase"
+                mb="2"
+                fontWeight="600"
+                color="textColor"
+              >
                 시험 종류
               </Text>
               <Controller
@@ -522,7 +567,12 @@ const WriteReview = () => {
             </Box>
 
             <Box mb="4">
-              <Text variant="textBase" mb="2" fontWeight="600">
+              <Text
+                variant="textBase"
+                mb="2"
+                fontWeight="600"
+                color="textColor"
+              >
                 과제량
               </Text>
               <Controller
@@ -558,7 +608,12 @@ const WriteReview = () => {
             </Box>
 
             <Box mb="4">
-              <Text variant="textBase" mb="2" fontWeight="600">
+              <Text
+                variant="textBase"
+                mb="2"
+                fontWeight="600"
+                color="textColor"
+              >
                 퀴즈 유무
               </Text>
               <Controller
@@ -594,7 +649,12 @@ const WriteReview = () => {
             </Box>
 
             <Box mb="4">
-              <Text variant="textBase" mb="2" fontWeight="600">
+              <Text
+                variant="textBase"
+                mb="2"
+                fontWeight="600"
+                color="textColor"
+              >
                 출석은 어떻게 확인하나요?
               </Text>
               <Controller
@@ -633,7 +693,12 @@ const WriteReview = () => {
             </Box>
 
             <Box mb="6">
-              <Text variant="textBase" mb="2" fontWeight="600">
+              <Text
+                variant="textBase"
+                mb="2"
+                fontWeight="600"
+                color="textColor"
+              >
                 팀플 유무
               </Text>
               <Controller
@@ -694,9 +759,11 @@ const WriteReview = () => {
               </Box>
             </TouchableOpacity>
 
-            <Box my="4" mb="10">
-              <Text mb="1">수정 및 삭제가 불가능한 점 유의 바랍니다.</Text>
-              <Text>
+            <Box my="4" mb="5">
+              <Text mb="1" color="textColor">
+                수정 및 삭제가 불가능한 점 유의 바랍니다.
+              </Text>
+              <Text color="textColor">
                 비판은 괜찮지만 지나친 비난 혹은 수강평과 관련 없는 내용을
                 작성할 경우 서비스 이용이 제한될 수 있습니다.
               </Text>
@@ -722,6 +789,7 @@ const WriteReview = () => {
               </Box>
             </TouchableOpacity>
           </Box>
+          <Box height={25} />
         </ScrollView>
       </Box>
 
@@ -734,10 +802,13 @@ const WriteReview = () => {
         onChange={handleSheetChange}
         backdropComponent={renderBackdrop}
         backgroundStyle={{
-          backgroundColor: isDark ? colors.DARKER_GREY : "white",
+          backgroundColor: theme.colors.mainBgColor,
+        }}
+        handleIndicatorStyle={{
+          backgroundColor: theme.colors.textColor,
         }}
       >
-        <Box>
+        <Box flexDirection="row" justifyContent="flex-end" mr="5">
           <TouchableOpacity
             onPress={() => {
               if (pickerContents === "semester") {
@@ -752,7 +823,13 @@ const WriteReview = () => {
               }
             }}
           >
-            <Text>확인</Text>
+            <Text
+              variant="textLg"
+              fontWeight="600"
+              style={{ color: theme.colors.sbuRed }}
+            >
+              확인
+            </Text>
           </TouchableOpacity>
         </Box>
         {pickerContents === "semester" ? (
@@ -761,13 +838,41 @@ const WriteReview = () => {
             selectedValue={semester}
             onValueChange={(itemValue, itemIndex) => setSemester(itemValue)}
           >
-            <Picker.Item label="2024 Spring" value="2024-spring" />
-            <Picker.Item label="2023 Fall" value="2023-fall" />
-            <Picker.Item label="2023 Spring" value="2023-spring" />
-            <Picker.Item label="2022 Fall" value="2022-fall" />
-            <Picker.Item label="2022 Spring" value="2022-spring" />
-            <Picker.Item label="2021 Fall" value="2021-fall" />
-            <Picker.Item label="2021 Spring" value="2021-spring" />
+            <Picker.Item
+              label="2024 Spring"
+              value="2024-spring"
+              color={theme.colors.textColor}
+            />
+            <Picker.Item
+              label="2023 Fall"
+              value="2023-fall"
+              color={theme.colors.textColor}
+            />
+            <Picker.Item
+              label="2023 Spring"
+              value="2023-spring"
+              color={theme.colors.textColor}
+            />
+            <Picker.Item
+              label="2022 Fall"
+              value="2022-fall"
+              color={theme.colors.textColor}
+            />
+            <Picker.Item
+              label="2022 Spring"
+              value="2022-spring"
+              color={theme.colors.textColor}
+            />
+            <Picker.Item
+              label="2021 Fall"
+              value="2021-fall"
+              color={theme.colors.textColor}
+            />
+            <Picker.Item
+              label="2021 Spring"
+              value="2021-spring"
+              color={theme.colors.textColor}
+            />
           </Picker>
         ) : pickerContents === "instructor" ? (
           <Picker
@@ -775,7 +880,11 @@ const WriteReview = () => {
             selectedValue={instructor}
             onValueChange={(itemValue, itemIndex) => setInstructor(itemValue)}
           >
-            <Picker.Item label="dongyoonlee" value="dongyoonlee" />
+            <Picker.Item
+              label="dongyoonlee"
+              value="dongyoonlee"
+              color={theme.colors.textColor}
+            />
           </Picker>
         ) : (
           <Picker
@@ -785,19 +894,19 @@ const WriteReview = () => {
               setMyLetterGrade(itemValue)
             }
           >
-            <Picker.Item label="A" value="A" />
-            <Picker.Item label="A-" value="A-" />
-            <Picker.Item label="B+" value="B+" />
-            <Picker.Item label="B" value="B" />
-            <Picker.Item label="B-" value="B-" />
-            <Picker.Item label="C+" value="C+" />
-            <Picker.Item label="C" value="C" />
-            <Picker.Item label="C-" value="C-" />
-            <Picker.Item label="D+" value="D+" />
-            <Picker.Item label="D" value="D" />
-            <Picker.Item label="F" value="F" />
-            <Picker.Item label="I" value="I" />
-            <Picker.Item label="W" value="W" />
+            <Picker.Item label="A" value="A" color={theme.colors.textColor} />
+            <Picker.Item label="A-" value="A-" color={theme.colors.textColor} />
+            <Picker.Item label="B+" value="B+" color={theme.colors.textColor} />
+            <Picker.Item label="B" value="B" color={theme.colors.textColor} />
+            <Picker.Item label="B-" value="B-" color={theme.colors.textColor} />
+            <Picker.Item label="C+" value="C+" color={theme.colors.textColor} />
+            <Picker.Item label="C" value="C" color={theme.colors.textColor} />
+            <Picker.Item label="C-" value="C-" color={theme.colors.textColor} />
+            <Picker.Item label="D+" value="D+" color={theme.colors.textColor} />
+            <Picker.Item label="D" value="D" color={theme.colors.textColor} />
+            <Picker.Item label="F" value="F" color={theme.colors.textColor} />
+            <Picker.Item label="I" value="I" color={theme.colors.textColor} />
+            <Picker.Item label="W" value="W" color={theme.colors.textColor} />
           </Picker>
         )}
       </BottomSheet>
