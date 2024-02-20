@@ -9,13 +9,19 @@ import { MainStackParamList } from "../navigation/types";
 import { Divider, Loader, NavigateBack, SafeAreaWrapper } from "../components";
 import { Rating } from "@kolking/react-native-rating";
 import { Table, Row, Rows } from "react-native-reanimated-table";
-import { VictoryBar, VictoryChart, VictoryTheme } from "victory-native";
+import {
+  VictoryAxis,
+  VictoryBar,
+  VictoryChart,
+  VictoryTheme,
+} from "victory-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { TouchableOpacity, Dimensions, Image } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as WebBrowser from "expo-web-browser";
+import useDarkMode from "../store/useDarkMode";
 
 type CourseDetailScreenRouteProp = RouteProp<
   MainStackParamList,
@@ -26,6 +32,8 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
   navigation: { navigate },
 }) => {
   const theme = useTheme<Theme>();
+  const { isDarkMode } = useDarkMode();
+
   const windowWidth = Dimensions.get("window").width;
   const windowHeight = Dimensions.get("window").height;
   const route = useRoute<CourseDetailScreenRouteProp>();
@@ -284,7 +292,7 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
             alignItems="center"
           >
             <NavigateBack />
-            <Text variant="textXl" fontWeight="600" mr="10">
+            <Text variant="textXl" fontWeight="600" mr="10" color="textColor">
               {course?.subj} {course?.crs}
             </Text>
             <Box></Box>
@@ -297,26 +305,41 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
             borderColor={"gray550"}
             p={"3"}
           >
-            <Text variant="textBase">Course Title: {course?.courseTitle}</Text>
-            <Text variant="textBase">
+            <Text variant="textBase" color="textColor">
+              Course Title: {course?.courseTitle}
+            </Text>
+            <Text variant="textBase" color="textColor">
               Instructor:{" "}
               {course?.unique_instructor.includes(",")
                 ? course?.unique_instructor.split(", ").join(" & ")
                 : course?.unique_instructor}
             </Text>
-            <Text variant="textBase">Credits: {course?.credits}</Text>
-            <Text variant="textBase">
+            <Text variant="textBase" color="textColor">
+              Credits: {course?.credits}
+            </Text>
+            <Text variant="textBase" color="textColor">
               Sbc: {course?.sbc === "NaN" ? "X" : course?.sbc}
             </Text>
             <Box height={16} />
 
-            <Table borderStyle={{ borderWidth: 2, borderColor: "#c8e1ff" }}>
+            <Table
+              borderStyle={{
+                borderWidth: 2,
+                borderColor: theme.colors.iconBlue,
+              }}
+            >
               <Row
                 data={["Semester", "Day", "Start", "End", "Location"]}
-                style={{ height: 40, backgroundColor: "#f1f8ff" }}
-                textStyle={{ margin: 6 }}
+                style={{
+                  height: 40,
+                  backgroundColor: theme.colors.textColor,
+                }}
+                textStyle={{ margin: 6, color: theme.colors.mainBgColor }}
               />
-              <Rows data={tableResult} textStyle={{ margin: 6 }} />
+              <Rows
+                data={tableResult}
+                textStyle={{ margin: 6, color: theme.colors.textColor }}
+              />
             </Table>
             <Box height={16} />
 
@@ -332,7 +355,12 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
                   source={require("../assets/images/woolfie.png")}
                   style={{ width: 36, height: 24 }}
                 />
-                <Text variant="textBase" fontWeight="600" ml="2">
+                <Text
+                  variant="textBase"
+                  fontWeight="600"
+                  ml="2"
+                  color="textColor"
+                >
                   Go to Course Bulletin Board
                 </Text>
               </Box>
@@ -347,7 +375,7 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
             p={"3"}
           >
             <Box flexDirection="row" alignItems="center">
-              <Text variant="text3Xl">
+              <Text variant="text3Xl" color="textColor">
                 {course?.avgGrade ? course?.avgGrade.toFixed(2) : 0}
               </Text>
               <Box width={8} />
@@ -357,7 +385,7 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
                 <Rating rating={0} disabled />
               )}
               <Box width={8} />
-              <Text>
+              <Text color="textColor">
                 {course?.avgGrade
                   ? "(" + course?.reviews.length + "개)"
                   : "(0개)"}
@@ -371,6 +399,28 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
                   height={250}
                   width={400}
                 >
+                  <VictoryAxis
+                    crossAxis
+                    style={{
+                      ticks: { stroke: "grey", size: 5 },
+                      tickLabels: {
+                        fontSize: 15,
+                        padding: 5,
+                        fill: theme.colors.textColor,
+                      },
+                    }}
+                  />
+                  <VictoryAxis
+                    dependentAxis
+                    style={{
+                      ticks: { stroke: "grey", size: 5 },
+                      tickLabels: {
+                        fontSize: 15,
+                        padding: 5,
+                        fill: theme.colors.textColor,
+                      },
+                    }}
+                  />
                   <VictoryBar
                     horizontal
                     data={[
@@ -398,7 +448,9 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
             )}
 
             <Box>
-              <Text variant="textLg">수업 내용 난이도</Text>
+              <Text variant="textLg" color="textColor">
+                수업 내용 난이도
+              </Text>
               {difficultyStore.toString() !== "0,0,0" ? (
                 <Box ml="1" mt="-6">
                   <VictoryChart
@@ -407,6 +459,28 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
                     height={250}
                     width={400}
                   >
+                    <VictoryAxis
+                      crossAxis
+                      style={{
+                        ticks: { stroke: "grey", size: 5 },
+                        tickLabels: {
+                          fontSize: 15,
+                          padding: 5,
+                          fill: theme.colors.textColor,
+                        },
+                      }}
+                    />
+                    <VictoryAxis
+                      dependentAxis
+                      style={{
+                        ticks: { stroke: "grey", size: 5 },
+                        tickLabels: {
+                          fontSize: 15,
+                          padding: 5,
+                          fill: theme.colors.textColor,
+                        },
+                      }}
+                    />
                     <VictoryBar
                       horizontal
                       data={[
@@ -428,14 +502,16 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
                   </VictoryChart>
                 </Box>
               ) : (
-                <Text ml="2" mt="1" mb="4">
+                <Text ml="2" mt="1" mb="4" color="textColor">
                   아직 관련 데이터가 없습니다 :(
                 </Text>
               )}
             </Box>
 
             <Box>
-              <Text variant="textLg">점수 너그러운 정도</Text>
+              <Text variant="textLg" color="textColor">
+                점수 너그러운 정도
+              </Text>
               {generosityStore.toString() !== "0,0,0" ? (
                 <Box ml="1" mt="-6">
                   <VictoryChart
@@ -444,6 +520,28 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
                     height={250}
                     width={400}
                   >
+                    <VictoryAxis
+                      crossAxis
+                      style={{
+                        ticks: { stroke: "grey", size: 5 },
+                        tickLabels: {
+                          fontSize: 15,
+                          padding: 5,
+                          fill: theme.colors.textColor,
+                        },
+                      }}
+                    />
+                    <VictoryAxis
+                      dependentAxis
+                      style={{
+                        ticks: { stroke: "grey", size: 5 },
+                        tickLabels: {
+                          fontSize: 15,
+                          padding: 5,
+                          fill: theme.colors.textColor,
+                        },
+                      }}
+                    />
                     <VictoryBar
                       horizontal
                       data={[
@@ -465,14 +563,16 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
                   </VictoryChart>
                 </Box>
               ) : (
-                <Text ml="2" mt="1" mb="4">
+                <Text ml="2" mt="1" mb="4" color="textColor">
                   아직 관련 데이터가 없습니다 :(
                 </Text>
               )}
             </Box>
 
             <Box>
-              <Text variant="textLg">과제량</Text>
+              <Text variant="textLg" color="textColor">
+                과제량
+              </Text>
               {hwQuantityStore.toString() !== "0,0,0" ? (
                 <Box ml="1" mt="-6">
                   <VictoryChart
@@ -481,6 +581,28 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
                     height={250}
                     width={400}
                   >
+                    <VictoryAxis
+                      crossAxis
+                      style={{
+                        ticks: { stroke: "grey", size: 5 },
+                        tickLabels: {
+                          fontSize: 15,
+                          padding: 5,
+                          fill: theme.colors.textColor,
+                        },
+                      }}
+                    />
+                    <VictoryAxis
+                      dependentAxis
+                      style={{
+                        ticks: { stroke: "grey", size: 5 },
+                        tickLabels: {
+                          fontSize: 15,
+                          padding: 5,
+                          fill: theme.colors.textColor,
+                        },
+                      }}
+                    />
                     <VictoryBar
                       horizontal
                       data={[
@@ -502,14 +624,16 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
                   </VictoryChart>
                 </Box>
               ) : (
-                <Text ml="2" mt="1" mb="4">
+                <Text ml="2" mt="1" mb="4" color="textColor">
                   아직 관련 데이터가 없습니다 :(
                 </Text>
               )}
             </Box>
 
             <Box>
-              <Text variant="textLg">시험 수</Text>
+              <Text variant="textLg" color="textColor">
+                시험 수
+              </Text>
               {testQuantityStore.toString() !== "0,0,0,0,0" ? (
                 <Box ml="1" mt="-6">
                   <VictoryChart
@@ -518,6 +642,28 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
                     height={250}
                     width={400}
                   >
+                    <VictoryAxis
+                      crossAxis
+                      style={{
+                        ticks: { stroke: "grey", size: 5 },
+                        tickLabels: {
+                          fontSize: 15,
+                          padding: 5,
+                          fill: theme.colors.textColor,
+                        },
+                      }}
+                    />
+                    <VictoryAxis
+                      dependentAxis
+                      style={{
+                        ticks: { stroke: "grey", size: 5 },
+                        tickLabels: {
+                          fontSize: 15,
+                          padding: 5,
+                          fill: theme.colors.textColor,
+                        },
+                      }}
+                    />
                     <VictoryBar
                       horizontal
                       data={[
@@ -541,14 +687,16 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
                   </VictoryChart>
                 </Box>
               ) : (
-                <Text ml="2" mt="1" mb="4">
+                <Text ml="2" mt="1" mb="4" color="textColor">
                   아직 관련 데이터가 없습니다 :(
                 </Text>
               )}
             </Box>
 
             <Box>
-              <Text variant="textLg">시험 종류</Text>
+              <Text variant="textLg" color="textColor">
+                시험 종류
+              </Text>
               {testTypeStore.toString() !== "0,0,0,0,0,0" ? (
                 <Box ml="1" mt="-6">
                   <VictoryChart
@@ -557,6 +705,28 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
                     height={250}
                     width={400}
                   >
+                    <VictoryAxis
+                      crossAxis
+                      style={{
+                        ticks: { stroke: "grey", size: 5 },
+                        tickLabels: {
+                          fontSize: 15,
+                          padding: 5,
+                          fill: theme.colors.textColor,
+                        },
+                      }}
+                    />
+                    <VictoryAxis
+                      dependentAxis
+                      style={{
+                        ticks: { stroke: "grey", size: 5 },
+                        tickLabels: {
+                          fontSize: 15,
+                          padding: 5,
+                          fill: theme.colors.textColor,
+                        },
+                      }}
+                    />
                     <VictoryBar
                       horizontal
                       data={[
@@ -590,14 +760,16 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
                   </VictoryChart>
                 </Box>
               ) : (
-                <Text ml="2" mt="1" mb="4">
+                <Text ml="2" mt="1" mb="4" color="textColor">
                   아직 관련 데이터가 없습니다 :(
                 </Text>
               )}
             </Box>
 
             <Box>
-              <Text variant="textLg">팀플 유무</Text>
+              <Text variant="textLg" color="textColor">
+                팀플 유무
+              </Text>
               {teamProjectPresenceStore.toString() !== "0,0" ? (
                 <Box ml="1" mt="-6">
                   <VictoryChart
@@ -606,6 +778,28 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
                     height={250}
                     width={400}
                   >
+                    <VictoryAxis
+                      crossAxis
+                      style={{
+                        ticks: { stroke: "grey", size: 5 },
+                        tickLabels: {
+                          fontSize: 15,
+                          padding: 5,
+                          fill: theme.colors.textColor,
+                        },
+                      }}
+                    />
+                    <VictoryAxis
+                      dependentAxis
+                      style={{
+                        ticks: { stroke: "grey", size: 5 },
+                        tickLabels: {
+                          fontSize: 15,
+                          padding: 5,
+                          fill: theme.colors.textColor,
+                        },
+                      }}
+                    />
                     <VictoryBar
                       horizontal
                       data={[
@@ -626,14 +820,16 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
                   </VictoryChart>
                 </Box>
               ) : (
-                <Text ml="2" mt="1" mb="4">
+                <Text ml="2" mt="1" mb="4" color="textColor">
                   아직 관련 데이터가 없습니다 :(
                 </Text>
               )}
             </Box>
 
             <Box>
-              <Text variant="textLg">퀴즈 유무</Text>
+              <Text variant="textLg" color="textColor">
+                퀴즈 유무
+              </Text>
               {quizPresenceStore.toString() !== "0,0" ? (
                 <Box ml="1" mt="-6">
                   <VictoryChart
@@ -642,6 +838,28 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
                     height={250}
                     width={400}
                   >
+                    <VictoryAxis
+                      crossAxis
+                      style={{
+                        ticks: { stroke: "grey", size: 5 },
+                        tickLabels: {
+                          fontSize: 15,
+                          padding: 5,
+                          fill: theme.colors.textColor,
+                        },
+                      }}
+                    />
+                    <VictoryAxis
+                      dependentAxis
+                      style={{
+                        ticks: { stroke: "grey", size: 5 },
+                        tickLabels: {
+                          fontSize: 15,
+                          padding: 5,
+                          fill: theme.colors.textColor,
+                        },
+                      }}
+                    />
                     <VictoryBar
                       horizontal
                       data={[
@@ -662,14 +880,16 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
                   </VictoryChart>
                 </Box>
               ) : (
-                <Text ml="2" mt="1" mb="4">
+                <Text ml="2" mt="1" mb="4" color="textColor">
                   아직 관련 데이터가 없습니다 :(
                 </Text>
               )}
             </Box>
 
             <Box>
-              <Text variant="textLg">출석</Text>
+              <Text variant="textLg" color="textColor">
+                출석
+              </Text>
               {attendanceStore.toString() !== "0,0,0,0,0" ? (
                 <Box ml="1" mt="-6">
                   <VictoryChart
@@ -678,6 +898,28 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
                     height={250}
                     width={400}
                   >
+                    <VictoryAxis
+                      crossAxis
+                      style={{
+                        ticks: { stroke: "grey", size: 5 },
+                        tickLabels: {
+                          fontSize: 15,
+                          padding: 5,
+                          fill: theme.colors.textColor,
+                        },
+                      }}
+                    />
+                    <VictoryAxis
+                      dependentAxis
+                      style={{
+                        ticks: { stroke: "grey", size: 5 },
+                        tickLabels: {
+                          fontSize: 15,
+                          padding: 5,
+                          fill: theme.colors.textColor,
+                        },
+                      }}
+                    />
                     <VictoryBar
                       horizontal
                       data={[
@@ -703,7 +945,7 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
                   </VictoryChart>
                 </Box>
               ) : (
-                <Text ml="2" mt="1">
+                <Text ml="2" mt="1" color="textColor">
                   아직 관련 데이터가 없습니다 :(
                 </Text>
               )}
@@ -714,12 +956,16 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
 
             <Box>
               {overallEvaluations.length === 0 && (
-                <Text>작성된 자세한 수강평이 아직 없습니다 :(</Text>
+                <Text color="textColor">
+                  작성된 자세한 수강평이 아직 없습니다 :(
+                </Text>
               )}
               {overallEvaluations.length >= 1 && (
                 <>
                   <Box mb="2">
-                    <Text variant="textLg">더 자세한 수강평</Text>
+                    <Text variant="textLg" color="textColor">
+                      더 자세한 수강평
+                    </Text>
                   </Box>
                   <Box>
                     <Box flexDirection="row" alignItems="center">
@@ -750,9 +996,9 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
                       <Text
                         mt="1"
                         mb="1"
-                        style={{
-                          color: theme.colors.gray650,
-                        }}
+                        color={
+                          isDarkMode?.mode === "dark" ? "gray300" : "gray650"
+                        }
                       >
                         {course!.reviews[overallEvaluations[0]].semester ===
                         "-1"
@@ -763,9 +1009,9 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
                       <Text
                         mt="1"
                         mb="1"
-                        style={{
-                          color: theme.colors.gray650,
-                        }}
+                        color={
+                          isDarkMode?.mode === "dark" ? "gray300" : "gray650"
+                        }
                       >
                         {course!.reviews[overallEvaluations[0]].instructor ===
                         "-2"
@@ -773,7 +1019,7 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
                           : course!.reviews[overallEvaluations[0]].instructor}
                       </Text>
                     </Box>
-                    <Text>
+                    <Text color="textColor">
                       {course!.reviews[overallEvaluations[0]].overallEvaluation}
                     </Text>
                   </Box>
@@ -813,9 +1059,9 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
                       <Text
                         mt="1"
                         mb="1"
-                        style={{
-                          color: theme.colors.gray650,
-                        }}
+                        color={
+                          isDarkMode?.mode === "dark" ? "gray300" : "gray650"
+                        }
                       >
                         {course!.reviews[overallEvaluations[0]].semester ===
                         "-1"
@@ -826,9 +1072,9 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
                       <Text
                         mt="1"
                         mb="1"
-                        style={{
-                          color: theme.colors.gray650,
-                        }}
+                        color={
+                          isDarkMode?.mode === "dark" ? "gray300" : "gray650"
+                        }
                       >
                         {course!.reviews[overallEvaluations[0]].instructor ===
                         "-2"
@@ -836,7 +1082,7 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
                           : course!.reviews[overallEvaluations[0]].instructor}
                       </Text>
                     </Box>
-                    <Text>
+                    <Text color="textColor">
                       {course!.reviews[overallEvaluations[1]].overallEvaluation}
                     </Text>
                   </Box>
@@ -854,7 +1100,7 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
                       justifyContent="center"
                       alignItems="center"
                     >
-                      <Text>강의평 더 보기</Text>
+                      <Text fontWeight="600">강의평 더 보기</Text>
                     </Box>
                   </TouchableOpacity>
                 </>
@@ -882,7 +1128,12 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
                   source={require("../assets/images/woolfie.png")}
                   style={{ width: 36, height: 24 }}
                 />
-                <Text variant="textBase" fontWeight="600" ml="2">
+                <Text
+                  variant="textBase"
+                  fontWeight="600"
+                  ml="2"
+                  color="textColor"
+                >
                   Go to Classie Eval
                 </Text>
               </Box>
@@ -901,7 +1152,12 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
                   source={require("../assets/images/woolfie.png")}
                   style={{ width: 36, height: 24 }}
                 />
-                <Text variant="textBase" fontWeight="600" ml="2">
+                <Text
+                  variant="textBase"
+                  fontWeight="600"
+                  ml="2"
+                  color="textColor"
+                >
                   Go to {course?.subj.toUpperCase()} Bulletin
                 </Text>
               </Box>
@@ -920,7 +1176,12 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
                   source={require("../assets/images/woolfie.png")}
                   style={{ width: 36, height: 24 }}
                 />
-                <Text variant="textBase" fontWeight="600" ml="2">
+                <Text
+                  variant="textBase"
+                  fontWeight="600"
+                  ml="2"
+                  color="textColor"
+                >
                   Go to Degree Works
                 </Text>
               </Box>
