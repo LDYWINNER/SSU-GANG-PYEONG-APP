@@ -95,11 +95,12 @@ const SchoolInfo = () => {
             textDecorationColor="iconBlue"
             textDecorationStyle="double"
             mb="6"
+            color="textColor"
           >
             School Info
           </Text>
 
-          <Text variant="textXl" fontWeight="500" mb="2">
+          <Text variant="textXl" fontWeight="500" mb="2" color="textColor">
             Academic
           </Text>
           <Box>
@@ -166,7 +167,7 @@ const SchoolInfo = () => {
           </Box>
           <Divider />
 
-          <Text variant="textXl" fontWeight="500" mb="2">
+          <Text variant="textXl" fontWeight="500" my="2" color="textColor">
             Career
           </Text>
           <Box>
@@ -226,7 +227,7 @@ const SchoolInfo = () => {
           </Box>
           <Divider />
 
-          <Text variant="textXl" fontWeight="500" mb="2">
+          <Text variant="textXl" fontWeight="500" my="2" color="textColor">
             Housing
           </Text>
           <Box>
@@ -301,7 +302,7 @@ const SchoolInfo = () => {
           </Box>
           <Divider />
 
-          <Text variant="textXl" fontWeight="500" mb="2">
+          <Text variant="textXl" fontWeight="500" my="2" color="textColor">
             Major Websites
           </Text>
           <Box>
@@ -430,7 +431,7 @@ const SchoolInfo = () => {
           </Box>
           <Divider />
 
-          <Text variant="textXl" fontWeight="500" mb="2">
+          <Text variant="textXl" fontWeight="500" my="2" color="textColor">
             School
           </Text>
           <Box>
@@ -471,7 +472,6 @@ const SchoolInfo = () => {
               </Box>
             </TouchableOpacity>
           </Box>
-          <Divider />
         </Box>
       </ScrollView>
     </SafeAreaWrapper>
