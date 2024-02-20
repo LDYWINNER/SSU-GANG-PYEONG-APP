@@ -21,6 +21,7 @@ import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import { Picker } from "@react-native-picker/picker";
 import { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";
 import { useFocusEffect } from "@react-navigation/native";
+import useDarkMode from "../store/useDarkMode";
 
 interface ISearch {
   crsNum: string;
@@ -35,6 +36,7 @@ const CourseBulletin: React.FC<
   NativeStackScreenProps<any, "CourseBulletin">
 > = ({ navigation: { navigate } }) => {
   const theme = useTheme<Theme>();
+  const { isDarkMode } = useDarkMode();
 
   const windowWidth = Dimensions.get("window").width;
   const windowHeight = Dimensions.get("window").height;
@@ -149,7 +151,7 @@ const CourseBulletin: React.FC<
           alignItems="center"
         >
           <NavigateBack />
-          <Text variant="textXl" fontWeight="600" mr="2">
+          <Text variant="textXl" fontWeight="600" mr="2" color="textColor">
             수업별 게시판
           </Text>
           <Box mr="6" />
@@ -161,9 +163,9 @@ const CourseBulletin: React.FC<
               <Ionicons
                 name="chevron-down"
                 size={24}
-                color={theme.colors.gray5}
+                color={theme.colors.textColor}
               />
-              <Text variant="text2Xl" marginLeft={"2"}>
+              <Text variant="text2Xl" marginLeft={"2"} color="textColor">
                 {searchSubj === "SHCourse" ? "교양/Writing" : searchSubj}
               </Text>
             </Box>
@@ -207,7 +209,7 @@ const CourseBulletin: React.FC<
 
         {posts && (
           <Box mt="3" ml="3">
-            <Text variant="textLg" fontWeight="600">
+            <Text variant="textLg" fontWeight="600" color="textColor">
               {posts?.bulletinTotalPosts} posts
             </Text>
           </Box>
@@ -223,16 +225,10 @@ const CourseBulletin: React.FC<
                   onPress={() => navigateToBulletinPost(post._id)}
                 >
                   <Box my="5" mx="4">
-                    <Text variant="textBase" fontWeight="600">
+                    <Text variant="textBase" fontWeight="600" color="textColor">
                       {post.title}
                     </Text>
-                    <Text
-                      variant="textBase"
-                      fontWeight="500"
-                      style={{
-                        color: theme.colors.gray600,
-                      }}
-                    >
+                    <Text variant="textBase" fontWeight="500" color="textColor">
                       {post.content.substring(0, 43)}
                       {post.content.length > 43 && "..."}
                     </Text>
@@ -268,32 +264,32 @@ const CourseBulletin: React.FC<
                         </Text>
                       </Text>
                       <Text
-                        style={{
-                          color: theme.colors.gray400,
-                        }}
+                        color={
+                          isDarkMode?.mode === "dark" ? "gray300" : "gray650"
+                        }
                       >
                         {" "}
                         |{" "}
                       </Text>
                       <Text
-                        style={{
-                          color: theme.colors.gray500,
-                        }}
+                        color={
+                          isDarkMode?.mode === "dark" ? "gray300" : "gray650"
+                        }
                       >
                         {moment(post.createdAt).format("MMMM Do, h:mm a")}
                       </Text>
                       <Text
-                        style={{
-                          color: theme.colors.gray400,
-                        }}
+                        color={
+                          isDarkMode?.mode === "dark" ? "gray300" : "gray650"
+                        }
                       >
                         {" "}
                         |{" "}
                       </Text>
                       <Text
-                        style={{
-                          color: theme.colors.gray500,
-                        }}
+                        color={
+                          isDarkMode?.mode === "dark" ? "gray300" : "gray650"
+                        }
                       >
                         {post.anonymity ? "익명" : post.createdByUsername}
                       </Text>
@@ -312,7 +308,7 @@ const CourseBulletin: React.FC<
             alignItems="center"
             position="absolute"
             right={windowWidth * 0.38}
-            bottom={windowHeight * 0}
+            bottom={windowHeight * 0.02}
             style={{ backgroundColor: theme.colors.sbuRed }}
             p="2"
             borderRadius="rounded-2xl"
@@ -343,9 +339,12 @@ const CourseBulletin: React.FC<
         enableContentPanningGesture={false}
         onChange={handleSheetChange}
         backdropComponent={renderBackdrop}
-        // backgroundStyle={{
-        //   backgroundColor: isDark ? colors.DARKER_GREY : "white",
-        // }}
+        backgroundStyle={{
+          backgroundColor: theme.colors.mainBgColor,
+        }}
+        handleIndicatorStyle={{
+          backgroundColor: theme.colors.textColor,
+        }}
       >
         <Box flexDirection="row" justifyContent="space-between" mr="5" ml="4">
           <TouchableOpacity
@@ -383,13 +382,25 @@ const CourseBulletin: React.FC<
           selectedValue={searchSubj}
           onValueChange={(itemValue, itemIndex) => setSearchSubj(itemValue)}
         >
-          <Picker.Item label="AMS" value="AMS" />
-          <Picker.Item label="ACC/BUS" value="ACC/BUS" />
-          <Picker.Item label="CSE" value="CSE" />
-          <Picker.Item label="ESE" value="ESE" />
-          <Picker.Item label="EST/EMP" value="EST/EMP" />
-          <Picker.Item label="MEC" value="MEC" />
-          <Picker.Item label="교양/Writing" value="SHCourse" />
+          <Picker.Item label="AMS" value="AMS" color={theme.colors.textColor} />
+          <Picker.Item
+            label="ACC/BUS"
+            value="ACC/BUS"
+            color={theme.colors.textColor}
+          />
+          <Picker.Item label="CSE" value="CSE" color={theme.colors.textColor} />
+          <Picker.Item label="ESE" value="ESE" color={theme.colors.textColor} />
+          <Picker.Item
+            label="EST/EMP"
+            value="EST/EMP"
+            color={theme.colors.textColor}
+          />
+          <Picker.Item label="MEC" value="MEC" color={theme.colors.textColor} />
+          <Picker.Item
+            label="교양/Writing"
+            value="SHCourse"
+            color={theme.colors.textColor}
+          />
         </Picker>
       </BottomSheet>
     </SafeAreaWrapper>
