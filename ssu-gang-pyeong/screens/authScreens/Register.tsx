@@ -1,22 +1,20 @@
 import React, { useCallback, useMemo, useRef, useState } from "react";
 import { SmoothButton, Input } from "../../components";
 import { TouchableOpacity } from "react-native";
-import SafeAreaWrapper from "../../components/SafeAreaWrapper";
 import { AuthScreenNavigationType } from "../../navigation/types";
 import { useNavigation } from "@react-navigation/native";
 import { Controller, useForm } from "react-hook-form";
-import { Box, Text } from "../../theme";
+import { Box, Text, Theme } from "../../theme";
 import { registerUser } from "../../utils/api";
 import { IUser } from "../../types";
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";
 import { Picker } from "@react-native-picker/picker";
-import { useColorScheme } from "react-native";
-import colors from "../../colors";
 import { Ionicons } from "@expo/vector-icons";
+import { useTheme } from "@shopify/restyle";
 
 const SignUpScreen = () => {
-  const isDark = useColorScheme() === "dark";
+  const theme = useTheme<Theme>();
 
   const navigation = useNavigation<AuthScreenNavigationType<"Register">>();
   const navigateToLoginScreen = () => {
@@ -94,8 +92,8 @@ const SignUpScreen = () => {
   );
 
   return (
-    <SafeAreaWrapper>
-      <Box flex={1} px="5.5" mt={"13"}>
+    <>
+      <Box flex={1} px="5.5" justifyContent="center">
         <Text variant="textXl" fontWeight="700" mb="6">
           Welcome to SSU GANG PYEONG!
         </Text>
@@ -137,7 +135,7 @@ const SignUpScreen = () => {
         />
         <Box mt="5.5" />
         <TouchableOpacity onPress={() => togglePicker("school")}>
-          <Text>School</Text>
+          <Text>SCHOOL</Text>
           <Box mb="2" />
           <Box
             bg="gray500"
@@ -163,7 +161,7 @@ const SignUpScreen = () => {
         </TouchableOpacity>
         <Box mb="5.5" />
         <TouchableOpacity onPress={() => togglePicker("major")}>
-          <Text>Major</Text>
+          <Text>MAJOR</Text>
           <Box mb="2" />
           <Box
             bg="gray500"
@@ -189,7 +187,7 @@ const SignUpScreen = () => {
         </TouchableOpacity>
         <Box mb="5.5" />
         <TouchableOpacity onPress={navigateToLoginScreen}>
-          <Text color="primary" textAlign="right">
+          <Text color="primary" textAlign="right" variant="textBase">
             Log in?
           </Text>
         </TouchableOpacity>
@@ -211,10 +209,10 @@ const SignUpScreen = () => {
         onChange={handleSheetChange}
         backdropComponent={renderBackdrop}
         backgroundStyle={{
-          backgroundColor: isDark ? colors.DARKER_GREY : "white",
+          backgroundColor: theme.colors.stDarkerGrey,
         }}
       >
-        <Box>
+        <Box flexDirection="row" justifyContent="flex-end" mr="5">
           <TouchableOpacity
             onPress={() => {
               if (pickerContents === "school") {
@@ -226,7 +224,13 @@ const SignUpScreen = () => {
               }
             }}
           >
-            <Text>확인</Text>
+            <Text
+              variant="textLg"
+              fontWeight="600"
+              style={{ color: theme.colors.iconBlue }}
+            >
+              확인
+            </Text>
           </TouchableOpacity>
         </Box>
         {pickerContents === "school" ? (
@@ -242,8 +246,16 @@ const SignUpScreen = () => {
                 selectedValue={value}
                 onValueChange={onChange}
               >
-                <Picker.Item label="SBU" value="SBU" />
-                <Picker.Item label="FIT" value="FIT" />
+                <Picker.Item
+                  label="SBU"
+                  value="SBU"
+                  color={theme.colors.white}
+                />
+                <Picker.Item
+                  label="FIT"
+                  value="FIT"
+                  color={theme.colors.white}
+                />
               </Picker>
             )}
           />
@@ -258,18 +270,34 @@ const SignUpScreen = () => {
                 selectedValue={value}
                 onValueChange={onChange}
               >
-                <Picker.Item label="AMS" value="AMS" />
-                <Picker.Item label="BM" value="BM" />
-                <Picker.Item label="CS" value="CS" />
-                <Picker.Item label="ECE" value="ECE" />
-                <Picker.Item label="MEC" value="MEC" />
-                <Picker.Item label="TSM" value="TSM" />
+                <Picker.Item
+                  label="AMS"
+                  value="AMS"
+                  color={theme.colors.white}
+                />
+                <Picker.Item label="BM" value="BM" color={theme.colors.white} />
+                <Picker.Item label="CS" value="CS" color={theme.colors.white} />
+                <Picker.Item
+                  label="ECE"
+                  value="ECE"
+                  color={theme.colors.white}
+                />
+                <Picker.Item
+                  label="MEC"
+                  value="MEC"
+                  color={theme.colors.white}
+                />
+                <Picker.Item
+                  label="TSM"
+                  value="TSM"
+                  color={theme.colors.white}
+                />
               </Picker>
             )}
           />
         )}
       </BottomSheet>
-    </SafeAreaWrapper>
+    </>
   );
 };
 

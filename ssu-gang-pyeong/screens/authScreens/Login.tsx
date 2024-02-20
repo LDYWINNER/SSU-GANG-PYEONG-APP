@@ -2,7 +2,7 @@ import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { SmoothButton, Input, SafeAreaWrapper } from "../../components";
+import { SmoothButton, Input } from "../../components";
 import { AuthScreenNavigationType } from "../../navigation/types";
 import { loginUser } from "../../utils/api";
 import { Box, Text } from "../../theme";
@@ -49,46 +49,40 @@ const LoginScreen = () => {
   };
 
   return (
-    <SafeAreaWrapper>
-      <Box flex={1} px="5.5" justifyContent="center">
-        <Text variant="textXl" fontWeight="700">
-          Welcome Back
+    <Box flex={1} px="5.5" justifyContent="center">
+      <Text variant="textXl" fontWeight="700">
+        Welcome Back
+      </Text>
+      <Box mb="6" />
+      <Controller
+        control={control}
+        rules={{
+          required: true,
+        }}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <Input
+            label="Email"
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value}
+            placeholder="Email"
+            error={errors.email}
+          />
+        )}
+        name="email"
+      />
+      <Box mb="6" />
+
+      <Box mt="5.5" />
+      <Pressable onPress={navigateToSignInScreen}>
+        <Text color="primary" textAlign="right" variant="textBase">
+          Register?
         </Text>
-        <Box mb="6" />
-        <Controller
-          control={control}
-          rules={{
-            required: true,
-          }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <Input
-              label="Email"
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-              placeholder="Email"
-              error={errors.email}
-            />
-          )}
-          name="email"
-        />
-        <Box mb="6" />
+      </Pressable>
+      <Box mb="5.5" />
 
-        <Box mt="5.5" />
-        <Pressable onPress={navigateToSignInScreen}>
-          <Text color="primary" textAlign="right">
-            Register?
-          </Text>
-        </Pressable>
-        <Box mb="5.5" />
-
-        <SmoothButton
-          label="Login"
-          onPress={handleSubmit(onSubmit)}
-          uppercase
-        />
-      </Box>
-    </SafeAreaWrapper>
+      <SmoothButton label="Login" onPress={handleSubmit(onSubmit)} uppercase />
+    </Box>
   );
 };
 
