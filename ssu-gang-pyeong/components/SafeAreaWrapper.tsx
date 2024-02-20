@@ -15,6 +15,7 @@ const SafeAreaWrapper = ({ children }: SafeAreaWrapperProps) => {
       style={{
         flex: 1,
         backgroundColor: theme.colors.mainBgColor,
+        marginBottom: -25,
       }}
     >
       {children}
