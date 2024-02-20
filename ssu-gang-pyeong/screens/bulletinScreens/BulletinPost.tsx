@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import {
   Divider,
   Loader,
@@ -25,17 +24,18 @@ import moment from "moment";
 import { ScrollView } from "react-native-gesture-handler";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import useUserGlobalStore from "../../store/useUserGlobal";
-import { Menu, MenuItem, MenuDivider } from "react-native-material-menu";
+import { Menu, MenuItem } from "react-native-material-menu";
+import useDarkMode from "../../store/useDarkMode";
 
 type BulletinPostScreenRouteProp = RouteProp<
   BulletinStackParamList,
   "BulletinPost"
 >;
 
-const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
-  navigation: { navigate },
-}) => {
+const BulletinPost = () => {
   const theme = useTheme<Theme>();
+  const { isDarkMode } = useDarkMode();
+
   const windowHeight = Dimensions.get("window").height;
 
   const { user } = useUserGlobalStore();
@@ -72,6 +72,7 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
             variant="textXl"
             fontWeight="600"
             mr={post.createdBy === user?._id ? "2" : "10"}
+            color="textColor"
           >
             {post.board === "Free"
               ? "자유 게시판"
@@ -92,7 +93,11 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
               visible={visible}
               anchor={
                 <Text onPress={showMenu}>
-                  <MaterialIcons name="more-vert" size={30} color="black" />
+                  <MaterialIcons
+                    name="more-vert"
+                    size={30}
+                    color={theme.colors.textColor}
+                  />
                 </Text>
               }
               onRequestClose={hideMenu}
@@ -126,15 +131,17 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
         <ScrollView>
           <Box mt="5" mx="4">
             <Box flexDirection="row" alignItems="center">
-              <FontAwesome name="user-circle" size={36} color="black" />
+              <FontAwesome
+                name="user-circle"
+                size={36}
+                color={theme.colors.textColor}
+              />
               <Box ml="2">
-                <Text variant="textXl" fontWeight="700">
+                <Text variant="textXl" fontWeight="700" color="textColor">
                   {post.anonymity ? "익명" : post.createdByUsername}
                 </Text>
                 <Text
-                  style={{
-                    color: theme.colors.gray500,
-                  }}
+                  color={isDarkMode?.mode === "dark" ? "gray300" : "gray650"}
                 >
                   {moment(post.createdAt).format("MMMM Do, h:mm a")}
                 </Text>
@@ -142,43 +149,52 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
             </Box>
 
             <Box mt="3">
-              <Text variant="textLg" fontWeight="600">
+              <Text variant="textLg" fontWeight="600" color="textColor">
                 {post.title}
               </Text>
               <Box height={6} />
-              <Text variant="textBase">{post.content}</Text>
+              <Text variant="textBase" color="textColor">
+                {post.content}
+              </Text>
 
-              <Box mt="5" flexDirection="row" alignItems="center">
-                <FontAwesome5
-                  name="thumbs-up"
-                  size={16}
-                  color={theme.colors.sbuRed}
-                />
-                <Box width={1} />
-                <Text
-                  style={{
-                    color: theme.colors.sbuRed,
-                  }}
-                >
-                  {post.likes.length}
-                </Text>
-                <Box width={10} />
-                <Ionicons
-                  name="chatbubble-outline"
-                  size={16}
-                  color={theme.colors.blu600}
-                />
-                <Box width={2} />
-                <Text
-                  style={{
-                    color: theme.colors.blu600,
-                  }}
-                >
-                  {post.comments.length}
-                </Text>
-              </Box>
+              <Box
+                my="5"
+                flexDirection="row"
+                alignItems="center"
+                justifyContent="space-between"
+              >
+                <Box flexDirection="row" alignItems="center">
+                  <FontAwesome5
+                    name="thumbs-up"
+                    size={24}
+                    color={theme.colors.sbuRed}
+                  />
+                  <Box width={1} />
+                  <Text
+                    style={{
+                      color: theme.colors.sbuRed,
+                    }}
+                    variant="textBase"
+                  >
+                    {post.likes.length}
+                  </Text>
+                  <Box width={10} />
+                  <Ionicons
+                    name="chatbubble-outline"
+                    size={24}
+                    color={theme.colors.blu600}
+                  />
+                  <Box width={2} />
+                  <Text
+                    style={{
+                      color: theme.colors.blu600,
+                    }}
+                    variant="textBase"
+                  >
+                    {post.comments.length}
+                  </Text>
+                </Box>
 
-              <Box mt="3" mb="5" flexDirection="row" alignItems="center">
                 <TouchableOpacity>
                   <Box
                     bg="gray300"
@@ -198,6 +214,7 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
                   </Box>
                 </TouchableOpacity>
               </Box>
+
               <Divider />
 
               {post.comments.map((comment, commentIndex) => (
@@ -209,9 +226,17 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
                     mb="2"
                   >
                     <Box flexDirection="row" alignItems="center">
-                      <FontAwesome name="user-circle" size={24} color="black" />
+                      <FontAwesome
+                        name="user-circle"
+                        size={24}
+                        color={theme.colors.textColor}
+                      />
                       <Box ml="2">
-                        <Text variant="textBase" fontWeight="700">
+                        <Text
+                          variant="textBase"
+                          fontWeight="700"
+                          color="textColor"
+                        >
                           {post.anonymity
                             ? `익명${commentIndex + 1}`
                             : post.createdByUsername}
@@ -248,7 +273,9 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
                       </Box>
                     </Box>
                   </Box>
-                  <Text variant="textBase">{comment.text}</Text>
+                  <Text variant="textBase" color="textColor">
+                    {comment.text}
+                  </Text>
                   <Box height={6} />
                   <Box flexDirection="row" alignItems="center">
                     <Text
@@ -278,11 +305,12 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
             </Box>
           </Box>
         </ScrollView>
+
         <Box
           flexDirection="row"
           alignItems="center"
           position="absolute"
-          bottom={windowHeight * 0}
+          bottom={windowHeight * 0.03}
           style={{ backgroundColor: theme.colors.gray400 }}
           p="2"
           borderRadius="rounded-2xl"
@@ -317,6 +345,7 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
             <Box height={5} />
             <TextInput
               placeholder="Write a comment."
+              placeholderTextColor={theme.colors.gray300}
               style={{
                 padding: 16,
                 borderColor: theme.colors.grey,

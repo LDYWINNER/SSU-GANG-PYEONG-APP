@@ -10,11 +10,13 @@ import { fetcher } from "../../utils/config";
 import { IBulletinPost } from "../../types";
 import { useTheme } from "@shopify/restyle";
 import moment from "moment";
+import useDarkMode from "../../store/useDarkMode";
 
 const BulletinMain: React.FC<NativeStackScreenProps<any, "BulletinMain">> = ({
   navigation: { navigate },
 }) => {
   const theme = useTheme<Theme>();
+  const { isDarkMode } = useDarkMode();
 
   const navigateToBulletinDetail = (BulletinName: string) => {
     navigate("BulletinStack", {
@@ -59,7 +61,7 @@ const BulletinMain: React.FC<NativeStackScreenProps<any, "BulletinMain">> = ({
   }
   return (
     <SafeAreaWrapper>
-      <Box bg="gray200" height={"105%"}>
+      <Box bg="mainBgColor" height={"100%"}>
         <Box
           flexDirection="row"
           justifyContent="space-between"
@@ -67,7 +69,7 @@ const BulletinMain: React.FC<NativeStackScreenProps<any, "BulletinMain">> = ({
           mx="4"
           mt="4"
         >
-          <Text variant="text2Xl" fontWeight="600">
+          <Text variant="text2Xl" fontWeight="600" color="textColor">
             게시판
           </Text>
           <Box
@@ -77,20 +79,27 @@ const BulletinMain: React.FC<NativeStackScreenProps<any, "BulletinMain">> = ({
           >
             <Box mr="3">
               <TouchableOpacity onPress={() => navigateToBulletinSearch("ALL")}>
-                <Ionicons name="md-search" size={30} color="black" />
+                <Ionicons
+                  name="md-search"
+                  size={30}
+                  color={theme.colors.textColor}
+                />
               </TouchableOpacity>
             </Box>
             <Box>
               <TouchableOpacity onPress={() => navigateToUserMain()}>
-                <FontAwesome name="user-circle" size={30} color="black" />
+                <FontAwesome
+                  name="user-circle"
+                  size={30}
+                  color={theme.colors.textColor}
+                />
               </TouchableOpacity>
             </Box>
           </Box>
         </Box>
         <ScrollView showsVerticalScrollIndicator={false}>
           <Box
-            // bg="gray550"
-            bg="white"
+            bg="gray200"
             mt="10"
             mx="4"
             p="4"
@@ -104,7 +113,7 @@ const BulletinMain: React.FC<NativeStackScreenProps<any, "BulletinMain">> = ({
                 </Text>
               </Box>
             </TouchableOpacity>
-            <Divider />
+            <Divider color={theme.colors.mainBgColor} />
             <TouchableOpacity onPress={() => navigateToCourseBulletin()}>
               <Box mb="3" mt="3">
                 <Text variant="textLg" fontWeight="600">
@@ -112,7 +121,7 @@ const BulletinMain: React.FC<NativeStackScreenProps<any, "BulletinMain">> = ({
                 </Text>
               </Box>
             </TouchableOpacity>
-            <Divider />
+            <Divider color={theme.colors.mainBgColor} />
             <TouchableOpacity
               onPress={() => navigateToBulletinDetail("courseRegister")}
             >
@@ -122,7 +131,7 @@ const BulletinMain: React.FC<NativeStackScreenProps<any, "BulletinMain">> = ({
                 </Text>
               </Box>
             </TouchableOpacity>
-            <Divider />
+            <Divider color={theme.colors.mainBgColor} />
             <TouchableOpacity
               onPress={() => navigateToBulletinDetail("Secret")}
             >
@@ -132,7 +141,7 @@ const BulletinMain: React.FC<NativeStackScreenProps<any, "BulletinMain">> = ({
                 </Text>
               </Box>
             </TouchableOpacity>
-            <Divider />
+            <Divider color={theme.colors.mainBgColor} />
             <TouchableOpacity
               onPress={() => navigateToBulletinDetail("Freshmen")}
             >
@@ -142,7 +151,7 @@ const BulletinMain: React.FC<NativeStackScreenProps<any, "BulletinMain">> = ({
                 </Text>
               </Box>
             </TouchableOpacity>
-            <Divider />
+            <Divider color={theme.colors.mainBgColor} />
             <TouchableOpacity
               onPress={() => navigateToBulletinDetail("Promotion")}
             >
@@ -152,7 +161,7 @@ const BulletinMain: React.FC<NativeStackScreenProps<any, "BulletinMain">> = ({
                 </Text>
               </Box>
             </TouchableOpacity>
-            <Divider />
+            <Divider color={theme.colors.mainBgColor} />
             <TouchableOpacity onPress={() => navigateToBulletinDetail("Club")}>
               <Box mb="3" mt="3">
                 <Text variant="textLg" fontWeight="600">
@@ -160,7 +169,7 @@ const BulletinMain: React.FC<NativeStackScreenProps<any, "BulletinMain">> = ({
                 </Text>
               </Box>
             </TouchableOpacity>
-            <Divider />
+            <Divider color={theme.colors.mainBgColor} />
             <TouchableOpacity onPress={() => navigateToBulletinDetail("Sbu")}>
               <Box mb="3" mt="3">
                 <Text variant="textLg" fontWeight="600">
@@ -173,7 +182,7 @@ const BulletinMain: React.FC<NativeStackScreenProps<any, "BulletinMain">> = ({
           <Box height={40} />
 
           <Box mx="4">
-            <Text variant="text2Xl" fontWeight="600">
+            <Text variant="text2Xl" fontWeight="600" color="textColor">
               홍보
             </Text>
             <Box>
@@ -183,15 +192,19 @@ const BulletinMain: React.FC<NativeStackScreenProps<any, "BulletinMain">> = ({
                     onPress={() => navigateToBulletinPost(promotionPost._id)}
                   >
                     <Box my="5" mx="4">
-                      <Text variant="textBase" fontWeight="600">
+                      <Text
+                        variant="textBase"
+                        fontWeight="600"
+                        color="textColor"
+                      >
                         {promotionPost.title}
                       </Text>
                       <Text
                         variant="textBase"
                         fontWeight="500"
-                        style={{
-                          color: theme.colors.gray600,
-                        }}
+                        color={
+                          isDarkMode?.mode === "dark" ? "gray400" : "gray600"
+                        }
                       >
                         {promotionPost.content}
                       </Text>
