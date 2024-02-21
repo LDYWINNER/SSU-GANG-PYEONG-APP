@@ -169,7 +169,7 @@ const TaskActions = ({ categoryId, updateTaskStatus }: TaskActionsProps) => {
               p="2"
               borderRadius="rounded-xl"
             >
-              <Box mr="1">
+              <Box>
                 <Ionicons
                   name="chevron-down"
                   size={16}
