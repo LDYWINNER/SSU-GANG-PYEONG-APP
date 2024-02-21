@@ -9,7 +9,7 @@ import { Loader, SafeAreaWrapper } from "../../components";
 import { Task, TaskActions } from "../../components/tasks";
 import { fetcher } from "../../utils/config";
 import { format, parseISO } from "date-fns";
-import { FlatList, TouchableOpacity, useColorScheme } from "react-native";
+import { FlatList, TouchableOpacity } from "react-native";
 import { ITask } from "../../types";
 import useUserGlobalStore from "../../store/useUserGlobal";
 import { Box, Text, Theme } from "../../theme";
@@ -20,9 +20,9 @@ import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";
 import useSWR from "swr";
 import useSWRMutation from "swr/mutation";
-import colors from "../../colors";
 import MoreMenu from "./MoreMenu";
 import { useTheme } from "@shopify/restyle";
+import useDarkMode from "../../store/useDarkMode";
 
 const todayISODate = new Date();
 todayISODate.setHours(-5, 0, 0, 0);
@@ -41,9 +41,9 @@ const OTHER = { key: "OTHER", color: "black", selectedDotColor: "black" };
 
 const HomeScreen = () => {
   const { user } = useUserGlobalStore();
-  const isDark = useColorScheme() === "dark";
-  const color = isDark ? "white" : colors.BLACK_COLOR;
+
   const theme = useTheme<Theme>();
+  const { isDarkMode } = useDarkMode();
 
   // date picking
   const [isSelectingDate, setIsSelectingDate] = useState<boolean>(true);
@@ -168,10 +168,10 @@ const HomeScreen = () => {
           alignItems="center"
         >
           <Box>
-            <Text variant="textXl" fontWeight="500">
+            <Text variant="textXl" fontWeight="500" color="textColor">
               Good {greeting} {user?.username}
             </Text>
-            <Text variant="textXl" fontWeight="500">
+            <Text variant="textXl" fontWeight="500" color="textColor">
               It’s{" "}
               {format(
                 new Date(dateForHeader).setHours(29, 0, 0, 0),
@@ -185,8 +185,12 @@ const HomeScreen = () => {
               onPress={() => setIsSelectingDate((prev) => !prev)}
             >
               <Ionicons
-                name={isDark ? "ios-calendar-outline" : "ios-calendar"}
-                color={color}
+                name={
+                  isDarkMode?.mode === "dark"
+                    ? "ios-calendar-outline"
+                    : "ios-calendar"
+                }
+                color={theme.colors.textColor}
                 size={35}
                 style={{ marginRight: 10 }}
               />
@@ -194,20 +198,27 @@ const HomeScreen = () => {
             <TouchableOpacity onPress={() => toggleMoreMenu()}>
               <Ionicons
                 name={
-                  isDark
+                  isDarkMode?.mode === "dark"
                     ? "ellipsis-horizontal-circle-outline"
                     : "ellipsis-horizontal-circle-sharp"
                 }
-                color={color}
+                color={theme.colors.textColor}
                 size={35}
               />
             </TouchableOpacity>
           </Box>
         </Box>
         <Box height={26} />
+
         {isSelectingDate && (
           <Box>
             <Calendar
+              theme={{
+                calendarBackground: theme.colors.mainBgColor,
+                dayTextColor: theme.colors.textColor,
+                textDisabledColor: "#444",
+                monthTextColor: "#888",
+              }}
               displayLoadingIndicator={isMutating}
               onDayPress={(day) => {
                 const selectedDate = new Date(day.dateString).toISOString();
@@ -231,6 +242,7 @@ const HomeScreen = () => {
         )}
         <TaskActions categoryId="" updateTaskStatus={trigger} />
         <Box height={26} />
+
         {isMutating ? (
           <Loader />
         ) : (
@@ -255,7 +267,7 @@ const HomeScreen = () => {
         onChange={handleSheetChange}
         backdropComponent={renderBackdrop}
         backgroundStyle={{
-          backgroundColor: isDark ? colors.BLACK_COLOR : "white",
+          backgroundColor: theme.colors.mainBgColor,
         }}
       >
         <MoreMenu />

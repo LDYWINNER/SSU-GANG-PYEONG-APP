@@ -66,6 +66,8 @@ interface ITask {
   isCompleted: boolean;
   categoryId: string;
   categoryTitle: string;
+  categoryName: string;
+  categoryColor: string;
   createdAt: string;
   date: string;
 }

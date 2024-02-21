@@ -131,11 +131,17 @@ const Task = ({ task, mutateTasks, updateTaskStatus }: TaskProps) => {
                 )}
               </Box>
             </AnimatedBox>
-            <Text ml="3" variant="textXl">
-              {task.name}
+            <Text
+              ml="3"
+              variant="textXl"
+              style={{
+                color: task.categoryColor,
+              }}
+            >
+              {task.categoryName}:{" "}
             </Text>
+            <Text variant="textXl">{task.name}</Text>
           </Box>
-          <Box></Box>
         </Box>
       </TouchableOpacity>
     </AnimatedBox>
