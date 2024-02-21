@@ -243,19 +243,15 @@ const HomeScreen = () => {
         <TaskActions categoryId="" updateTaskStatus={trigger} />
         <Box height={26} />
 
-        {isMutating ? (
-          <Loader />
-        ) : (
-          <FlatList
-            data={specificDayTasks}
-            renderItem={({ item }) => (
-              <Task task={item} updateTaskStatus={trigger} date={pickedDate} />
-            )}
-            ItemSeparatorComponent={() => <Box height={14} />}
-            showsVerticalScrollIndicator={false}
-            keyExtractor={(item) => item._id}
-          />
-        )}
+        <FlatList
+          data={specificDayTasks}
+          renderItem={({ item }) => (
+            <Task task={item} updateTaskStatus={trigger} date={pickedDate} />
+          )}
+          ItemSeparatorComponent={() => <Box height={14} />}
+          showsVerticalScrollIndicator={false}
+          keyExtractor={(item) => item._id}
+        />
       </Box>
 
       <BottomSheet
