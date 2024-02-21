@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axiosInstance, { BASE_URL, fetcher } from "../../utils/config";
 import { ICategory, ITask, ITaskRequest } from "../../types";
 import { format, isEqual, parseISO } from "date-fns";
-import { FlatList, TouchableOpacity, TextInput } from "react-native";
+import { FlatList, TouchableOpacity, TextInput, Alert } from "react-native";
 import { Calendar } from "react-native-calendars";
 import useSWR, { useSWRConfig } from "swr";
 import useSWRMutation from "swr/mutation";
@@ -73,6 +73,10 @@ const TaskActions = ({ categoryId, updateTaskStatus }: TaskActionsProps) => {
 
   const onCreateTask = async () => {
     try {
+      if (newTask.categoryId === "") {
+        Alert.alert("Please select a category");
+      }
+
       if (newTask.name.length.toString().trim().length > 0) {
         /**
          * mutation
