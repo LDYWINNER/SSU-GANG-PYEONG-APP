@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import axiosInstance, { BASE_URL, fetcher } from "../../utils/config";
+import axiosInstance, { fetcher } from "../../utils/config";
 import { ICategory, ITask, ITaskRequest } from "../../types";
-import { format, isEqual, parseISO } from "date-fns";
+import { isEqual, parseISO } from "date-fns";
 import { FlatList, TouchableOpacity, TextInput, Alert } from "react-native";
 import { Calendar } from "react-native-calendars";
 import useSWR, { useSWRConfig } from "swr";
@@ -13,7 +13,7 @@ import { useTheme } from "@shopify/restyle";
 
 type TaskActionsProps = {
   categoryId: string;
-  updateTaskStatus: () => Promise<ITask[] | undefined>;
+  updateTaskStatus?: () => Promise<ITask[] | undefined>;
 };
 
 export const today = new Date();
@@ -90,7 +90,9 @@ const TaskActions = ({ categoryId, updateTaskStatus }: TaskActionsProps) => {
           date: todaysISODate.toISOString(),
           name: "",
         });
-        await updateTaskStatus();
+        if (updateTaskStatus) {
+          await updateTaskStatus();
+        }
       }
     } catch (error) {
       console.log("error in onCreateTask", error);
@@ -237,6 +239,12 @@ const TaskActions = ({ categoryId, updateTaskStatus }: TaskActionsProps) => {
       {isSelectingDate && (
         <Box>
           <Calendar
+            theme={{
+              calendarBackground: theme.colors.mainBgColor,
+              dayTextColor: theme.colors.textColor,
+              textDisabledColor: "#444",
+              monthTextColor: "#888",
+            }}
             onDayPress={(day) => {
               setIsSelectingDate(false);
               const selectedDate = new Date(day.dateString).toISOString();

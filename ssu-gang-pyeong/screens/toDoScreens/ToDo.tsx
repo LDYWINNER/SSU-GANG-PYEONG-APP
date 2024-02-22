@@ -129,32 +129,37 @@ const HomeScreen = () => {
         };
       }
 
+      // console.log(presetTasks[taskDate].dots);
+
       // Push the category color object to the dots array
+      let dotColorSubj = null;
+      if (task.categoryTitle === "AMS") {
+        dotColorSubj = AMS;
+      } else if (task.categoryTitle === "ACC") {
+        dotColorSubj = ACC;
+      } else if (task.categoryTitle === "BUS") {
+        dotColorSubj = BUS;
+      } else if (task.categoryTitle === "CSE") {
+        dotColorSubj = CSE;
+      } else if (task.categoryTitle === "ESE") {
+        dotColorSubj = ESE;
+      } else if (task.categoryTitle === "EST") {
+        dotColorSubj = EST;
+      } else if (task.categoryTitle === "EMP") {
+        dotColorSubj = EMP;
+      } else if (task.categoryTitle === "MEC") {
+        dotColorSubj = MEC;
+      } else {
+        dotColorSubj = OTHER;
+      }
+
       if (
         !presetTasks[taskDate].dots
           .map((obj: any) => obj.key)
           .join()
-          .includes(task.categoryTitle)
+          .includes(dotColorSubj.key)
       ) {
-        presetTasks[taskDate].dots.push(
-          task.categoryTitle === "AMS"
-            ? AMS
-            : task.categoryTitle === "ACC"
-            ? ACC
-            : task.categoryTitle === "BUS"
-            ? BUS
-            : task.categoryTitle === "CSE"
-            ? CSE
-            : task.categoryTitle === "ESE"
-            ? ESE
-            : task.categoryTitle === "EST"
-            ? EST
-            : task.categoryTitle === "EMP"
-            ? EMP
-            : task.categoryTitle === "MEC"
-            ? MEC
-            : OTHER
-        );
+        presetTasks[taskDate].dots.push(dotColorSubj);
       }
     });
   }

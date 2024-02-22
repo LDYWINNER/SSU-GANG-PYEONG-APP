@@ -1,11 +1,11 @@
 import React from "react";
-import { Entypo } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { FadeInRight, FadeInLeft } from "react-native-reanimated";
 import { ICategory } from "../../types";
 import { AnimatedBox, Box, Text } from "../../theme";
 import { ToDoScreenNavigationType } from "../../navigation/types";
+// import { Entypo } from "@expo/vector-icons";
 
 type CategoryProps = {
   category: ICategory;
@@ -27,7 +27,10 @@ const Category = ({ category }: CategoryProps) => {
 
   return (
     <AnimatedBox entering={FadeInRight} exiting={FadeInLeft}>
-      <TouchableOpacity onPress={navigateToCategoryScreen}>
+      <TouchableOpacity
+        onPress={navigateToCategoryScreen}
+        onLongPress={navigateToCreateCategory}
+      >
         <Box bg="lightGray" p="4" borderRadius="rounded-5xl">
           <Box
             flexDirection="row"
@@ -38,13 +41,18 @@ const Category = ({ category }: CategoryProps) => {
               <Text variant="textBase" fontWeight="600" mr="3">
                 {category.icon.symbol}
               </Text>
-              <Text variant="textBase" fontWeight="600">
+              <Text
+                variant="textBase"
+                fontWeight="600"
+                style={{ color: category.color.code }}
+              >
                 {category.name}
               </Text>
             </Box>
-            <TouchableOpacity onPress={navigateToCreateCategory}>
+
+            {/* <TouchableOpacity onPress={navigateToCreateCategory}>
               <Entypo name="dots-three-vertical" size={16} />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </Box>
         </Box>
       </TouchableOpacity>

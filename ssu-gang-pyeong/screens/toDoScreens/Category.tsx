@@ -1,8 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Loader, NavigateBack, SafeAreaWrapper } from "../../components";
 import { Task, TaskActions } from "../../components/tasks";
 import { ToDoStackParamList } from "../../navigation/types";
-import axiosInstance, { fetcher } from "../../utils/config";
+import { fetcher } from "../../utils/config";
 import { ICategory, ITask } from "../../types";
 import { Box, Text } from "../../theme";
 import { RouteProp, useRoute } from "@react-navigation/native";
@@ -21,14 +21,14 @@ const Category = () => {
     fetcher
   );
 
-  console.log(`category`, JSON.stringify(category, null, 2));
+  // console.log(`category`, JSON.stringify(category, null, 2));
 
   const {
     data: tasks,
     isLoading: isLoadingTasks,
     mutate: mutateTasks,
   } = useSWR<ITask[]>(`api/v1/todotask/tasks-by-categories/${id}`, fetcher, {
-    refreshInterval: 500,
+    refreshInterval: 1000,
   });
 
   if (isLoadingTasks || isLoadingCategory || !category || !tasks) {
@@ -37,6 +37,7 @@ const Category = () => {
 
   return (
     <SafeAreaWrapper>
+      <Box height={16} />
       <Box flex={1} mx="4">
         <Box width={40}>
           <NavigateBack />
@@ -67,6 +68,8 @@ const Category = () => {
             return <Task task={item} mutateTasks={mutateTasks} />;
           }}
           ItemSeparatorComponent={() => <Box height={14} />}
+          showsVerticalScrollIndicator={false}
+          keyExtractor={(item) => item._id}
         />
       </Box>
     </SafeAreaWrapper>

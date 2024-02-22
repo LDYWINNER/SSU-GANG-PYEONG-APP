@@ -2,13 +2,13 @@ import React from "react";
 import { fetcher } from "../../utils/config";
 import { ICategory } from "../../types";
 import { Box, Text } from "../../theme";
-import { Loader, SafeAreaWrapper } from "../../components";
+import { Loader, NavigateBack, SafeAreaWrapper } from "../../components";
 import { Category, CreateNewList } from "../../components/categories";
 import { FlatList } from "react-native";
 import useSWR from "swr";
 
 const Categories = () => {
-  const { data, isLoading, error } = useSWR<ICategory[]>(
+  const { data, isLoading } = useSWR<ICategory[]>(
     "api/v1/todocategory/",
     fetcher,
     {
@@ -16,19 +16,25 @@ const Categories = () => {
     }
   );
 
-  if (isLoading) {
-    return <Loader />;
-  }
-
   const renderItem = ({ item }: { item: ICategory }) => (
     <Category category={item} />
   );
 
+  if (isLoading) {
+    return <Loader />;
+  }
   return (
     <SafeAreaWrapper>
       <Box flex={1} px="4">
-        <Text variant="textXl" fontWeight="700" mb="10">
+        <Box height={16} />
+        <Box width={40}>
+          <NavigateBack />
+        </Box>
+        <Text variant="textXl" fontWeight="700" mt="5" mb="2" color="textColor">
           Categories
+        </Text>
+        <Text color="textColor" mb="3" fontWeight="600">
+          Press longer to edit categories
         </Text>
         <FlatList
           data={data}
@@ -39,6 +45,7 @@ const Categories = () => {
         />
         <Box height={4} />
         <CreateNewList />
+        <Box height={25} />
       </Box>
     </SafeAreaWrapper>
   );
