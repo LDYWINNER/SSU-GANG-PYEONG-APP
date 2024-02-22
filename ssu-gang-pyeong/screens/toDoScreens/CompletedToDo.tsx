@@ -24,8 +24,12 @@ const CompletedToDo = () => {
     <SafeAreaWrapper>
       <Box flex={1} mx="4">
         <Box height={16} />
+        <Box width={40}>
+          <NavigateBack />
+        </Box>
+        <Box height={16} />
         <Box flexDirection="row">
-          <Text variant="textXl" fontWeight="700" ml="3">
+          <Text variant="textXl" fontWeight="700" ml="3" color="textColor">
             Completed
           </Text>
         </Box>
