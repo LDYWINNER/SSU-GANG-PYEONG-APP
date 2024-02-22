@@ -6,6 +6,8 @@ const palette = {
   red600: "#dc2626",
   orange300: "#fdba74",
   orange400: "#fb923c",
+  yellow300: "#fcd34d",
+  yellow500: "#f59e0b",
   green500: "#22c55e",
   green600: "#16a34a",
   sky400: "#38bdf8",

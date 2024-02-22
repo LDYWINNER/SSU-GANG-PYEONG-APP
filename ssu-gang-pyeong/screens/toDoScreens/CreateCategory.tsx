@@ -8,9 +8,10 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Box, Text, Theme } from "../../theme";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { useTheme } from "@shopify/restyle";
-import { TouchableOpacity, TextInput } from "react-native";
+import { TouchableOpacity, TextInput, Dimensions } from "react-native";
 import { useSWRConfig } from "swr";
 import useSWRMutation from "swr/mutation";
+import { ScrollView } from "react-native-gesture-handler";
 
 const COLORS = getColors();
 const ICONS = getIcons();
@@ -64,6 +65,9 @@ const CreateCategory = () => {
   const theme = useTheme<Theme>();
   const navigation = useNavigation();
 
+  const windowHeight = Dimensions.get("window").height;
+  const windowWidth = Dimensions.get("window").width;
+
   const route = useRoute<CreateCategoryRouteTypes>();
 
   const isEditing = route.params.category ? true : false;
@@ -85,7 +89,7 @@ const CreateCategory = () => {
 
   const { mutate } = useSWRConfig();
 
-  console.log(`route.params`, JSON.stringify(route.params, null, 2));
+  // console.log(`route.params`, JSON.stringify(route.params, null, 2));
 
   const [newCategory, setNewCategory] = useState<
     Omit<ICategory, "_id" | "user" | "isEditable">
@@ -192,85 +196,109 @@ const CreateCategory = () => {
           />
         </Box>
         <Box height={24} />
-        <Box bg="gray250" p="4" borderRadius="rounded-2xl">
-          <Box
-            bg="white"
-            width={80}
-            p="2"
-            mb="4"
-            borderRadius="rounded-2xl"
-            alignItems="center"
-          >
-            <Text
-              variant="textBase"
-              fontWeight="600"
-              color={newCategory.color.name as any}
-            >
-              Colors
-            </Text>
-          </Box>
 
-          <Box flexDirection="row" justifyContent="space-evenly">
-            {COLORS.map((_color) => {
-              return (
-                <TouchableOpacity
-                  key={_color.id}
-                  onPress={() => {
-                    updateColor(_color);
-                  }}
-                >
-                  <Box
-                    style={{
-                      backgroundColor: _color.code,
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <Box bg="gray250" p="4" borderRadius="rounded-2xl">
+            <Box
+              bg="white"
+              width={80}
+              p="2"
+              mb="4"
+              borderRadius="rounded-2xl"
+              alignItems="center"
+            >
+              <Text
+                variant="textBase"
+                fontWeight="600"
+                color={newCategory.color.name as any}
+              >
+                Colors
+              </Text>
+            </Box>
+
+            <Box
+              flexDirection="row"
+              flexWrap="wrap"
+              justifyContent="flex-start"
+            >
+              {COLORS.map((_color) => {
+                return (
+                  <TouchableOpacity
+                    key={_color.id}
+                    onPress={() => {
+                      updateColor(_color);
                     }}
-                    width={24}
-                    height={24}
-                    borderRadius="rounded-2xl"
-                  ></Box>
-                </TouchableOpacity>
-              );
-            })}
+                    style={{ width: "25%" }}
+                  >
+                    <Box
+                      style={{
+                        backgroundColor: _color.code,
+                        margin: 4,
+                      }}
+                      width={windowWidth * 0.1}
+                      height={windowHeight * 0.045}
+                      borderRadius="rounded-2xl"
+                    />
+                  </TouchableOpacity>
+                );
+              })}
+            </Box>
           </Box>
-        </Box>
 
-        <Box height={24} />
+          <Box height={24} />
 
-        <Box bg="gray250" p="4" borderRadius="rounded-2xl">
-          <Box
-            bg="white"
-            width={60}
-            p="2"
-            mb="4"
-            borderRadius="rounded-2xl"
-            alignItems="center"
-          >
-            <Text
-              variant="textBase"
-              fontWeight="600"
-              color={newCategory.color.name as any}
+          <Box bg="gray250" p="4" borderRadius="rounded-2xl">
+            <Box
+              bg="white"
+              width={60}
+              p="2"
+              mb="4"
+              borderRadius="rounded-2xl"
+              alignItems="center"
             >
-              {newCategory.icon.symbol}
-            </Text>
-          </Box>
+              <Text
+                variant="textBase"
+                fontWeight="600"
+                color={newCategory.color.name as any}
+              >
+                {newCategory.icon.symbol}
+              </Text>
+            </Box>
 
-          <Box flexDirection="row" justifyContent="space-evenly">
-            {ICONS.map((icon) => {
-              return (
-                <TouchableOpacity
-                  key={icon.id}
-                  onPress={() => {
-                    updateIcon(icon);
-                  }}
-                >
-                  <Box width={24} height={24} borderRadius="rounded-2xl">
-                    <Text>{icon.symbol}</Text>
-                  </Box>
-                </TouchableOpacity>
-              );
-            })}
+            <Box
+              flexDirection="row"
+              flexWrap="wrap"
+              justifyContent="flex-start"
+            >
+              {ICONS.map((icon) => {
+                return (
+                  <TouchableOpacity
+                    key={icon.id}
+                    onPress={() => {
+                      updateIcon(icon);
+                    }}
+                    style={{ width: "25%" }}
+                  >
+                    <Box
+                      backgroundColor="white"
+                      width={windowWidth * 0.1}
+                      height={windowHeight * 0.045}
+                      borderRadius="rounded-2xl"
+                      justifyContent="center"
+                      alignItems="center"
+                      margin="2"
+                    >
+                      <Text fontSize={20}>{icon.symbol}</Text>
+                    </Box>
+                  </TouchableOpacity>
+                );
+              })}
+            </Box>
           </Box>
-        </Box>
-        <Box position="absolute" bottom={4} left={0} right={0}>
+          <Box height={windowHeight * 0.1} />
+        </ScrollView>
+
+        <Box position="absolute" bottom={16} left={0} right={0}>
           <SmoothButton
             label={isEditing ? "Edit category" : "Create new Category"}
             onPress={createNewCategory}
