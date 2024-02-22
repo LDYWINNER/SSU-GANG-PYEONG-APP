@@ -1,37 +1,17 @@
 import React from "react";
-import styled from "styled-components/native";
 import { TouchableOpacity } from "react-native";
-import { useColorScheme } from "react-native";
-import colors from "../../colors";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { ToDoScreenNavigationType } from "../../navigation/types";
-
-const Wrapper = styled.View`
-  width: 100%;
-  height: 100%;
-  padding-top: 10px;
-  padding-left: 15px;
-`;
-
-const Row = styled.View`
-  flex-direction: row;
-  align-items: center;
-  border-bottom: 5px solid black;
-  margin-bottom: 10px;
-`;
-
-const Title = styled.Text<{ color: string }>`
-  color: ${(props) => props.color};
-  font-weight: 500;
-  font-size: 16px;
-  margin-left: 10px;
-`;
+import { Box, Text, Theme } from "../../theme";
+import useDarkMode from "../../store/useDarkMode";
+import { useTheme } from "@shopify/restyle";
 
 const MoreMenu = () => {
   const navigation = useNavigation<ToDoScreenNavigationType>();
-  const isDark = useColorScheme() === "dark";
-  const color = isDark ? "white" : colors.BLACK_COLOR;
+
+  const { isDarkMode } = useDarkMode();
+  const theme = useTheme<Theme>();
 
   const navigateToCreateCategory = () => {
     navigation.navigate("CreateCategory", {});
@@ -46,38 +26,50 @@ const MoreMenu = () => {
   };
 
   return (
-    <Wrapper>
+    <Box pt="3" px="3">
       <TouchableOpacity onPress={navigateToCreateCategory}>
-        <Row>
+        <Box flexDirection="row" alignItems="center" mb="3">
           <Ionicons
-            name={isDark ? "add-circle-outline" : "add-circle"}
-            color={color}
+            name={
+              isDarkMode?.mode === "dark" ? "add-circle-outline" : "add-circle"
+            }
+            color={theme.colors.textColor}
             size={35}
           />
-          <Title color={color}>Category 등록</Title>
-        </Row>
+          <Text ml="2" fontWeight="500" variant="textBase" color="textColor">
+            Category 등록
+          </Text>
+        </Box>
       </TouchableOpacity>
       <TouchableOpacity onPress={navigateToCategories}>
-        <Row>
+        <Box flexDirection="row" alignItems="center" mb="3">
           <Ionicons
-            name={isDark ? "file-tray-full-outline" : "file-tray-full"}
-            color={color}
+            name={
+              isDarkMode?.mode === "dark"
+                ? "file-tray-full-outline"
+                : "file-tray-full"
+            }
+            color={theme.colors.textColor}
             size={35}
           />
-          <Title color={color}>Category 관리</Title>
-        </Row>
+          <Text ml="2" fontWeight="500" variant="textBase" color="textColor">
+            Category 관리
+          </Text>
+        </Box>
       </TouchableOpacity>
       <TouchableOpacity onPress={navigateToCompletedToDo}>
-        <Row>
+        <Box flexDirection="row" alignItems="center">
           <Ionicons
-            name={isDark ? "checkbox-outline" : "checkbox"}
-            color={color}
+            name={isDarkMode?.mode === "dark" ? "checkbox-outline" : "checkbox"}
+            color={theme.colors.textColor}
             size={35}
           />
-          <Title color={color}>완료한 Todo 관리</Title>
-        </Row>
+          <Text ml="2" fontWeight="500" variant="textBase" color="textColor">
+            완료한 Todo 관리
+          </Text>
+        </Box>
       </TouchableOpacity>
-    </Wrapper>
+    </Box>
   );
 };
 

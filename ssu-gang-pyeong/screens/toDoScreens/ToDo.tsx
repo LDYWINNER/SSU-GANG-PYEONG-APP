@@ -270,6 +270,9 @@ const HomeScreen = () => {
         backgroundStyle={{
           backgroundColor: theme.colors.mainBgColor,
         }}
+        handleIndicatorStyle={{
+          backgroundColor: theme.colors.textColor,
+        }}
       >
         <MoreMenu />
       </BottomSheet>
