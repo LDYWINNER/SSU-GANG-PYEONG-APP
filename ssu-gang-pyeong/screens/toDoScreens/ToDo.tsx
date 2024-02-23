@@ -246,7 +246,7 @@ const HomeScreen = () => {
           </Box>
         )}
         <TaskActions categoryId="" updateTaskStatus={trigger} />
-        <Box height={16} />
+        <Box height={14} />
 
         <FlatList
           data={specificDayTasks}

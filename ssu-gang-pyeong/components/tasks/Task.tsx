@@ -2,7 +2,7 @@ import React from "react";
 import { HomeScreenNavigationType } from "../../navigation/types";
 import axiosInstance, { fetcher } from "../../utils/config";
 import { ITask } from "../../types";
-import { AnimatedBox, Box, Text } from "../../theme";
+import { AnimatedBox, Box, Text, Theme } from "../../theme";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native";
@@ -14,6 +14,10 @@ import {
   withSpring,
 } from "react-native-reanimated";
 import useSWRMutation from "swr/mutation";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { FontAwesome5 } from "@expo/vector-icons";
+import { useTheme } from "@shopify/restyle";
+import useDarkMode from "../../store/useDarkMode";
 
 type TaskProps = {
   task: ITask;
@@ -46,6 +50,9 @@ const Task = ({ task, mutateTasks, updateTaskStatus }: TaskProps) => {
   const checkmarkIconSize = useSharedValue(0.8);
 
   // const navigation = useNavigation<HomeScreenNavigationType>();
+
+  const theme = useTheme<Theme>();
+  const { isDarkMode } = useDarkMode();
 
   const { trigger, isMutating: isUpdating } = useSWRMutation(
     "api/v1/todotask/update",
@@ -100,17 +107,15 @@ const Task = ({ task, mutateTasks, updateTaskStatus }: TaskProps) => {
 
   return (
     <AnimatedBox entering={FadeInRight} exiting={FadeInLeft}>
-      <TouchableOpacity
-        onPress={toggleTaskStatus}
-        // onLongPress={navigateToEditTask}
+      <Box
+        p="4"
+        bg="lightGray"
+        borderRadius="rounded-5xl"
+        flexDirection="row"
+        justifyContent="space-between"
       >
-        <Box
-          p="4"
-          bg="lightGray"
-          borderRadius="rounded-5xl"
-          flexDirection="row"
-        >
-          <Box flexDirection="row" alignItems="center">
+        <Box flexDirection="row" alignItems="center">
+          <TouchableOpacity onPress={toggleTaskStatus}>
             <AnimatedBox
               style={[animatedStyles]}
               flexDirection="row"
@@ -131,19 +136,39 @@ const Task = ({ task, mutateTasks, updateTaskStatus }: TaskProps) => {
                 )}
               </Box>
             </AnimatedBox>
-            <Text
-              ml="3"
-              variant="textXl"
-              style={{
-                color: task.categoryColor,
-              }}
-            >
-              {task.categoryName}:{" "}
-            </Text>
-            <Text variant="textXl">{task.name}</Text>
-          </Box>
+          </TouchableOpacity>
+
+          <Text
+            ml="3"
+            variant="textXl"
+            style={{
+              color: task.categoryColor,
+            }}
+          >
+            {task.categoryName}:{" "}
+          </Text>
+          <Text variant="textXl">{task.name}</Text>
         </Box>
-      </TouchableOpacity>
+
+        <Box flexDirection="row" alignItems="center">
+          <TouchableOpacity>
+            <Box mr="3">
+              <MaterialCommunityIcons
+                name={
+                  isDarkMode?.mode === "dark"
+                    ? "pencil-circle-outline"
+                    : "pencil-circle"
+                }
+                size={36}
+                color={theme.colors.stBlack}
+              />
+            </Box>
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <FontAwesome5 name="trash" size={26} color={theme.colors.stBlack} />
+          </TouchableOpacity>
+        </Box>
+      </Box>
     </AnimatedBox>
   );
 };
