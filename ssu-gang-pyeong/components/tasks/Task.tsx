@@ -45,7 +45,7 @@ const toggleTaskStatusRequest = async (
   }
 };
 
-const Task = ({ task, mutateTasks, updateTaskStatus }: TaskProps) => {
+const Task = ({ task, mutateTasks, updateTaskStatus, date }: TaskProps) => {
   const offset = useSharedValue(1);
   const checkmarkIconSize = useSharedValue(0.8);
 
@@ -89,6 +89,7 @@ const Task = ({ task, mutateTasks, updateTaskStatus }: TaskProps) => {
   const navigateToEditTask = () => {
     navigation.navigate("EditTask", {
       task,
+      date,
     });
   };
 
@@ -151,7 +152,7 @@ const Task = ({ task, mutateTasks, updateTaskStatus }: TaskProps) => {
         </Box>
 
         <Box flexDirection="row" alignItems="center">
-          <TouchableOpacity onPress={() => navigateToEditTask()}>
+          <TouchableOpacity onPress={navigateToEditTask}>
             <Box mr="3">
               <MaterialCommunityIcons
                 name={

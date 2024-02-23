@@ -1,17 +1,24 @@
 import { Box, Text, Theme } from "../../theme";
 import React, { useState } from "react";
-import { FlatList, Pressable, TextInput } from "react-native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Alert, FlatList, TextInput } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "@shopify/restyle";
-import { isToday, format } from "date-fns";
+import { isEqual, parseISO } from "date-fns";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import axiosInstance, { fetcher } from "../../utils/config";
 import { ICategory, ITask } from "../../types";
-import useSWR, { useSWRConfig } from "swr";
+import useSWR from "swr";
 import useSWRMutation from "swr/mutation";
 import { Calendar } from "react-native-calendars";
 import { ToDoStackParamList } from "../../navigation/types";
-import { NavigateBack, Loader, SafeAreaWrapper } from "../../components";
+import {
+  NavigateBack,
+  Loader,
+  SafeAreaWrapper,
+  SmoothButton,
+} from "../../components";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { todaysISODate } from "../../components/tasks/TaskActions";
 
 type EditTaskRouteType = RouteProp<ToDoStackParamList, "EditTask">;
 
@@ -23,14 +30,14 @@ const updateTaskRequest = async (url: string, { arg }: { arg: ITask }) => {
   } catch (error) {}
 };
 
-const deleteTaskRequest = async (
-  url: string,
-  { arg }: { arg: { id: string } }
-) => {
-  try {
-    await axiosInstance.delete(url + "/" + arg.id);
-  } catch (error) {}
-};
+// const deleteTaskRequest = async (
+//   url: string,
+//   { arg }: { arg: { id: string } }
+// ) => {
+//   try {
+//     await axiosInstance.delete(url + "/" + arg.id);
+//   } catch (error) {}
+// };
 
 const EditTask = () => {
   const theme = useTheme<Theme>();
@@ -39,45 +46,46 @@ const EditTask = () => {
 
   const navigation = useNavigation();
 
-  const { trigger } = useSWRMutation("tasks/edit", updateTaskRequest);
-  const { trigger: triggerDelete } = useSWRMutation(
-    "tasks/",
-    deleteTaskRequest
-  );
-
-  const { task } = route.params;
-
-  const [updatedTask, setUpdatedTask] = useState(task);
-
-  const { mutate } = useSWRConfig();
+  const { trigger } = useSWRMutation("api/v1/todotask/edit", updateTaskRequest);
+  // const { trigger: triggerDelete } = useSWRMutation(
+  //   "api/v1/todotask/",
+  //   deleteTaskRequest
+  // );
 
   const [isSelectingCategory, setIsSelectingCategory] =
     useState<boolean>(false);
   const [isSelectingDate, setIsSelectingDate] = useState<boolean>(false);
+
+  const { task, date } = route.params;
+
+  const [updatedTask, setUpdatedTask] = useState<ITask>(task);
 
   const { data: categories, isLoading } = useSWR<ICategory[]>(
     "api/v1/todocategory/",
     fetcher
   );
 
-  const deleteTask = async () => {
-    try {
-      await triggerDelete({
-        id: task._id,
-      });
-      await mutate("tasks/");
-      navigation.goBack();
-    } catch (error) {
-      console.log("error in deleteTask", error);
-      throw error;
-    }
-  };
+  // const deleteTask = async () => {
+  //   try {
+  //     await triggerDelete({
+  //       id: task._id,
+  //     });
+  //     await mutate("tasks/");
+  //     navigation.goBack();
+  //   } catch (error) {
+  //     console.log("error in deleteTask", error);
+  //     throw error;
+  //   }
+  // };
 
   const updateTask = async () => {
     try {
-      if (updateTask.name.length.toString().trim().length > 0) {
+      if (updatedTask.categoryId === "") {
+        Alert.alert("Please select a category");
+      }
+
+      if (updatedTask.name.length.toString().trim().length > 0) {
         await trigger({ ...updatedTask });
-        await mutate("tasks/");
         navigation.goBack();
       }
     } catch (error) {
@@ -86,40 +94,26 @@ const EditTask = () => {
     }
   };
 
-  if (isLoading || !categories) {
-    return <Loader />;
-  }
-
   const selectedCategory = categories?.find(
     (_category) => _category._id === updatedTask.categoryId
   );
 
+  if (isLoading || !categories) {
+    return <Loader />;
+  }
   return (
     <SafeAreaWrapper>
       <Box flex={1} mx="4">
-        <Box
-          flexDirection="row"
-          alignItems="center"
-          justifyContent="space-between"
-        >
+        <Box width={40} mb="5">
           <NavigateBack />
-          <Pressable onPress={deleteTask}>
-            <MaterialCommunityIcons
-              name="delete"
-              size={24}
-              color={theme.colors.rose500}
-            />
-          </Pressable>
         </Box>
-
-        <Box height={20} />
-
         <Box
           bg="lightGray"
           px="4"
           py="3.5"
           borderRadius="rounded-5xl"
           flexDirection="row"
+          justifyContent="space-between"
           position="relative"
         >
           <TextInput
@@ -128,7 +122,6 @@ const EditTask = () => {
               paddingVertical: 8,
               paddingHorizontal: 8,
               fontSize: 16,
-              width: "50%",
             }}
             maxLength={36}
             textAlignVertical="center"
@@ -141,12 +134,16 @@ const EditTask = () => {
                 };
               });
             }}
-            onSubmitEditing={updateTask}
           />
           <Box flexDirection="row" alignItems="center">
-            <Pressable
+            <TouchableOpacity
               onPress={() => {
                 setIsSelectingDate((prev) => !prev);
+                // console.log("start");
+                // console.log(parseISO(newTask.date));
+                // console.log(new Date(today.setHours(0)));
+                // console.log(todaysISODate);
+                // console.log(isEqual(parseISO(newTask.date), todaysISODate));
               }}
             >
               <Box
@@ -157,14 +154,16 @@ const EditTask = () => {
                 borderRadius="rounded-xl"
               >
                 <Text>
-                  {isToday(new Date(updatedTask.date))
+                  {isEqual(todaysISODate, parseISO(updatedTask.date))
                     ? "Today"
-                    : format(new Date(updatedTask.date), "MMM dd")}
+                    : `${new Date(updatedTask.date).getMonth() + 1}/${
+                        new Date(updatedTask.date).getDate() + 1
+                      }`}
                 </Text>
               </Box>
-            </Pressable>
+            </TouchableOpacity>
             <Box width={12} />
-            <Pressable
+            <TouchableOpacity
               onPress={() => {
                 setIsSelectingCategory((prev) => !prev);
               }}
@@ -176,16 +175,13 @@ const EditTask = () => {
                 p="2"
                 borderRadius="rounded-xl"
               >
-                <Box
-                  width={12}
-                  height={12}
-                  borderRadius="rounded"
-                  borderWidth={2}
-                  mr="1"
-                  style={{
-                    borderColor: selectedCategory?.color.code,
-                  }}
-                ></Box>
+                <Box>
+                  <Ionicons
+                    name="chevron-down"
+                    size={16}
+                    color={selectedCategory?.color.code}
+                  />
+                </Box>
                 <Text
                   style={{
                     color: selectedCategory?.color.code,
@@ -194,17 +190,16 @@ const EditTask = () => {
                   {selectedCategory?.name}
                 </Text>
               </Box>
-            </Pressable>
+            </TouchableOpacity>
           </Box>
         </Box>
-
         {isSelectingCategory && (
           <Box alignItems="flex-end" my="4" justifyContent="flex-end">
             <FlatList
               data={categories}
               renderItem={({ item, index }) => {
                 return (
-                  <Pressable
+                  <TouchableOpacity
                     onPress={() => {
                       setUpdatedTask((prev) => {
                         return {
@@ -245,7 +240,7 @@ const EditTask = () => {
                         </Text>
                       </Box>
                     </Box>
-                  </Pressable>
+                  </TouchableOpacity>
                 );
               }}
             />
@@ -254,6 +249,12 @@ const EditTask = () => {
         {isSelectingDate && (
           <Box>
             <Calendar
+              theme={{
+                calendarBackground: theme.colors.mainBgColor,
+                dayTextColor: theme.colors.textColor,
+                textDisabledColor: "#444",
+                monthTextColor: "#888",
+              }}
               onDayPress={(day) => {
                 setIsSelectingDate(false);
                 const selectedDate = new Date(day.dateString).toISOString();
@@ -267,6 +268,10 @@ const EditTask = () => {
             />
           </Box>
         )}
+
+        <Box position="absolute" bottom={16} left={0} right={0}>
+          <SmoothButton label={"Edit task"} onPress={updateTask} />
+        </Box>
       </Box>
     </SafeAreaWrapper>
   );

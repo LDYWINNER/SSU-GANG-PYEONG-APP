@@ -55,6 +55,7 @@ export type ToDoStackParamList = {
   CompletedToDo: undefined;
   EditTask: {
     task: ITask;
+    date: string | undefined;
   };
 };
 

@@ -4,7 +4,7 @@ import { ICategory, ITask, ITaskRequest } from "../../types";
 import { isEqual, parseISO } from "date-fns";
 import { FlatList, TouchableOpacity, TextInput, Alert } from "react-native";
 import { Calendar } from "react-native-calendars";
-import useSWR, { useSWRConfig } from "swr";
+import useSWR from "swr";
 import useSWRMutation from "swr/mutation";
 import { Loader } from "../../components";
 import { Box, Text, Theme } from "../../theme";
@@ -58,8 +58,6 @@ const TaskActions = ({ categoryId, updateTaskStatus }: TaskActionsProps) => {
     "api/v1/todocategory/",
     fetcher
   );
-
-  const { mutate } = useSWRConfig();
 
   if (isLoading || !categories) {
     return <Loader />;

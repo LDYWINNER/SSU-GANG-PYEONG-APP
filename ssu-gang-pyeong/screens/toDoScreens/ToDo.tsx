@@ -23,6 +23,7 @@ import useSWRMutation from "swr/mutation";
 import MoreMenu from "./MoreMenu";
 import { useTheme } from "@shopify/restyle";
 import useDarkMode from "../../store/useDarkMode";
+import { useFocusEffect } from "@react-navigation/native";
 
 const todayISODate = new Date();
 todayISODate.setHours(-5, 0, 0, 0);
@@ -106,10 +107,16 @@ const HomeScreen = () => {
     isMutating,
   } = useSWRMutation<ITask[]>(`api/v1/todotask/${pickedDate}`, fetcher);
 
-  useEffect(() => {
-    trigger();
-    // console.log(specificDayTasks);
-  }, [pickedDate]);
+  // useEffect(() => {
+  //   trigger();
+  //   // console.log(specificDayTasks);
+  // }, [pickedDate]);
+
+  useFocusEffect(
+    useCallback(() => {
+      trigger();
+    }, [pickedDate])
+  );
 
   if (isLoading || !specificDayTasks) {
     return <Loader />;
@@ -245,18 +252,23 @@ const HomeScreen = () => {
             <Box height={26} />
           </Box>
         )}
+
         <TaskActions categoryId="" updateTaskStatus={trigger} />
         <Box height={14} />
 
-        <FlatList
-          data={specificDayTasks}
-          renderItem={({ item }) => (
-            <Task task={item} updateTaskStatus={trigger} date={pickedDate} />
-          )}
-          ItemSeparatorComponent={() => <Box height={14} />}
-          showsVerticalScrollIndicator={false}
-          keyExtractor={(item) => item._id}
-        />
+        {isMutating ? (
+          <Loader />
+        ) : (
+          <FlatList
+            data={specificDayTasks}
+            renderItem={({ item }) => (
+              <Task task={item} updateTaskStatus={trigger} date={pickedDate} />
+            )}
+            ItemSeparatorComponent={() => <Box height={14} />}
+            showsVerticalScrollIndicator={false}
+            keyExtractor={(item) => item._id}
+          />
+        )}
       </Box>
 
       <BottomSheet
