@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 import { Loader, SafeAreaWrapper } from "../../components";
 import { Task, TaskActions } from "../../components/tasks";
 import { fetcher } from "../../utils/config";

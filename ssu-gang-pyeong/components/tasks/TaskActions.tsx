@@ -128,6 +128,7 @@ const TaskActions = ({ categoryId, updateTaskStatus }: TaskActionsProps) => {
             });
           }}
           onSubmitEditing={onCreateTask}
+          autoComplete="off"
         />
         <Box flexDirection="row" alignItems="center">
           <TouchableOpacity

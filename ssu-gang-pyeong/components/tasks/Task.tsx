@@ -1,6 +1,6 @@
 import React from "react";
 import { ToDoScreenNavigationType } from "../../navigation/types";
-import axiosInstance, { fetcher } from "../../utils/config";
+import axiosInstance from "../../utils/config";
 import { ITask } from "../../types";
 import { AnimatedBox, Box, Text, Theme } from "../../theme";
 import { Ionicons } from "@expo/vector-icons";
@@ -45,6 +45,15 @@ const toggleTaskStatusRequest = async (
   }
 };
 
+const deleteTaskRequest = async (
+  url: string,
+  { arg }: { arg: { id: string } }
+) => {
+  try {
+    await axiosInstance.delete(url + "/" + arg.id);
+  } catch (error) {}
+};
+
 const Task = ({ task, mutateTasks, updateTaskStatus, date }: TaskProps) => {
   const offset = useSharedValue(1);
   const checkmarkIconSize = useSharedValue(0.8);
@@ -57,6 +66,11 @@ const Task = ({ task, mutateTasks, updateTaskStatus, date }: TaskProps) => {
   const { trigger, isMutating: isUpdating } = useSWRMutation(
     "api/v1/todotask/update",
     toggleTaskStatusRequest
+  );
+
+  const { trigger: triggerDelete } = useSWRMutation(
+    "api/v1/todotask/",
+    deleteTaskRequest
   );
 
   const toggleTaskStatus = async () => {
@@ -82,6 +96,20 @@ const Task = ({ task, mutateTasks, updateTaskStatus, date }: TaskProps) => {
       }
     } catch (error) {
       console.log("error in toggleTaskStatus", error);
+      throw error;
+    }
+  };
+
+  const deleteTask = async () => {
+    try {
+      await triggerDelete({
+        id: task._id,
+      });
+      if (updateTaskStatus) {
+        await updateTaskStatus();
+      }
+    } catch (error) {
+      console.log("error in deleteTask", error);
       throw error;
     }
   };
@@ -165,7 +193,7 @@ const Task = ({ task, mutateTasks, updateTaskStatus, date }: TaskProps) => {
               />
             </Box>
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={deleteTask}>
             <FontAwesome5 name="trash" size={26} color={theme.colors.stBlack} />
           </TouchableOpacity>
         </Box>

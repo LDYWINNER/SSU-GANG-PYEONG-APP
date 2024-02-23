@@ -30,15 +30,6 @@ const updateTaskRequest = async (url: string, { arg }: { arg: ITask }) => {
   } catch (error) {}
 };
 
-// const deleteTaskRequest = async (
-//   url: string,
-//   { arg }: { arg: { id: string } }
-// ) => {
-//   try {
-//     await axiosInstance.delete(url + "/" + arg.id);
-//   } catch (error) {}
-// };
-
 const EditTask = () => {
   const theme = useTheme<Theme>();
 
@@ -47,10 +38,6 @@ const EditTask = () => {
   const navigation = useNavigation();
 
   const { trigger } = useSWRMutation("api/v1/todotask/edit", updateTaskRequest);
-  // const { trigger: triggerDelete } = useSWRMutation(
-  //   "api/v1/todotask/",
-  //   deleteTaskRequest
-  // );
 
   const [isSelectingCategory, setIsSelectingCategory] =
     useState<boolean>(false);
@@ -64,19 +51,6 @@ const EditTask = () => {
     "api/v1/todocategory/",
     fetcher
   );
-
-  // const deleteTask = async () => {
-  //   try {
-  //     await triggerDelete({
-  //       id: task._id,
-  //     });
-  //     await mutate("tasks/");
-  //     navigation.goBack();
-  //   } catch (error) {
-  //     console.log("error in deleteTask", error);
-  //     throw error;
-  //   }
-  // };
 
   const updateTask = async () => {
     try {
