@@ -1,5 +1,5 @@
 import React from "react";
-import { HomeScreenNavigationType } from "../../navigation/types";
+import { ToDoScreenNavigationType } from "../../navigation/types";
 import axiosInstance, { fetcher } from "../../utils/config";
 import { ITask } from "../../types";
 import { AnimatedBox, Box, Text, Theme } from "../../theme";
@@ -49,7 +49,7 @@ const Task = ({ task, mutateTasks, updateTaskStatus }: TaskProps) => {
   const offset = useSharedValue(1);
   const checkmarkIconSize = useSharedValue(0.8);
 
-  // const navigation = useNavigation<HomeScreenNavigationType>();
+  const navigation = useNavigation<ToDoScreenNavigationType>();
 
   const theme = useTheme<Theme>();
   const { isDarkMode } = useDarkMode();
@@ -86,11 +86,11 @@ const Task = ({ task, mutateTasks, updateTaskStatus }: TaskProps) => {
     }
   };
 
-  // const navigateToEditTask = () => {
-  //   navigation.navigate("EditTask", {
-  //     task,
-  //   });
-  // };
+  const navigateToEditTask = () => {
+    navigation.navigate("EditTask", {
+      task,
+    });
+  };
 
   const animatedStyles = useAnimatedStyle(() => {
     return {
@@ -151,7 +151,7 @@ const Task = ({ task, mutateTasks, updateTaskStatus }: TaskProps) => {
         </Box>
 
         <Box flexDirection="row" alignItems="center">
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigateToEditTask()}>
             <Box mr="3">
               <MaterialCommunityIcons
                 name={

@@ -1,4 +1,4 @@
-import { ICategory, ITable } from "../types";
+import { ICategory, ITable, ITask } from "../types";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import {
   CompositeNavigationProp,
@@ -53,6 +53,9 @@ export type ToDoStackParamList = {
     id: string;
   };
   CompletedToDo: undefined;
+  EditTask: {
+    task: ITask;
+  };
 };
 
 export type NotificationStackParamList = {

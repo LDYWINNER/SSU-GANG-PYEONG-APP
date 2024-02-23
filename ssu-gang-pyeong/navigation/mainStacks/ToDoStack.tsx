@@ -7,6 +7,7 @@ import {
   Category,
   CompletedToDo,
   MoreMenu,
+  EditTask,
 } from "../../screens/toDoScreens";
 
 const NativeStack = createNativeStackNavigator();
@@ -46,6 +47,11 @@ const ToDoStack = () => {
       <NativeStack.Screen
         name="MoreMenu"
         component={MoreMenu}
+        options={{ presentation: "card", headerShown: false }}
+      />
+      <NativeStack.Screen
+        name="EditTask"
+        component={EditTask}
         options={{ presentation: "card", headerShown: false }}
       />
     </NativeStack.Navigator>
