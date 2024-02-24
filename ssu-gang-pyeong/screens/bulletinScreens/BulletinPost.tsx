@@ -379,22 +379,14 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
                         alignItems="center"
                       >
                         <TouchableOpacity>
-                          <Ionicons
-                            name="chatbubble-outline"
-                            size={16}
-                            color={theme.colors.gray500}
-                          />
-                        </TouchableOpacity>
-                        <Text>
-                          {"   "}| {"  "}
-                        </Text>
-                        <TouchableOpacity>
                           <FontAwesome5
                             name="thumbs-up"
                             size={16}
                             color={theme.colors.gray500}
                           />
                         </TouchableOpacity>
+                        <Box width={6} />
+                        <Text fontWeight="500">공감</Text>
                       </Box>
                     </Box>
                   </Box>
