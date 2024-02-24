@@ -80,6 +80,30 @@ const addBulletinCommentRequest = async (
   }
 };
 
+const deleteCommentRequest = async (
+  url: string,
+  { arg }: { arg: { id: string } }
+) => {
+  try {
+    await axiosInstance.delete(url + "/" + arg.id);
+  } catch (error) {
+    console.log("error in deleteCommentRequest", error);
+    throw error;
+  }
+};
+
+const likeCommentRequest = async (
+  url: string,
+  { arg }: { arg: { id: string } }
+) => {
+  try {
+    await axiosInstance.patch(url + "/" + arg.id);
+  } catch (error) {
+    console.log("error in likeCommentRequest", error);
+    throw error;
+  }
+};
+
 const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
   navigation: { goBack },
 }) => {
@@ -107,15 +131,15 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
     mutate: mutatePost,
   } = useSWR<{ post: IBulletinPost }>(`/api/v1/bulletin/${id}`, fetcher);
 
-  const { trigger: triggerDelete } = useSWRMutation(
-    "api/v1/bulletin/",
-    deletePostRequest
-  );
-
   const { trigger: updatePosts } = useSWRMutation<{
     bulletinAllPosts: IBulletinPost[];
     bulletinTotalPosts: number;
   }>(`/api/v1/bulletin?board=${board}`, fetcher);
+
+  const { trigger: triggerDelete } = useSWRMutation(
+    "api/v1/bulletin/",
+    deletePostRequest
+  );
 
   const { trigger: likePostTrigger } = useSWRMutation(
     "api/v1/bulletin/",
@@ -125,6 +149,16 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
   const { trigger: addBulletinComment } = useSWRMutation(
     `api/v1/bulletin/${id}`,
     addBulletinCommentRequest
+  );
+
+  const { trigger: commentDeleteTrigger } = useSWRMutation(
+    "api/v1/bulletin/comment",
+    deleteCommentRequest
+  );
+
+  const { trigger: likeCommentTrigger } = useSWRMutation(
+    "api/v1/bulletin/comment",
+    likeCommentRequest
   );
 
   const addComment = async () => {
@@ -150,6 +184,20 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
     }
   };
 
+  const likePost = async () => {
+    try {
+      const _updatePostReq = {
+        id: post!._id,
+        like: true,
+      };
+      await likePostTrigger(_updatePostReq);
+      await mutatePost();
+    } catch (error) {
+      console.log("error in likePost", error);
+      throw error;
+    }
+  };
+
   const deletePost = async () => {
     try {
       await triggerDelete({
@@ -163,13 +211,24 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
     }
   };
 
-  const likePost = async () => {
+  const deleteComment = async (commentId: string) => {
     try {
-      const _updatePostReq = {
-        id: post!._id,
-        like: true,
+      await commentDeleteTrigger({
+        id: commentId,
+      });
+      await mutatePost();
+    } catch (error) {
+      console.log("error in deleteTask", error);
+      throw error;
+    }
+  };
+
+  const likeComment = async (commentId: string) => {
+    try {
+      const _updateCommentReq = {
+        id: commentId,
       };
-      await likePostTrigger(_updatePostReq);
+      await likeCommentTrigger(_updateCommentReq);
       await mutatePost();
     } catch (error) {
       console.log("error in likePost", error);
@@ -384,7 +443,10 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
                           onPress={() =>
                             Alert.alert("공감", "이 댓글에 공감하시겠습니까?", [
                               { text: "취소", onPress: () => {} },
-                              { text: "확인", onPress: () => {} },
+                              {
+                                text: "확인",
+                                onPress: () => likeComment(comment._id),
+                              },
                             ])
                           }
                         >
@@ -406,7 +468,10 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
                                   "이 댓글을 삭제하시겠습니까?",
                                   [
                                     { text: "취소", onPress: () => {} },
-                                    { text: "확인", onPress: () => {} },
+                                    {
+                                      text: "확인",
+                                      onPress: () => deleteComment(comment._id),
+                                    },
                                   ]
                                 )
                               }
