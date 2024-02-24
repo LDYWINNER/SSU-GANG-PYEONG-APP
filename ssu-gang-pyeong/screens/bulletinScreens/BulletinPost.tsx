@@ -105,7 +105,7 @@ const likeCommentRequest = async (
 };
 
 const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
-  navigation: { goBack },
+  navigation: { navigate, goBack },
 }) => {
   const theme = useTheme<Theme>();
   const { isDarkMode } = useDarkMode();
@@ -288,7 +288,15 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
               }
               onRequestClose={hideMenu}
             >
-              <MenuItem onPress={hideMenu}>
+              <MenuItem
+                onPress={() => {
+                  hideMenu();
+                  navigate("MainStack", {
+                    screen: "WritePost",
+                    params: { post },
+                  });
+                }}
+              >
                 <Box flexDirection="row" alignItems="center">
                   <Box width={10} />
                   <MaterialCommunityIcons

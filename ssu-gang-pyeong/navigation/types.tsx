@@ -23,6 +23,7 @@ export type BulletinStackParamList = {
     board?: string;
   };
   WritePost: {
+    post?: IBulletinPost;
     courseInfo?: string;
     board: string;
   };

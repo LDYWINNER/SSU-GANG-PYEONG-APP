@@ -34,20 +34,36 @@ const addBulletinPostRequest = async (
   }
 };
 
+const updateBulletinPostRequest = async (
+  url: string,
+  { arg }: { arg: IBulletinPostRequest }
+) => {
+  try {
+    await axiosInstance.put(url, {
+      ...arg,
+    });
+  } catch (error) {
+    console.log("error in updateBulletinPostRequest", error);
+    throw error;
+  }
+};
+
 const WritePost: React.FC<NativeStackScreenProps<any, "WritePost">> = ({
   navigation: { goBack },
 }) => {
   const theme = useTheme<Theme>();
 
-  const [isSelected, setSelection] = useState(true);
+  const [anonymity, setAnonymity] = useState(true);
 
   const route = useRoute<WritePostScreenRouteProp>();
   const { board, courseInfo } = route.params;
 
+  const isEditing = route.params.post ? true : false;
+
   const { control, watch } = useForm<IPost>({
     defaultValues: {
-      title: "",
-      content: "",
+      title: route.params.post?.title ?? "",
+      content: route.params.post?.content ?? "",
     },
   });
 
@@ -56,7 +72,13 @@ const WritePost: React.FC<NativeStackScreenProps<any, "WritePost">> = ({
     addBulletinPostRequest
   );
 
+  const { trigger: updateBulletinPost } = useSWRMutation(
+    "api/v1/bulletin/update",
+    updateBulletinPostRequest
+  );
+
   const createNewPost = async () => {
+    const _id: string = route.params.post!._id;
     const title = watch("title");
     const content = watch("content");
 
@@ -64,23 +86,39 @@ const WritePost: React.FC<NativeStackScreenProps<any, "WritePost">> = ({
       Alert.alert("Empty Fields", "Both title and content are required.", [
         { text: "OK" },
       ]);
-      return; // Prevent the rest of the function from running
+      return;
     }
 
     try {
-      await addBulletinPost({
-        title:
-          board === "course"
-            ? courseInfo + ": " + watch("title")
-            : watch("title"),
-        content: watch("content"),
-        anonymity: isSelected,
-        board,
-      });
+      if (isEditing) {
+        const updatedPostItem = {
+          _id,
+          title,
+          content,
+          anonymity,
+          board,
+        };
+        await updateBulletinPost({
+          ...updatedPostItem,
+        });
+      } else {
+        await addBulletinPost({
+          title:
+            board === "course"
+              ? courseInfo + ": " + watch("title")
+              : watch("title"),
+          content: watch("content"),
+          anonymity,
+          board,
+        });
+      }
 
-      if (board === "course") {
+      if (isEditing) {
+        updatePost();
+      } else if (board === "course") {
         courseBulletinMutate();
       } else {
+        console.log("mutate");
         mutate();
       }
 
@@ -100,6 +138,11 @@ const WritePost: React.FC<NativeStackScreenProps<any, "WritePost">> = ({
     bulletinAllPosts: IBulletinPost[];
     bulletinTotalPosts: number;
   }>(`/api/v1/bulletin?board=course&search=${courseInfo}`, fetcher);
+
+  const { trigger: updatePost } = useSWRMutation<{ post: IBulletinPost }>(
+    `/api/v1/bulletin/${route.params.post!._id}`,
+    fetcher
+  );
 
   return (
     <SafeAreaWrapper>
@@ -238,7 +281,7 @@ const WritePost: React.FC<NativeStackScreenProps<any, "WritePost">> = ({
         </Box>
 
         <Box alignSelf="flex-end" mr="3">
-          <TouchableOpacity onPress={() => setSelection(!isSelected)}>
+          <TouchableOpacity onPress={() => setAnonymity(!anonymity)}>
             <Box flexDirection="row" alignItems="center">
               <BouncyCheckbox
                 size={25}
@@ -250,9 +293,9 @@ const WritePost: React.FC<NativeStackScreenProps<any, "WritePost">> = ({
                   borderWidth: 2,
                 }}
                 disableText
-                isChecked={isSelected}
+                isChecked={anonymity}
                 disableBuiltInState
-                onPress={() => setSelection(!isSelected)}
+                onPress={() => setAnonymity(!anonymity)}
               />
               <Text
                 ml="1"
