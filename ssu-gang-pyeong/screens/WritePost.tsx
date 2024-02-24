@@ -168,7 +168,7 @@ const WritePost: React.FC<NativeStackScreenProps<any, "WritePost">> = ({
                   style={{
                     padding: 16,
                     height: "10%",
-                    color: "black",
+                    color: theme.colors.textColor,
                     borderBottomWidth: 1,
                     borderBottomColor: theme.colors.gray200,
                     marginBottom: 20,
@@ -195,7 +195,7 @@ const WritePost: React.FC<NativeStackScreenProps<any, "WritePost">> = ({
                   placeholderTextColor={theme.colors.gray400}
                   style={{
                     padding: 16,
-                    color: "black",
+                    color: theme.colors.textColor,
                     fontSize: 16,
                     textAlignVertical: "top", // to align text to the top on Android
                     flex: 1,
