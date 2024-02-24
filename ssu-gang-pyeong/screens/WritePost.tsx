@@ -60,13 +60,10 @@ const WritePost: React.FC<NativeStackScreenProps<any, "WritePost">> = ({
     const title = watch("title");
     const content = watch("content");
 
-    // Check if title or content is empty
     if (!title.trim() || !content.trim()) {
-      Alert.alert(
-        "Empty Fields", // Title of the alert
-        "Both title and content are required.", // Message of the alert
-        [{ text: "OK" }] // Array of buttons
-      );
+      Alert.alert("Empty Fields", "Both title and content are required.", [
+        { text: "OK" },
+      ]);
       return; // Prevent the rest of the function from running
     }
 

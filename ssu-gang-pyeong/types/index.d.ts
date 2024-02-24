@@ -20,11 +20,6 @@ interface IAuthenticatedUser {
   };
 }
 
-interface ILikePostRequest {
-  id: string;
-  like: boolean;
-}
-
 export interface IColor {
   name: string;
   id: string;
@@ -154,6 +149,11 @@ interface IBulletinPost {
   createdAt: string;
 }
 
+interface ILikePostRequest {
+  id: string;
+  like: boolean;
+}
+
 interface IBulletinPostComment {
   _id: string;
   text: string;
@@ -169,6 +169,16 @@ interface IBulletinPostRequest {
   title: string;
   content: string;
   board: string;
+  anonymity: boolean;
+}
+
+interface IComment {
+  text: string;
+  anonymity: boolean;
+}
+
+interface IBulletinCommentRequest {
+  text: string;
   anonymity: boolean;
 }
 

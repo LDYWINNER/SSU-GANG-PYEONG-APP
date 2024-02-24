@@ -11,8 +11,13 @@ import { RouteProp, useRoute } from "@react-navigation/native";
 import { BulletinStackParamList } from "../../navigation/types";
 import useSWR from "swr";
 import axiosInstance, { fetcher } from "../../utils/config";
-import { IBulletinPost, ILikePostRequest } from "../../types";
-import { Dimensions, TextInput, TouchableOpacity } from "react-native";
+import {
+  IBulletinCommentRequest,
+  IBulletinPost,
+  IComment,
+  ILikePostRequest,
+} from "../../types";
+import { Alert, Dimensions, TextInput, TouchableOpacity } from "react-native";
 import {
   FontAwesome,
   FontAwesome5,
@@ -28,6 +33,7 @@ import { Menu, MenuItem } from "react-native-material-menu";
 import useDarkMode from "../../store/useDarkMode";
 import useSWRMutation from "swr/mutation";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { Controller, useForm } from "react-hook-form";
 
 type BulletinPostScreenRouteProp = RouteProp<
   BulletinStackParamList,
@@ -60,6 +66,20 @@ const likePostRequest = async (
   }
 };
 
+const addBulletinCommentRequest = async (
+  url: string,
+  { arg }: { arg: IBulletinCommentRequest }
+) => {
+  try {
+    await axiosInstance.post(url, {
+      ...arg,
+    });
+  } catch (error) {
+    console.log("error in addBulletinCommentRequest", error);
+    throw error;
+  }
+};
+
 const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
   navigation: { goBack },
 }) => {
@@ -70,10 +90,16 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
 
   const { user } = useUserGlobalStore();
 
-  const [isSelected, setSelection] = useState(true);
+  const [anonymity, setAnonymity] = useState(true);
 
   const route = useRoute<BulletinPostScreenRouteProp>();
   const { id, board } = route.params;
+
+  const { control, watch } = useForm<IComment>({
+    defaultValues: {
+      text: "",
+    },
+  });
 
   const {
     data,
@@ -95,6 +121,32 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
     "api/v1/bulletin/",
     likePostRequest
   );
+
+  const { trigger: addBulletinComment } = useSWRMutation(
+    `api/v1/bulletin/${id}`,
+    addBulletinCommentRequest
+  );
+
+  const addComment = async () => {
+    const text = watch("text");
+
+    if (!text.trim()) {
+      Alert.alert("Empty Fields", "Text is required.", [{ text: "OK" }]);
+      return;
+    }
+
+    try {
+      await addBulletinComment({
+        text: text,
+        anonymity: anonymity,
+      });
+
+      mutatePost();
+    } catch (error) {
+      console.log("error in addComment", error);
+      throw error;
+    }
+  };
 
   const deletePost = async () => {
     try {
@@ -389,7 +441,7 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
           borderRadius="rounded-2xl"
           width={"100%"}
         >
-          <TouchableOpacity onPress={() => setSelection(!isSelected)}>
+          <TouchableOpacity onPress={() => setAnonymity(!anonymity)}>
             <Box flexDirection="row" alignItems="center">
               <BouncyCheckbox
                 size={25}
@@ -401,9 +453,9 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
                   borderWidth: 2,
                 }}
                 disableText
-                isChecked={isSelected}
+                isChecked={anonymity}
                 disableBuiltInState
-                onPress={() => setSelection(!isSelected)}
+                onPress={() => setAnonymity(!anonymity)}
               />
               <Text
                 ml="1"
@@ -414,26 +466,39 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
               </Text>
             </Box>
           </TouchableOpacity>
+
           <Box width={"75%"}>
             <Box height={5} />
-            <TextInput
-              placeholder="Write a comment."
-              placeholderTextColor={theme.colors.gray300}
-              style={{
-                padding: 16,
-                borderColor: theme.colors.grey,
-                borderRadius: theme.borderRadii["rounded-7xl"],
-                height: "100%",
-                marginBottom: -6,
+            <Controller
+              name="text"
+              control={control}
+              rules={{
+                required: true,
               }}
-              multiline
-              autoComplete={"off"}
-              autoCorrect={false}
-              keyboardAppearance={"default"}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  placeholder="Write a comment."
+                  placeholderTextColor={theme.colors.gray300}
+                  style={{
+                    padding: 16,
+                    borderColor: theme.colors.grey,
+                    borderRadius: theme.borderRadii["rounded-7xl"],
+                    height: "100%",
+                    marginBottom: -6,
+                  }}
+                  value={value}
+                  onChangeText={onChange}
+                  onBlur={onBlur}
+                  multiline
+                  autoComplete={"off"}
+                  autoCorrect={false}
+                  keyboardAppearance={"default"}
+                />
+              )}
             />
           </Box>
           <Box width={6} />
-          <TouchableOpacity>
+          <TouchableOpacity onPress={addComment}>
             <FontAwesome name="send" size={24} color={theme.colors.sbuRed} />
           </TouchableOpacity>
         </Box>
