@@ -1,7 +1,5 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { useColorScheme } from "react-native";
-import colors from "../colors";
 import {
   CourseDetail,
   CourseReview,
@@ -10,20 +8,26 @@ import {
   WritePost,
 } from "../screens";
 import { UserMain, MyAccount } from "../screens/userScreens";
+import useDarkMode from "../store/useDarkMode";
+import { useTheme } from "@shopify/restyle";
+import { Theme } from "../theme";
 
 const NativeStack = createNativeStackNavigator();
 
 const MainStack = () => {
-  const isDark = useColorScheme() === "dark";
+  const theme = useTheme<Theme>();
+  const { isDarkMode } = useDarkMode();
+
   return (
     <NativeStack.Navigator
       screenOptions={{
         headerBackTitleVisible: false,
         headerStyle: {
-          backgroundColor: isDark ? colors.BLACK_COLOR : "white",
+          backgroundColor:
+            isDarkMode?.mode === "dark" ? theme.colors.stBlack : "white",
         },
         headerTitleStyle: {
-          color: isDark ? "white" : colors.BLACK_COLOR,
+          color: isDarkMode?.mode === "dark" ? "white" : theme.colors.stBlack,
         },
       }}
     >

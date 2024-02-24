@@ -6,25 +6,32 @@ import {
   SearchStack,
   ToDoStack,
 } from "./mainStacks/index";
-import { useColorScheme } from "react-native";
-import colors from "../colors";
 import { Ionicons } from "@expo/vector-icons";
 import SchoolInfo from "../screens/SchoolInfo";
 import { Feather } from "@expo/vector-icons";
+import useDarkMode from "../store/useDarkMode";
+import { useTheme } from "@shopify/restyle";
+import { Theme } from "../theme";
 
 const Tab = createBottomTabNavigator();
 
 const MainTabs = () => {
-  const isDark = useColorScheme() === "dark";
+  const theme = useTheme<Theme>();
+  const { isDarkMode } = useDarkMode();
+
   return (
     <Tab.Navigator
       initialRouteName="HomeStack"
       screenOptions={{
         tabBarStyle: {
-          backgroundColor: isDark ? colors.BLACK_COLOR : "white",
+          backgroundColor:
+            isDarkMode?.mode === "dark" ? theme.colors.stBlack : "white",
         },
-        tabBarActiveTintColor: colors.SBU_RED,
-        tabBarInactiveTintColor: isDark ? colors.DARK_GREY : colors.LIGHT_GREY,
+        tabBarActiveTintColor: theme.colors.sbuRed,
+        tabBarInactiveTintColor:
+          isDarkMode?.mode === "dark"
+            ? theme.colors.stDarkGrey
+            : theme.colors.stLightGrey,
         headerShown: false,
         tabBarShowLabel: false,
       }}
