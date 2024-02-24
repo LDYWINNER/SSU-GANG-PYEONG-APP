@@ -11,7 +11,7 @@ import { RouteProp, useRoute } from "@react-navigation/native";
 import { BulletinStackParamList } from "../../navigation/types";
 import useSWR from "swr";
 import axiosInstance, { fetcher } from "../../utils/config";
-import { IBulletinPost } from "../../types";
+import { IBulletinPost, ILikePostRequest } from "../../types";
 import { Dimensions, TextInput, TouchableOpacity } from "react-native";
 import {
   FontAwesome,
@@ -40,7 +40,24 @@ const deletePostRequest = async (
 ) => {
   try {
     await axiosInstance.delete(url + "/" + arg.id);
-  } catch (error) {}
+  } catch (error) {
+    console.log("error in deletePostRequest", error);
+    throw error;
+  }
+};
+
+const likePostRequest = async (
+  url: string,
+  { arg }: { arg: ILikePostRequest }
+) => {
+  try {
+    await axiosInstance.patch(url, {
+      ...arg,
+    });
+  } catch (error) {
+    console.log("error in likePostRequest", error);
+    throw error;
+  }
 };
 
 const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
@@ -58,30 +75,50 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
   const route = useRoute<BulletinPostScreenRouteProp>();
   const { id, board } = route.params;
 
-  const { data, isLoading: isLoadingPost } = useSWR<{ post: IBulletinPost }>(
-    `/api/v1/bulletin/${id}`,
-    fetcher
-  );
+  const {
+    data,
+    isLoading: isLoadingPost,
+    mutate: mutatePost,
+  } = useSWR<{ post: IBulletinPost }>(`/api/v1/bulletin/${id}`, fetcher);
 
   const { trigger: triggerDelete } = useSWRMutation(
     "api/v1/bulletin/",
     deletePostRequest
   );
 
-  const { trigger } = useSWRMutation<{
+  const { trigger: updatePosts } = useSWRMutation<{
     bulletinAllPosts: IBulletinPost[];
     bulletinTotalPosts: number;
   }>(`/api/v1/bulletin?board=${board}`, fetcher);
+
+  const { trigger: likePostTrigger } = useSWRMutation(
+    "api/v1/bulletin/",
+    likePostRequest
+  );
 
   const deletePost = async () => {
     try {
       await triggerDelete({
         id: post!._id,
       });
-      trigger();
+      updatePosts();
       goBack();
     } catch (error) {
       console.log("error in deleteTask", error);
+      throw error;
+    }
+  };
+
+  const likePost = async () => {
+    try {
+      const _updatePostReq = {
+        id: post!._id,
+        like: true,
+      };
+      await likePostTrigger(_updatePostReq);
+      await mutatePost();
+    } catch (error) {
+      console.log("error in likePost", error);
       throw error;
     }
   };
@@ -231,7 +268,7 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
                   </Text>
                 </Box>
 
-                <TouchableOpacity>
+                <TouchableOpacity onPress={likePost}>
                   <Box
                     bg="gray300"
                     px="3"

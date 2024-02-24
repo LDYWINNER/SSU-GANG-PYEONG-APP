@@ -20,6 +20,11 @@ interface IAuthenticatedUser {
   };
 }
 
+interface ILikePostRequest {
+  id: string;
+  like: boolean;
+}
+
 export interface IColor {
   name: string;
   id: string;

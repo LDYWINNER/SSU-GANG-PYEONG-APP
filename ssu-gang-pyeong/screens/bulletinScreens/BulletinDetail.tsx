@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Dimensions, TouchableOpacity } from "react-native";
@@ -22,6 +22,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import { useTheme } from "@shopify/restyle";
 import moment from "moment";
 import useDarkMode from "../../store/useDarkMode";
+import { useFocusEffect } from "@react-navigation/native";
 
 type BulletinDetailScreenRouteProp = RouteProp<
   BulletinStackParamList,
@@ -69,6 +70,12 @@ const BulletinDetail: React.FC<
     bulletinAllPosts: IBulletinPost[];
     bulletinTotalPosts: number;
   }>(`/api/v1/bulletin?board=${name}`, fetcher);
+
+  useFocusEffect(
+    useCallback(() => {
+      mutate();
+    }, [])
+  );
 
   if (isLoadingPosts) {
     return <Loader />;
