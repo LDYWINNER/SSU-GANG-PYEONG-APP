@@ -95,7 +95,7 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
   const route = useRoute<BulletinPostScreenRouteProp>();
   const { id, board } = route.params;
 
-  const { control, watch } = useForm<IComment>({
+  const { control, watch, reset } = useForm<IComment>({
     defaultValues: {
       text: "",
     },
@@ -140,6 +140,8 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
         text: text,
         anonymity: anonymity,
       });
+
+      reset({ text: "" });
 
       mutatePost();
     } catch (error) {
