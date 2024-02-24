@@ -56,7 +56,7 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
   const [isSelected, setSelection] = useState(true);
 
   const route = useRoute<BulletinPostScreenRouteProp>();
-  const { id, mutate } = route.params;
+  const { id, board } = route.params;
 
   const { data, isLoading: isLoadingPost } = useSWR<{ post: IBulletinPost }>(
     `/api/v1/bulletin/${id}`,
@@ -68,14 +68,17 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
     deletePostRequest
   );
 
+  const { trigger } = useSWRMutation<{
+    bulletinAllPosts: IBulletinPost[];
+    bulletinTotalPosts: number;
+  }>(`/api/v1/bulletin?board=${board}`, fetcher);
+
   const deletePost = async () => {
     try {
       await triggerDelete({
         id: post!._id,
       });
-      if (mutate) {
-        await mutate();
-      }
+      trigger();
       goBack();
     } catch (error) {
       console.log("error in deleteTask", error);

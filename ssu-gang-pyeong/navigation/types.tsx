@@ -17,7 +17,7 @@ export type BulletinStackParamList = {
   };
   BulletinPost: {
     id: string;
-    mutate?: () => Promise<IBulletinPost[] | undefined>;
+    board: string;
   };
   BulletinSearch: {
     board?: string;

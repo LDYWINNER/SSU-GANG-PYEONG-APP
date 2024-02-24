@@ -43,7 +43,7 @@ const BulletinDetail: React.FC<
   const navigateToBulletinPost = (postId: string) => {
     navigate("BulletinStack", {
       screen: "BulletinPost",
-      params: { id: postId, mutate },
+      params: { id: postId, board: name },
     });
   };
 
