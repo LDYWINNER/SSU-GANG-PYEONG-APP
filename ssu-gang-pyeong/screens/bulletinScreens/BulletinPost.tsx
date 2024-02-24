@@ -381,8 +381,8 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
                         alignItems="center"
                       >
                         <TouchableOpacity>
-                          <Ionicons
-                            name="chatbubble-outline"
+                          <FontAwesome5
+                            name="thumbs-up"
                             size={16}
                             color={theme.colors.gray500}
                           />
@@ -392,7 +392,7 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
                         </Text>
                         <TouchableOpacity>
                           <FontAwesome5
-                            name="thumbs-up"
+                            name="trash"
                             size={16}
                             color={theme.colors.gray500}
                           />
