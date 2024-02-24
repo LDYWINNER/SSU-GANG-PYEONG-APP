@@ -118,7 +118,6 @@ const WritePost: React.FC<NativeStackScreenProps<any, "WritePost">> = ({
       } else if (board === "course") {
         courseBulletinMutate();
       } else {
-        console.log("mutate");
         mutate();
       }
 
