@@ -43,7 +43,7 @@ const BulletinDetail: React.FC<
   const navigateToBulletinPost = (postId: string) => {
     navigate("BulletinStack", {
       screen: "BulletinPost",
-      params: { id: postId },
+      params: { id: postId, mutate },
     });
   };
 
@@ -61,7 +61,11 @@ const BulletinDetail: React.FC<
     });
   };
 
-  const { data: posts, isLoading: isLoadingPosts } = useSWR<{
+  const {
+    data: posts,
+    isLoading: isLoadingPosts,
+    mutate,
+  } = useSWR<{
     bulletinAllPosts: IBulletinPost[];
     bulletinTotalPosts: number;
   }>(`/api/v1/bulletin?board=${name}`, fetcher);

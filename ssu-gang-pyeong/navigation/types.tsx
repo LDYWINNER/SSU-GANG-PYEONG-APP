@@ -1,4 +1,4 @@
-import { ICategory, ITable, ITask } from "../types";
+import { IBulletinPost, ICategory, ITable, ITask } from "../types";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import {
   CompositeNavigationProp,
@@ -17,6 +17,7 @@ export type BulletinStackParamList = {
   };
   BulletinPost: {
     id: string;
+    mutate?: () => Promise<IBulletinPost[] | undefined>;
   };
   BulletinSearch: {
     board?: string;

@@ -10,7 +10,7 @@ import { useTheme } from "@shopify/restyle";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { BulletinStackParamList } from "../../navigation/types";
 import useSWR from "swr";
-import { fetcher } from "../../utils/config";
+import axiosInstance, { fetcher } from "../../utils/config";
 import { IBulletinPost } from "../../types";
 import { Dimensions, TextInput, TouchableOpacity } from "react-native";
 import {
@@ -26,13 +26,26 @@ import BouncyCheckbox from "react-native-bouncy-checkbox";
 import useUserGlobalStore from "../../store/useUserGlobal";
 import { Menu, MenuItem } from "react-native-material-menu";
 import useDarkMode from "../../store/useDarkMode";
+import useSWRMutation from "swr/mutation";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 type BulletinPostScreenRouteProp = RouteProp<
   BulletinStackParamList,
   "BulletinPost"
 >;
 
-const BulletinPost = () => {
+const deletePostRequest = async (
+  url: string,
+  { arg }: { arg: { id: string } }
+) => {
+  try {
+    await axiosInstance.delete(url + "/" + arg.id);
+  } catch (error) {}
+};
+
+const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
+  navigation: { goBack },
+}) => {
   const theme = useTheme<Theme>();
   const { isDarkMode } = useDarkMode();
 
@@ -43,12 +56,32 @@ const BulletinPost = () => {
   const [isSelected, setSelection] = useState(true);
 
   const route = useRoute<BulletinPostScreenRouteProp>();
-  const { id } = route.params;
+  const { id, mutate } = route.params;
 
   const { data, isLoading: isLoadingPost } = useSWR<{ post: IBulletinPost }>(
     `/api/v1/bulletin/${id}`,
     fetcher
   );
+
+  const { trigger: triggerDelete } = useSWRMutation(
+    "api/v1/bulletin/",
+    deletePostRequest
+  );
+
+  const deletePost = async () => {
+    try {
+      await triggerDelete({
+        id: post!._id,
+      });
+      if (mutate) {
+        await mutate();
+      }
+      goBack();
+    } catch (error) {
+      console.log("error in deleteTask", error);
+      throw error;
+    }
+  };
 
   const { post } = data || {};
 
@@ -114,7 +147,7 @@ const BulletinPost = () => {
                   <Text>글 수정하기</Text>
                 </Box>
               </MenuItem>
-              <MenuItem onPress={hideMenu}>
+              <MenuItem onPress={deletePost}>
                 <Box flexDirection="row" alignItems="center">
                   <Box width={14} />
                   <FontAwesome5 name="trash" size={24} color="black" />
