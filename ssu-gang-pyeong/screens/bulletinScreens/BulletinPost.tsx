@@ -380,23 +380,45 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
                         flexDirection="row"
                         alignItems="center"
                       >
-                        <TouchableOpacity>
+                        <TouchableOpacity
+                          onPress={() =>
+                            Alert.alert("공감", "이 댓글에 공감하시겠습니까?", [
+                              { text: "취소", onPress: () => {} },
+                              { text: "확인", onPress: () => {} },
+                            ])
+                          }
+                        >
                           <FontAwesome5
                             name="thumbs-up"
                             size={16}
                             color={theme.colors.gray500}
                           />
                         </TouchableOpacity>
-                        <Text>
-                          {"   "}| {"  "}
-                        </Text>
-                        <TouchableOpacity>
-                          <FontAwesome5
-                            name="trash"
-                            size={16}
-                            color={theme.colors.gray500}
-                          />
-                        </TouchableOpacity>
+                        {comment.createdBy === user?._id && (
+                          <>
+                            <Text>
+                              {"   "}| {"  "}
+                            </Text>
+                            <TouchableOpacity
+                              onPress={() =>
+                                Alert.alert(
+                                  "삭제",
+                                  "이 댓글을 삭제하시겠습니까?",
+                                  [
+                                    { text: "취소", onPress: () => {} },
+                                    { text: "확인", onPress: () => {} },
+                                  ]
+                                )
+                              }
+                            >
+                              <FontAwesome5
+                                name="trash"
+                                size={16}
+                                color={theme.colors.gray500}
+                              />
+                            </TouchableOpacity>
+                          </>
+                        )}
                       </Box>
                     </Box>
                   </Box>

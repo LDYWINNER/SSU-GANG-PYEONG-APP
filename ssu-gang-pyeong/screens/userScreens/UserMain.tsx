@@ -141,8 +141,8 @@ const UserMain: React.FC<NativeStackScreenProps<any, "UserMain">> = ({
             <TouchableOpacity
               onPress={() =>
                 Alert.alert("Logout", "Are you sure you want to logout?", [
-                  { text: "Yes", onPress: () => logout() },
-                  { text: "No", onPress: () => {} },
+                  { text: "No", onPress: () => logout() },
+                  { text: "Yes", onPress: () => {} },
                 ])
               }
             >
