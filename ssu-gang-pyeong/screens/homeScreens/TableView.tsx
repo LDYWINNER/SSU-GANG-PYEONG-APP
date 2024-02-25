@@ -12,9 +12,12 @@ import { formatCourses } from "../../utils/helpers";
 import { Divider, Loader } from "../../components";
 import { useIsFocused } from "@react-navigation/native";
 import { Box, Text, Theme } from "../../theme";
-import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
+import {
+  BottomSheetModal,
+  BottomSheetModalProvider,
+  BottomSheetBackdrop,
+} from "@gorhom/bottom-sheet";
 import { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";
-import { Picker } from "@react-native-picker/picker";
 import {
   FontAwesome5,
   Ionicons,
@@ -52,31 +55,17 @@ const TableView: React.FC<NativeStackScreenProps<any, "TableView">> = ({
   const [courseIndex, setCourseIndex] = useState<number>();
 
   //bottom sheet
-  const sheetRef = useRef<BottomSheet>(null);
+  const sheetRef = useRef<BottomSheetModal>(null);
   const snapPoints = useMemo(() => ["45%"], []);
   const handleSnapPress = useCallback(() => {
-    sheetRef.current?.snapToIndex(0);
+    sheetRef.current?.present();
   }, []);
   const handleClosePress = useCallback(() => {
     sheetRef.current?.close();
   }, []);
-  const [picker, setPicker] = useState(true);
-  const pickerRef = useRef<Picker<string>>(null);
   const togglePicker = () => {
-    if (picker) {
-      handleSnapPress();
-      setPicker(false);
-    } else {
-      handleClosePress();
-      setPicker(true);
-    }
+    handleSnapPress();
   };
-  const handleSheetChange = useCallback((index: any) => {
-    if (index == -1) {
-      setPicker(true);
-      // mutate();
-    }
-  }, []);
   const renderBackdrop = useCallback(
     (
       props: React.JSX.IntrinsicAttributes & BottomSheetDefaultBackdropProps
@@ -125,7 +114,7 @@ const TableView: React.FC<NativeStackScreenProps<any, "TableView">> = ({
   }, [isFocused, navigation]);
 
   return (
-    <Box>
+    <BottomSheetModalProvider>
       {isLoadingCourses ? (
         <Loader />
       ) : (
@@ -159,13 +148,11 @@ const TableView: React.FC<NativeStackScreenProps<any, "TableView">> = ({
         />
       )}
 
-      <BottomSheet
-        index={-1}
+      <BottomSheetModal
         ref={sheetRef}
         snapPoints={snapPoints}
         enablePanDownToClose={true}
         enableContentPanningGesture={false}
-        onChange={handleSheetChange}
         backdropComponent={renderBackdrop}
         backgroundStyle={{
           backgroundColor: theme.colors.mainBgColor,
@@ -258,7 +245,6 @@ const TableView: React.FC<NativeStackScreenProps<any, "TableView">> = ({
                 });
                 //close bottom sheet
                 handleClosePress();
-                setPicker(true);
               }}
             >
               <Box ml="3">
@@ -269,8 +255,8 @@ const TableView: React.FC<NativeStackScreenProps<any, "TableView">> = ({
             </TouchableOpacity>
           </Box>
         </Box>
-      </BottomSheet>
-    </Box>
+      </BottomSheetModal>
+    </BottomSheetModalProvider>
   );
 };
 
