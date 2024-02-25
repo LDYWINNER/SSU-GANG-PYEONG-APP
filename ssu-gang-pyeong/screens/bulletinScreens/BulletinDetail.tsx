@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { Dimensions, TouchableOpacity } from "react-native";
+import { Dimensions, TouchableOpacity, useColorScheme } from "react-native";
 import { BulletinStackParamList } from "../../navigation/types";
 import {
   Divider,
@@ -34,6 +34,7 @@ const BulletinDetail: React.FC<
 > = ({ navigation: { navigate } }) => {
   const theme = useTheme<Theme>();
   const { isDarkMode } = useDarkMode();
+  const systemIsDark = useColorScheme() === "dark";
 
   const windowWidth = Dimensions.get("window").width;
   const windowHeight = Dimensions.get("window").height;
@@ -136,7 +137,15 @@ const BulletinDetail: React.FC<
                   <Text
                     variant="textBase"
                     fontWeight="500"
-                    color={isDarkMode?.mode === "dark" ? "gray300" : "gray650"}
+                    color={
+                      isDarkMode?.mode === "system"
+                        ? systemIsDark
+                          ? "gray300"
+                          : "gray650"
+                        : isDarkMode?.mode === "dark"
+                        ? "gray300"
+                        : "gray650"
+                    }
                   >
                     {post.content.substring(0, 43)}
                     {post.content.length > 43 && "..."}

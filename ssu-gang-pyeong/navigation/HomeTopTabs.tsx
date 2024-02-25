@@ -1,6 +1,6 @@
 import React, { useRef, useState, useCallback, useMemo } from "react";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import { Dimensions, TouchableOpacity } from "react-native";
+import { Dimensions, TouchableOpacity, useColorScheme } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ListView, MoreMenu, TableView } from "../screens/homeScreens/index";
@@ -21,6 +21,8 @@ const HomeTopTabs: React.FC<NativeStackScreenProps<any, "HomeTopTabs">> = ({
 
   const { isDarkMode } = useDarkMode();
   const theme = useTheme<Theme>();
+  const systemIsDark = useColorScheme() === "dark";
+
   const [tableView, setTableView] = useState(true);
   const toggleView = () => setTableView((current) => !current);
 
@@ -89,7 +91,11 @@ const HomeTopTabs: React.FC<NativeStackScreenProps<any, "HomeTopTabs">> = ({
           >
             <Ionicons
               name={
-                isDarkMode?.mode === "dark"
+                isDarkMode?.mode === "system"
+                  ? systemIsDark
+                    ? "add-circle-outline"
+                    : "add-circle"
+                  : isDarkMode?.mode === "dark"
                   ? "add-circle-outline"
                   : "add-circle"
               }
@@ -100,7 +106,11 @@ const HomeTopTabs: React.FC<NativeStackScreenProps<any, "HomeTopTabs">> = ({
           <TouchableOpacity onPress={() => toggleMoreMenu()}>
             <Ionicons
               name={
-                isDarkMode?.mode === "dark"
+                isDarkMode?.mode === "system"
+                  ? systemIsDark
+                    ? "ellipsis-horizontal-circle-outline"
+                    : "ellipsis-horizontal-circle-sharp"
+                  : isDarkMode?.mode === "dark"
                   ? "ellipsis-horizontal-circle-outline"
                   : "ellipsis-horizontal-circle-sharp"
               }
@@ -144,7 +154,11 @@ const HomeTopTabs: React.FC<NativeStackScreenProps<any, "HomeTopTabs">> = ({
             },
             tabBarActiveTintColor: theme.colors.sbuRed,
             tabBarInactiveTintColor:
-              isDarkMode?.mode === "dark"
+              isDarkMode?.mode === "system"
+                ? systemIsDark
+                  ? theme.colors.stDarkGrey
+                  : theme.colors.stLightGrey
+                : isDarkMode?.mode === "dark"
                 ? theme.colors.stDarkGrey
                 : theme.colors.stLightGrey,
             swipeEnabled: true,

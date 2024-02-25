@@ -4,12 +4,14 @@ import { Welcome, Register, Login } from "../screens/authScreens";
 import useDarkMode from "../store/useDarkMode";
 import { useTheme } from "@shopify/restyle";
 import { Theme } from "../theme";
+import { useColorScheme } from "react-native";
 
 const NativeStack = createNativeStackNavigator();
 
 const AuthStack = () => {
   const theme = useTheme<Theme>();
   const { isDarkMode } = useDarkMode();
+  const systemIsDark = useColorScheme() === "dark";
 
   return (
     <NativeStack.Navigator
@@ -17,10 +19,23 @@ const AuthStack = () => {
         headerBackTitleVisible: false,
         headerStyle: {
           backgroundColor:
-            isDarkMode?.mode === "dark" ? theme.colors.stBlack : "white",
+            isDarkMode?.mode === "system"
+              ? systemIsDark
+                ? theme.colors.stBlack
+                : "white"
+              : isDarkMode?.mode === "dark"
+              ? theme.colors.stBlack
+              : "white",
         },
         headerTitleStyle: {
-          color: isDarkMode?.mode === "dark" ? "white" : theme.colors.stBlack,
+          color:
+            isDarkMode?.mode === "system"
+              ? systemIsDark
+                ? "white"
+                : theme.colors.stBlack
+              : isDarkMode?.mode === "dark"
+              ? "white"
+              : theme.colors.stBlack,
         },
       }}
     >

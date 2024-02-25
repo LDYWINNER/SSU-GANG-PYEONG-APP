@@ -17,6 +17,7 @@ import { RouteProp, useRoute } from "@react-navigation/native";
 import { BulletinStackParamList } from "../../navigation/types";
 import moment from "moment";
 import useDarkMode from "../../store/useDarkMode";
+import { useColorScheme } from "react-native";
 
 interface ISearch {
   keyword: string;
@@ -32,6 +33,7 @@ const BulletinSearch: React.FC<
 > = ({ navigation: { navigate } }) => {
   const theme = useTheme<Theme>();
   const { isDarkMode } = useDarkMode();
+  const systemIsDark = useColorScheme() === "dark";
 
   const route = useRoute<BulletinSearchScreenRouteProp>();
   const { board } = route.params;
@@ -160,7 +162,13 @@ const BulletinSearch: React.FC<
                       variant="textBase"
                       fontWeight="500"
                       color={
-                        isDarkMode?.mode === "dark" ? "gray300" : "gray650"
+                        isDarkMode?.mode === "system"
+                          ? systemIsDark
+                            ? "gray300"
+                            : "gray650"
+                          : isDarkMode?.mode === "dark"
+                          ? "gray300"
+                          : "gray650"
                       }
                     >
                       {post.content.substring(0, 43)}

@@ -17,7 +17,13 @@ import {
   IComment,
   ILikePostRequest,
 } from "../../types";
-import { Alert, Dimensions, TextInput, TouchableOpacity } from "react-native";
+import {
+  Alert,
+  Dimensions,
+  TextInput,
+  TouchableOpacity,
+  useColorScheme,
+} from "react-native";
 import {
   FontAwesome,
   FontAwesome5,
@@ -109,6 +115,7 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
 }) => {
   const theme = useTheme<Theme>();
   const { isDarkMode } = useDarkMode();
+  const systemIsDark = useColorScheme() === "dark";
 
   const windowHeight = Dimensions.get("window").height;
 
@@ -335,7 +342,15 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
                   {post.anonymity ? "익명" : post.createdByUsername}
                 </Text>
                 <Text
-                  color={isDarkMode?.mode === "dark" ? "gray300" : "gray650"}
+                  color={
+                    isDarkMode?.mode === "system"
+                      ? systemIsDark
+                        ? "gray300"
+                        : "gray650"
+                      : isDarkMode?.mode === "dark"
+                      ? "gray300"
+                      : "gray650"
+                  }
                 >
                   {moment(post.createdAt).format("MMMM Do, h:mm a")}
                 </Text>

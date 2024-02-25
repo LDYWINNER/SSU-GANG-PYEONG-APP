@@ -5,7 +5,7 @@ import { ITask } from "../../types";
 import { AnimatedBox, Box, Text, Theme } from "../../theme";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { TouchableOpacity } from "react-native";
+import { TouchableOpacity, useColorScheme } from "react-native";
 import {
   FadeInLeft,
   FadeInRight,
@@ -62,6 +62,7 @@ const Task = ({ task, mutateTasks, updateTaskStatus, date }: TaskProps) => {
 
   const theme = useTheme<Theme>();
   const { isDarkMode } = useDarkMode();
+  const systemIsDark = useColorScheme() === "dark";
 
   const { trigger, isMutating: isUpdating } = useSWRMutation(
     "api/v1/todotask/update",
@@ -184,7 +185,11 @@ const Task = ({ task, mutateTasks, updateTaskStatus, date }: TaskProps) => {
             <Box mr="3">
               <MaterialCommunityIcons
                 name={
-                  isDarkMode?.mode === "dark"
+                  isDarkMode?.mode === "system"
+                    ? systemIsDark
+                      ? "pencil-circle-outline"
+                      : "pencil-circle"
+                    : isDarkMode?.mode === "dark"
                     ? "pencil-circle-outline"
                     : "pencil-circle"
                 }

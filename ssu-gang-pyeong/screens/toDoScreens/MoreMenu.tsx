@@ -1,5 +1,5 @@
 import React from "react";
-import { TouchableOpacity } from "react-native";
+import { TouchableOpacity, useColorScheme } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { ToDoScreenNavigationType } from "../../navigation/types";
@@ -12,6 +12,7 @@ const MoreMenu = () => {
 
   const { isDarkMode } = useDarkMode();
   const theme = useTheme<Theme>();
+  const systemIsDark = useColorScheme() === "dark";
 
   const navigateToCreateCategory = () => {
     navigation.navigate("CreateCategory", {});
@@ -31,7 +32,13 @@ const MoreMenu = () => {
         <Box flexDirection="row" alignItems="center" mb="3">
           <Ionicons
             name={
-              isDarkMode?.mode === "dark" ? "add-circle-outline" : "add-circle"
+              isDarkMode?.mode === "system"
+                ? systemIsDark
+                  ? "add-circle-outline"
+                  : "add-circle"
+                : isDarkMode?.mode === "dark"
+                ? "add-circle-outline"
+                : "add-circle"
             }
             color={theme.colors.textColor}
             size={35}
@@ -45,7 +52,11 @@ const MoreMenu = () => {
         <Box flexDirection="row" alignItems="center" mb="3">
           <Ionicons
             name={
-              isDarkMode?.mode === "dark"
+              isDarkMode?.mode === "system"
+                ? systemIsDark
+                  ? "file-tray-full-outline"
+                  : "file-tray-full"
+                : isDarkMode?.mode === "dark"
                 ? "file-tray-full-outline"
                 : "file-tray-full"
             }
@@ -60,7 +71,15 @@ const MoreMenu = () => {
       <TouchableOpacity onPress={navigateToCompletedToDo}>
         <Box flexDirection="row" alignItems="center">
           <Ionicons
-            name={isDarkMode?.mode === "dark" ? "checkbox-outline" : "checkbox"}
+            name={
+              isDarkMode?.mode === "system"
+                ? systemIsDark
+                  ? "checkbox-outline"
+                  : "checkbox"
+                : isDarkMode?.mode === "dark"
+                ? "checkbox-outline"
+                : "checkbox"
+            }
             color={theme.colors.textColor}
             size={35}
           />

@@ -16,7 +16,6 @@ import { useTheme } from "@shopify/restyle";
 import { Ionicons } from "@expo/vector-icons";
 import { ScrollView } from "react-native-gesture-handler";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
-import useDarkMode from "../store/useDarkMode";
 
 interface ICourseEval {
   overallGrade: number;
@@ -72,7 +71,6 @@ const addCourseEvalRequest = async (
 
 const WriteReview = () => {
   const theme = useTheme<Theme>();
-  const { isDarkMode } = useDarkMode();
 
   const route = useRoute<WriteReviewScreenRouteProp>();
   const { id } = route.params;
@@ -259,6 +257,7 @@ const WriteReview = () => {
                 render={({ field: { onChange, onBlur, value } }) => (
                   <TextInput
                     placeholder="Fill the content."
+                    placeholderTextColor={theme.colors.gray500}
                     style={{
                       paddingTop: 16,
                       padding: 16,

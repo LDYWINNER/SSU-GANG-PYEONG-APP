@@ -11,7 +11,7 @@ import { MainStackParamList } from "../navigation/types";
 import { Rating } from "@kolking/react-native-rating";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { ScrollView } from "react-native-gesture-handler";
-import { TouchableOpacity, Dimensions } from "react-native";
+import { TouchableOpacity, Dimensions, useColorScheme } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import useDarkMode from "../store/useDarkMode";
@@ -38,6 +38,7 @@ const CourseReview: React.FC<NativeStackScreenProps<any, "CourseReview">> = ({
 }) => {
   const theme = useTheme<Theme>();
   const { isDarkMode } = useDarkMode();
+  const systemIsDark = useColorScheme() === "dark";
 
   const windowWidth = Dimensions.get("window").width;
   const route = useRoute<CourseReviewScreenRouteProp>();
@@ -113,7 +114,13 @@ const CourseReview: React.FC<NativeStackScreenProps<any, "CourseReview">> = ({
                       alignItems="center"
                       borderRadius="rounded-xl"
                       backgroundColor={
-                        isDarkMode?.mode === "dark" ? "gray300" : "gray650"
+                        isDarkMode?.mode === "system"
+                          ? systemIsDark
+                            ? "gray300"
+                            : "gray650"
+                          : isDarkMode?.mode === "dark"
+                          ? "gray300"
+                          : "gray650"
                       }
                       p="1"
                     >
@@ -149,7 +156,15 @@ const CourseReview: React.FC<NativeStackScreenProps<any, "CourseReview">> = ({
                   <Text
                     mt="1"
                     mb="1"
-                    color={isDarkMode?.mode === "dark" ? "gray300" : "gray650"}
+                    color={
+                      isDarkMode?.mode === "system"
+                        ? systemIsDark
+                          ? "gray300"
+                          : "gray650"
+                        : isDarkMode?.mode === "dark"
+                        ? "gray300"
+                        : "gray650"
+                    }
                   >
                     {reviewItem.semester === "-1" ? "?" : reviewItem.semester}
                   </Text>
@@ -157,7 +172,15 @@ const CourseReview: React.FC<NativeStackScreenProps<any, "CourseReview">> = ({
                   <Text
                     mt="1"
                     mb="1"
-                    color={isDarkMode?.mode === "dark" ? "gray300" : "gray650"}
+                    color={
+                      isDarkMode?.mode === "system"
+                        ? systemIsDark
+                          ? "gray300"
+                          : "gray650"
+                        : isDarkMode?.mode === "dark"
+                        ? "gray300"
+                        : "gray650"
+                    }
                   >
                     {reviewItem.instructor === "-2"
                       ? "?"

@@ -12,12 +12,14 @@ import { Feather } from "@expo/vector-icons";
 import useDarkMode from "../store/useDarkMode";
 import { useTheme } from "@shopify/restyle";
 import { Theme } from "../theme";
+import { useColorScheme } from "react-native";
 
 const Tab = createBottomTabNavigator();
 
 const MainTabs = () => {
   const theme = useTheme<Theme>();
   const { isDarkMode } = useDarkMode();
+  const systemIsDark = useColorScheme() === "dark";
 
   return (
     <Tab.Navigator
@@ -25,11 +27,21 @@ const MainTabs = () => {
       screenOptions={{
         tabBarStyle: {
           backgroundColor:
-            isDarkMode?.mode === "dark" ? theme.colors.stBlack : "white",
+            isDarkMode?.mode === "system"
+              ? systemIsDark
+                ? theme.colors.stBlack
+                : "white"
+              : isDarkMode?.mode === "dark"
+              ? theme.colors.stBlack
+              : "white",
         },
         tabBarActiveTintColor: theme.colors.sbuRed,
         tabBarInactiveTintColor:
-          isDarkMode?.mode === "dark"
+          isDarkMode?.mode === "system"
+            ? systemIsDark
+              ? theme.colors.stDarkGrey
+              : theme.colors.stLightGrey
+            : isDarkMode?.mode === "dark"
             ? theme.colors.stDarkGrey
             : theme.colors.stLightGrey,
         headerShown: false,

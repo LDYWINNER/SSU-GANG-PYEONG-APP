@@ -11,12 +11,14 @@ import { IBulletinPost } from "../../types";
 import { useTheme } from "@shopify/restyle";
 import moment from "moment";
 import useDarkMode from "../../store/useDarkMode";
+import { useColorScheme } from "react-native";
 
 const BulletinMain: React.FC<NativeStackScreenProps<any, "BulletinMain">> = ({
   navigation: { navigate },
 }) => {
   const theme = useTheme<Theme>();
   const { isDarkMode } = useDarkMode();
+  const systemIsDark = useColorScheme() === "dark";
 
   const navigateToBulletinDetail = (BulletinName: string) => {
     navigate("BulletinStack", {
@@ -203,7 +205,13 @@ const BulletinMain: React.FC<NativeStackScreenProps<any, "BulletinMain">> = ({
                         variant="textBase"
                         fontWeight="500"
                         color={
-                          isDarkMode?.mode === "dark" ? "gray400" : "gray600"
+                          isDarkMode?.mode === "system"
+                            ? systemIsDark
+                              ? "gray400"
+                              : "gray600"
+                            : isDarkMode?.mode === "dark"
+                            ? "gray400"
+                            : "gray600"
                         }
                       >
                         {promotionPost.content}

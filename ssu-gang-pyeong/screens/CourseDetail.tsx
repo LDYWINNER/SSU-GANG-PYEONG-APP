@@ -17,7 +17,12 @@ import {
 } from "victory-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { FontAwesome5 } from "@expo/vector-icons";
-import { TouchableOpacity, Dimensions, Image } from "react-native";
+import {
+  TouchableOpacity,
+  Dimensions,
+  Image,
+  useColorScheme,
+} from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as WebBrowser from "expo-web-browser";
@@ -33,6 +38,7 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
 }) => {
   const theme = useTheme<Theme>();
   const { isDarkMode } = useDarkMode();
+  const systemIsDark = useColorScheme() === "dark";
 
   const windowWidth = Dimensions.get("window").width;
   const windowHeight = Dimensions.get("window").height;
@@ -997,7 +1003,13 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
                         mt="1"
                         mb="1"
                         color={
-                          isDarkMode?.mode === "dark" ? "gray300" : "gray650"
+                          isDarkMode?.mode === "system"
+                            ? systemIsDark
+                              ? "gray300"
+                              : "gray650"
+                            : isDarkMode?.mode === "dark"
+                            ? "gray300"
+                            : "gray650"
                         }
                       >
                         {course!.reviews[overallEvaluations[0]].semester ===
@@ -1010,7 +1022,13 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
                         mt="1"
                         mb="1"
                         color={
-                          isDarkMode?.mode === "dark" ? "gray300" : "gray650"
+                          isDarkMode?.mode === "system"
+                            ? systemIsDark
+                              ? "gray300"
+                              : "gray650"
+                            : isDarkMode?.mode === "dark"
+                            ? "gray300"
+                            : "gray650"
                         }
                       >
                         {course!.reviews[overallEvaluations[0]].instructor ===
@@ -1060,7 +1078,13 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
                         mt="1"
                         mb="1"
                         color={
-                          isDarkMode?.mode === "dark" ? "gray300" : "gray650"
+                          isDarkMode?.mode === "system"
+                            ? systemIsDark
+                              ? "gray300"
+                              : "gray650"
+                            : isDarkMode?.mode === "dark"
+                            ? "gray300"
+                            : "gray650"
                         }
                       >
                         {course!.reviews[overallEvaluations[0]].semester ===
@@ -1073,7 +1097,13 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
                         mt="1"
                         mb="1"
                         color={
-                          isDarkMode?.mode === "dark" ? "gray300" : "gray650"
+                          isDarkMode?.mode === "system"
+                            ? systemIsDark
+                              ? "gray300"
+                              : "gray650"
+                            : isDarkMode?.mode === "dark"
+                            ? "gray300"
+                            : "gray650"
                         }
                       >
                         {course!.reviews[overallEvaluations[0]].instructor ===

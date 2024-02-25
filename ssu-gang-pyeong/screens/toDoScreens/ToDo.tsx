@@ -3,7 +3,7 @@ import { Loader, SafeAreaWrapper } from "../../components";
 import { Task, TaskActions } from "../../components/tasks";
 import { fetcher } from "../../utils/config";
 import { format, parseISO } from "date-fns";
-import { FlatList, TouchableOpacity } from "react-native";
+import { FlatList, TouchableOpacity, useColorScheme } from "react-native";
 import { ITask } from "../../types";
 import useUserGlobalStore from "../../store/useUserGlobal";
 import { Box, Text, Theme } from "../../theme";
@@ -39,6 +39,7 @@ const HomeScreen = () => {
 
   const theme = useTheme<Theme>();
   const { isDarkMode } = useDarkMode();
+  const systemIsDark = useColorScheme() === "dark";
 
   // date picking
   const [isSelectingDate, setIsSelectingDate] = useState<boolean>(true);
@@ -192,7 +193,11 @@ const HomeScreen = () => {
             >
               <Ionicons
                 name={
-                  isDarkMode?.mode === "dark"
+                  isDarkMode?.mode === "system"
+                    ? systemIsDark
+                      ? "ios-calendar-outline"
+                      : "ios-calendar"
+                    : isDarkMode?.mode === "dark"
                     ? "ios-calendar-outline"
                     : "ios-calendar"
                 }
@@ -204,7 +209,11 @@ const HomeScreen = () => {
             <TouchableOpacity onPress={() => toggleMoreMenu()}>
               <Ionicons
                 name={
-                  isDarkMode?.mode === "dark"
+                  isDarkMode?.mode === "system"
+                    ? systemIsDark
+                      ? "ellipsis-horizontal-circle-outline"
+                      : "ellipsis-horizontal-circle-sharp"
+                    : isDarkMode?.mode === "dark"
                     ? "ellipsis-horizontal-circle-outline"
                     : "ellipsis-horizontal-circle-sharp"
                 }

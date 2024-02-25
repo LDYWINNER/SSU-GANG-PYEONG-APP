@@ -1,5 +1,5 @@
 import React from "react";
-import { TouchableOpacity } from "react-native";
+import { TouchableOpacity, useColorScheme } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import useSWR from "swr";
 import { Ionicons } from "@expo/vector-icons";
@@ -44,8 +44,10 @@ const EasyPick = () => {
   const route = useRoute<EasyPickScreenRouteProp>();
   const { togglePicker } = route.params;
   const { toggleInfo } = useGlobalToggle();
+
   const theme = useTheme<Theme>();
   const { isDarkMode } = useDarkMode();
+  const systemIsDark = useColorScheme() === "dark";
 
   const navigateToCourseDetail = (courseId: string) => {
     navigation.navigate("MainStack", {
@@ -77,7 +79,11 @@ const EasyPick = () => {
           <Box mr="2" mt="2">
             <Ionicons
               name={
-                isDarkMode?.mode === "dark"
+                isDarkMode?.mode === "system"
+                  ? systemIsDark
+                    ? "add-circle-outline"
+                    : "add-circle"
+                  : isDarkMode?.mode === "dark"
                   ? "add-circle-outline"
                   : "add-circle"
               }

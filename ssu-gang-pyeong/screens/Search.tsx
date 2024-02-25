@@ -21,7 +21,6 @@ import { useTheme } from "@shopify/restyle";
 import { Theme } from "../theme";
 import { Ionicons } from "@expo/vector-icons";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import useDarkMode from "../store/useDarkMode";
 
 interface ISearch {
   keyword: string;
@@ -31,7 +30,6 @@ const Search: React.FC<NativeStackScreenProps<any, "Search">> = ({
   navigation: { navigate },
 }) => {
   const theme = useTheme<Theme>();
-  const { isDarkMode } = useDarkMode();
 
   const [searchSubj, setSearchSubj] = useState<string>("ALL");
 

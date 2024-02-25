@@ -1,7 +1,12 @@
 import React, { useCallback, useMemo, useRef, useState } from "react";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { Dimensions, TextInput, TouchableOpacity } from "react-native";
+import {
+  Dimensions,
+  TextInput,
+  TouchableOpacity,
+  useColorScheme,
+} from "react-native";
 import { MainStackParamList } from "../navigation/types";
 import { Divider, Loader, NavigateBack, SafeAreaWrapper } from "../components";
 import { Box, Text, Theme } from "../theme";
@@ -37,6 +42,7 @@ const CourseBulletin: React.FC<
 > = ({ navigation: { navigate } }) => {
   const theme = useTheme<Theme>();
   const { isDarkMode } = useDarkMode();
+  const systemIsDark = useColorScheme() === "dark";
 
   const windowWidth = Dimensions.get("window").width;
   const windowHeight = Dimensions.get("window").height;
@@ -265,7 +271,13 @@ const CourseBulletin: React.FC<
                       </Text>
                       <Text
                         color={
-                          isDarkMode?.mode === "dark" ? "gray300" : "gray650"
+                          isDarkMode?.mode === "system"
+                            ? systemIsDark
+                              ? "gray300"
+                              : "gray650"
+                            : isDarkMode?.mode === "dark"
+                            ? "gray300"
+                            : "gray650"
                         }
                       >
                         {" "}
@@ -273,14 +285,26 @@ const CourseBulletin: React.FC<
                       </Text>
                       <Text
                         color={
-                          isDarkMode?.mode === "dark" ? "gray300" : "gray650"
+                          isDarkMode?.mode === "system"
+                            ? systemIsDark
+                              ? "gray300"
+                              : "gray650"
+                            : isDarkMode?.mode === "dark"
+                            ? "gray300"
+                            : "gray650"
                         }
                       >
                         {moment(post.createdAt).format("MMMM Do, h:mm a")}
                       </Text>
                       <Text
                         color={
-                          isDarkMode?.mode === "dark" ? "gray300" : "gray650"
+                          isDarkMode?.mode === "system"
+                            ? systemIsDark
+                              ? "gray300"
+                              : "gray650"
+                            : isDarkMode?.mode === "dark"
+                            ? "gray300"
+                            : "gray650"
                         }
                       >
                         {" "}
@@ -288,7 +312,13 @@ const CourseBulletin: React.FC<
                       </Text>
                       <Text
                         color={
-                          isDarkMode?.mode === "dark" ? "gray300" : "gray650"
+                          isDarkMode?.mode === "system"
+                            ? systemIsDark
+                              ? "gray300"
+                              : "gray650"
+                            : isDarkMode?.mode === "dark"
+                            ? "gray300"
+                            : "gray650"
                         }
                       >
                         {post.anonymity ? "익명" : post.createdByUsername}
