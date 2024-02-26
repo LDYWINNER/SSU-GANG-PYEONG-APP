@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import useSWR from "swr";
 import useSWRMutation from "swr/mutation";
-import { RouteProp, useRoute } from "@react-navigation/native";
+import { RouteProp, useIsFocused, useRoute } from "@react-navigation/native";
 import axiosInstance, { fetcher } from "../utils/config";
 import { Box, Text, Theme } from "../theme";
 import { useTheme } from "@shopify/restyle";
@@ -41,9 +41,13 @@ const CourseReview: React.FC<NativeStackScreenProps<any, "CourseReview">> = ({
   const systemIsDark = useColorScheme() === "dark";
 
   const windowWidth = Dimensions.get("window").width;
+  const windowHeight = Dimensions.get("window").height;
+
   const route = useRoute<CourseReviewScreenRouteProp>();
   const { courseIndex, id } = route.params;
   const reviewList = [];
+
+  const isFocused = useIsFocused();
 
   const navigateToWriteReview = () => {
     navigate("MainStack", {
@@ -56,13 +60,17 @@ const CourseReview: React.FC<NativeStackScreenProps<any, "CourseReview">> = ({
     likeReviewRequest
   );
 
-  const { data: course, isLoading: isLoadingCourse } = useSWR<ICourse>(
-    `/api/v1/course/${id}`,
-    fetcher,
-    {
-      refreshInterval: 100,
+  const {
+    data: course,
+    isLoading: isLoadingCourse,
+    mutate,
+  } = useSWR<ICourse>(`/api/v1/course/${id}`, fetcher);
+
+  useEffect(() => {
+    if (isFocused) {
+      mutate();
     }
-  );
+  }, [isFocused]);
 
   if (isLoadingCourse) {
     return <Loader />;
@@ -207,7 +215,7 @@ const CourseReview: React.FC<NativeStackScreenProps<any, "CourseReview">> = ({
           alignItems="center"
           position="absolute"
           right={windowWidth * 0.4}
-          bottom={15}
+          bottom={windowHeight * 0.04}
           style={{ backgroundColor: theme.colors.sbuRed }}
           p="2"
           borderRadius="rounded-2xl"

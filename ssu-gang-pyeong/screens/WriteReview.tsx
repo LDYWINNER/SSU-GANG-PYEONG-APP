@@ -47,6 +47,7 @@ const addCourseEvalRequest = async (
       teamProjectPresence: "Yes" ? true : false,
       quizPresence: "Yes" ? true : false,
     });
+    return true;
   } catch (error) {
     // console.log("error in addCourseEvalRequest", error);
     // throw error;
@@ -60,11 +61,12 @@ const addCourseEvalRequest = async (
       // Extract the error message
       const errorMessage = axiosError.response.data.error;
       // Display the error message
-      Alert.alert(errorMessage);
+      return errorMessage;
     } else {
       console.log("Error in createCourseEval", error);
       // Fallback error message if the structure is different
-      Alert.alert("An unexpected error occurred.");
+      // Alert.alert("An unexpected error occurred.");
+      return "An unexpected error occurred.";
     }
   }
 };
@@ -101,11 +103,7 @@ const WriteReview = () => {
     ],
   };
 
-  const {
-    control,
-    watch,
-    formState: { isSubmitSuccessful },
-  } = useForm<ICourseEval>({
+  const { control, watch } = useForm<ICourseEval>({
     defaultValues: {
       overallGrade: 0,
       overallEvaluation: "",
@@ -128,7 +126,7 @@ const WriteReview = () => {
 
   const createCourseEval = async () => {
     try {
-      await addCourseEval({
+      const success = await addCourseEval({
         overallGrade: watch("overallGrade"),
         overallEvaluation: watch("overallEvaluation"),
         difficulty: watch("difficulty"),
@@ -145,8 +143,11 @@ const WriteReview = () => {
         myLetterGrade,
         anonymity,
       });
-      if (isSubmitSuccessful) {
+
+      if (typeof success === "boolean" && success) {
         navigation.goBack();
+      } else {
+        Alert.alert(success);
       }
     } catch (error) {
       console.log("error in createCourseEval", error);

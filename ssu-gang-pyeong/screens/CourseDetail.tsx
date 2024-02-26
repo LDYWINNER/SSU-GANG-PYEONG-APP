@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import useSWR from "swr";
-import { RouteProp, useRoute } from "@react-navigation/native";
+import { RouteProp, useIsFocused, useRoute } from "@react-navigation/native";
 import { fetcher } from "../utils/config";
 import { Box, Text, Theme } from "../theme";
 import { useTheme } from "@shopify/restyle";
@@ -60,13 +60,19 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
 
   const { id } = route.params;
 
-  const { data: course, isLoading: isLoadingCourse } = useSWR<ICourse>(
-    `/api/v1/course/${id}`,
-    fetcher,
-    {
-      refreshInterval: 2000,
+  const isFocused = useIsFocused();
+
+  const {
+    data: course,
+    isLoading: isLoadingCourse,
+    mutate,
+  } = useSWR<ICourse>(`/api/v1/course/${id}`, fetcher);
+
+  useEffect(() => {
+    if (isFocused) {
+      mutate();
     }
-  );
+  }, [isFocused]);
 
   const navigateToCourseReview = (overallEvaluations: number[]) => {
     navigate("MainStack", {
