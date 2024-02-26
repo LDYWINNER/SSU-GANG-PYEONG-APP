@@ -19,7 +19,6 @@ const CompletedToDo = () => {
   if (isLoadingTasks || !tasks) {
     return <Loader />;
   }
-
   return (
     <SafeAreaWrapper>
       <Box flex={1} mx="4">

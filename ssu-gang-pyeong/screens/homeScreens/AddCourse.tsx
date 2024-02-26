@@ -65,7 +65,6 @@ const AddCourse = () => {
   const handleSheetChange = useCallback((index: any) => {
     if (index == -1) {
       setPicker(true);
-      // mutate();
     }
   }, []);
   const renderBackdrop = useCallback(

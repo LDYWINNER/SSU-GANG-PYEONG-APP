@@ -10,10 +10,7 @@ import useSWR from "swr";
 const Categories = () => {
   const { data, isLoading } = useSWR<ICategory[]>(
     "api/v1/todocategory/",
-    fetcher,
-    {
-      refreshInterval: 1000,
-    }
+    fetcher
   );
 
   const renderItem = ({ item }: { item: ICategory }) => (

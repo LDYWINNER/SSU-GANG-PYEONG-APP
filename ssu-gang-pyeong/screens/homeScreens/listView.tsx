@@ -25,9 +25,7 @@ const ListView: React.FC<NativeStackScreenProps<any, "ListView">> = ({
     mutate,
   } = useSWR<{
     takingCourses: ICourse[];
-  }>(`/api/v1/course/tableView/${toggleInfo?.currentTableView}`, fetcher, {
-    refreshInterval: 1000,
-  });
+  }>(`/api/v1/course/tableView/${toggleInfo?.currentTableView}`, fetcher);
 
   const navigateToCourseDetail = (courseId: string) => {
     navigation.navigate("MainStack", {

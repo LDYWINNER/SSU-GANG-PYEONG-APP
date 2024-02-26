@@ -97,9 +97,7 @@ const TableView: React.FC<NativeStackScreenProps<any, "TableView">> = ({
     mutate,
   } = useSWR<{
     takingCourses: ICourse[];
-  }>(`/api/v1/course/tableView/${toggleInfo?.currentTableView}`, fetcher, {
-    refreshInterval: 1000,
-  });
+  }>(`/api/v1/course/tableView/${toggleInfo?.currentTableView}`, fetcher);
 
   useEffect(() => {
     if (isFocused) {
@@ -243,6 +241,7 @@ const TableView: React.FC<NativeStackScreenProps<any, "TableView">> = ({
                   courseId: courses?.takingCourses[courseIndex as number]
                     ._id as string,
                 });
+                mutate();
                 //close bottom sheet
                 handleClosePress();
               }}

@@ -34,7 +34,6 @@ const Category = () => {
   if (isLoadingTasks || isLoadingCategory || !category || !tasks) {
     return <Loader />;
   }
-
   return (
     <SafeAreaWrapper>
       <Box height={16} />
