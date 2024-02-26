@@ -36,7 +36,7 @@ export type SearchStackParamList = {
 export type HomeStackParamList = {
   HomeTopTabs: undefined;
   EasyPick: {
-    togglePicker: any;
+    togglePicker: () => void;
   };
   AddCourse: undefined;
   Tables: undefined;

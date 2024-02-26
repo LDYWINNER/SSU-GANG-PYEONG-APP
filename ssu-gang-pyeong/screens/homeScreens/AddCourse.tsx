@@ -9,7 +9,6 @@ import SelectCourses from "./SelectCourses";
 import EasyPick from "./EasyPick";
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";
-import { Picker } from "@react-native-picker/picker";
 import useGlobalToggle from "../../store/useGlobalToggle";
 import axiosInstance, { fetcher } from "../../utils/config";
 import useSWR from "swr";
@@ -54,7 +53,6 @@ const AddCourse = () => {
     sheetRef.current?.close();
   }, []);
   const [picker, setPicker] = useState(true);
-  const pickerRef = useRef<Picker<string>>(null);
   const togglePicker = () => {
     if (picker) {
       handleSnapPress();
