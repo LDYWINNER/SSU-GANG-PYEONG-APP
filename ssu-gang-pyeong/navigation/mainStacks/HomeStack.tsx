@@ -5,6 +5,7 @@ import {
   AddCourse,
   CreateTable,
   EasyPick,
+  ManualPick,
   Tables,
 } from "../../screens/homeScreens";
 
@@ -20,6 +21,7 @@ const HomeStack = () => {
       <NativeStack.Screen name="HomeTopTabs" component={HomeTopTabs} />
       <NativeStack.Screen name="AddCourse" component={AddCourse} />
       <NativeStack.Screen name="EasyPick" component={EasyPick} />
+      <NativeStack.Screen name="ManualPick" component={ManualPick} />
       <NativeStack.Screen name="CreateTable" component={CreateTable} />
       <NativeStack.Screen name="Tables" component={Tables} />
     </NativeStack.Navigator>

@@ -108,97 +108,105 @@ const EasyPick = () => {
       </Box>
       <Box height={12} />
 
-      <ScrollView
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-            colors={[theme.colors.sbuRed]} // For Android
-            tintColor={theme.colors.sbuRed} // For iOS
-          />
-        }
-        showsVerticalScrollIndicator={false}
-      >
-        {courses!.takingCourses.map((courseItem, courseIndex) => (
-          <Box key={courseItem._id}>
-            <Box
-              flexDirection="row"
-              justifyContent="space-between"
-              alignItems="center"
-              mb="5"
-            >
-              <Box flexDirection="row" alignItems="center">
-                <Text variant="textXl" fontWeight="600" color="textColor">
-                  {courseIndex + 1}.{" "}
-                </Text>
-                <Text variant="textXl" fontWeight="600" color="textColor">
-                  {courseItem.subj} {courseItem.crs}
-                </Text>
-                <Text
-                  ml="2"
-                  color="textColor"
-                >{`(credits: ${courseItem.credits})`}</Text>
-              </Box>
-              <Box mr="4">
-                <TouchableOpacity
-                  onPress={() => {
-                    deleteTVCourse({
-                      tableName: toggleInfo as IGlobalToggle,
-                      courseId: courseItem._id,
-                    });
-                  }}
-                >
-                  <FontAwesome5
-                    name="trash"
-                    size={24}
-                    color={theme.colors.textColor}
-                  />
-                </TouchableOpacity>
-              </Box>
-            </Box>
-            <Box
-              ml="5"
-              mb="4"
-              flexDirection="row"
-              justifyContent="space-between"
-            >
-              <Box>
-                {courseItem.unique_instructor.includes(",") ? (
-                  courseItem.unique_instructor
-                    .split(", ")
-                    .map((prof, index) => (
-                      <Text key={index} variant="textBase" color="textColor">
-                        {prof}
-                      </Text>
-                    ))
-                ) : (
-                  <Text variant="textBase" color="textColor">
-                    {courseItem.unique_instructor}
+      {courses?.takingCourses.length === 0 ? (
+        <Box flex={1} justifyContent="center" alignItems="center">
+          <Text color="textColor" fontWeight="600" fontSize={20}>
+            No registered courses yet :(
+          </Text>
+        </Box>
+      ) : (
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              colors={[theme.colors.sbuRed]} // For Android
+              tintColor={theme.colors.sbuRed} // For iOS
+            />
+          }
+          showsVerticalScrollIndicator={false}
+        >
+          {courses!.takingCourses.map((courseItem, courseIndex) => (
+            <Box key={courseItem._id}>
+              <Box
+                flexDirection="row"
+                justifyContent="space-between"
+                alignItems="center"
+                mb="5"
+              >
+                <Box flexDirection="row" alignItems="center">
+                  <Text variant="textXl" fontWeight="600" color="textColor">
+                    {courseIndex + 1}.{" "}
                   </Text>
-                )}
-              </Box>
-              <Box alignSelf="flex-end">
-                <TouchableOpacity
-                  onPress={() => navigateToCourseDetail(courseItem._id)}
-                >
+                  <Text variant="textXl" fontWeight="600" color="textColor">
+                    {courseItem.subj} {courseItem.crs}
+                  </Text>
                   <Text
-                    variant="textBase"
-                    fontWeight="600"
-                    style={{
-                      color: theme.colors.blu700,
+                    ml="2"
+                    color="textColor"
+                  >{`(credits: ${courseItem.credits})`}</Text>
+                </Box>
+                <Box mr="4">
+                  <TouchableOpacity
+                    onPress={() => {
+                      deleteTVCourse({
+                        tableName: toggleInfo as IGlobalToggle,
+                        courseId: courseItem._id,
+                      });
                     }}
                   >
-                    수업 정보 보러가기 →
-                  </Text>
-                </TouchableOpacity>
+                    <FontAwesome5
+                      name="trash"
+                      size={24}
+                      color={theme.colors.textColor}
+                    />
+                  </TouchableOpacity>
+                </Box>
+              </Box>
+              <Box
+                ml="5"
+                mb="4"
+                flexDirection="row"
+                justifyContent="space-between"
+              >
+                <Box>
+                  {courseItem.unique_instructor.includes(",") ? (
+                    courseItem.unique_instructor
+                      .split(", ")
+                      .map((prof, index) => (
+                        <Text key={index} variant="textBase" color="textColor">
+                          {prof}
+                        </Text>
+                      ))
+                  ) : (
+                    <Text variant="textBase" color="textColor">
+                      {courseItem.unique_instructor}
+                    </Text>
+                  )}
+                </Box>
+                <Box alignSelf="flex-end">
+                  <TouchableOpacity
+                    onPress={() => navigateToCourseDetail(courseItem._id)}
+                  >
+                    <Text
+                      variant="textBase"
+                      fontWeight="600"
+                      style={{
+                        color: theme.colors.blu700,
+                      }}
+                    >
+                      수업 정보 보러가기 →
+                    </Text>
+                  </TouchableOpacity>
+                </Box>
+              </Box>
+              <Box mb="4">
+                <Divider />
               </Box>
             </Box>
-            <Box mb="4">
-              <Divider />
-            </Box>
-          </Box>
-        ))}
-      </ScrollView>
+          ))}
+        </ScrollView>
+      )}
     </Box>
   );
 };

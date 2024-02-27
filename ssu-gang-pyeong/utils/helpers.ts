@@ -195,7 +195,7 @@ export const formatCourses = (courses: ICourse[]) => {
       });
     }
   }
-
+  // console.log(formattedCourses[0].sections);
   return formattedCourses;
 };
 

@@ -38,6 +38,7 @@ export type HomeStackParamList = {
   EasyPick: {
     togglePicker: () => void;
   };
+  ManualPick: undefined;
   AddCourse: undefined;
   Tables: undefined;
   CreateTable: {
