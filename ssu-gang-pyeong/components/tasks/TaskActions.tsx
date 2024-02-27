@@ -4,7 +4,7 @@ import { ICategory, ITask, ITaskRequest } from "../../types";
 import { isEqual, parseISO } from "date-fns";
 import { FlatList, TouchableOpacity, TextInput, Alert } from "react-native";
 import { Calendar } from "react-native-calendars";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import useSWRMutation from "swr/mutation";
 import { Loader } from "../../components";
 import { Box, Text, Theme } from "../../theme";
@@ -14,6 +14,7 @@ import { useTheme } from "@shopify/restyle";
 type TaskActionsProps = {
   categoryId: string;
   updateTaskStatus?: () => Promise<ITask[] | undefined>;
+  mutateCalendar?: () => void;
 };
 
 export const today = new Date();
@@ -35,7 +36,11 @@ const createTaskRequest = async (
   }
 };
 
-const TaskActions = ({ categoryId, updateTaskStatus }: TaskActionsProps) => {
+const TaskActions = ({
+  categoryId,
+  updateTaskStatus,
+  mutateCalendar,
+}: TaskActionsProps) => {
   const theme = useTheme<Theme>();
 
   const [newTask, setNewTask] = useState<ITaskRequest>({
@@ -88,6 +93,9 @@ const TaskActions = ({ categoryId, updateTaskStatus }: TaskActionsProps) => {
           date: todaysISODate.toISOString(),
           name: "",
         });
+        if (mutateCalendar) {
+          await mutateCalendar();
+        }
         if (updateTaskStatus) {
           await updateTaskStatus();
         }

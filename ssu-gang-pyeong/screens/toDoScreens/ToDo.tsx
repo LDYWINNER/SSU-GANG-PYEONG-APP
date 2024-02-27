@@ -91,10 +91,11 @@ const HomeScreen = () => {
     []
   );
 
-  const { data: monthlyTasks, isLoading } = useSWR<ITask[]>(
-    `api/v1/todotask/`,
-    fetcher
-  );
+  const {
+    data: monthlyTasks,
+    isLoading,
+    mutate,
+  } = useSWR<ITask[]>(`api/v1/todotask/`, fetcher);
 
   const {
     data: specificDayTasks,
@@ -107,17 +108,8 @@ const HomeScreen = () => {
   //   // console.log(specificDayTasks);
   // }, [pickedDate]);
 
-  useFocusEffect(
-    useCallback(() => {
-      trigger();
-    }, [pickedDate])
-  );
-
-  if (isLoading || !specificDayTasks) {
-    return <Loader />;
-  } else {
+  const presetDots = () => {
     //preset tasks for calendar dots representation
-    // Loop over the monthlyTasks array
     monthlyTasks!.forEach((task) => {
       // Extract the date part from the task's date
       const taskDate = task.date.split("T")[0];
@@ -164,6 +156,18 @@ const HomeScreen = () => {
         presetTasks[taskDate].dots.push(dotColorSubj);
       }
     });
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      trigger();
+    }, [pickedDate])
+  );
+
+  if (isLoading || !specificDayTasks) {
+    return <Loader />;
+  } else {
+    presetDots();
   }
 
   return (
@@ -256,7 +260,11 @@ const HomeScreen = () => {
           </Box>
         )}
 
-        <TaskActions categoryId="" updateTaskStatus={trigger} />
+        <TaskActions
+          categoryId=""
+          updateTaskStatus={trigger}
+          mutateCalendar={mutate}
+        />
         <Box height={14} />
 
         {isMutating ? (
