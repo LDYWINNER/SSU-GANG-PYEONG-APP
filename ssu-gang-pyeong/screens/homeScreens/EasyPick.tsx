@@ -1,5 +1,5 @@
 import React from "react";
-import { TouchableOpacity, useColorScheme } from "react-native";
+import { TouchableOpacity, useColorScheme, RefreshControl } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import useSWR from "swr";
 import { Ionicons } from "@expo/vector-icons";
@@ -56,7 +56,20 @@ const EasyPick = () => {
     });
   };
 
-  const { data: courses } = useSWR<{
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    try {
+      await mutate();
+    } catch (error) {
+      console.error("Error refreshing data: ", error);
+    } finally {
+      setRefreshing(false);
+    }
+  }, []);
+
+  const { data: courses, mutate } = useSWR<{
     takingCourses: ICourse[];
   }>(`/api/v1/course/tableView/${toggleInfo?.currentTableView}`, fetcher);
 
@@ -95,7 +108,17 @@ const EasyPick = () => {
       </Box>
       <Box height={12} />
 
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={[theme.colors.sbuRed]} // For Android
+            tintColor={theme.colors.sbuRed} // For iOS
+          />
+        }
+        showsVerticalScrollIndicator={false}
+      >
         {courses!.takingCourses.map((courseItem, courseIndex) => (
           <Box key={courseItem._id}>
             <Box

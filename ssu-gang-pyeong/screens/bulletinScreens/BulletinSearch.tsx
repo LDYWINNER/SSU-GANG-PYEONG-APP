@@ -148,7 +148,7 @@ const BulletinSearch: React.FC<
             </Text>
           </Box>
         ) : (
-          <ScrollView>
+          <ScrollView showsVerticalScrollIndicator={false}>
             {posts?.bulletinAllPosts.map((post) => (
               <Box key={post._id}>
                 <TouchableOpacity

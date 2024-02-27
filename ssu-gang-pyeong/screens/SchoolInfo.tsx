@@ -86,7 +86,7 @@ const SchoolInfo = () => {
 
   return (
     <SafeAreaWrapper>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <Box mx="4">
           <Text
             variant="text2Xl"

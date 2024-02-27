@@ -95,7 +95,7 @@ const UserMain: React.FC<NativeStackScreenProps<any, "UserMain">> = ({
 
   return (
     <SafeAreaWrapper>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <Box flex={1} mx="4">
           <Box
             flexDirection="row"

@@ -23,6 +23,7 @@ import {
   TextInput,
   TouchableOpacity,
   useColorScheme,
+  RefreshControl,
 } from "react-native";
 import {
   FontAwesome,
@@ -137,6 +138,19 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
     isLoading: isLoadingPost,
     mutate: mutatePost,
   } = useSWR<{ post: IBulletinPost }>(`/api/v1/bulletin/${id}`, fetcher);
+
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    try {
+      await mutatePost();
+    } catch (error) {
+      console.error("Error refreshing data: ", error);
+    } finally {
+      setRefreshing(false);
+    }
+  }, []);
 
   const { trigger: updatePosts } = useSWRMutation<{
     bulletinAllPosts: IBulletinPost[];
@@ -329,7 +343,17 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
           )}
         </Box>
 
-        <ScrollView>
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              colors={[theme.colors.sbuRed]} // For Android
+              tintColor={theme.colors.sbuRed} // For iOS
+            />
+          }
+          showsVerticalScrollIndicator={false}
+        >
           <Box mt="5" mx="4">
             <Box flexDirection="row" alignItems="center">
               <FontAwesome

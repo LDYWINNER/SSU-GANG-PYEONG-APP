@@ -1,14 +1,25 @@
-import React from "react";
+import React, { useState, useCallback } from "react";
 import { fetcher } from "../../utils/config";
 import { ICategory } from "../../types";
-import { Box, Text } from "../../theme";
+import { Box, Text, Theme } from "../../theme";
 import { Loader, NavigateBack, SafeAreaWrapper } from "../../components";
 import { Category, CreateNewList } from "../../components/categories";
-import { FlatList } from "react-native";
+import { FlatList, RefreshControl } from "react-native";
 import useSWR from "swr";
+import { useTheme } from "@shopify/restyle";
 
 const Categories = () => {
-  const { data, isLoading } = useSWR<ICategory[]>(
+  const theme = useTheme<Theme>();
+
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await mutate();
+    setRefreshing(false);
+  }, []);
+
+  const { data, isLoading, mutate } = useSWR<ICategory[]>(
     "api/v1/todocategory/",
     fetcher
   );
@@ -39,6 +50,14 @@ const Categories = () => {
           renderItem={renderItem}
           ItemSeparatorComponent={() => <Box height={14} />}
           keyExtractor={(item) => item._id}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              colors={[theme.colors.sbuRed]} // For Android
+              tintColor={theme.colors.sbuRed} // For iOS
+            />
+          }
         />
         <Box height={4} />
         <CreateNewList />

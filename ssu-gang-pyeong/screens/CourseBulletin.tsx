@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   useColorScheme,
+  RefreshControl,
 } from "react-native";
 import { MainStackParamList } from "../navigation/types";
 import { Divider, Loader, NavigateBack, SafeAreaWrapper } from "../components";
@@ -85,6 +86,19 @@ const CourseBulletin: React.FC<
       throw error;
     }
   };
+
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    try {
+      await trigger();
+    } catch (error) {
+      console.error("Error refreshing data: ", error);
+    } finally {
+      setRefreshing(false);
+    }
+  }, []);
 
   const {
     data: posts,
@@ -224,7 +238,17 @@ const CourseBulletin: React.FC<
         {isMutating ? (
           <Loader />
         ) : (
-          <ScrollView>
+          <ScrollView
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+                colors={[theme.colors.sbuRed]} // For Android
+                tintColor={theme.colors.sbuRed} // For iOS
+              />
+            }
+            showsVerticalScrollIndicator={false}
+          >
             {posts?.bulletinAllPosts.map((post) => (
               <Box key={post._id}>
                 <TouchableOpacity

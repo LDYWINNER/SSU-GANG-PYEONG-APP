@@ -1,7 +1,12 @@
 import React, { useCallback } from "react";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { Dimensions, TouchableOpacity, useColorScheme } from "react-native";
+import {
+  Dimensions,
+  TouchableOpacity,
+  useColorScheme,
+  RefreshControl,
+} from "react-native";
 import { BulletinStackParamList } from "../../navigation/types";
 import {
   Divider,
@@ -41,6 +46,19 @@ const BulletinDetail: React.FC<
 
   const route = useRoute<BulletinDetailScreenRouteProp>();
   const { name } = route.params;
+
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    try {
+      await mutate();
+    } catch (error) {
+      console.error("Error refreshing data: ", error);
+    } finally {
+      setRefreshing(false);
+    }
+  }, []);
 
   const navigateToBulletinPost = (postId: string) => {
     navigate("BulletinStack", {
@@ -124,7 +142,17 @@ const BulletinDetail: React.FC<
           </Text>
         </Box>
 
-        <ScrollView>
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              colors={[theme.colors.sbuRed]} // For Android
+              tintColor={theme.colors.sbuRed} // For iOS
+            />
+          }
+          showsVerticalScrollIndicator={false}
+        >
           {posts?.bulletinAllPosts.map((post) => (
             <Box key={post._id}>
               <TouchableOpacity
