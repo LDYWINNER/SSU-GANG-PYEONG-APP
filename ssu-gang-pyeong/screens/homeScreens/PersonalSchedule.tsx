@@ -117,7 +117,7 @@ const PersonalSchedule = () => {
 
   const { user, updateUser } = useUserGlobalStore();
 
-  console.log(`route.params`, JSON.stringify(route.params, null, 2));
+  // console.log(`route.params`, JSON.stringify(route.params, null, 2));
 
   const createNewPS = async () => {
     try {
@@ -293,18 +293,18 @@ const PersonalSchedule = () => {
               <TouchableOpacity onPress={() => togglePicker("day", index)}>
                 <Box flexDirection="row" alignItems="center">
                   <Text variant="textLg" fontWeight="600" color="textColor">
-                    {inputSections[whichIndex][0] === 0 ||
-                    inputSections[whichIndex][0] === undefined
+                    {inputSections[index][0] === 0 ||
+                    inputSections[index][0] === undefined
                       ? "월요일"
-                      : inputSections[whichIndex][0] === 1
+                      : inputSections[index][0] === 1
                       ? "화요일"
-                      : inputSections[whichIndex][0] === 2
+                      : inputSections[index][0] === 2
                       ? "수요일"
-                      : inputSections[whichIndex][0] === 3
+                      : inputSections[index][0] === 3
                       ? "목요일"
-                      : inputSections[whichIndex][0] === 4
+                      : inputSections[index][0] === 4
                       ? "금요일"
-                      : inputSections[whichIndex][0] === 5
+                      : inputSections[index][0] === 5
                       ? "토요일"
                       : "일요일"}
                   </Text>
@@ -321,10 +321,8 @@ const PersonalSchedule = () => {
               <TouchableOpacity onPress={() => togglePicker("time", index)}>
                 <Box flexDirection="row" alignItems="center">
                   <Text variant="textLg" fontWeight="600" color="textColor">
-                    {inputSections[whichIndex][1]}:
-                    {inputSections[whichIndex][2]} -{" "}
-                    {inputSections[whichIndex][3]}:
-                    {inputSections[whichIndex][4]}
+                    {inputSections[index][1]}:{inputSections[index][2]} -{" "}
+                    {inputSections[index][3]}:{inputSections[index][4]}
                   </Text>
                   <Box width={6} />
                   <Ionicons
@@ -347,7 +345,7 @@ const PersonalSchedule = () => {
                   borderBottomColor: theme.colors.gray5,
                   color: theme.colors.textColor,
                 }}
-                value={inputSections[whichIndex][5]}
+                value={inputSections[index][5]}
                 maxLength={36}
                 placeholder="장소"
                 placeholderTextColor={theme.colors.gray5}
