@@ -253,7 +253,7 @@ const PersonalSchedule = () => {
       );
       setInputSections(presetSections);
     }
-  }, [route.params.schedule, isEditing]);
+  }, []);
 
   return (
     <SafeAreaWrapper>
