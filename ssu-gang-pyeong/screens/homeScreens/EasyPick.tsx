@@ -7,7 +7,12 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { Divider } from "../../components";
 import useGlobalToggle from "../../store/useGlobalToggle";
 import { Box, Text, Theme } from "../../theme";
-import { ICourse, IGlobalToggle, IPSDeleteRequest } from "../../types";
+import {
+  ICourse,
+  IGlobalToggle,
+  IPSDeleteRequest,
+  IPersonalSchedule,
+} from "../../types";
 import axiosInstance, { fetcher } from "../../utils/config";
 import { useTheme } from "@shopify/restyle";
 import { useNavigation } from "@react-navigation/native";
@@ -72,8 +77,12 @@ const EasyPick = ({ togglePicker }: { togglePicker?: () => void }) => {
     });
   };
 
-  const navigateToPersonalSchedule = () => {
-    homeScreenNavigation.navigate("PersonalSchedule", {});
+  const navigateToPersonalSchedule = (
+    personalScheduleItem: IPersonalSchedule
+  ) => {
+    homeScreenNavigation.navigate("PersonalSchedule", {
+      schedule: personalScheduleItem,
+    });
   };
 
   const [refreshing, setRefreshing] = React.useState(false);
@@ -132,7 +141,11 @@ const EasyPick = ({ togglePicker }: { togglePicker?: () => void }) => {
         </Text>
 
         <Box flexDirection="row" alignItems="center">
-          <TouchableOpacity onPress={navigateToPersonalSchedule}>
+          <TouchableOpacity
+            onPress={() =>
+              homeScreenNavigation.navigate("PersonalSchedule", {})
+            }
+          >
             <Box
               style={{
                 backgroundColor: theme.colors.sbuRed,
@@ -290,7 +303,9 @@ const EasyPick = ({ togglePicker }: { togglePicker?: () => void }) => {
                       </Text>
                     </Box>
                     <Box mr="4" flexDirection="row" alignItems="center">
-                      <TouchableOpacity onPress={() => {}}>
+                      <TouchableOpacity
+                        onPress={() => navigateToPersonalSchedule(courseItem)}
+                      >
                         <MaterialCommunityIcons
                           name={
                             isDarkMode?.mode === "system"

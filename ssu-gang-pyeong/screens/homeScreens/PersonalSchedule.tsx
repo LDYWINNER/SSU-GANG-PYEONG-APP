@@ -1,4 +1,10 @@
-import React, { useCallback, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { SmoothButton, SafeAreaWrapper, NavigateBack } from "../../components";
 import { HomeStackParamList } from "../../navigation/types";
 import axiosInstance from "../../utils/config";
@@ -100,7 +106,7 @@ const PersonalSchedule = () => {
 
   const route = useRoute<PersonalScheduleRouteTypes>();
 
-  const isEditing = route.params.schedule?.courseId ? true : false;
+  const isEditing = route.params.schedule ? true : false;
 
   const { trigger } = useSWRMutation("api/v1/ps/create", createPSRequest);
 
@@ -111,7 +117,7 @@ const PersonalSchedule = () => {
 
   const { user, updateUser } = useUserGlobalStore();
 
-  // console.log(`route.params`, JSON.stringify(route.params, null, 2));
+  console.log(`route.params`, JSON.stringify(route.params, null, 2));
 
   const createNewPS = async () => {
     try {
@@ -231,9 +237,24 @@ const PersonalSchedule = () => {
     []
   );
 
-  if (isEditing) {
-    //input sections preset
-  }
+  useEffect(() => {
+    if (isEditing) {
+      const presetSections = route.params.schedule!.sections.LEC.days.map(
+        (day, i) => {
+          return [
+            day,
+            route.params.schedule!.sections.LEC.startTimes[i].split(":")[0],
+            route.params.schedule!.sections.LEC.startTimes[i].split(":")[1],
+            route.params.schedule!.sections.LEC.endTimes[i].split(":")[0],
+            route.params.schedule!.sections.LEC.endTimes[i].split(":")[1],
+            route.params.schedule!.sections.LEC.locations[i],
+          ];
+        }
+      );
+      setInputSections(presetSections);
+    }
+  }, [route.params.schedule, isEditing]);
+
   return (
     <SafeAreaWrapper>
       <Box flex={1} mx="4">
