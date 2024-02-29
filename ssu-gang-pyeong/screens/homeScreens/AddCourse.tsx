@@ -166,10 +166,8 @@ const AddCourse = () => {
 
         <Box
           height={windowHeight * 0.5}
-          style={{ marginTop: windowHeight * 0.04 }}
+          style={{ marginTop: windowHeight * 0.03 }}
         >
-          <Divider />
-          <Box height={6} />
           <EasyPick togglePicker={togglePicker} />
         </Box>
       </Box>

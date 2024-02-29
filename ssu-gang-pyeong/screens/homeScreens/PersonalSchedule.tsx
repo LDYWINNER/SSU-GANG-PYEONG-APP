@@ -127,8 +127,6 @@ const PersonalSchedule = () => {
 
   const { user, updateUser } = useUserGlobalStore();
 
-  console.log(user);
-
   // console.log(`route.params`, JSON.stringify(route.params, null, 2));
 
   const createNewPS = async () => {
@@ -203,8 +201,6 @@ const PersonalSchedule = () => {
   // ]
 
   // inputs
-
-  //input section
   const [inputSections, setInputSections] = useState<any[]>([
     [0, "09", "00", "10", "00", ""],
   ]);

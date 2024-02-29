@@ -17,6 +17,8 @@ import {
 } from "../../navigation/types";
 import useSWRMutation from "swr/mutation";
 import useDarkMode from "../../store/useDarkMode";
+import useUserGlobalStore from "../../store/useUserGlobal";
+import { WINDOW_HEIGHT } from "@gorhom/bottom-sheet";
 
 interface ITVAuthRequest {
   tableName: IGlobalToggle;
@@ -46,6 +48,8 @@ const EasyPick = ({ togglePicker }: { togglePicker?: () => void }) => {
   const theme = useTheme<Theme>();
   const { isDarkMode } = useDarkMode();
   const systemIsDark = useColorScheme() === "dark";
+
+  const { user } = useUserGlobalStore();
 
   const navigateToCourseDetail = (courseId: string) => {
     navigation.navigate("MainStack", {
@@ -231,6 +235,39 @@ const EasyPick = ({ togglePicker }: { togglePicker?: () => void }) => {
               </Box>
             </Box>
           ))}
+          {user?.personalSchedule.length !== 0 &&
+            user?.personalSchedule.map((courseItem, courseIndex) => (
+              <Box key={courseIndex}>
+                <Box
+                  flexDirection="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  mb="5"
+                >
+                  <Box flexDirection="row" alignItems="center">
+                    <Text variant="textXl" fontWeight="600" color="textColor">
+                      {courses!.takingCourses.length + courseIndex + 1}.{" "}
+                    </Text>
+                    <Text variant="textXl" fontWeight="600" color="textColor">
+                      {courseItem.courseId}
+                    </Text>
+                  </Box>
+                  <Box mr="4">
+                    <TouchableOpacity onPress={() => {}}>
+                      <FontAwesome5
+                        name="trash"
+                        size={24}
+                        color={theme.colors.textColor}
+                      />
+                    </TouchableOpacity>
+                  </Box>
+                </Box>
+                <Box mb="4">
+                  <Divider />
+                </Box>
+              </Box>
+            ))}
+          <Box height={WINDOW_HEIGHT * 0.08} />
         </ScrollView>
       )}
     </Box>
