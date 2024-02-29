@@ -127,9 +127,11 @@ const PersonalSchedule = () => {
 
   const { user, updateUser } = useUserGlobalStore();
 
+  console.log(user);
+
   // console.log(`route.params`, JSON.stringify(route.params, null, 2));
 
-  const createNewTable = async () => {
+  const createNewPS = async () => {
     try {
       if (false) {
         // if (isEditing) {
@@ -155,22 +157,27 @@ const PersonalSchedule = () => {
           sections: {
             LEC: {
               days: inputSections.map((section) => section[0]),
-              startTimes: inputSections.map((section) => section[1]),
-              endTimes: inputSections.map((section) => section[2]),
-              locations: inputSections.map((section) => section[3]),
+              startTimes: inputSections.map(
+                (section) => section[1] + ":" + section[2]
+              ),
+              endTimes: inputSections.map(
+                (section) => section[3] + ":" + section[4]
+              ),
+              locations: inputSections.map((section) => section[5]),
             },
           },
         };
-        console.log(newPS);
+        console.log(newPS.sections.LEC);
         await trigger(newPS);
         updateUser({
           ...user!,
           personalSchedule: [...user!.personalSchedule, newPS],
         });
       }
+
       navigation.goBack();
     } catch (error) {
-      console.log("error in createNewTable", error);
+      console.log("error in createNewPS", error);
       throw error;
     }
   };
@@ -209,10 +216,11 @@ const PersonalSchedule = () => {
   const [psCourseId, setPSCourseId] = useState(
     route.params.schedule?.courseId ?? ""
   );
+  const [tempDay, setTempDay] = useState<number>(0);
   const [tempStartHour, setTempStartHour] = useState<String>("09");
-  const tempStartMinute = useState<String>("00");
-  const tempEndHour = useState<String>("10");
-  const tempEndMinute = useState<String>("00");
+  const [tempStartMinute, setTempStartMinute] = useState<String>("00");
+  const [tempEndHour, setTempEndHour] = useState<String>("10");
+  const [tempEndMinute, setTempEndMinute] = useState<String>("00");
 
   //bottom sheet
   const sheetRef = useRef<BottomSheet>(null);
@@ -226,7 +234,7 @@ const PersonalSchedule = () => {
   const [picker, setPicker] = useState(true);
   const [pickerContents, setPickerContents] = useState("");
   const [whichIndex, setWhichIndex] = useState(0);
-  const pickerRef = useRef<Picker<string>>(null);
+  const pickerRef = useRef<Picker<string | number>>(null);
   const togglePicker = (index: string, indexNum: number) => {
     if (picker) {
       handleSnapPress();
@@ -388,7 +396,7 @@ const PersonalSchedule = () => {
         <Box position="absolute" bottom={4} left={0} right={0}>
           <SmoothButton
             label={isEditing ? "Edit table item" : "Done"}
-            onPress={createNewTable}
+            onPress={() => createNewPS()}
           />
         </Box>
       </Box>
@@ -411,9 +419,22 @@ const PersonalSchedule = () => {
         <Box flexDirection="row" justifyContent="flex-end" mr="5">
           <TouchableOpacity
             onPress={() => {
-              if (pickerContents === "school") {
+              if (pickerContents === "day") {
+                setInputSections((prevSections) => {
+                  const newSections = [...prevSections];
+                  newSections[whichIndex][0] = tempDay;
+                  return newSections;
+                });
                 handleClosePress();
               } else {
+                setInputSections((prevSections) => {
+                  const newSections = [...prevSections];
+                  newSections[whichIndex][1] = tempStartHour;
+                  newSections[whichIndex][2] = tempStartMinute;
+                  newSections[whichIndex][3] = tempEndHour;
+                  newSections[whichIndex][4] = tempEndMinute;
+                  return newSections;
+                });
                 handleClosePress();
               }
             }}
@@ -430,11 +451,10 @@ const PersonalSchedule = () => {
         {pickerContents === "day" ? (
           <Picker
             ref={pickerRef}
-            selectedValue={inputSections[whichIndex][0]}
+            selectedValue={tempDay}
             onValueChange={(itemValue) => {
-              const temp = inputSections;
-              temp[whichIndex][0] = itemValue;
-              setInputSections(temp);
+              console.log(typeof itemValue, itemValue);
+              setTempDay(itemValue as number);
             }}
           >
             <Picker.Item label="월요일" value={0} color={theme.colors.white} />
@@ -449,13 +469,9 @@ const PersonalSchedule = () => {
           <Box flexDirection="row" justifyContent="center">
             <Picker
               style={{ width: 100 }}
-              selectedValue={inputSections[whichIndex][1]}
+              selectedValue={tempStartHour}
               onValueChange={(itemValue) => {
-                setInputSections((prevSections) => {
-                  const newSections = [...prevSections];
-                  newSections[whichIndex][1] = itemValue;
-                  return newSections;
-                });
+                setTempStartHour(itemValue);
               }}
             >
               {hours.map((hour) => (
@@ -469,11 +485,9 @@ const PersonalSchedule = () => {
             </Picker>
             <Picker
               style={{ width: 100 }}
-              selectedValue={inputSections[whichIndex][2]}
+              selectedValue={tempStartMinute}
               onValueChange={(itemValue) => {
-                const temp = inputSections;
-                temp[whichIndex][2] = itemValue;
-                setInputSections(temp);
+                setTempStartMinute(itemValue);
               }}
             >
               {minutes.map((minute) => (
@@ -487,11 +501,9 @@ const PersonalSchedule = () => {
             </Picker>
             <Picker
               style={{ width: 100 }}
-              selectedValue={inputSections[whichIndex][3]}
+              selectedValue={tempEndHour}
               onValueChange={(itemValue) => {
-                const temp = inputSections;
-                temp[whichIndex][3] = itemValue;
-                setInputSections(temp);
+                setTempEndHour(itemValue);
               }}
             >
               {hours.map((hour) => (
@@ -505,11 +517,9 @@ const PersonalSchedule = () => {
             </Picker>
             <Picker
               style={{ width: 100 }}
-              selectedValue={inputSections[whichIndex][4]}
+              selectedValue={tempEndMinute}
               onValueChange={(itemValue) => {
-                const temp = inputSections;
-                temp[whichIndex][4] = itemValue;
-                setInputSections(temp);
+                setTempEndMinute(itemValue);
               }}
             >
               {minutes.map((minute) => (

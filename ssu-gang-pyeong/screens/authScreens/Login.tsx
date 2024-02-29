@@ -44,6 +44,7 @@ const LoginScreen = () => {
         courseReviewNum: _user.courseReviewNum,
         adminAccount: _user.adminAccount,
         classHistory: _user.classHistory,
+        personalSchedule: _user.personalSchedule,
       });
     } catch (error) {}
   };
