@@ -2,7 +2,7 @@ import React from "react";
 import { TouchableOpacity, useColorScheme, RefreshControl } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import useSWR from "swr";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Divider } from "../../components";
 import useGlobalToggle from "../../store/useGlobalToggle";
@@ -252,7 +252,23 @@ const EasyPick = ({ togglePicker }: { togglePicker?: () => void }) => {
                       {courseItem.courseId}
                     </Text>
                   </Box>
-                  <Box mr="4">
+                  <Box mr="4" flexDirection="row" alignItems="center">
+                    <TouchableOpacity onPress={() => {}}>
+                      <MaterialCommunityIcons
+                        name={
+                          isDarkMode?.mode === "system"
+                            ? systemIsDark
+                              ? "pencil-circle-outline"
+                              : "pencil-circle"
+                            : isDarkMode?.mode === "dark"
+                            ? "pencil-circle-outline"
+                            : "pencil-circle"
+                        }
+                        size={36}
+                        color={theme.colors.textColor}
+                      />
+                    </TouchableOpacity>
+                    <Box width={12} />
                     <TouchableOpacity onPress={() => {}}>
                       <FontAwesome5
                         name="trash"
