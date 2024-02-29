@@ -271,55 +271,57 @@ const EasyPick = ({ togglePicker }: { togglePicker?: () => void }) => {
             </Box>
           ))}
           {user?.personalSchedule.length !== 0 &&
-            user?.personalSchedule.map((courseItem, courseIndex) => (
-              <Box key={courseIndex}>
-                <Box
-                  flexDirection="row"
-                  justifyContent="space-between"
-                  alignItems="center"
-                  mb="5"
-                >
-                  <Box flexDirection="row" alignItems="center">
-                    <Text variant="textXl" fontWeight="600" color="textColor">
-                      {courses!.takingCourses.length + courseIndex + 1}.{" "}
-                    </Text>
-                    <Text variant="textXl" fontWeight="600" color="textColor">
-                      {courseItem.courseId}
-                    </Text>
-                  </Box>
-                  <Box mr="4" flexDirection="row" alignItems="center">
-                    <TouchableOpacity onPress={() => {}}>
-                      <MaterialCommunityIcons
-                        name={
-                          isDarkMode?.mode === "system"
-                            ? systemIsDark
+            user?.personalSchedule
+              .filter((item) => item.table === toggleInfo?.currentTableView)
+              .map((courseItem, courseIndex) => (
+                <Box key={courseIndex}>
+                  <Box
+                    flexDirection="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    mb="5"
+                  >
+                    <Box flexDirection="row" alignItems="center">
+                      <Text variant="textXl" fontWeight="600" color="textColor">
+                        {courses!.takingCourses.length + courseIndex + 1}.{" "}
+                      </Text>
+                      <Text variant="textXl" fontWeight="600" color="textColor">
+                        {courseItem.courseId}
+                      </Text>
+                    </Box>
+                    <Box mr="4" flexDirection="row" alignItems="center">
+                      <TouchableOpacity onPress={() => {}}>
+                        <MaterialCommunityIcons
+                          name={
+                            isDarkMode?.mode === "system"
+                              ? systemIsDark
+                                ? "pencil-circle-outline"
+                                : "pencil-circle"
+                              : isDarkMode?.mode === "dark"
                               ? "pencil-circle-outline"
                               : "pencil-circle"
-                            : isDarkMode?.mode === "dark"
-                            ? "pencil-circle-outline"
-                            : "pencil-circle"
-                        }
-                        size={36}
-                        color={theme.colors.textColor}
-                      />
-                    </TouchableOpacity>
-                    <Box width={12} />
-                    <TouchableOpacity
-                      onPress={() => deletePS(courseItem.courseId)}
-                    >
-                      <FontAwesome5
-                        name="trash"
-                        size={24}
-                        color={theme.colors.textColor}
-                      />
-                    </TouchableOpacity>
+                          }
+                          size={36}
+                          color={theme.colors.textColor}
+                        />
+                      </TouchableOpacity>
+                      <Box width={12} />
+                      <TouchableOpacity
+                        onPress={() => deletePS(courseItem.courseId)}
+                      >
+                        <FontAwesome5
+                          name="trash"
+                          size={24}
+                          color={theme.colors.textColor}
+                        />
+                      </TouchableOpacity>
+                    </Box>
+                  </Box>
+                  <Box mb="4">
+                    <Divider />
                   </Box>
                 </Box>
-                <Box mb="4">
-                  <Divider />
-                </Box>
-              </Box>
-            ))}
+              ))}
           <Box height={WINDOW_HEIGHT * 0.08} />
         </ScrollView>
       )}

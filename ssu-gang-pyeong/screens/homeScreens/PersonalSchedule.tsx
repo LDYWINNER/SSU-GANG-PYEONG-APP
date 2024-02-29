@@ -19,6 +19,7 @@ import useUserGlobalStore from "../../store/useUserGlobal";
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";
 import { Picker } from "@react-native-picker/picker";
+import useGlobalToggle from "../../store/useGlobalToggle";
 
 const hours = [
   "00",
@@ -95,6 +96,8 @@ const PersonalSchedule = () => {
   const theme = useTheme<Theme>();
   const navigation = useNavigation();
 
+  const { toggleInfo } = useGlobalToggle();
+
   const route = useRoute<PersonalScheduleRouteTypes>();
 
   const isEditing = route.params.schedule?.courseId ? true : false;
@@ -132,6 +135,7 @@ const PersonalSchedule = () => {
         // });
       } else {
         const newPS = {
+          table: toggleInfo!.currentTableView,
           courseId: psCourseId,
           sections: {
             LEC: {

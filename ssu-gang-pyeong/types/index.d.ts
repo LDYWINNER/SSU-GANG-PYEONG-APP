@@ -22,6 +22,7 @@ interface IAuthenticatedUser {
 }
 
 export interface IPersonalSchedule {
+  table: string;
   courseId: string;
   sections: {
     [string]: {
@@ -59,6 +60,7 @@ interface IUpdateTableRequest {
 }
 
 interface IPSRequest {
+  table: string;
   courseId: string;
   sections: {
     [string]: {
