@@ -228,12 +228,7 @@ const UserMain: React.FC<NativeStackScreenProps<any, "UserMain">> = ({
                   size={24}
                   color="black"
                 />
-                <Text
-                  variant="textBase"
-                  fontWeight="600"
-                  ml="3"
-                  color="mainBgColor"
-                >
+                <Text variant="textBase" fontWeight="600" ml="3">
                   다크모드: {isDarkMode?.mode}
                 </Text>
               </Box>

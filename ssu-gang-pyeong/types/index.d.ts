@@ -18,6 +18,19 @@ interface IAuthenticatedUser {
   classHistory: {
     [index: string]: [string] | [];
   };
+  personalSchedule: IPersonalSchedule[];
+}
+
+export interface IPersonalSchedule {
+  courseId: string;
+  sections: {
+    [string]: {
+      days: number[];
+      locations: string[];
+      startTimes: string[];
+      endTimes: string[];
+    };
+  };
 }
 
 export interface IColor {
@@ -43,6 +56,18 @@ interface ITableRequest {
 interface IUpdateTableRequest {
   name: string;
   oldName: string;
+}
+
+interface IPSRequest {
+  courseId: string;
+  sections: {
+    [string]: {
+      days: number[];
+      locations: string[];
+      startTimes: string[];
+      endTimes: string[];
+    };
+  };
 }
 
 interface ICategory {
@@ -118,22 +143,6 @@ interface IGlobalToggle {
 
 interface IDarkMode {
   mode: string; // "dark" | "light" | "system"
-}
-
-interface ITVCourse {
-  courseId: string;
-  title: string;
-  sections: {
-    [string]: ITVItem;
-  };
-}
-
-interface ITVItem {
-  day: number;
-  startTime: string;
-  endTime: string;
-  location: string;
-  color: string;
 }
 
 interface IBulletinPost {

@@ -1,4 +1,10 @@
-import { IBulletinPost, ICategory, ITable, ITask } from "../types";
+import {
+  IBulletinPost,
+  ICategory,
+  IPersonalSchedule,
+  ITable,
+  ITask,
+} from "../types";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import {
   CompositeNavigationProp,
@@ -38,7 +44,9 @@ export type HomeStackParamList = {
   EasyPick: {
     togglePicker: () => void;
   };
-  ManualPick: undefined;
+  PersonalSchedule: {
+    schedule?: IPersonalSchedule;
+  };
   AddCourse: undefined;
   Tables: undefined;
   CreateTable: {

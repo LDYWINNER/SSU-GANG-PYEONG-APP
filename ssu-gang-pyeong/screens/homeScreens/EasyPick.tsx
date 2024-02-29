@@ -10,15 +10,13 @@ import { Box, Text, Theme } from "../../theme";
 import { ICourse, IGlobalToggle } from "../../types";
 import axiosInstance, { fetcher } from "../../utils/config";
 import { useTheme } from "@shopify/restyle";
-import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import {
-  HomeStackParamList,
+  HomeScreenNavigationType,
   MainStackNavigationType,
 } from "../../navigation/types";
 import useSWRMutation from "swr/mutation";
 import useDarkMode from "../../store/useDarkMode";
-
-type EasyPickScreenRouteProp = RouteProp<HomeStackParamList, "EasyPick">;
 
 interface ITVAuthRequest {
   tableName: IGlobalToggle;
@@ -39,10 +37,10 @@ const deleteTVCourseRequest = async (
   }
 };
 
-const EasyPick = () => {
+const EasyPick = ({ togglePicker }: { togglePicker?: () => void }) => {
   const navigation = useNavigation<MainStackNavigationType>();
-  const route = useRoute<EasyPickScreenRouteProp>();
-  const { togglePicker } = route.params;
+  const homeScreenNavigation = useNavigation<HomeScreenNavigationType>();
+
   const { toggleInfo } = useGlobalToggle();
 
   const theme = useTheme<Theme>();
@@ -54,6 +52,10 @@ const EasyPick = () => {
       screen: "CourseDetail",
       params: { id: courseId },
     });
+  };
+
+  const navigateToPersonalSchedule = () => {
+    homeScreenNavigation.navigate("PersonalSchedule", {});
   };
 
   const [refreshing, setRefreshing] = React.useState(false);
@@ -84,27 +86,51 @@ const EasyPick = () => {
         flexDirection="row"
         justifyContent="space-between"
         alignItems="center"
+        mt="2"
       >
-        <Text variant="text2Xl" fontWeight="700" mt="3" color="textColor">
+        <Text variant="text2Xl" fontWeight="700" color="textColor">
           Table Name: {toggleInfo?.currentTableView}
         </Text>
-        <TouchableOpacity onPress={() => togglePicker()}>
-          <Box mr="2" mt="2">
-            <Ionicons
-              name={
-                isDarkMode?.mode === "system"
-                  ? systemIsDark
+
+        <Box flexDirection="row" alignItems="center">
+          <TouchableOpacity onPress={navigateToPersonalSchedule}>
+            <Box
+              style={{
+                backgroundColor: theme.colors.sbuRed,
+              }}
+              p="2"
+              px="3"
+              mr="3"
+              borderRadius="rounded-4xl"
+            >
+              <Text
+                variant="textBase"
+                fontWeight="600"
+                style={{ color: "white" }}
+              >
+                직접 추가
+              </Text>
+            </Box>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => togglePicker!()}>
+            <Box mr="2">
+              <Ionicons
+                name={
+                  isDarkMode?.mode === "system"
+                    ? systemIsDark
+                      ? "add-circle-outline"
+                      : "add-circle"
+                    : isDarkMode?.mode === "dark"
                     ? "add-circle-outline"
                     : "add-circle"
-                  : isDarkMode?.mode === "dark"
-                  ? "add-circle-outline"
-                  : "add-circle"
-              }
-              color={theme.colors.textColor}
-              size={35}
-            />
-          </Box>
-        </TouchableOpacity>
+                }
+                color={theme.colors.textColor}
+                size={35}
+              />
+            </Box>
+          </TouchableOpacity>
+        </Box>
       </Box>
       <Box height={12} />
 

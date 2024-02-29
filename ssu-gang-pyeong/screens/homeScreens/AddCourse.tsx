@@ -1,10 +1,14 @@
 import React, { useCallback, useState, useRef, useMemo } from "react";
-import { Loader, NavigateBack, SafeAreaWrapper } from "../../components";
+import {
+  Divider,
+  Loader,
+  NavigateBack,
+  SafeAreaWrapper,
+} from "../../components";
 import { useTheme } from "@shopify/restyle";
 import { Box, Text, Theme } from "../../theme";
 import { TouchableOpacity, Dimensions } from "react-native";
 import TimeTable, { EventGroup } from "@mikezzb/react-native-timetable";
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import SelectCourses from "./SelectCourses";
 import EasyPick from "./EasyPick";
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
@@ -15,9 +19,6 @@ import useSWR from "swr";
 import { ICourse, IGlobalToggle } from "../../types";
 import { formatCourses } from "../../utils/helpers";
 import useSWRMutation from "swr/mutation";
-import ManualPick from "./ManualPick";
-
-const Tab = createMaterialTopTabNavigator();
 
 interface ITVAuthRequest {
   tableName: IGlobalToggle;
@@ -163,39 +164,13 @@ const AddCourse = () => {
           )}
         </Box>
 
-        <Box height={windowHeight * 0.5}>
-          <Tab.Navigator
-            initialRouteName="학교 수업 추가"
-            sceneContainerStyle={{
-              backgroundColor: theme.colors.mainBgColor,
-            }}
-            initialLayout={{
-              width: Dimensions.get("window").width,
-            }}
-            screenOptions={{
-              tabBarStyle: {
-                backgroundColor: theme.colors.mainBgColor,
-              },
-              tabBarIndicatorStyle: {
-                backgroundColor: theme.colors.sbuRed,
-              },
-              tabBarActiveTintColor: theme.colors.sbuRed,
-              tabBarInactiveTintColor: theme.colors.textColor,
-              swipeEnabled: true,
-            }}
-          >
-            <Tab.Screen
-              key={"학교 수업 추가"}
-              name={"학교 수업 추가"}
-              component={EasyPick}
-              initialParams={{ togglePicker }}
-            />
-            <Tab.Screen
-              key={"직접 추가"}
-              name={"직접 추가"}
-              component={ManualPick}
-            />
-          </Tab.Navigator>
+        <Box
+          height={windowHeight * 0.5}
+          style={{ marginTop: windowHeight * 0.04 }}
+        >
+          <Divider />
+          <Box height={6} />
+          <EasyPick togglePicker={togglePicker} />
         </Box>
       </Box>
 
