@@ -128,7 +128,7 @@ const EasyPick = ({ togglePicker }: { togglePicker?: () => void }) => {
         mt="2"
       >
         <Text variant="text2Xl" fontWeight="700" color="textColor">
-          Table Name: {toggleInfo?.currentTableView}
+          {toggleInfo?.currentTableView}
         </Text>
 
         <Box flexDirection="row" alignItems="center">
