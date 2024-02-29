@@ -86,20 +86,6 @@ const updatePSRequest = async (
   }
 };
 
-const deletePSRequest = async (
-  url: string,
-  { arg }: { arg: ITableRequest }
-) => {
-  try {
-    await axiosInstance.patch(url, {
-      ...arg,
-    });
-  } catch (error) {
-    console.log("error in deletePSRequest", error);
-    throw error;
-  }
-};
-
 type PersonalScheduleRouteTypes = RouteProp<
   HomeStackParamList,
   "PersonalSchedule"
@@ -118,11 +104,6 @@ const PersonalSchedule = () => {
   const { trigger: updateTrigger } = useSWRMutation(
     "api/v1/ps/update",
     updatePSRequest
-  );
-
-  const { trigger: deleteTrigger } = useSWRMutation(
-    "api/v1/ps/delete",
-    deletePSRequest
   );
 
   const { user, updateUser } = useUserGlobalStore();
@@ -165,32 +146,16 @@ const PersonalSchedule = () => {
             },
           },
         };
-        console.log(newPS.sections.LEC);
+        // console.log(newPS.sections.LEC);
         await trigger(newPS);
         updateUser({
           ...user!,
           personalSchedule: [...user!.personalSchedule, newPS],
         });
       }
-
       navigation.goBack();
     } catch (error) {
       console.log("error in createNewPS", error);
-      throw error;
-    }
-  };
-
-  const deletePS = async () => {
-    try {
-      // await deleteTrigger({
-      //   ...newTable,
-      // });
-
-      // delete user!.classHistory[newTable.name];
-      updateUser(user);
-      navigation.goBack();
-    } catch (error) {
-      console.log("error in deleteTable", error);
       throw error;
     }
   };
@@ -275,15 +240,6 @@ const PersonalSchedule = () => {
           alignItems="center"
         >
           <NavigateBack />
-          {isEditing && (
-            <TouchableOpacity onPress={deletePS}>
-              <MaterialCommunityIcons
-                name="delete"
-                size={24}
-                color={theme.colors.rose500}
-              />
-            </TouchableOpacity>
-          )}
         </Box>
         <Box height={16} />
 

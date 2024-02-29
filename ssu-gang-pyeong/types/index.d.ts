@@ -70,6 +70,10 @@ interface IPSRequest {
   };
 }
 
+interface IPSDeleteRequest {
+  courseId: string;
+}
+
 interface ICategory {
   _id: string;
   name: string;

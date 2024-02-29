@@ -7,7 +7,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { Divider } from "../../components";
 import useGlobalToggle from "../../store/useGlobalToggle";
 import { Box, Text, Theme } from "../../theme";
-import { ICourse, IGlobalToggle } from "../../types";
+import { ICourse, IGlobalToggle, IPSDeleteRequest } from "../../types";
 import axiosInstance, { fetcher } from "../../utils/config";
 import { useTheme } from "@shopify/restyle";
 import { useNavigation } from "@react-navigation/native";
@@ -39,6 +39,20 @@ const deleteTVCourseRequest = async (
   }
 };
 
+const deletePSRequest = async (
+  url: string,
+  { arg }: { arg: IPSDeleteRequest }
+) => {
+  try {
+    await axiosInstance.patch(url, {
+      ...arg,
+    });
+  } catch (error) {
+    console.log("error in deletePSRequest", error);
+    throw error;
+  }
+};
+
 const EasyPick = ({ togglePicker }: { togglePicker?: () => void }) => {
   const navigation = useNavigation<MainStackNavigationType>();
   const homeScreenNavigation = useNavigation<HomeScreenNavigationType>();
@@ -49,7 +63,7 @@ const EasyPick = ({ togglePicker }: { togglePicker?: () => void }) => {
   const { isDarkMode } = useDarkMode();
   const systemIsDark = useColorScheme() === "dark";
 
-  const { user } = useUserGlobalStore();
+  const { user, updateUser } = useUserGlobalStore();
 
   const navigateToCourseDetail = (courseId: string) => {
     navigation.navigate("MainStack", {
@@ -83,6 +97,27 @@ const EasyPick = ({ togglePicker }: { togglePicker?: () => void }) => {
     "api/v1/course/deleteTVCourse",
     deleteTVCourseRequest
   );
+
+  const { trigger: deleteTrigger } = useSWRMutation(
+    "api/v1/ps/delete",
+    deletePSRequest
+  );
+
+  const deletePS = async (index: string) => {
+    try {
+      const updatedPersonalSchedule = user!.personalSchedule.filter(
+        (course) => course.courseId !== index
+      );
+      await deleteTrigger({
+        courseId: index,
+      });
+      // console.log("updatedPersonalSchedule", updatedPersonalSchedule);
+      updateUser({ ...user!, personalSchedule: updatedPersonalSchedule });
+    } catch (error) {
+      console.log("error in deleteTable", error);
+      throw error;
+    }
+  };
 
   return (
     <Box flex={1}>
@@ -269,7 +304,9 @@ const EasyPick = ({ togglePicker }: { togglePicker?: () => void }) => {
                       />
                     </TouchableOpacity>
                     <Box width={12} />
-                    <TouchableOpacity onPress={() => {}}>
+                    <TouchableOpacity
+                      onPress={() => deletePS(courseItem.courseId)}
+                    >
                       <FontAwesome5
                         name="trash"
                         size={24}
