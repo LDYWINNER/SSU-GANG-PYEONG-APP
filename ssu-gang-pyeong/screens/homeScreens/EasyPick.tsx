@@ -172,8 +172,8 @@ const EasyPick = ({ togglePicker }: { togglePicker?: () => void }) => {
         </Box>
       </Box>
       <Box height={12} />
-
-      {courses?.takingCourses.length === 0 ? (
+      {courses?.takingCourses.length === 0 &&
+      user?.personalSchedule.length === 0 ? (
         <Box flex={1} justifyContent="center" alignItems="center">
           <Text color="textColor" fontWeight="600" fontSize={20}>
             No registered courses yet :(
