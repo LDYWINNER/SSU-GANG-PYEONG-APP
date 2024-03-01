@@ -279,7 +279,6 @@ const PersonalSchedule = () => {
           <NavigateBack />
         </Box>
         <Box height={16} />
-
         <Box bg="gray250" borderRadius="rounded-2xl">
           <TextInput
             style={{
@@ -296,27 +295,24 @@ const PersonalSchedule = () => {
             }}
           />
         </Box>
-
-        <Box height={24} />
-
+        <Box height={24} /> //TODO: section "" 로 바꿔야됨
         {inputSections.map((section: any, index: any) => (
           <Box key={index} mx="2">
             <Box flexDirection="row" alignItems="center" mb="6">
               <TouchableOpacity onPress={() => togglePicker("day", index)}>
                 <Box flexDirection="row" alignItems="center">
                   <Text variant="textLg" fontWeight="600" color="textColor">
-                    {inputSections[index][0] === 0 ||
-                    inputSections[index][0] === undefined
+                    {inputSections[index][0] === 1
                       ? "월요일"
-                      : inputSections[index][0] === 1
-                      ? "화요일"
                       : inputSections[index][0] === 2
-                      ? "수요일"
+                      ? "화요일"
                       : inputSections[index][0] === 3
-                      ? "목요일"
+                      ? "수요일"
                       : inputSections[index][0] === 4
-                      ? "금요일"
+                      ? "목요일"
                       : inputSections[index][0] === 5
+                      ? "금요일"
+                      : inputSections[index][0] === 6
                       ? "토요일"
                       : "일요일"}
                   </Text>
@@ -373,13 +369,11 @@ const PersonalSchedule = () => {
             </Box>
           </Box>
         ))}
-
         <TouchableOpacity onPress={addInputSection}>
           <Text variant="textLg" fontWeight="600" color="sbuRed">
             시간 및 장소 추가
           </Text>
         </TouchableOpacity>
-
         <Box position="absolute" bottom={4} left={0} right={0}>
           <SmoothButton
             label={isEditing ? "Edit table item" : "Done"}
@@ -443,13 +437,13 @@ const PersonalSchedule = () => {
               setTempDay(itemValue as number);
             }}
           >
-            <Picker.Item label="월요일" value={0} color={theme.colors.white} />
-            <Picker.Item label="화요일" value={1} color={theme.colors.white} />
-            <Picker.Item label="수요일" value={2} color={theme.colors.white} />
-            <Picker.Item label="목요일" value={3} color={theme.colors.white} />
-            <Picker.Item label="금요일" value={4} color={theme.colors.white} />
-            <Picker.Item label="토요일" value={5} color={theme.colors.white} />
-            <Picker.Item label="일요일" value={6} color={theme.colors.white} />
+            <Picker.Item label="월요일" value={1} color={theme.colors.white} />
+            <Picker.Item label="화요일" value={2} color={theme.colors.white} />
+            <Picker.Item label="수요일" value={3} color={theme.colors.white} />
+            <Picker.Item label="목요일" value={4} color={theme.colors.white} />
+            <Picker.Item label="금요일" value={5} color={theme.colors.white} />
+            <Picker.Item label="토요일" value={6} color={theme.colors.white} />
+            <Picker.Item label="일요일" value={7} color={theme.colors.white} />
           </Picker>
         ) : (
           <Box flexDirection="row" justifyContent="center">

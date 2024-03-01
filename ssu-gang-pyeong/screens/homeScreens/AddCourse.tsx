@@ -19,6 +19,7 @@ import useSWR from "swr";
 import { ICourse, IGlobalToggle } from "../../types";
 import { formatCourses } from "../../utils/helpers";
 import useSWRMutation from "swr/mutation";
+import useUserGlobalStore from "../../store/useUserGlobal";
 
 interface ITVAuthRequest {
   tableName: IGlobalToggle;
@@ -41,6 +42,8 @@ const deleteAllTVCourseRequest = async (
 const AddCourse = () => {
   const theme = useTheme<Theme>();
   const windowHeight = Dimensions.get("window").height;
+
+  const { user } = useUserGlobalStore();
 
   const { toggleInfo } = useGlobalToggle();
 
@@ -146,9 +149,11 @@ const AddCourse = () => {
               eventGroups={
                 courses?.takingCourses.length === 0
                   ? []
-                  : (formatCourses(
-                      courses!.takingCourses
-                    ) as unknown as EventGroup[])
+                  : (
+                      formatCourses(
+                        courses!.takingCourses
+                      ) as unknown as EventGroup[]
+                    ).concat(user!.personalSchedule)
               }
               configs={{
                 startHour: 8,
