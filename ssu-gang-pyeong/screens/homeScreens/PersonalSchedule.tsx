@@ -8,14 +8,8 @@ import React, {
 import { SmoothButton, SafeAreaWrapper, NavigateBack } from "../../components";
 import { HomeStackParamList } from "../../navigation/types";
 import axiosInstance from "../../utils/config";
-import {
-  IPSRequest,
-  IPersonalSchedule,
-  ITableRequest,
-  IUpdateTableRequest,
-} from "../../types";
-import { Controller, useForm } from "react-hook-form";
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { IPSRequest, IPSUpdateRequest } from "../../types";
+import { Ionicons } from "@expo/vector-icons";
 import { Box, Text, Theme } from "../../theme";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { useTheme } from "@shopify/restyle";
@@ -26,6 +20,7 @@ import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";
 import { Picker } from "@react-native-picker/picker";
 import useGlobalToggle from "../../store/useGlobalToggle";
+import uuid from "react-native-uuid";
 
 const hours = [
   "00",
@@ -81,7 +76,7 @@ const createPSRequest = async (url: string, { arg }: { arg: IPSRequest }) => {
 
 const updatePSRequest = async (
   url: string,
-  { arg }: { arg: IUpdateTableRequest }
+  { arg }: { arg: IPSUpdateRequest }
 ) => {
   try {
     await axiosInstance.patch(url, {
@@ -121,26 +116,41 @@ const PersonalSchedule = () => {
 
   const createNewPS = async () => {
     try {
-      if (false) {
-        // if (isEditing) {
-        // const updatedPSItem = {
-        //   courseId: route.params.schedule!.courseId,
-        //   ...newSchedule,
-        // };
-        // await updateTrigger({
-        //   ...updatedPSItem,
-        // });
-        // const updatedClassHistory = updateClassHistoryKey(
-        //   user!.classHistory,
-        //   updatedTableItem.oldName,
-        //   updatedTableItem.name
-        // );
-        // updateUser({
-        //   ...user!,
-        //   classHistory: updatedClassHistory,
-        // });
+      if (isEditing) {
+        console.log(psCourseId);
+        const updatedPSItem = {
+          ...route.params.schedule,
+          id: route.params.schedule!.id,
+          courseId: psCourseId,
+          sections: {
+            LEC: {
+              days: inputSections.map((section) => section[0]),
+              startTimes: inputSections.map(
+                (section) => section[1] + ":" + section[2]
+              ),
+              endTimes: inputSections.map(
+                (section) => section[3] + ":" + section[4]
+              ),
+              locations: inputSections.map((section) => section[5]),
+            },
+          },
+        };
+        console.log(updatedPSItem.courseId);
+        console.log(`updatedPSItem`, updatedPSItem.sections.LEC);
+        await updateTrigger({
+          ...updatedPSItem,
+        });
+
+        const itemIndex = user!.personalSchedule.findIndex(
+          (item) => item.id === route.params.schedule!.id
+        );
+        const newUser = { ...user! };
+        newUser!.personalSchedule[itemIndex].courseId = updatedPSItem.courseId;
+        newUser!.personalSchedule[itemIndex].sections = updatedPSItem.sections;
+        updateUser(newUser);
       } else {
         const newPS = {
+          id: uuid.v4().toString(),
           table: toggleInfo!.currentTableView,
           courseId: psCourseId,
           sections: {
@@ -157,7 +167,9 @@ const PersonalSchedule = () => {
           },
         };
         // console.log(newPS.sections.LEC);
-        await trigger(newPS);
+        await trigger({
+          ...newPS,
+        });
         updateUser({
           ...user!,
           personalSchedule: [...user!.personalSchedule, newPS],
@@ -428,7 +440,6 @@ const PersonalSchedule = () => {
             ref={pickerRef}
             selectedValue={tempDay}
             onValueChange={(itemValue) => {
-              console.log(typeof itemValue, itemValue);
               setTempDay(itemValue as number);
             }}
           >
