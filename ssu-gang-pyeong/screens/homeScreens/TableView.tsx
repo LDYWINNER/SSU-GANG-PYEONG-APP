@@ -138,11 +138,10 @@ const TableView: React.FC<NativeStackScreenProps<any, "TableView">> = ({
               // console.log(courseIndex);
             }
           }}
-          disableTicker
-          configs={{
-            startHour: 8,
-            endHour: 20,
-          }}
+          // configs={{
+          //   startHour: 6,
+          //   endHour: 20,
+          // }}
           // eventColors={["#FFC107", "#FF9800", "#FF5722", "#795548", "#9E9E9E"]}
           theme={{
             primary: theme.colors.mainBgColor,

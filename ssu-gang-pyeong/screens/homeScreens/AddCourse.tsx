@@ -145,7 +145,6 @@ const AddCourse = () => {
             <Loader />
           ) : (
             <TimeTable
-              disableTicker
               eventGroups={
                 courses?.takingCourses.length === 0
                   ? []
@@ -155,10 +154,10 @@ const AddCourse = () => {
                       ) as unknown as EventGroup[]
                     ).concat(user!.personalSchedule)
               }
-              configs={{
-                startHour: 8,
-                endHour: 20,
-              }}
+              // configs={{
+              //   startHour: 8,
+              //   endHour: 20,
+              // }}
               theme={{
                 primary: theme.colors.mainBgColor,
                 accent: theme.colors.stYellow,

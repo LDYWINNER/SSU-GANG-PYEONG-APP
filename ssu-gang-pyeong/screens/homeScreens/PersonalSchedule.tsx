@@ -117,7 +117,7 @@ const PersonalSchedule = () => {
   const createNewPS = async () => {
     try {
       if (isEditing) {
-        console.log(psCourseId);
+        // console.log(psCourseId);
         const updatedPSItem = {
           ...route.params.schedule,
           id: route.params.schedule!.id,
@@ -135,8 +135,8 @@ const PersonalSchedule = () => {
             },
           },
         };
-        console.log(updatedPSItem.courseId);
-        console.log(`updatedPSItem`, updatedPSItem.sections[""]);
+        // console.log(updatedPSItem.courseId);
+        // console.log(`updatedPSItem`, updatedPSItem.sections[""]);
         await updateTrigger({
           ...updatedPSItem,
         });
@@ -264,9 +264,21 @@ const PersonalSchedule = () => {
         }
       );
       setInputSections(presetSections);
+      setTempDay(route.params.schedule!.sections[""].days[whichIndex]);
+      setTempStartHour(
+        route.params.schedule!.sections[""].startTimes[whichIndex].split(":")[0]
+      );
+      setTempStartMinute(
+        route.params.schedule!.sections[""].startTimes[whichIndex].split(":")[1]
+      );
+      setTempEndHour(
+        route.params.schedule!.sections[""].endTimes[whichIndex].split(":")[0]
+      );
+      setTempEndMinute(
+        route.params.schedule!.sections[""].endTimes[whichIndex].split(":")[1]
+      );
     } else {
       // reset to default
-      // console.log(inputSections[whichIndex]);
       setTempDay(inputSections[whichIndex][0]);
       setTempStartHour(inputSections[whichIndex][1]);
       setTempStartMinute(inputSections[whichIndex][2]);
@@ -275,7 +287,6 @@ const PersonalSchedule = () => {
     }
   }, [whichIndex]);
 
-  //TODO: ps 시간 날짜 싱크 안맞는거
   return (
     <SafeAreaWrapper>
       <Box flex={1} mx="4">
