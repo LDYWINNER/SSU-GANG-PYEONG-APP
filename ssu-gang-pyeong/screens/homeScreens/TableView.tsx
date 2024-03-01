@@ -129,7 +129,7 @@ const TableView: React.FC<NativeStackScreenProps<any, "TableView">> = ({
           }
           // eventOnPress={(event) => Alert.alert(`${JSON.stringify(event)}`)}
           eventOnPress={(event) => {
-            console.log(user?.personalSchedule[0].sections.LEC);
+            console.log(user?.personalSchedule[0].sections[""]);
             console.log(event);
             if (event.groupIndex < courses!.takingCourses.length) {
               togglePicker();

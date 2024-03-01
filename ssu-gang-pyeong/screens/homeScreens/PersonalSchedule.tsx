@@ -123,7 +123,7 @@ const PersonalSchedule = () => {
           id: route.params.schedule!.id,
           courseId: psCourseId,
           sections: {
-            LEC: {
+            "": {
               days: inputSections.map((section) => section[0]),
               startTimes: inputSections.map(
                 (section) => section[1] + ":" + section[2]
@@ -136,7 +136,7 @@ const PersonalSchedule = () => {
           },
         };
         console.log(updatedPSItem.courseId);
-        console.log(`updatedPSItem`, updatedPSItem.sections.LEC);
+        console.log(`updatedPSItem`, updatedPSItem.sections[""]);
         await updateTrigger({
           ...updatedPSItem,
         });
@@ -154,7 +154,7 @@ const PersonalSchedule = () => {
           table: toggleInfo!.currentTableView,
           courseId: psCourseId,
           sections: {
-            LEC: {
+            "": {
               days: inputSections.map((section) => section[0]),
               startTimes: inputSections.map(
                 (section) => section[1] + ":" + section[2]
@@ -189,17 +189,17 @@ const PersonalSchedule = () => {
 
   // inputs
   const [inputSections, setInputSections] = useState<any[]>([
-    [0, "09", "00", "10", "00", ""],
+    [1, "09", "00", "10", "00", ""],
   ]);
 
   const addInputSection = () => {
-    setInputSections([...inputSections, [0, "09", "00", "10", "00", ""]]);
+    setInputSections([...inputSections, [1, "09", "00", "10", "00", ""]]);
   };
 
   const [psCourseId, setPSCourseId] = useState(
     route.params.schedule?.courseId ?? ""
   );
-  const [tempDay, setTempDay] = useState<number>(0);
+  const [tempDay, setTempDay] = useState<number>(1);
   const [tempStartHour, setTempStartHour] = useState<String>("09");
   const [tempStartMinute, setTempStartMinute] = useState<String>("00");
   const [tempEndHour, setTempEndHour] = useState<String>("10");
@@ -251,15 +251,15 @@ const PersonalSchedule = () => {
 
   useEffect(() => {
     if (isEditing) {
-      const presetSections = route.params.schedule!.sections.LEC.days.map(
+      const presetSections = route.params.schedule!.sections[""].days.map(
         (day, i) => {
           return [
             day,
-            route.params.schedule!.sections.LEC.startTimes[i].split(":")[0],
-            route.params.schedule!.sections.LEC.startTimes[i].split(":")[1],
-            route.params.schedule!.sections.LEC.endTimes[i].split(":")[0],
-            route.params.schedule!.sections.LEC.endTimes[i].split(":")[1],
-            route.params.schedule!.sections.LEC.locations[i],
+            route.params.schedule!.sections[""].startTimes[i].split(":")[0],
+            route.params.schedule!.sections[""].startTimes[i].split(":")[1],
+            route.params.schedule!.sections[""].endTimes[i].split(":")[0],
+            route.params.schedule!.sections[""].endTimes[i].split(":")[1],
+            route.params.schedule!.sections[""].locations[i],
           ];
         }
       );
@@ -281,6 +281,7 @@ const PersonalSchedule = () => {
         <Box height={16} />
         <Box bg="gray250" borderRadius="rounded-2xl">
           <TextInput
+            autoComplete="off"
             style={{
               fontSize: 20,
               lineHeight: 26,
@@ -295,7 +296,8 @@ const PersonalSchedule = () => {
             }}
           />
         </Box>
-        <Box height={24} /> //TODO: section "" 로 바꿔야됨
+        <Box height={24} />
+
         {inputSections.map((section: any, index: any) => (
           <Box key={index} mx="2">
             <Box flexDirection="row" alignItems="center" mb="6">
@@ -344,6 +346,7 @@ const PersonalSchedule = () => {
 
             <Box bg="gray250" borderRadius="rounded-2xl" mb="6">
               <TextInput
+                autoComplete="off"
                 style={{
                   backgroundColor: theme.colors.mainBgColor,
                   fontSize: 20,

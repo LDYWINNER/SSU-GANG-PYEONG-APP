@@ -26,7 +26,7 @@ export interface IPersonalSchedule {
   table: string;
   courseId: string;
   sections: {
-    LEC: {
+    "": {
       days: number[];
       locations: string[];
       startTimes: string[];
