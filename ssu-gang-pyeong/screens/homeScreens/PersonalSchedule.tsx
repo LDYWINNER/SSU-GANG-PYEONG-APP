@@ -264,9 +264,18 @@ const PersonalSchedule = () => {
         }
       );
       setInputSections(presetSections);
+    } else {
+      // reset to default
+      // console.log(inputSections[whichIndex]);
+      setTempDay(inputSections[whichIndex][0]);
+      setTempStartHour(inputSections[whichIndex][1]);
+      setTempStartMinute(inputSections[whichIndex][2]);
+      setTempEndHour(inputSections[whichIndex][3]);
+      setTempEndMinute(inputSections[whichIndex][4]);
     }
-  }, []);
+  }, [whichIndex]);
 
+  //TODO: ps 시간 날짜 싱크 안맞는거
   return (
     <SafeAreaWrapper>
       <Box flex={1} mx="4">
