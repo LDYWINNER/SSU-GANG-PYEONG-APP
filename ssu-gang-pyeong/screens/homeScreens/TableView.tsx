@@ -118,18 +118,25 @@ const TableView: React.FC<NativeStackScreenProps<any, "TableView">> = ({
       ) : (
         <TimeTable
           eventGroups={
-            courses?.takingCourses.length === 0
+            courses?.takingCourses.length === 0 &&
+            user?.personalSchedule.length === 0
               ? []
-              : (formatCourses(
-                  courses!.takingCourses
-                ) as unknown as EventGroup[])
+              : (
+                  formatCourses(
+                    courses!.takingCourses
+                  ) as unknown as EventGroup[]
+                ).concat(user!.personalSchedule)
           }
           // eventOnPress={(event) => Alert.alert(`${JSON.stringify(event)}`)}
           eventOnPress={(event) => {
-            togglePicker();
-            setCourseIndex(event.groupIndex);
-            // console.log(courses?.takingCourses[courseIndex as number]);
-            // console.log(courseIndex);
+            console.log(user?.personalSchedule[0].sections.LEC);
+            console.log(event);
+            if (event.groupIndex < courses!.takingCourses.length) {
+              togglePicker();
+              setCourseIndex(event.groupIndex);
+              // console.log(courses?.takingCourses[courseIndex as number]);
+              // console.log(courseIndex);
+            }
           }}
           disableTicker
           configs={{
