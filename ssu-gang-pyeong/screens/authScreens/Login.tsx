@@ -31,6 +31,7 @@ const LoginScreen = () => {
   const {
     control,
     watch,
+    handleSubmit,
     formState: { errors },
   } = useForm<Omit<IUser, "username" | "school" | "major">>({
     defaultValues: {
@@ -47,7 +48,11 @@ const LoginScreen = () => {
       <Controller
         control={control}
         rules={{
-          required: true,
+          required: "Email is required",
+          pattern: {
+            value: /@stonybrook\.edu$/,
+            message: "Email must end with @stonybrook.edu",
+          },
         }}
         render={({ field: { onChange, onBlur, value } }) => (
           <Input
@@ -55,7 +60,6 @@ const LoginScreen = () => {
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
-            placeholder="Email"
             error={errors.email}
           />
         )}
@@ -73,7 +77,7 @@ const LoginScreen = () => {
 
       <SmoothButton
         label="Next"
-        onPress={() => navigateToEmailVerificationScreen()}
+        onPress={handleSubmit(navigateToEmailVerificationScreen)}
         uppercase
       />
     </Box>

@@ -27,7 +27,7 @@ const Input = ({ label, error, ...props }: InputProps) => {
       />
       {error && (
         <Text mt="3.5" color="rose500">
-          {label} is required
+          {error.message}
         </Text>
       )}
     </Box>
@@ -35,5 +35,3 @@ const Input = ({ label, error, ...props }: InputProps) => {
 };
 
 export default Input;
-
-const styles = StyleSheet.create({});
