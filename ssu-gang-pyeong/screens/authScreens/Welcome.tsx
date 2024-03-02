@@ -1,7 +1,6 @@
 import React from "react";
 import { Box, Text } from "../../theme";
 import { useNavigation } from "@react-navigation/native";
-import SafeAreaWrapper from "../../components/SafeAreaWrapper";
 import { AuthScreenNavigationType } from "../../navigation/types";
 import { LinearGradient } from "expo-linear-gradient";
 import Animated, { ZoomIn } from "react-native-reanimated";

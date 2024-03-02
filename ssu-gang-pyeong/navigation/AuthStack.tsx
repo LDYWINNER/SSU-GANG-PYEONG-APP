@@ -1,6 +1,11 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Welcome, Register, Login } from "../screens/authScreens";
+import {
+  Welcome,
+  Register,
+  Login,
+  EmailVerification,
+} from "../screens/authScreens";
 import useDarkMode from "../store/useDarkMode";
 import { useTheme } from "@shopify/restyle";
 import { Theme } from "../theme";
@@ -52,6 +57,11 @@ const AuthStack = () => {
       <NativeStack.Screen
         name="Login"
         component={Login}
+        options={{ presentation: "card", headerShown: false }}
+      />
+      <NativeStack.Screen
+        name="EmailVerification"
+        component={EmailVerification}
         options={{ presentation: "card", headerShown: false }}
       />
     </NativeStack.Navigator>

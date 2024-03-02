@@ -1,53 +1,42 @@
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { SmoothButton, Input } from "../../components";
 import { AuthScreenNavigationType } from "../../navigation/types";
-import { loginUser } from "../../utils/api";
 import { Box, Text } from "../../theme";
-import useUserGlobalStore from "../../store/useUserGlobal";
 import { IUser } from "../../types";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import axiosInstance from "../../utils/config";
 
 const LoginScreen = () => {
   const navigation = useNavigation<AuthScreenNavigationType<"Login">>();
+
   const navigateToSignInScreen = () => {
     navigation.navigate("Register");
   };
 
-  const { updateUser } = useUserGlobalStore();
+  const navigateToEmailVerificationScreen = async () => {
+    // send email to the user
+    const response = await axiosInstance.post("api/v1/auth/loginEmail", {
+      email: watch("email"),
+    });
+    // console.log(response.data);
+
+    navigation.navigate("EmailVerification", {
+      email: watch("email"),
+      verificationCodeFromBack: response.data.authNum || "",
+    });
+  };
+
   const {
     control,
-    handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<Omit<IUser, "username" | "school" | "major">>({
     defaultValues: {
       email: "",
     },
   });
-
-  const onSubmit = async (
-    data: Omit<IUser, "username" | "school" | "major">
-  ) => {
-    try {
-      const { email } = data;
-      const lowerCaseEmail = email.toLowerCase();
-      const _user = await loginUser({
-        email: lowerCaseEmail,
-      });
-      updateUser({
-        _id: _user._id,
-        username: _user.username,
-        email: _user.email,
-        school: _user.school,
-        major: _user.major,
-        courseReviewNum: _user.courseReviewNum,
-        adminAccount: _user.adminAccount,
-        classHistory: _user.classHistory,
-        personalSchedule: _user.personalSchedule,
-      });
-    } catch (error) {}
-  };
 
   return (
     <Box flex={1} px="5.5" justifyContent="center">
@@ -75,14 +64,18 @@ const LoginScreen = () => {
       <Box mb="6" />
 
       <Box mt="5.5" />
-      <Pressable onPress={navigateToSignInScreen}>
+      <TouchableOpacity onPress={navigateToSignInScreen}>
         <Text color="primary" textAlign="right" variant="textBase">
           Register?
         </Text>
-      </Pressable>
+      </TouchableOpacity>
       <Box mb="5.5" />
 
-      <SmoothButton label="Login" onPress={handleSubmit(onSubmit)} uppercase />
+      <SmoothButton
+        label="Next"
+        onPress={() => navigateToEmailVerificationScreen()}
+        uppercase
+      />
     </Box>
   );
 };
