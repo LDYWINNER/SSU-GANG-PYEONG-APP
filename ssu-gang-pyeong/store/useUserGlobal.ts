@@ -20,7 +20,6 @@ const useUserGlobalStore = create<IUserGlobalStore>()(
       },
       logout: () => {
         set({ user: null });
-        // Add any additional cleanup logic if needed
       },
     }),
     {

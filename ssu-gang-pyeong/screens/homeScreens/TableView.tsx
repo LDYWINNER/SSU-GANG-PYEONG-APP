@@ -125,7 +125,7 @@ const TableView: React.FC<NativeStackScreenProps<any, "TableView">> = ({
                   formatCourses(
                     courses!.takingCourses
                   ) as unknown as EventGroup[]
-                ).concat(user!.personalSchedule)
+                ).concat(user?.personalSchedule || [])
           }
           // eventOnPress={(event) => Alert.alert(`${JSON.stringify(event)}`)}
           eventOnPress={(event) => {
