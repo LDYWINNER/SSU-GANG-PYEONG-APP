@@ -16,8 +16,6 @@ type EmailVerificationRouteProp = RouteProp<
   "EmailVerification"
 >;
 
-// TODO: error Alert 까지
-
 const EmailVerification = () => {
   const navigation = useNavigation<AuthScreenNavigationType<"Login">>();
 
