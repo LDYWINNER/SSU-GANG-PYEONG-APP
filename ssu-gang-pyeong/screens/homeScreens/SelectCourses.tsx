@@ -13,7 +13,7 @@ import { useTheme } from "@shopify/restyle";
 import { Ionicons } from "@expo/vector-icons";
 import { ICategory, IColor, ICourse, IGlobalToggle } from "../../types";
 import { Loader } from "../../components";
-import { FlatList, Image, TouchableOpacity } from "react-native";
+import { Alert, FlatList, Image, TouchableOpacity } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import { Picker } from "@react-native-picker/picker";
@@ -34,6 +34,7 @@ interface ITVAuthRequest {
   tableName: IGlobalToggle;
   courseId: string;
   color: IColor;
+  mwtuthDay?: string;
 }
 
 const patchTVCourseRequest = async (
@@ -208,13 +209,50 @@ const SelectCourses = ({ togglePicker, courses }: any) => {
             return (
               <TouchableOpacity
                 onPress={() => {
-                  patchTVCourse({
-                    tableName: toggleInfo as IGlobalToggle,
-                    courseId: item._id,
-                    color: DEFAULT_COLOR,
-                  });
-                  togglePicker();
-                  mutate();
+                  console.log(item.day);
+                  if (item.day.split(", ").at(-1) === "MW/TUTH") {
+                    Alert.alert(
+                      "월수/화목 수업",
+                      "월수와 화목 중 어떤 요일의 수업을 듣고 계신지 선택해주세요.",
+                      [
+                        {
+                          text: "월수",
+                          onPress: () => {
+                            patchTVCourse({
+                              tableName: toggleInfo as IGlobalToggle,
+                              courseId: item._id,
+                              color: DEFAULT_COLOR,
+                              mwtuthDay: "MW",
+                            });
+                            togglePicker();
+                            mutate();
+                          },
+                        },
+                        {
+                          text: "화목",
+                          onPress: () => {
+                            patchTVCourse({
+                              tableName: toggleInfo as IGlobalToggle,
+                              courseId: item._id,
+                              color: DEFAULT_COLOR,
+                              mwtuthDay: "TUTH",
+                            });
+                            togglePicker();
+                            mutate();
+                          },
+                        },
+                      ],
+                      { cancelable: true }
+                    );
+                  } else {
+                    patchTVCourse({
+                      tableName: toggleInfo as IGlobalToggle,
+                      courseId: item._id,
+                      color: DEFAULT_COLOR,
+                    });
+                    togglePicker();
+                    mutate();
+                  }
                 }}
                 style={{ width: "50%" }}
               >
