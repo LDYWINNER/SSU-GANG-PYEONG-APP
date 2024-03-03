@@ -250,7 +250,7 @@ const UserMain: React.FC<NativeStackScreenProps<any, "UserMain">> = ({
               onPress={() =>
                 Alert.alert(
                   "문의하기",
-                  "sunytime-auth@naver.com 으로 문의사항을 보내주시면 신속한 처리 도와드리겠습니다.",
+                  "ssugangpyeong@gmail.com 으로 문의사항을 보내주시면 신속한 처리 도와드리겠습니다.",
                   [{ text: "OK", onPress: () => {} }]
                 )
               }
@@ -274,7 +274,7 @@ const UserMain: React.FC<NativeStackScreenProps<any, "UserMain">> = ({
               </Box>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => openLink("https://forms.gle/C1KPvABMzFSGCUVM6")}
+              onPress={() => openLink("https://forms.gle/popW3deHdLh6RfcR9")}
             >
               <Box
                 bg="gray200"
