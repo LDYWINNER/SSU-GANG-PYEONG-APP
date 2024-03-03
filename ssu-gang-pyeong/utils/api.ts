@@ -16,6 +16,9 @@ export const registerUser = async ({
       school,
       major,
     });
+    const _token = response.data.token;
+    axiosInstance.defaults.headers.common["Authorization"] = _token;
+    saveToken(SSU_TOKEN_NAME, _token);
     return response.data.user;
   } catch (error) {
     console.log("error in registerUser", error);

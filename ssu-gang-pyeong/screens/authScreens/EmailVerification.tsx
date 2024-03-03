@@ -7,7 +7,7 @@ import {
   AuthScreenNavigationType,
   AuthStackParamList,
 } from "../../navigation/types";
-import { loginUser } from "../../utils/api";
+import { loginUser, registerUser } from "../../utils/api";
 import { Box, Text } from "../../theme";
 import useUserGlobalStore from "../../store/useUserGlobal";
 
@@ -20,12 +20,10 @@ type EmailVerificationRouteProp = RouteProp<
 
 const EmailVerification = () => {
   const navigation = useNavigation<AuthScreenNavigationType<"Login">>();
-  const navigateToSignInScreen = () => {
-    navigation.navigate("Register");
-  };
 
   const route = useRoute<EmailVerificationRouteProp>();
-  const { email, verificationCodeFromBack } = route.params;
+  const { isLogin, email, verificationCodeFromBack, username, school, major } =
+    route.params;
 
   const { updateUser } = useUserGlobalStore();
 
@@ -43,31 +41,53 @@ const EmailVerification = () => {
   const onSubmit = async (data: { verificationCode: string }) => {
     try {
       if (verificationCodeFromBack != data.verificationCode) {
-        console.log(verificationCodeFromBack, data.verificationCode);
-        console.log(
-          typeof verificationCodeFromBack,
-          typeof data.verificationCode
-        );
+        // console.log(verificationCodeFromBack, data.verificationCode);
+        // console.log(
+        //   typeof verificationCodeFromBack,
+        //   typeof data.verificationCode
+        // );
 
         throw new Error("Invalid verification code");
       }
 
-      const lowerCaseEmail = email.toLowerCase();
-      const _user = await loginUser({
-        email: lowerCaseEmail,
-      });
-      updateUser({
-        _id: _user._id,
-        username: _user.username,
-        email: _user.email,
-        school: _user.school,
-        major: _user.major,
-        courseReviewNum: _user.courseReviewNum,
-        adminAccount: _user.adminAccount,
-        classHistory: _user.classHistory,
-        personalSchedule: _user.personalSchedule,
-      });
+      if (isLogin) {
+        const lowerCaseEmail = email.toLowerCase();
+        const _user = await loginUser({
+          email: lowerCaseEmail,
+        });
+        updateUser({
+          _id: _user._id,
+          username: _user.username,
+          email: _user.email,
+          school: _user.school,
+          major: _user.major,
+          courseReviewNum: _user.courseReviewNum,
+          adminAccount: _user.adminAccount,
+          classHistory: _user.classHistory,
+          personalSchedule: _user.personalSchedule,
+        });
+      } else {
+        // register user
+        const _user = await registerUser({
+          username: username ?? "",
+          email,
+          school: school ?? "",
+          major: major ?? "",
+        });
+        updateUser({
+          _id: _user._id,
+          username: _user.username,
+          email: _user.email,
+          school: _user.school,
+          major: _user.major,
+          courseReviewNum: _user.courseReviewNum,
+          adminAccount: _user.adminAccount,
+          classHistory: _user.classHistory,
+          personalSchedule: _user.personalSchedule,
+        });
+      }
     } catch (error) {
+      console.log(error);
       Alert.alert("Error", "Invalid verification code");
     }
   };
@@ -96,14 +116,6 @@ const EmailVerification = () => {
         name="verificationCode"
       />
       <Box mb="6" />
-
-      <Box mt="5.5" />
-      <Pressable onPress={navigateToSignInScreen}>
-        <Text color="primary" textAlign="right" variant="textBase">
-          Register?
-        </Text>
-      </Pressable>
-      <Box mb="5.5" />
 
       <SmoothButton label="Login" onPress={handleSubmit(onSubmit)} uppercase />
     </Box>

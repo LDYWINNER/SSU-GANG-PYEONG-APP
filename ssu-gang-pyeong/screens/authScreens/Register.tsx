@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useRef, useState } from "react";
 import { SmoothButton, Input } from "../../components";
-import { TouchableOpacity } from "react-native";
+import { Alert, TouchableOpacity } from "react-native";
 import { AuthScreenNavigationType } from "../../navigation/types";
 import { useNavigation } from "@react-navigation/native";
 import { Controller, useForm } from "react-hook-form";
@@ -12,6 +12,7 @@ import { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typesc
 import { Picker } from "@react-native-picker/picker";
 import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "@shopify/restyle";
+import axiosInstance from "../../utils/config";
 
 const SignUpScreen = () => {
   const theme = useTheme<Theme>();
@@ -19,6 +20,26 @@ const SignUpScreen = () => {
   const navigation = useNavigation<AuthScreenNavigationType<"Register">>();
   const navigateToLoginScreen = () => {
     navigation.navigate("Login");
+  };
+
+  const navigateToEmailVerificationScreen = async () => {
+    // send email to the user
+    const response = await axiosInstance.post("api/v1/auth/registerEmail", {
+      email: watch("email"),
+      username: watch("username"),
+      school: watch("school"),
+      major: watch("major"),
+    });
+    // console.log(response.data);
+
+    navigation.navigate("EmailVerification", {
+      isLogin: false,
+      email: watch("email"),
+      username: watch("username"),
+      school: watch("school"),
+      major: watch("major"),
+      verificationCodeFromBack: response.data.authNum || "",
+    });
   };
 
   const {
@@ -35,20 +56,6 @@ const SignUpScreen = () => {
       major: "AMS",
     },
   });
-
-  const onSubmit = async (data: IUser) => {
-    try {
-      const { username, email, school, major } = data;
-      // register user
-      await registerUser({
-        username,
-        email,
-        school,
-        major,
-      });
-      navigateToLoginScreen();
-    } catch (error) {}
-  };
 
   //bottom sheet
   const sheetRef = useRef<BottomSheet>(null);
@@ -101,7 +108,7 @@ const SignUpScreen = () => {
         <Controller
           control={control}
           rules={{
-            required: true,
+            required: "Username is required",
           }}
           render={({ field: { onChange, onBlur, value } }) => (
             <Input
@@ -109,7 +116,6 @@ const SignUpScreen = () => {
               onBlur={onBlur}
               onChangeText={onChange}
               value={value}
-              placeholder="Username"
               error={errors.username}
             />
           )}
@@ -119,7 +125,11 @@ const SignUpScreen = () => {
         <Controller
           control={control}
           rules={{
-            required: true,
+            required: "Email is required",
+            pattern: {
+              value: /@stonybrook\.edu$/,
+              message: "Email must end with @stonybrook.edu",
+            },
           }}
           render={({ field: { onChange, onBlur, value } }) => (
             <Input
@@ -127,7 +137,6 @@ const SignUpScreen = () => {
               onBlur={onBlur}
               onChangeText={onChange}
               value={value}
-              placeholder="Email"
               error={errors.email}
             />
           )}
@@ -195,7 +204,7 @@ const SignUpScreen = () => {
 
         <SmoothButton
           label="Register"
-          onPress={handleSubmit(onSubmit)}
+          onPress={handleSubmit(navigateToEmailVerificationScreen)}
           uppercase
         />
       </Box>

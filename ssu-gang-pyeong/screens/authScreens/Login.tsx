@@ -23,6 +23,7 @@ const LoginScreen = () => {
     // console.log(response.data);
 
     navigation.navigate("EmailVerification", {
+      isLogin: true,
       email: watch("email"),
       verificationCodeFromBack: response.data.authNum || "",
     });

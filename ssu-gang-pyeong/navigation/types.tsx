@@ -80,7 +80,11 @@ export type AuthStackParamList = {
   Login: undefined;
   EmailVerification: {
     email: string;
+    username?: string;
+    school?: string;
+    major?: string;
     verificationCodeFromBack: string;
+    isLogin: boolean;
   };
 };
 
