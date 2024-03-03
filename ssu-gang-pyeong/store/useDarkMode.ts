@@ -11,7 +11,9 @@ interface IDarkModeStore {
 const useDarkMode = create<IDarkModeStore>()(
   persist(
     (set, get) => ({
-      isDarkMode: null,
+      isDarkMode: {
+        mode: "system",
+      },
       updateDarkMode: (isDarkMode) => {
         set({
           isDarkMode,
