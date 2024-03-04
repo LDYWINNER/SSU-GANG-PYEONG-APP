@@ -4,6 +4,7 @@ import CourseBulletin from "./CourseBulletin";
 import CourseReview from "./CourseReview";
 import WriteReview from "./WriteReview";
 import WritePost from "./WritePost";
+import EmptyClassHistory from "./EmptyClassHistory";
 
 export {
   Search,
@@ -12,4 +13,5 @@ export {
   CourseReview,
   WriteReview,
   WritePost,
+  EmptyClassHistory,
 };

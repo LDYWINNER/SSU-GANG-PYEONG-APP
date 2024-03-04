@@ -11,6 +11,7 @@ import { Loader, SafeAreaWrapper } from "../components";
 import { Box, Text, Theme } from "../theme";
 import useDarkMode from "../store/useDarkMode";
 import { useTheme } from "@shopify/restyle";
+import { EmptyClassHistory } from "../screens";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -164,13 +165,20 @@ const HomeTopTabs: React.FC<NativeStackScreenProps<any, "HomeTopTabs">> = ({
             swipeEnabled: true,
           }}
         >
-          {Object.keys(user?.classHistory).map((classHistoryKey) => (
+          {Object.keys(user?.classHistory).length > 0 ? (
+            Object.keys(user?.classHistory).map((classHistoryKey) => (
+              <Tab.Screen
+                key={classHistoryKey}
+                name={classHistoryKey}
+                component={tableView ? TableView : (ListView as any)}
+              />
+            ))
+          ) : (
             <Tab.Screen
-              key={classHistoryKey}
-              name={classHistoryKey}
-              component={tableView ? TableView : (ListView as any)}
+              name="EmptyClassHistory"
+              component={EmptyClassHistory}
             />
-          ))}
+          )}
         </Tab.Navigator>
 
         <BottomSheet

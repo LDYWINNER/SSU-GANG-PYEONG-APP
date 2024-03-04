@@ -111,6 +111,9 @@ const TableView: React.FC<NativeStackScreenProps<any, "TableView">> = ({
     }
   }, [isFocused, navigation]);
 
+  if (!courses) {
+    return <Loader />;
+  }
   return (
     <BottomSheetModalProvider>
       {isLoadingCourses ? (
