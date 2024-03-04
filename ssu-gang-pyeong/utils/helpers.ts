@@ -84,22 +84,39 @@ const tvPalette = [
 //for table view - using eventGroups
 export const formatCourses = (courses: ICourse[]) => {
   const formattedCourses = [];
-  const sl = courses[0].instructor.length;
 
   for (let i = 0; i < courses.length; i++) {
-    let recExist = false;
+    let recOrLabExist = false;
+    let targetCmp = "";
+    let recOrLab = "";
     if (courses[i].cmp.includes(", ")) {
-      const targetCmp = courses[i].cmp.split(", ")[sl - 1];
-      if (targetCmp.includes("(")) {
-        recExist = true;
-      }
+      targetCmp = courses[i].cmp.split(", ").at(-1) as string;
+    } else {
+      targetCmp = courses[i].cmp;
     }
 
-    if (recExist) {
-      const targetDay = courses[i].day.split(", ")[sl - 1];
-      const targetLocation = courses[i].room.split(", ")[sl - 1];
-      const targetStartTime = courses[i].startTime.split(", ")[sl - 1];
-      const targetEndTime = courses[i].endTime.split(", ")[sl - 1];
+    if (targetCmp.includes("REC")) {
+      recOrLabExist = true;
+      recOrLab = "REC";
+    } else if (targetCmp.includes("LAB")) {
+      recOrLabExist = true;
+      recOrLab = "LAB";
+    }
+
+    // console.log(recOrLabExist, "recOrLabExist");
+
+    if (recOrLabExist) {
+      const targetDay = courses[i].day.split(", ").at(-1) as string;
+      const targetStartTime = courses[i].startTime.split(", ").at(-1) as string;
+      const targetEndTime = courses[i].endTime.split(", ").at(-1) as string;
+      let targetLocation = courses[i].room.split(", ").at(-1);
+      let recOrLabLocation = "";
+
+      if (targetLocation?.includes("(")) {
+        const temp = targetLocation.slice(0, -1).split("(");
+        targetLocation = temp[0];
+        recOrLabLocation = temp[1];
+      }
 
       //console.log(targetDay, targetStartTime, targetEndTime);
       //MW(RECM) 3:30 PM(12:30 PM) 4:50 PM(1:25 PM)
@@ -128,14 +145,18 @@ export const formatCourses = (courses: ICourse[]) => {
                 ? [targetLocation]
                 : [targetLocation, targetLocation],
           },
-          REC: {
+          [recOrLab]: {
             days: formattedDays[1],
             startTimes: formattedST[1],
             endTimes: formattedET[1],
             locations:
-              courses[i].day === "F"
-                ? [targetLocation]
-                : [targetLocation, targetLocation],
+              recOrLabLocation === ""
+                ? courses[i].day === "F"
+                  ? [targetLocation]
+                  : [targetLocation, targetLocation]
+                : courses[i].day === "F"
+                ? [recOrLabLocation]
+                : [recOrLabLocation, recOrLabLocation],
           },
         },
       });
@@ -145,24 +166,30 @@ export const formatCourses = (courses: ICourse[]) => {
         title: `${courses[i].courseTitle}`,
         sections: {
           "": {
-            days: formatDays(courses[i].day.split(", ")[sl - 1]),
+            days: formatDays(courses[i].day.split(", ").at(-1) as string),
             startTimes:
               courses[i].day === "F"
-                ? formatTimes(courses[i].startTime.split(", ")[sl - 1])
-                : formatTimes(courses[i].startTime.split(", ")[sl - 1]).concat(
-                    formatTimes(courses[i].startTime.split(", ")[sl - 1])
+                ? formatTimes(courses[i].startTime.split(", ").at(-1) as string)
+                : formatTimes(
+                    courses[i].startTime.split(", ").at(-1) as string
+                  ).concat(
+                    formatTimes(
+                      courses[i].startTime.split(", ").at(-1) as string
+                    )
                   ),
             endTimes:
               courses[i].day === "F"
-                ? formatTimes(courses[i].endTime.split(", ")[sl - 1])
-                : formatTimes(courses[i].endTime.split(", ")[sl - 1]).concat(
-                    formatTimes(courses[i].endTime.split(", ")[sl - 1])
+                ? formatTimes(courses[i].endTime.split(", ").at(-1) as string)
+                : formatTimes(
+                    courses[i].endTime.split(", ").at(-1) as string
+                  ).concat(
+                    formatTimes(courses[i].endTime.split(", ").at(-1) as string)
                   ),
             locations:
               courses[i].day === "F"
-                ? [courses[i].room.split(", ")[sl - 1]]
-                : [courses[i].room.split(", ")[sl - 1]].concat([
-                    courses[i].room.split(", ")[sl - 1],
+                ? [courses[i].room.split(", ").at(-1) as string]
+                : [courses[i].room.split(", ").at(-1) as string].concat([
+                    courses[i].room.split(", ").at(-1) as string,
                   ]),
           },
         },
@@ -234,11 +261,14 @@ const formatTimes = (target: string) => {
   return result;
 };
 
+let recOrLabDay = "";
+
 //MW(RECW) becomes [[1, 3], [3]]
 const formatRecDays = (target: string) => {
   const result: [number[], number[]] = [[], []];
   //[MW, RECW]
   const temp = target.slice(0, -1).split("(");
+  recOrLabDay = temp[1];
   switch (temp[0]) {
     case "MW":
       result[0].push(1);
@@ -261,6 +291,14 @@ const formatRecDays = (target: string) => {
       break;
     case "RECF":
       result[1].push(5);
+      break;
+    case "MW":
+      result[1].push(1);
+      result[1].push(3);
+      break;
+    case "TUTH":
+      result[1].push(2);
+      result[1].push(4);
       break;
     default:
       console.log(temp[1]);
@@ -291,5 +329,9 @@ const formatRecTimes = (target: string) => {
     result[1].push(String(hour) + ":" + temp[1].split(":")[1].slice(0, 2));
   }
 
+  if (recOrLabDay === "MW" || recOrLabDay === "TUTH") {
+    result[0].push(result[0][0]);
+    result[1].push(result[1][0]);
+  }
   return result;
 };
