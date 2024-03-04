@@ -139,47 +139,44 @@ const HomeTopTabs: React.FC<NativeStackScreenProps<any, "HomeTopTabs">> = ({
       </Box>
 
       <>
-        <Tab.Navigator
-          sceneContainerStyle={{
-            backgroundColor: theme.colors.mainBgColor,
-          }}
-          initialLayout={{
-            width: Dimensions.get("window").width,
-          }}
-          screenOptions={{
-            tabBarStyle: {
+        {Object.keys(user?.classHistory).length > 0 ? (
+          <Tab.Navigator
+            sceneContainerStyle={{
               backgroundColor: theme.colors.mainBgColor,
-            },
-            tabBarIndicatorStyle: {
-              backgroundColor: theme.colors.sbuRed,
-            },
-            tabBarActiveTintColor: theme.colors.sbuRed,
-            tabBarInactiveTintColor:
-              isDarkMode?.mode === "system"
-                ? systemIsDark
+            }}
+            initialLayout={{
+              width: Dimensions.get("window").width,
+            }}
+            screenOptions={{
+              tabBarStyle: {
+                backgroundColor: theme.colors.mainBgColor,
+              },
+              tabBarIndicatorStyle: {
+                backgroundColor: theme.colors.sbuRed,
+              },
+              tabBarActiveTintColor: theme.colors.sbuRed,
+              tabBarInactiveTintColor:
+                isDarkMode?.mode === "system"
+                  ? systemIsDark
+                    ? theme.colors.stDarkGrey
+                    : theme.colors.stLightGrey
+                  : isDarkMode?.mode === "dark"
                   ? theme.colors.stDarkGrey
-                  : theme.colors.stLightGrey
-                : isDarkMode?.mode === "dark"
-                ? theme.colors.stDarkGrey
-                : theme.colors.stLightGrey,
-            swipeEnabled: true,
-          }}
-        >
-          {Object.keys(user?.classHistory).length > 0 ? (
-            Object.keys(user?.classHistory).map((classHistoryKey) => (
+                  : theme.colors.stLightGrey,
+              swipeEnabled: true,
+            }}
+          >
+            {Object.keys(user?.classHistory).map((classHistoryKey) => (
               <Tab.Screen
                 key={classHistoryKey}
                 name={classHistoryKey}
                 component={tableView ? TableView : (ListView as any)}
               />
-            ))
-          ) : (
-            <Tab.Screen
-              name="EmptyClassHistory"
-              component={EmptyClassHistory}
-            />
-          )}
-        </Tab.Navigator>
+            ))}
+          </Tab.Navigator>
+        ) : (
+          <EmptyClassHistory />
+        )}
 
         <BottomSheet
           index={-1}
