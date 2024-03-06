@@ -86,11 +86,6 @@ export const formatCourses = (courses: ICourse[]) => {
   const formattedCourses = [];
 
   for (let i = 0; i < courses.length; i++) {
-    // 475, 476, 487, 488, 499, 522, 523, 524, 587, 593, 596, 599, 696, 697, 698, 699, 700 처리
-    if (courses[i].startTime.split(", ").at(-1)?.includes("-")) {
-      continue;
-    }
-
     let recOrLabOrSemExist = false;
     let targetCmp = "";
     let recOrLabOrSem = "";
@@ -285,7 +280,7 @@ const formatDays = (target: string) => {
 const formatTimes = (target: string) => {
   const result: string[] = [];
   //["3:30 PM"]
-  if (Number(target.split(":")[0]) < 12) {
+  if (target.split(":")[1] === "PM" && Number(target.split(":")[0]) < 12) {
     const hour = Number(target.split(":")[0]) + 12;
     result.push(String(hour) + ":" + target.split(":")[1].slice(0, 2));
   } else {
