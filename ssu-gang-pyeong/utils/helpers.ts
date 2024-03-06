@@ -92,9 +92,9 @@ export const formatCourses = (courses: ICourse[]) => {
     }
 
     // 2024_spring 이 있는 수업들만 처리
-    if (!courses[i].semesters.includes("2024_spring")) {
-      continue;
-    }
+    // if (!courses[i].semesters.includes("2024_spring")) {
+    //   continue;
+    // }
 
     let recOrLabOrSemExist = false;
     let targetCmp = "";
@@ -287,7 +287,7 @@ const formatDays = (target: string) => {
 const formatTimes = (target: string) => {
   const result: string[] = [];
   //["3:30 PM"]
-  if (Number(target.split(":")[0]) < 8) {
+  if (Number(target.split(":")[0]) < 12) {
     const hour = Number(target.split(":")[0]) + 12;
     result.push(String(hour) + ":" + target.split(":")[1].slice(0, 2));
   } else {
