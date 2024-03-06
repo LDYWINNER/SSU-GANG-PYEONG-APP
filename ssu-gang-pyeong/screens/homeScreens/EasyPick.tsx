@@ -248,9 +248,9 @@ const EasyPick = ({ togglePicker }: { togglePicker?: () => void }) => {
                 justifyContent="space-between"
               >
                 <Box>
-                  {courseItem.unique_instructor.includes(",") ? (
+                  {courseItem.unique_instructor.includes("/") ? (
                     courseItem.unique_instructor
-                      .split(", ")
+                      .split("/")
                       .map((prof, index) => (
                         <Text key={index} variant="textBase" color="textColor">
                           {prof}
