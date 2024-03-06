@@ -85,9 +85,17 @@ const tvPalette = [
 export const formatCourses = (courses: ICourse[]) => {
   const formattedCourses = [];
 
-  // 475, 476, 처리
-
   for (let i = 0; i < courses.length; i++) {
+    // 475, 476, 487, 488, 499, 522, 523, 524, 587, 593, 596, 599, 696, 697, 698, 699, 700 처리
+    if (courses[i].startTime.split(", ").at(-1)?.includes("-")) {
+      continue;
+    }
+
+    // 2024_spring 이 있는 수업들만 처리
+    if (!courses[i].semesters.includes("2024_spring")) {
+      continue;
+    }
+
     let recOrLabOrSemExist = false;
     let targetCmp = "";
     let recOrLabOrSem = "";
