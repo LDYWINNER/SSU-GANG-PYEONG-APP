@@ -85,27 +85,34 @@ const tvPalette = [
 export const formatCourses = (courses: ICourse[]) => {
   const formattedCourses = [];
 
+  // 475, 476, 처리
+
   for (let i = 0; i < courses.length; i++) {
-    let recOrLabExist = false;
+    let recOrLabOrSemExist = false;
     let targetCmp = "";
-    let recOrLab = "";
+    let recOrLabOrSem = "";
     if (courses[i].cmp.includes(", ")) {
       targetCmp = courses[i].cmp.split(", ").at(-1) as string;
     } else {
       targetCmp = courses[i].cmp;
     }
 
+    console.log(targetCmp, "targetCmp");
+
     if (targetCmp.includes("REC")) {
-      recOrLabExist = true;
-      recOrLab = "REC";
+      recOrLabOrSemExist = true;
+      recOrLabOrSem = "REC";
     } else if (targetCmp.includes("LAB")) {
-      recOrLabExist = true;
-      recOrLab = "LAB";
+      recOrLabOrSemExist = true;
+      recOrLabOrSem = "LAB";
+    } else if (targetCmp.includes("SEM")) {
+      recOrLabOrSemExist = true;
+      recOrLabOrSem = "SEM";
     }
 
-    // console.log(recOrLabExist, "recOrLabExist");
+    console.log(recOrLabOrSemExist, "recOrLabOrSemExist");
 
-    if (recOrLabExist) {
+    if (recOrLabOrSemExist) {
       const targetDay = courses[i].day.split(", ").at(-1) as string;
       const targetStartTime = courses[i].startTime.split(", ").at(-1) as string;
       const targetEndTime = courses[i].endTime.split(", ").at(-1) as string;
@@ -116,6 +123,8 @@ export const formatCourses = (courses: ICourse[]) => {
         const temp = targetLocation.slice(0, -1).split("(");
         targetLocation = temp[0];
         recOrLabLocation = temp[1];
+
+        console.log(recOrLabLocation, "recOrLabLocation");
       }
 
       //console.log(targetDay, targetStartTime, targetEndTime);
@@ -145,7 +154,7 @@ export const formatCourses = (courses: ICourse[]) => {
                 ? [targetLocation]
                 : [targetLocation, targetLocation],
           },
-          [recOrLab]: {
+          [recOrLabOrSem]: {
             days: formattedDays[1],
             startTimes: formattedST[1],
             endTimes: formattedET[1],
@@ -154,7 +163,7 @@ export const formatCourses = (courses: ICourse[]) => {
                 ? courses[i].day === "F"
                   ? [targetLocation]
                   : [targetLocation, targetLocation]
-                : courses[i].day === "F"
+                : formattedDays[1].length === 1
                 ? [recOrLabLocation]
                 : [recOrLabLocation, recOrLabLocation],
           },
@@ -222,7 +231,7 @@ export const formatCourses = (courses: ICourse[]) => {
       });
     }
   }
-  // console.log(formattedCourses[0].sections);
+  console.log(formattedCourses[0].sections);
   return formattedCourses;
 };
 
@@ -240,6 +249,25 @@ const formatDays = (target: string) => {
       break;
     case "F":
       result.push(5);
+    case "MF":
+      result.push(1);
+      result.push(5);
+      break;
+    case "M":
+      result.push(1);
+      break;
+    case "TU":
+      result.push(2);
+      break;
+    case "W":
+      result.push(3);
+      break;
+    case "TH":
+      result.push(4);
+      break;
+    case "F":
+      result.push(5);
+      break;
     default:
       console.log(target);
   }
@@ -278,6 +306,25 @@ const formatRecDays = (target: string) => {
       result[0].push(2);
       result[0].push(4);
       break;
+    case "MF":
+      result[0].push(1);
+      result[0].push(5);
+      break;
+    case "M":
+      result[0].push(1);
+      break;
+    case "TU":
+      result[0].push(2);
+      break;
+    case "W":
+      result[0].push(3);
+      break;
+    case "TH":
+      result[0].push(4);
+      break;
+    case "F":
+      result[0].push(5);
+      break;
     default:
       console.log(temp[0]);
   }
@@ -292,6 +339,12 @@ const formatRecDays = (target: string) => {
     case "RECF":
       result[1].push(5);
       break;
+    case "RECTU":
+      result[1].push(2);
+      break;
+    case "RECTH":
+      result[1].push(4);
+      break;
     case "MW":
       result[1].push(1);
       result[1].push(3);
@@ -299,6 +352,21 @@ const formatRecDays = (target: string) => {
     case "TUTH":
       result[1].push(2);
       result[1].push(4);
+      break;
+    case "M":
+      result[1].push(1);
+      break;
+    case "TU":
+      result[1].push(2);
+      break;
+    case "W":
+      result[1].push(3);
+      break;
+    case "TH":
+      result[1].push(4);
+      break;
+    case "F":
+      result[1].push(5);
       break;
     default:
       console.log(temp[1]);
@@ -312,8 +380,8 @@ const formatRecTimes = (target: string) => {
   const result: [string[], string[]] = [[], []];
   //["3:30 PM", "12:30 PM"]
   const temp = target.slice(0, -1).split("(");
-  //console.log("temp", temp);
-  if (temp[0].includes("PM") && Number(temp[0].split(":")[0]) < 8) {
+  console.log("temp", temp);
+  if (temp[0].includes("PM") && Number(temp[0].split(":")[0]) < 12) {
     const hour = Number(temp[0].split(":")[0]) + 12;
     result[0].push(String(hour) + ":" + temp[0].split(":")[1].slice(0, 2));
   } else {
@@ -321,7 +389,7 @@ const formatRecTimes = (target: string) => {
     result[0].push(String(hour) + ":" + temp[0].split(":")[1].slice(0, 2));
   }
 
-  if (temp[1].includes("PM") && Number(temp[1].split(":")[0]) < 8) {
+  if (temp[1].includes("PM") && Number(temp[1].split(":")[0]) < 12) {
     const hour = Number(temp[1].split(":")[0]) + 12;
     result[1].push(String(hour) + ":" + temp[1].split(":")[1].slice(0, 2));
   } else {
