@@ -91,11 +91,6 @@ export const formatCourses = (courses: ICourse[]) => {
       continue;
     }
 
-    // 2024_spring 이 있는 수업들만 처리
-    // if (!courses[i].semesters.includes("2024_spring")) {
-    //   continue;
-    // }
-
     let recOrLabOrSemExist = false;
     let targetCmp = "";
     let recOrLabOrSem = "";
@@ -116,6 +111,9 @@ export const formatCourses = (courses: ICourse[]) => {
     } else if (targetCmp.includes("SEM")) {
       recOrLabOrSemExist = true;
       recOrLabOrSem = "SEM";
+    } else if (courses[i].day.split(", ").at(-1)?.includes("(")) {
+      recOrLabOrSemExist = true;
+      recOrLabOrSem = "LEC";
     }
 
     console.log(recOrLabOrSemExist, "recOrLabOrSemExist");
