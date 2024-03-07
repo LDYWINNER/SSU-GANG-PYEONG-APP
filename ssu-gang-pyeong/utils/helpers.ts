@@ -280,7 +280,7 @@ const formatDays = (target: string) => {
 const formatTimes = (target: string) => {
   const result: string[] = [];
   //["3:30 PM"]
-  if (target.split(":")[1] === "PM" && Number(target.split(":")[0]) < 12) {
+  if (target.includes("PM") && Number(target.split(":")[0]) < 12) {
     const hour = Number(target.split(":")[0]) + 12;
     result.push(String(hour) + ":" + target.split(":")[1].slice(0, 2));
   } else {
