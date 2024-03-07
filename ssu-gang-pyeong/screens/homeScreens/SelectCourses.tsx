@@ -34,7 +34,7 @@ interface ITVAuthRequest {
   tableName: IGlobalToggle;
   courseId: string;
   color: IColor;
-  mwtuthDay?: string;
+  twoOptionsDay?: string;
 }
 
 const patchTVCourseRequest = async (
@@ -210,32 +210,40 @@ const SelectCourses = ({ togglePicker, courses }: any) => {
               <TouchableOpacity
                 onPress={() => {
                   console.log(item.day);
-                  if (item.day.split(", ").at(-1) === "MW/TUTH") {
+                  if (item.day.split(", ").at(-1)?.includes("/")) {
                     Alert.alert(
-                      "월수/화목 수업",
-                      "월수와 화목 중 어떤 요일의 수업을 듣고 계신지 선택해주세요.",
+                      "수업 선택",
+                      "두 옵션 중 어떤 요일의 수업을 듣고 계신지 선택해주세요.",
                       [
                         {
-                          text: "월수",
+                          text: item.day.split(", ").at(-1)?.split("/").at(0),
                           onPress: () => {
                             patchTVCourse({
                               tableName: toggleInfo as IGlobalToggle,
                               courseId: item._id,
                               color: DEFAULT_COLOR,
-                              mwtuthDay: "MW",
+                              twoOptionsDay: item.day
+                                .split(", ")
+                                .at(-1)
+                                ?.split("/")
+                                .at(0),
                             });
                             togglePicker();
                             mutate();
                           },
                         },
                         {
-                          text: "화목",
+                          text: item.day.split(", ").at(-1)?.split("/").at(1),
                           onPress: () => {
                             patchTVCourse({
                               tableName: toggleInfo as IGlobalToggle,
                               courseId: item._id,
                               color: DEFAULT_COLOR,
-                              mwtuthDay: "TUTH",
+                              twoOptionsDay: item.day
+                                .split(", ")
+                                .at(-1)
+                                ?.split("/")
+                                .at(1),
                             });
                             togglePicker();
                             mutate();
