@@ -254,6 +254,10 @@ const formatDays = (target: string) => {
       result.push(1);
       result.push(5);
       break;
+    case "TUF":
+      result.push(2);
+      result.push(5);
+      break;
     case "M":
       result.push(1);
       break;
@@ -268,6 +272,9 @@ const formatDays = (target: string) => {
       break;
     case "F":
       result.push(5);
+      break;
+    case "SAT":
+      result.push(6);
       break;
     default:
       console.log(target);
@@ -311,6 +318,10 @@ const formatRecDays = (target: string) => {
       result[0].push(1);
       result[0].push(5);
       break;
+    case "TUF":
+      result[0].push(2);
+      result[0].push(5);
+      break;
     case "M":
       result[0].push(1);
       break;
@@ -325,6 +336,9 @@ const formatRecDays = (target: string) => {
       break;
     case "F":
       result[0].push(5);
+      break;
+    case "SAT":
+      result[0].push(6);
       break;
     default:
       console.log(temp[0]);
@@ -344,6 +358,21 @@ const formatRecDays = (target: string) => {
       result[1].push(2);
       break;
     case "RECTH":
+      result[1].push(4);
+      break;
+    case "REM":
+      result[1].push(1);
+      break;
+    case "REW":
+      result[1].push(3);
+      break;
+    case "REF":
+      result[1].push(5);
+      break;
+    case "RETU":
+      result[1].push(2);
+      break;
+    case "RETH":
       result[1].push(4);
       break;
     case "MW":
