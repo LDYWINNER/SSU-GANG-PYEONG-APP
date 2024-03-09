@@ -375,6 +375,10 @@ const formatRecDays = (target: string) => {
     case "RETH":
       result[1].push(4);
       break;
+    case "RETUTH":
+      result[1].push(2);
+      result[1].push(4);
+      break;
     case "MW":
       result[1].push(1);
       result[1].push(3);
@@ -427,7 +431,11 @@ const formatRecTimes = (target: string) => {
     result[1].push(String(hour) + ":" + temp[1].split(":")[1].slice(0, 2));
   }
 
-  if (recOrLabDay === "MW" || recOrLabDay === "TUTH") {
+  if (
+    recOrLabDay === "MW" ||
+    recOrLabDay === "TUTH" ||
+    recOrLabDay === "RETUTH"
+  ) {
     result[0].push(result[0][0]);
     result[1].push(result[1][0]);
   }
