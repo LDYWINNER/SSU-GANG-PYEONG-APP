@@ -35,6 +35,7 @@ interface ITVAuthRequest {
   courseId: string;
   color: IColor;
   twoOptionsDay?: string;
+  optionsTime?: string;
 }
 
 const patchTVCourseRequest = async (
@@ -215,6 +216,7 @@ const SelectCourses = ({ togglePicker, courses }: any) => {
                       "수업 선택",
                       "두 옵션 중 어떤 요일의 수업을 듣고 계신지 선택해주세요.",
                       [
+                        { text: "취소", style: "cancel" },
                         {
                           text: item.day.split(", ").at(-1)?.split("/").at(0),
                           onPress: () => {
@@ -249,8 +251,30 @@ const SelectCourses = ({ togglePicker, courses }: any) => {
                             mutate();
                           },
                         },
-                      ],
-                      { cancelable: true }
+                      ]
+                    );
+                  } else if (item.startTime.split(", ").at(-1)?.includes("/")) {
+                    const timeOptions = item.startTime
+                      .split(", ")
+                      .at(-1)
+                      ?.split("/");
+                    const options = timeOptions?.map((timeOption) => ({
+                      text: timeOption,
+                      onPress: () => {
+                        patchTVCourse({
+                          tableName: toggleInfo as IGlobalToggle,
+                          courseId: item._id,
+                          color: DEFAULT_COLOR,
+                          optionsTime: timeOption,
+                        });
+                        togglePicker();
+                        mutate();
+                      },
+                    }));
+                    Alert.alert(
+                      "수업 선택",
+                      "옵션들 중 듣고 계신 수업의 시작 시간을 선택해주세요.",
+                      [{ text: "취소", style: "cancel" }, ...options!]
                     );
                   } else {
                     patchTVCourse({
