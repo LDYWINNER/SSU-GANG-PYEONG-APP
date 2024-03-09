@@ -201,10 +201,10 @@ const Search: React.FC<NativeStackScreenProps<any, "Search">> = ({
                     </Text>
                     <Box>
                       {data.queryCourses[index].unique_instructor.includes(
-                        ","
+                        "/"
                       ) ? (
                         data.queryCourses[index].unique_instructor
-                          .split(", ")
+                          .split("/")
                           .map((prof, index) => <Text key={index}>{prof}</Text>)
                       ) : (
                         <Text>
