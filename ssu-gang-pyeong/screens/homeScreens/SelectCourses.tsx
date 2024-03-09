@@ -15,7 +15,10 @@ import { ICategory, IColor, ICourse, IGlobalToggle } from "../../types";
 import { Loader } from "../../components";
 import { Alert, FlatList, Image, TouchableOpacity } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
-import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
+import BottomSheet, {
+  BottomSheetBackdrop,
+  WINDOW_HEIGHT,
+} from "@gorhom/bottom-sheet";
 import { Picker } from "@react-native-picker/picker";
 import useGlobalToggle from "../../store/useGlobalToggle";
 import useSWR from "swr";
@@ -202,165 +205,172 @@ const SelectCourses = ({ togglePicker, courses }: any) => {
       {isMutating ? (
         <Loader />
       ) : (
-        <FlatList
-          data={data!.queryCourses}
-          numColumns={2}
-          renderItem={({ item, index }) => {
-            const isSelected = tvCoursesId.includes(item._id);
-            return (
-              <TouchableOpacity
-                onPress={() => {
-                  console.log(item.day);
-                  if (
-                    item.day.split(", ").at(-1)?.includes("/") &&
-                    item.day.split(", ").at(-1)?.includes("(")
-                  ) {
-                    const dayOptions = item.day
-                      .split(", ")
-                      .at(-1)
-                      ?.split("(")[0]
-                      ?.split("/");
-                    const options = dayOptions?.map((dayOption) => ({
-                      text: dayOption,
-                      onPress: () => {
-                        patchTVCourse({
-                          tableName: toggleInfo as IGlobalToggle,
-                          courseId: item._id,
-                          color: DEFAULT_COLOR,
-                          twoOptionsDay: dayOption,
-                        });
-                        togglePicker();
-                        mutate();
-                      },
-                    }));
-                    Alert.alert(
-                      "수업 선택",
-                      "LEC 수업 옵션들 중 듣고 계신 수업의 요일을 선택해주세요.",
-                      [{ text: "취소", style: "cancel" }, ...options!]
-                    );
-                  } else if (item.day.split(", ").at(-1)?.includes("/")) {
-                    Alert.alert(
-                      "수업 선택",
-                      "두 옵션 중 어떤 요일의 수업을 듣고 계신지 선택해주세요.",
-                      [
-                        { text: "취소", style: "cancel" },
-                        {
-                          text: item.day.split(", ").at(-1)?.split("/").at(0),
-                          onPress: () => {
-                            patchTVCourse({
-                              tableName: toggleInfo as IGlobalToggle,
-                              courseId: item._id,
-                              color: DEFAULT_COLOR,
-                              twoOptionsDay: item.day
-                                .split(", ")
-                                .at(-1)
-                                ?.split("/")
-                                .at(0),
-                            });
-                            togglePicker();
-                            mutate();
-                          },
+        <>
+          <FlatList
+            data={data!.queryCourses}
+            numColumns={2}
+            renderItem={({ item, index }) => {
+              const isSelected = tvCoursesId.includes(item._id);
+              return (
+                <TouchableOpacity
+                  onPress={() => {
+                    console.log(item.day);
+                    if (
+                      item.day.split(", ").at(-1)?.includes("/") &&
+                      item.day.split(", ").at(-1)?.includes("(")
+                    ) {
+                      const dayOptions = item.day
+                        .split(", ")
+                        .at(-1)
+                        ?.split("(")[0]
+                        ?.split("/");
+                      const options = dayOptions?.map((dayOption) => ({
+                        text: dayOption,
+                        onPress: () => {
+                          patchTVCourse({
+                            tableName: toggleInfo as IGlobalToggle,
+                            courseId: item._id,
+                            color: DEFAULT_COLOR,
+                            twoOptionsDay: dayOption,
+                          });
+                          togglePicker();
+                          mutate();
                         },
-                        {
-                          text: item.day.split(", ").at(-1)?.split("/").at(1),
-                          onPress: () => {
-                            patchTVCourse({
-                              tableName: toggleInfo as IGlobalToggle,
-                              courseId: item._id,
-                              color: DEFAULT_COLOR,
-                              twoOptionsDay: item.day
-                                .split(", ")
-                                .at(-1)
-                                ?.split("/")
-                                .at(1),
-                            });
-                            togglePicker();
-                            mutate();
+                      }));
+                      Alert.alert(
+                        "수업 선택",
+                        "LEC 수업 옵션들 중 듣고 계신 수업의 요일을 선택해주세요.",
+                        [{ text: "취소", style: "cancel" }, ...options!]
+                      );
+                    } else if (item.day.split(", ").at(-1)?.includes("/")) {
+                      Alert.alert(
+                        "수업 선택",
+                        "두 옵션 중 어떤 요일의 수업을 듣고 계신지 선택해주세요.",
+                        [
+                          { text: "취소", style: "cancel" },
+                          {
+                            text: item.day.split(", ").at(-1)?.split("/").at(0),
+                            onPress: () => {
+                              patchTVCourse({
+                                tableName: toggleInfo as IGlobalToggle,
+                                courseId: item._id,
+                                color: DEFAULT_COLOR,
+                                twoOptionsDay: item.day
+                                  .split(", ")
+                                  .at(-1)
+                                  ?.split("/")
+                                  .at(0),
+                              });
+                              togglePicker();
+                              mutate();
+                            },
                           },
+                          {
+                            text: item.day.split(", ").at(-1)?.split("/").at(1),
+                            onPress: () => {
+                              patchTVCourse({
+                                tableName: toggleInfo as IGlobalToggle,
+                                courseId: item._id,
+                                color: DEFAULT_COLOR,
+                                twoOptionsDay: item.day
+                                  .split(", ")
+                                  .at(-1)
+                                  ?.split("/")
+                                  .at(1),
+                              });
+                              togglePicker();
+                              mutate();
+                            },
+                          },
+                        ]
+                      );
+                    } else if (
+                      item.startTime.split(", ").at(-1)?.includes("/")
+                    ) {
+                      const timeOptions = item.startTime
+                        .split(", ")
+                        .at(-1)
+                        ?.split("/");
+                      const options = timeOptions?.map((timeOption) => ({
+                        text: timeOption,
+                        onPress: () => {
+                          patchTVCourse({
+                            tableName: toggleInfo as IGlobalToggle,
+                            courseId: item._id,
+                            color: DEFAULT_COLOR,
+                            optionsTime: timeOption,
+                          });
+                          togglePicker();
+                          mutate();
                         },
-                      ]
-                    );
-                  } else if (item.startTime.split(", ").at(-1)?.includes("/")) {
-                    const timeOptions = item.startTime
-                      .split(", ")
-                      .at(-1)
-                      ?.split("/");
-                    const options = timeOptions?.map((timeOption) => ({
-                      text: timeOption,
-                      onPress: () => {
-                        patchTVCourse({
-                          tableName: toggleInfo as IGlobalToggle,
-                          courseId: item._id,
-                          color: DEFAULT_COLOR,
-                          optionsTime: timeOption,
-                        });
-                        togglePicker();
-                        mutate();
-                      },
-                    }));
-                    Alert.alert(
-                      "수업 선택",
-                      "옵션들 중 듣고 계신 수업의 시작 시간을 선택해주세요.",
-                      [{ text: "취소", style: "cancel" }, ...options!]
-                    );
-                  } else {
-                    patchTVCourse({
-                      tableName: toggleInfo as IGlobalToggle,
-                      courseId: item._id,
-                      color: DEFAULT_COLOR,
-                    });
-                    togglePicker();
-                    mutate();
-                  }
-                }}
-                style={{ width: "50%" }}
-              >
-                <Box
-                  borderRadius="rounded-xl"
-                  bg={"lightGray"}
-                  px="4"
-                  py="6"
-                  m="3"
-                  borderWidth={isSelected ? 2 : 0}
-                  borderColor="sbuRed"
-                  position="relative" //for woolfie image
+                      }));
+                      Alert.alert(
+                        "수업 선택",
+                        "옵션들 중 듣고 계신 수업의 시작 시간을 선택해주세요.",
+                        [{ text: "취소", style: "cancel" }, ...options!]
+                      );
+                    } else {
+                      patchTVCourse({
+                        tableName: toggleInfo as IGlobalToggle,
+                        courseId: item._id,
+                        color: DEFAULT_COLOR,
+                      });
+                      togglePicker();
+                      mutate();
+                    }
+                  }}
+                  style={{ width: "50%" }}
                 >
-                  <Box>
-                    <Text variant="text2Xl" mb="1">
-                      {item.subj} {item.crs}
-                    </Text>
+                  <Box
+                    borderRadius="rounded-xl"
+                    bg={"lightGray"}
+                    px="4"
+                    py="6"
+                    m="3"
+                    borderWidth={isSelected ? 2 : 0}
+                    borderColor="sbuRed"
+                    position="relative" //for woolfie image
+                  >
                     <Box>
-                      {data.queryCourses[index].unique_instructor.includes(
-                        ","
-                      ) ? (
-                        data.queryCourses[index].unique_instructor
-                          .split(", ")
-                          .map((prof, index) => <Text key={index}>{prof}</Text>)
-                      ) : (
-                        <Text>
-                          {data.queryCourses[index].unique_instructor}
-                        </Text>
-                      )}
+                      <Text variant="text2Xl" mb="1">
+                        {item.subj} {item.crs}
+                      </Text>
+                      <Box>
+                        {data.queryCourses[index].unique_instructor.includes(
+                          ","
+                        ) ? (
+                          data.queryCourses[index].unique_instructor
+                            .split(", ")
+                            .map((prof, index) => (
+                              <Text key={index}>{prof}</Text>
+                            ))
+                        ) : (
+                          <Text>
+                            {data.queryCourses[index].unique_instructor}
+                          </Text>
+                        )}
+                      </Box>
                     </Box>
+                    {isSelected && (
+                      <Image
+                        source={require("../../assets/images/woolfie.png")}
+                        style={{
+                          position: "absolute",
+                          top: 0,
+                          right: 10,
+                          width: 50,
+                          height: 50,
+                          resizeMode: "contain", // Ensure the entire image is visible and maintains aspect ratio
+                        }}
+                      />
+                    )}
                   </Box>
-                  {isSelected && (
-                    <Image
-                      source={require("../../assets/images/woolfie.png")}
-                      style={{
-                        position: "absolute",
-                        top: 0,
-                        right: 10,
-                        width: 50,
-                        height: 50,
-                        resizeMode: "contain", // Ensure the entire image is visible and maintains aspect ratio
-                      }}
-                    />
-                  )}
-                </Box>
-              </TouchableOpacity>
-            );
-          }}
-        />
+                </TouchableOpacity>
+              );
+            }}
+          />
+          <Box height={WINDOW_HEIGHT * 0.04} />
+        </>
       )}
 
       <BottomSheet

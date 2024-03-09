@@ -56,7 +56,7 @@ const TableView: React.FC<NativeStackScreenProps<any, "TableView">> = ({
 
   //bottom sheet
   const sheetRef = useRef<BottomSheetModal>(null);
-  const snapPoints = useMemo(() => ["45%"], []);
+  const snapPoints = useMemo(() => ["50%"], []);
   const handleSnapPress = useCallback(() => {
     sheetRef.current?.present();
   }, []);
