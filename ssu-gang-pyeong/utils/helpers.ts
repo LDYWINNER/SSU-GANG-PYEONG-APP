@@ -97,13 +97,13 @@ export const formatCourses = (courses: ICourse[]) => {
 
     console.log(targetCmp, "targetCmp");
 
-    if (targetCmp.includes("REC")) {
+    if (targetCmp.includes("(REC")) {
       recOrLabOrSemExist = true;
       recOrLabOrSem = "REC";
-    } else if (targetCmp.includes("LAB")) {
+    } else if (targetCmp.includes("(LAB")) {
       recOrLabOrSemExist = true;
       recOrLabOrSem = "LAB";
-    } else if (targetCmp.includes("SEM")) {
+    } else if (targetCmp.includes("(SEM")) {
       recOrLabOrSemExist = true;
       recOrLabOrSem = "SEM";
     } else if (courses[i].day.split(", ").at(-1)?.includes("(")) {
