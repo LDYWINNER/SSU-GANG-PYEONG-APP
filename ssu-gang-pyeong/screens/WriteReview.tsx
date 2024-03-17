@@ -42,6 +42,12 @@ const addCourseEvalRequest = async (
   { arg }: { arg: ICourseEvalPostRequest }
 ) => {
   try {
+    if (arg.instructor === "Pick the instructor") {
+      return Alert.alert("교수님을 선택해주세요.");
+    }
+    if (arg.myLetterGrade === "Pick an item") {
+      arg.myLetterGrade = "";
+    }
     await axiosInstance.post(url, {
       ...arg,
       teamProjectPresence: "Yes" ? true : false,
@@ -75,7 +81,7 @@ const WriteReview = () => {
   const theme = useTheme<Theme>();
 
   const route = useRoute<WriteReviewScreenRouteProp>();
-  const { id } = route.params;
+  const { id, instructors } = route.params;
   const navigation = useNavigation();
 
   const [semester, setSemester] = useState("2024-spring");
@@ -146,7 +152,8 @@ const WriteReview = () => {
 
       if (typeof success === "boolean" && success) {
         navigation.goBack();
-      } else {
+      } else if (success !== undefined) {
+        console.log(success);
         Alert.alert(success);
       }
     } catch (error) {
@@ -331,7 +338,12 @@ const WriteReview = () => {
                 교수님
               </Text>
               <Box flexDirection="row">
-                <TouchableOpacity onPress={() => togglePicker("instructor")}>
+                <TouchableOpacity
+                  onPress={() => {
+                    setInstructor(instructors.split(", ")[0]);
+                    togglePicker("instructor");
+                  }}
+                >
                   <Box
                     style={{
                       backgroundColor: theme.colors.gray300,
@@ -880,11 +892,14 @@ const WriteReview = () => {
             selectedValue={instructor}
             onValueChange={(itemValue, itemIndex) => setInstructor(itemValue)}
           >
-            <Picker.Item
-              label="dongyoonlee"
-              value="dongyoonlee"
-              color={theme.colors.textColor}
-            />
+            {instructors.split(", ").map((instructor, index) => (
+              <Picker.Item
+                key={index}
+                label={instructor}
+                value={instructor}
+                color={theme.colors.textColor}
+              />
+            ))}
           </Picker>
         ) : (
           <Picker

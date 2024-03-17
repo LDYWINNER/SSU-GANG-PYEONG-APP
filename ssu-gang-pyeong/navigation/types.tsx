@@ -110,6 +110,7 @@ export type MainStackParamList = {
   };
   WriteReview: {
     id: string;
+    instructors: string;
   };
   MyAccount: undefined;
   UserMain: undefined;
