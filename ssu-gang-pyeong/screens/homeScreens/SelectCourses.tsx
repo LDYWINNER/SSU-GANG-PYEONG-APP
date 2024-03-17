@@ -82,8 +82,10 @@ const SelectCourses = ({ togglePicker, courses }: any) => {
     totalCourses: number;
   }>(
     watch("keyword") === undefined || watch("keyword") === ""
-      ? `api/v1/course?searchSubj=${searchSubj}`
-      : `api/v1/course?searchSubj=${searchSubj}&keyword=${watch("keyword")}`,
+      ? `api/v1/course/tableSelect?searchSubj=${searchSubj}`
+      : `api/v1/course/tableSelect?searchSubj=${searchSubj}&keyword=${watch(
+          "keyword"
+        )}`,
     fetcher
   );
 
