@@ -26,7 +26,7 @@ const Root = () => {
 
   return (
     <>
-      {user ? (
+      {user && user.courseReviewNum >= 3 ? (
         <Nav.Navigator
           screenOptions={{
             headerShown: false,

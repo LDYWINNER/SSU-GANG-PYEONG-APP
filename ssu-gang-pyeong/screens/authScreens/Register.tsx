@@ -1,11 +1,10 @@
 import React, { useCallback, useMemo, useRef, useState } from "react";
 import { SmoothButton, Input } from "../../components";
-import { Alert, TouchableOpacity } from "react-native";
+import { TouchableOpacity } from "react-native";
 import { AuthScreenNavigationType } from "../../navigation/types";
 import { useNavigation } from "@react-navigation/native";
 import { Controller, useForm } from "react-hook-form";
 import { Box, Text, Theme } from "../../theme";
-import { registerUser } from "../../utils/api";
 import { IUser } from "../../types";
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";

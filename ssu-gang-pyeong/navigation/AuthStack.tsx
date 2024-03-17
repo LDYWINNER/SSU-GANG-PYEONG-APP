@@ -5,6 +5,8 @@ import {
   Register,
   Login,
   EmailVerification,
+  RegisterReviewCourse,
+  RegisterReviewWrite,
 } from "../screens/authScreens";
 import useDarkMode from "../store/useDarkMode";
 import { useTheme } from "@shopify/restyle";
@@ -62,6 +64,16 @@ const AuthStack = () => {
       <NativeStack.Screen
         name="EmailVerification"
         component={EmailVerification}
+        options={{ presentation: "card", headerShown: false }}
+      />
+      <NativeStack.Screen
+        name="RegisterReviewCourse"
+        component={RegisterReviewCourse}
+        options={{ presentation: "card", headerShown: false }}
+      />
+      <NativeStack.Screen
+        name="RegisterReviewWrite"
+        component={RegisterReviewWrite}
         options={{ presentation: "card", headerShown: false }}
       />
     </NativeStack.Navigator>

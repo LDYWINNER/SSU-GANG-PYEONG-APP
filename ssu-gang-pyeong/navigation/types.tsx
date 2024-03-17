@@ -86,6 +86,11 @@ export type AuthStackParamList = {
     verificationCodeFromBack: string;
     isLogin: boolean;
   };
+  RegisterReviewCourse: undefined;
+  RegisterReviewWrite: {
+    id: string;
+    instructors: string;
+  };
 };
 
 export type MainTabsParamList = {

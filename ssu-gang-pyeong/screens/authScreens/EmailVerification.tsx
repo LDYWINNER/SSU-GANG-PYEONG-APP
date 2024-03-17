@@ -1,6 +1,6 @@
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Alert, Pressable } from "react-native";
+import { Alert } from "react-native";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { SmoothButton, Input } from "../../components";
 import {
@@ -17,7 +17,8 @@ type EmailVerificationRouteProp = RouteProp<
 >;
 
 const EmailVerification = () => {
-  const navigation = useNavigation<AuthScreenNavigationType<"Login">>();
+  const navigation =
+    useNavigation<AuthScreenNavigationType<"EmailVerification">>();
 
   const route = useRoute<EmailVerificationRouteProp>();
   const { isLogin, email, verificationCodeFromBack, username, school, major } =
@@ -45,7 +46,8 @@ const EmailVerification = () => {
         //   typeof data.verificationCode
         // );
 
-        throw new Error("Invalid verification code");
+        // throw new Error("Invalid verification code");
+        Alert.alert("Error", "Invalid verification code");
       }
 
       if (isLogin) {
@@ -65,7 +67,7 @@ const EmailVerification = () => {
           personalSchedule: _user.personalSchedule,
         });
       } else {
-        // register user
+        // first register user
         const _user = await registerUser({
           username: username ?? "",
           email,
@@ -83,6 +85,8 @@ const EmailVerification = () => {
           classHistory: _user.classHistory,
           personalSchedule: _user.personalSchedule,
         });
+        // then go to register review course to fill out three reviews
+        navigation.navigate("RegisterReviewCourse");
       }
     } catch (error) {
       console.log(error);
