@@ -39,6 +39,7 @@ interface ITVAuthRequest {
   color: IColor;
   twoOptionsDay?: string;
   optionsTime?: string;
+  complicatedCourseOption?: string;
 }
 
 const patchTVCourseRequest = async (
@@ -215,7 +216,48 @@ const SelectCourses = ({ togglePicker, courses }: any) => {
                 <TouchableOpacity
                   onPress={() => {
                     console.log(item.day);
-                    if (
+                    //chi 111 courses
+                    if (item.subj === "CHI" && item.crs === "111") {
+                      const LECStartTimeOptions = item.startTime
+                        .split(", ")
+                        .at(-1)
+                        ?.split("/");
+                      const LECEndTimeOptions = item.endTime
+                        .split(", ")
+                        .at(-1)
+                        ?.split("/");
+                      const dayOptions = item.day
+                        .split(", ")
+                        .at(-1)
+                        ?.split("/")
+                        .map(
+                          (dayOption, dayOptionIndex) =>
+                            dayOption +
+                            "  " +
+                            LECStartTimeOptions![dayOptionIndex] +
+                            "  ~  " +
+                            LECEndTimeOptions![dayOptionIndex]
+                        );
+                      console.log(JSON.stringify(dayOptions));
+                      const options = dayOptions?.map((dayOption) => ({
+                        text: dayOption,
+                        onPress: () => {
+                          patchTVCourse({
+                            tableName: toggleInfo as IGlobalToggle,
+                            courseId: item._id,
+                            color: DEFAULT_COLOR,
+                            complicatedCourseOption: dayOption,
+                          });
+                          togglePicker();
+                          mutate();
+                        },
+                      }));
+                      Alert.alert(
+                        "수업 선택",
+                        "LEC 수업 옵션들 중 듣고 계신 수업의 요일과 시간을 선택해주세요.",
+                        [{ text: "취소", style: "cancel" }, ...options!]
+                      );
+                    } else if (
                       item.day.split(", ").at(-1)?.includes("/") &&
                       item.day.split(", ").at(-1)?.includes("(")
                     ) {
