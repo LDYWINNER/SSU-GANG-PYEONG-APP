@@ -216,6 +216,11 @@ const SelectCourses = ({ togglePicker, courses }: any) => {
                 <TouchableOpacity
                   onPress={() => {
                     console.log(item.day);
+                    if (isSelected) {
+                      return Alert.alert("이미 선택된 수업입니다.", "", [
+                        { text: "확인" },
+                      ]);
+                    }
                     //chi 111 courses
                     if (item.subj === "CHI" && item.crs === "111") {
                       const LECStartTimeOptions = item.startTime
