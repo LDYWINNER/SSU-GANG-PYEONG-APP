@@ -52,7 +52,12 @@ const patchTVCourseRequest = async (
     });
   } catch (error) {
     console.log("error in patchTVCourseRequest", error);
-    throw error;
+    // throw error;
+    Alert.alert(
+      "해당 수업을 등록하는데에 에러가 났습니다. My Page에 가셔서 문의해주시면 감사하겠습니다.",
+      error as string,
+      [{ text: "확인" }]
+    );
   }
 };
 

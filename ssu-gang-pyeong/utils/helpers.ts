@@ -1,3 +1,4 @@
+import { Alert } from "react-native";
 import { IColor, ICourse, IIcon } from "../types";
 import { nanoid } from "nanoid/non-secure";
 
@@ -83,157 +84,171 @@ const tvPalette = [
 
 //for table view - using eventGroups
 export const formatCourses = (courses: ICourse[]) => {
-  const formattedCourses = [];
+  try {
+    const formattedCourses = [];
 
-  for (let i = 0; i < courses.length; i++) {
-    let recOrLabOrSemExist = false;
-    let targetCmp = "";
-    let recOrLabOrSem = "";
-    if (courses[i].cmp.includes(", ")) {
-      targetCmp = courses[i].cmp.split(", ").at(-1) as string;
-    } else {
-      targetCmp = courses[i].cmp;
-    }
-
-    console.log(targetCmp, "targetCmp");
-
-    if (targetCmp.includes("(REC")) {
-      recOrLabOrSemExist = true;
-      recOrLabOrSem = "REC";
-    } else if (targetCmp.includes("(LAB")) {
-      recOrLabOrSemExist = true;
-      recOrLabOrSem = "LAB";
-    } else if (targetCmp.includes("(SEM")) {
-      recOrLabOrSemExist = true;
-      recOrLabOrSem = "SEM";
-    } else if (courses[i].day.split(", ").at(-1)?.includes("(")) {
-      recOrLabOrSemExist = true;
-      recOrLabOrSem = "LEC";
-    }
-
-    console.log(recOrLabOrSemExist, "recOrLabOrSemExist");
-
-    if (recOrLabOrSemExist) {
-      const targetDay = courses[i].day.split(", ").at(-1) as string;
-      const targetStartTime = courses[i].startTime.split(", ").at(-1) as string;
-      const targetEndTime = courses[i].endTime.split(", ").at(-1) as string;
-      let targetLocation = courses[i].room.split(", ").at(-1);
-      let recOrLabLocation = "";
-
-      if (targetLocation?.includes("(")) {
-        const temp = targetLocation.slice(0, -1).split("(");
-        targetLocation = temp[0];
-        recOrLabLocation = temp[1];
-
-        console.log(recOrLabLocation, "recOrLabLocation");
+    for (let i = 0; i < courses.length; i++) {
+      let recOrLabOrSemExist = false;
+      let targetCmp = "";
+      let recOrLabOrSem = "";
+      if (courses[i].cmp.includes(", ")) {
+        targetCmp = courses[i].cmp.split(", ").at(-1) as string;
+      } else {
+        targetCmp = courses[i].cmp;
       }
 
-      //console.log(targetDay, targetStartTime, targetEndTime);
-      //MW(RECM) 3:30 PM(12:30 PM) 4:50 PM(1:25 PM)
+      console.log(targetCmp, "targetCmp");
 
-      const formattedDays: any = formatRecDays(targetDay);
-      const formattedST: any = formatRecTimes(targetStartTime);
-      const formattedET: any = formatRecTimes(targetEndTime);
-      //console.log(formattedST, formattedET);
+      if (targetCmp.includes("(REC")) {
+        recOrLabOrSemExist = true;
+        recOrLabOrSem = "REC";
+      } else if (targetCmp.includes("(LAB")) {
+        recOrLabOrSemExist = true;
+        recOrLabOrSem = "LAB";
+      } else if (targetCmp.includes("(SEM")) {
+        recOrLabOrSemExist = true;
+        recOrLabOrSem = "SEM";
+      } else if (courses[i].day.split(", ").at(-1)?.includes("(")) {
+        recOrLabOrSemExist = true;
+        recOrLabOrSem = "LEC";
+      }
 
-      formattedCourses.push({
-        courseId: `${courses[i].subj} ${courses[i].crs}`,
-        title: `${courses[i].courseTitle}`,
-        sections: {
-          LEC: {
-            days: formattedDays[0],
-            startTimes:
-              courses[i].day === "F"
-                ? formattedST[0]
-                : formattedST[0].concat(formattedST[0]),
-            endTimes:
-              courses[i].day === "F"
-                ? formattedET[0]
-                : formattedET[0].concat(formattedET[0]),
-            locations:
-              courses[i].day === "F"
-                ? [targetLocation]
-                : [targetLocation, targetLocation],
-          },
-          [recOrLabOrSem]: {
-            days: formattedDays[1],
-            startTimes: formattedST[1],
-            endTimes: formattedET[1],
-            locations:
-              recOrLabLocation === ""
-                ? courses[i].day === "F"
+      console.log(recOrLabOrSemExist, "recOrLabOrSemExist");
+
+      if (recOrLabOrSemExist) {
+        const targetDay = courses[i].day.split(", ").at(-1) as string;
+        const targetStartTime = courses[i].startTime
+          .split(", ")
+          .at(-1) as string;
+        const targetEndTime = courses[i].endTime.split(", ").at(-1) as string;
+        let targetLocation = courses[i].room.split(", ").at(-1);
+        let recOrLabLocation = "";
+
+        if (targetLocation?.includes("(")) {
+          const temp = targetLocation.slice(0, -1).split("(");
+          targetLocation = temp[0];
+          recOrLabLocation = temp[1];
+
+          console.log(recOrLabLocation, "recOrLabLocation");
+        }
+
+        //console.log(targetDay, targetStartTime, targetEndTime);
+        //MW(RECM) 3:30 PM(12:30 PM) 4:50 PM(1:25 PM)
+
+        const formattedDays: any = formatRecDays(targetDay);
+        const formattedST: any = formatRecTimes(targetStartTime);
+        const formattedET: any = formatRecTimes(targetEndTime);
+        //console.log(formattedST, formattedET);
+
+        formattedCourses.push({
+          courseId: `${courses[i].subj} ${courses[i].crs}`,
+          title: `${courses[i].courseTitle}`,
+          sections: {
+            LEC: {
+              days: formattedDays[0],
+              startTimes:
+                courses[i].day === "F"
+                  ? formattedST[0]
+                  : formattedST[0].concat(formattedST[0]),
+              endTimes:
+                courses[i].day === "F"
+                  ? formattedET[0]
+                  : formattedET[0].concat(formattedET[0]),
+              locations:
+                courses[i].day === "F"
                   ? [targetLocation]
-                  : [targetLocation, targetLocation]
-                : formattedDays[1].length === 1
-                ? [recOrLabLocation]
-                : [recOrLabLocation, recOrLabLocation],
+                  : [targetLocation, targetLocation],
+            },
+            [recOrLabOrSem]: {
+              days: formattedDays[1],
+              startTimes: formattedST[1],
+              endTimes: formattedET[1],
+              locations:
+                recOrLabLocation === ""
+                  ? courses[i].day === "F"
+                    ? [targetLocation]
+                    : [targetLocation, targetLocation]
+                  : formattedDays[1].length === 1
+                  ? [recOrLabLocation]
+                  : [recOrLabLocation, recOrLabLocation],
+            },
           },
-        },
-      });
-    } else if (courses[i].classNbr.includes(",")) {
-      formattedCourses.push({
-        courseId: `${courses[i].subj} ${courses[i].crs}`,
-        title: `${courses[i].courseTitle}`,
-        sections: {
-          "": {
-            days: formatDays(courses[i].day.split(", ").at(-1) as string),
-            startTimes:
-              courses[i].day === "F"
-                ? formatTimes(courses[i].startTime.split(", ").at(-1) as string)
-                : formatTimes(
-                    courses[i].startTime.split(", ").at(-1) as string
-                  ).concat(
-                    formatTimes(
+        });
+      } else if (courses[i].classNbr.includes(",")) {
+        formattedCourses.push({
+          courseId: `${courses[i].subj} ${courses[i].crs}`,
+          title: `${courses[i].courseTitle}`,
+          sections: {
+            "": {
+              days: formatDays(courses[i].day.split(", ").at(-1) as string),
+              startTimes:
+                courses[i].day === "F"
+                  ? formatTimes(
                       courses[i].startTime.split(", ").at(-1) as string
                     )
-                  ),
-            endTimes:
-              courses[i].day === "F"
-                ? formatTimes(courses[i].endTime.split(", ").at(-1) as string)
-                : formatTimes(
-                    courses[i].endTime.split(", ").at(-1) as string
-                  ).concat(
-                    formatTimes(courses[i].endTime.split(", ").at(-1) as string)
-                  ),
-            locations:
-              courses[i].day === "F"
-                ? [courses[i].room.split(", ").at(-1) as string]
-                : [courses[i].room.split(", ").at(-1) as string].concat([
-                    courses[i].room.split(", ").at(-1) as string,
-                  ]),
+                  : formatTimes(
+                      courses[i].startTime.split(", ").at(-1) as string
+                    ).concat(
+                      formatTimes(
+                        courses[i].startTime.split(", ").at(-1) as string
+                      )
+                    ),
+              endTimes:
+                courses[i].day === "F"
+                  ? formatTimes(courses[i].endTime.split(", ").at(-1) as string)
+                  : formatTimes(
+                      courses[i].endTime.split(", ").at(-1) as string
+                    ).concat(
+                      formatTimes(
+                        courses[i].endTime.split(", ").at(-1) as string
+                      )
+                    ),
+              locations:
+                courses[i].day === "F"
+                  ? [courses[i].room.split(", ").at(-1) as string]
+                  : [courses[i].room.split(", ").at(-1) as string].concat([
+                      courses[i].room.split(", ").at(-1) as string,
+                    ]),
+            },
           },
-        },
-      });
-    } else {
-      formattedCourses.push({
-        courseId: `${courses[i].subj} ${courses[i].crs}`,
-        title: `${courses[i].courseTitle}`,
-        sections: {
-          "": {
-            days: formatDays(courses[i].day),
-            startTimes:
-              courses[i].day === "F"
-                ? formatTimes(courses[i].startTime)
-                : formatTimes(courses[i].startTime).concat(
-                    formatTimes(courses[i].startTime)
-                  ),
-            endTimes:
-              courses[i].day === "F"
-                ? formatTimes(courses[i].endTime)
-                : formatTimes(courses[i].endTime).concat(
-                    formatTimes(courses[i].endTime)
-                  ),
-            locations:
-              courses[i].day === "F"
-                ? [courses[i].room]
-                : [courses[i].room].concat([courses[i].room]),
+        });
+      } else {
+        formattedCourses.push({
+          courseId: `${courses[i].subj} ${courses[i].crs}`,
+          title: `${courses[i].courseTitle}`,
+          sections: {
+            "": {
+              days: formatDays(courses[i].day),
+              startTimes:
+                courses[i].day === "F"
+                  ? formatTimes(courses[i].startTime)
+                  : formatTimes(courses[i].startTime).concat(
+                      formatTimes(courses[i].startTime)
+                    ),
+              endTimes:
+                courses[i].day === "F"
+                  ? formatTimes(courses[i].endTime)
+                  : formatTimes(courses[i].endTime).concat(
+                      formatTimes(courses[i].endTime)
+                    ),
+              locations:
+                courses[i].day === "F"
+                  ? [courses[i].room]
+                  : [courses[i].room].concat([courses[i].room]),
+            },
           },
-        },
-      });
+        });
+      }
     }
+    console.log(formattedCourses[0].sections);
+    return formattedCourses;
+  } catch (error) {
+    Alert.alert(
+      "해당 수업을 등록하는데에 에러가 났습니다. My Page에 가셔서 문의해주시면 감사하겠습니다.",
+      error as string,
+      [{ text: "확인" }]
+    );
   }
-  console.log(formattedCourses[0].sections);
-  return formattedCourses;
 };
 
 //makes MW into [1, 3]
