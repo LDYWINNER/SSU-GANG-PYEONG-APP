@@ -13,6 +13,7 @@ import {
   VictoryAxis,
   VictoryBar,
   VictoryChart,
+  VictoryLabel,
   VictoryTheme,
 } from "victory-native";
 import { ScrollView } from "react-native-gesture-handler";
@@ -710,14 +711,17 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
                 시험 종류
               </Text>
               {testTypeStore.toString() !== "0,0,0,0,0,0" ? (
-                <Box ml="1" mt="-6">
+                <Box mt="-6">
                   <VictoryChart
                     theme={VictoryTheme.material}
                     domainPadding={{ y: 45, x: 20 }}
-                    height={250}
+                    height={350}
                     width={400}
                   >
                     <VictoryAxis
+                      tickLabelComponent={
+                        <VictoryLabel angle={45} textAnchor="middle" />
+                      }
                       crossAxis
                       style={{
                         ticks: { stroke: "grey", size: 5 },
@@ -937,12 +941,12 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
                       data={[
                         { x: "호명", y: attendanceStore[0] },
                         { x: "수기", y: attendanceStore[1] },
-                        { x: "QR코드", y: attendanceStore[2] },
+                        { x: "QR", y: attendanceStore[2] },
                         { x: "구글폼", y: attendanceStore[3] },
                         { x: "없음", y: attendanceStore[4] },
                       ]}
                       categories={{
-                        x: ["없음", "구글폼", "QR코드", "수기", "호명"],
+                        x: ["없음", "구글폼", "QR", "수기", "호명"],
                       }}
                       barWidth={20}
                       animate={{
