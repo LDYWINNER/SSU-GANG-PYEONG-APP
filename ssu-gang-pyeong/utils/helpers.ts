@@ -97,7 +97,7 @@ export const formatCourses = (courses: ICourse[]) => {
         targetCmp = courses[i].cmp;
       }
 
-      console.log(targetCmp, "targetCmp");
+      // console.log(targetCmp, "targetCmp");
 
       if (targetCmp.includes("(REC")) {
         recOrLabOrSemExist = true;
@@ -113,7 +113,7 @@ export const formatCourses = (courses: ICourse[]) => {
         recOrLabOrSem = "LEC";
       }
 
-      console.log(recOrLabOrSemExist, "recOrLabOrSemExist");
+      // console.log(recOrLabOrSemExist, "recOrLabOrSemExist");
 
       if (recOrLabOrSemExist) {
         const targetDay = courses[i].day.split(", ").at(-1) as string;
@@ -129,7 +129,7 @@ export const formatCourses = (courses: ICourse[]) => {
           targetLocation = temp[0];
           recOrLabLocation = temp[1];
 
-          console.log(recOrLabLocation, "recOrLabLocation");
+          // console.log(recOrLabLocation, "recOrLabLocation");
         }
 
         //console.log(targetDay, targetStartTime, targetEndTime);
@@ -240,7 +240,7 @@ export const formatCourses = (courses: ICourse[]) => {
         });
       }
     }
-    console.log(formattedCourses[0].sections);
+    // console.log(formattedCourses[0].sections);
     return formattedCourses;
   } catch (error) {
     Alert.alert(
@@ -429,7 +429,7 @@ const formatRecTimes = (target: string) => {
   const result: [string[], string[]] = [[], []];
   //["3:30 PM", "12:30 PM"]
   const temp = target.slice(0, -1).split("(");
-  console.log("temp", temp);
+  // console.log("temp", temp);
   if (temp[0].includes("PM") && Number(temp[0].split(":")[0]) < 12) {
     const hour = Number(temp[0].split(":")[0]) + 12;
     result[0].push(String(hour) + ":" + temp[0].split(":")[1].slice(0, 2));
