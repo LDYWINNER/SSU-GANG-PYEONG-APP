@@ -6,29 +6,23 @@ import React, {
   useEffect,
 } from "react";
 import useSWRMutation from "swr/mutation";
-import axiosInstance, { fetcher } from "../../utils/config";
+import { fetcher } from "../../utils/config";
 import { Controller, useForm } from "react-hook-form";
 import { Box, Text, Theme } from "../../theme";
 import { useTheme } from "@shopify/restyle";
 import { Ionicons } from "@expo/vector-icons";
-import { ICategory, IColor, ICourse, IGlobalToggle } from "../../types";
+import { ICourse } from "../../types";
 import { Loader, SafeAreaWrapper } from "../../components";
-import { Alert, FlatList, Image, TouchableOpacity } from "react-native";
+import { FlatList, TouchableOpacity } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import BottomSheet, {
   BottomSheetBackdrop,
   WINDOW_HEIGHT,
 } from "@gorhom/bottom-sheet";
 import { Picker } from "@react-native-picker/picker";
-import useGlobalToggle from "../../store/useGlobalToggle";
-import useSWR from "swr";
-import { getColors } from "../../utils/helpers";
 import { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";
-import {
-  AuthScreenNavigationType,
-  AuthStackParamList,
-} from "../../navigation/types";
-import { RouteProp, useNavigation } from "@react-navigation/native";
+import { AuthScreenNavigationType } from "../../navigation/types";
+import { useNavigation } from "@react-navigation/native";
 import useUserGlobalStore from "../../store/useUserGlobal";
 
 interface ISearch {
@@ -128,7 +122,7 @@ const RegisterReviewCourse = () => {
           variant="textBase"
           textAlign="center"
         >
-          You should first complete 3 course reviews to complete registering (
+          You should first complete 3 course reviews to use this service (
           {user?.courseReviewNum}/3)
         </Text>
       </Box>

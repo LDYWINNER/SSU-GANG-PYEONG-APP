@@ -28,7 +28,6 @@ const EmailVerification = () => {
 
   const {
     control,
-    watch,
     handleSubmit,
     formState: { errors },
   } = useForm({
@@ -55,6 +54,10 @@ const EmailVerification = () => {
         const _user = await loginUser({
           email: lowerCaseEmail,
         });
+        // user course review num is lower than 3, make the user fill the rest
+        if (_user.courseReviewNum < 3) {
+          navigation.navigate("RegisterReviewCourse");
+        }
         updateUser({
           _id: _user._id,
           username: _user.username,
@@ -70,7 +73,7 @@ const EmailVerification = () => {
         // first register user
         const _user = await registerUser({
           username: username ?? "",
-          email,
+          email: email.toLowerCase(),
           school: school ?? "",
           major: major ?? "",
         });
