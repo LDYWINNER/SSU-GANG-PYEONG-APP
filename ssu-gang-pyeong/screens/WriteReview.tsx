@@ -84,7 +84,7 @@ const WriteReview = () => {
   const { id, instructors } = route.params;
   const navigation = useNavigation();
 
-  const [semester, setSemester] = useState("2024-spring");
+  const [semester, setSemester] = useState("2023-fall");
   const [instructor, setInstructor] = useState("Pick the instructor");
   const [myLetterGrade, setMyLetterGrade] = useState("Pick an item");
   const [anonymity, setAnonymity] = useState(true);
@@ -382,7 +382,12 @@ const WriteReview = () => {
                 받은 Letter Grade(optional)
               </Text>
               <Box flexDirection="row">
-                <TouchableOpacity onPress={() => togglePicker("myLetterGrade")}>
+                <TouchableOpacity
+                  onPress={() => {
+                    setMyLetterGrade("A");
+                    togglePicker("myLetterGrade");
+                  }}
+                >
                   <Box
                     style={{
                       backgroundColor: theme.colors.gray300,
@@ -850,11 +855,11 @@ const WriteReview = () => {
             selectedValue={semester}
             onValueChange={(itemValue, itemIndex) => setSemester(itemValue)}
           >
-            <Picker.Item
+            {/* <Picker.Item
               label="2024 Spring"
               value="2024-spring"
               color={theme.colors.textColor}
-            />
+            /> */}
             <Picker.Item
               label="2023 Fall"
               value="2023-fall"

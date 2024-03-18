@@ -28,21 +28,12 @@ import {
   AuthScreenNavigationType,
   AuthStackParamList,
 } from "../../navigation/types";
-import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import { RouteProp, useNavigation } from "@react-navigation/native";
 import useUserGlobalStore from "../../store/useUserGlobal";
-
-const COLORS = getColors();
-
-const DEFAULT_COLOR = COLORS[0];
 
 interface ISearch {
   keyword: string;
 }
-
-type RegisterReviewCourseRouteProp = RouteProp<
-  AuthStackParamList,
-  "RegisterReviewCourse"
->;
 
 const RegisterReviewCourse = () => {
   const theme = useTheme<Theme>();

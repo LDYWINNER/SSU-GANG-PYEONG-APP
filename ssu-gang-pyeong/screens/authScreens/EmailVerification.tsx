@@ -119,7 +119,7 @@ const EmailVerification = () => {
       />
       <Box mb="6" />
 
-      <SmoothButton label="Login" onPress={handleSubmit(onSubmit)} uppercase />
+      <SmoothButton label="Next" onPress={handleSubmit(onSubmit)} uppercase />
     </Box>
   );
 };
