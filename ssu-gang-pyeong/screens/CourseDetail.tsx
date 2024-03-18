@@ -1,4 +1,10 @@
-import React, { useEffect } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import useSWR from "swr";
 import { RouteProp, useIsFocused, useRoute } from "@react-navigation/native";
 import { fetcher } from "../utils/config";
@@ -17,7 +23,7 @@ import {
   VictoryTheme,
 } from "victory-native";
 import { ScrollView } from "react-native-gesture-handler";
-import { FontAwesome5 } from "@expo/vector-icons";
+import { FontAwesome5, Ionicons } from "@expo/vector-icons";
 import {
   TouchableOpacity,
   Dimensions,
@@ -28,6 +34,13 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as WebBrowser from "expo-web-browser";
 import useDarkMode from "../store/useDarkMode";
+import BottomSheet, {
+  BottomSheetBackdrop,
+  WINDOW_WIDTH,
+} from "@gorhom/bottom-sheet";
+import { Picker } from "@react-native-picker/picker";
+import { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";
+import { Controller, useForm } from "react-hook-form";
 
 type CourseDetailScreenRouteProp = RouteProp<
   MainStackParamList,
@@ -58,6 +71,60 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
   const attendanceStore = [0, 0, 0, 0, 0];
   //storing for overallEvaluations
   const overallEvaluations: number[] = [];
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    watch,
+    setValue,
+  } = useForm<{ sem: string; inst: string }>({
+    defaultValues: {
+      sem: "ALL",
+      inst: "ALL",
+    },
+  });
+
+  //bottom sheet
+  const sheetRef = useRef<BottomSheet>(null);
+  const snapPoints = useMemo(() => ["30%"], []);
+  const handleSnapPress = useCallback(() => {
+    sheetRef.current?.snapToIndex(0);
+  }, []);
+  const handleClosePress = useCallback(() => {
+    sheetRef.current?.close();
+  }, []);
+  const [picker, setPicker] = useState(true);
+  const [pickerContents, setPickerContents] = useState("");
+  const pickerRef = useRef<Picker<string>>(null);
+  const togglePicker = (index: string) => {
+    if (picker) {
+      handleSnapPress();
+      setPicker(false);
+      setPickerContents(index);
+    } else {
+      handleClosePress();
+      setPicker(true);
+      setPickerContents(index);
+    }
+  };
+  const handleSheetChange = useCallback((index: any) => {
+    if (index == -1) {
+      setPicker(true);
+    }
+  }, []);
+  const renderBackdrop = useCallback(
+    (
+      props: React.JSX.IntrinsicAttributes & BottomSheetDefaultBackdropProps
+    ) => (
+      <BottomSheetBackdrop
+        {...props}
+        disappearsOnIndex={-1}
+        appearsOnIndex={1}
+      />
+    ),
+    []
+  );
 
   const { id } = route.params;
 
@@ -146,6 +213,8 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
     await WebBrowser.openBrowserAsync(baseUrl);
   };
 
+  let courseReviewsCount = 0;
+
   if (isLoadingCourse) {
     return <Loader />;
   } else {
@@ -172,6 +241,22 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
 
     //preprocessing for reviews
     for (let j = 0; j < course!.reviews.length; j++) {
+      // filtering semester and instructor values
+      if (
+        watch("sem") !== "ALL" &&
+        watch("sem") !== course!.reviews[j].semester
+      ) {
+        continue;
+      }
+      if (
+        watch("inst") !== "ALL" &&
+        watch("inst") !== course!.reviews[j].instructor
+      ) {
+        continue;
+      }
+
+      courseReviewsCount++;
+
       //storing overallEvaluations
       if (course!.reviews[j].overallEvaluation !== "") {
         overallEvaluations.push(j);
@@ -387,7 +472,69 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
             borderColor={"gray550"}
             p={"3"}
           >
-            <Box flexDirection="row" alignItems="center">
+            <Box
+              flexDirection="row"
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <Box width={"50%"}>
+                <TouchableOpacity onPress={() => togglePicker("sem")}>
+                  <Text color="textColor">Semester</Text>
+                  <Box mb="2" />
+                  <Box
+                    bg="gray500"
+                    py="2"
+                    pl="4"
+                    borderRadius="rounded-xl"
+                    flexDirection="row"
+                    alignItems="center"
+                    justifyContent="space-between"
+                  >
+                    <Text
+                      variant="textSm"
+                      fontWeight="700"
+                      textAlign="center"
+                      color="white"
+                    >
+                      {watch("sem")}
+                    </Text>
+                    <Text textAlign="right" mr="3">
+                      <Ionicons name={"caret-down"} color={"white"} size={35} />
+                    </Text>
+                  </Box>
+                </TouchableOpacity>
+              </Box>
+              <Box width={5} />
+              <Box width={"50%"}>
+                <TouchableOpacity onPress={() => togglePicker("inst")}>
+                  <Text color="textColor">Instructors</Text>
+                  <Box mb="2" />
+                  <Box
+                    bg="gray500"
+                    py="2"
+                    pl="4"
+                    borderRadius="rounded-xl"
+                    flexDirection="row"
+                    alignItems="center"
+                    justifyContent="space-between"
+                  >
+                    <Text
+                      variant="textSm"
+                      fontWeight="700"
+                      textAlign="center"
+                      color="white"
+                    >
+                      {watch("inst")}
+                    </Text>
+                    <Text textAlign="right" mr="3">
+                      <Ionicons name={"caret-down"} color={"white"} size={35} />
+                    </Text>
+                  </Box>
+                </TouchableOpacity>
+              </Box>
+            </Box>
+
+            <Box flexDirection="row" alignItems="center" mt="5">
               <Text variant="text3Xl" color="textColor">
                 {course?.avgGrade ? course?.avgGrade.toFixed(2) : 0}
               </Text>
@@ -399,9 +546,7 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
               )}
               <Box width={8} />
               <Text color="textColor">
-                {course?.avgGrade
-                  ? "(" + course?.reviews.length + "개)"
-                  : "(0개)"}
+                {course?.avgGrade ? "(" + courseReviewsCount + "개)" : "(0개)"}
               </Text>
             </Box>
             {overallGradeStore.toString() !== "0,0,0,0,0" ? (
@@ -1256,6 +1401,122 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
           </Box>
         </TouchableOpacity>
       </Box>
+
+      <BottomSheet
+        index={-1}
+        ref={sheetRef}
+        snapPoints={snapPoints}
+        enablePanDownToClose={true}
+        enableContentPanningGesture={false}
+        onChange={handleSheetChange}
+        backdropComponent={renderBackdrop}
+        backgroundStyle={{
+          backgroundColor: theme.colors.stDarkerGrey,
+        }}
+      >
+        <Box flexDirection="row" justifyContent="flex-end" mr="5">
+          <TouchableOpacity
+            onPress={() => {
+              if (pickerContents === "sem") {
+                setValue("sem", watch("sem"));
+                handleClosePress();
+              } else {
+                setValue("inst", watch("inst"));
+                handleClosePress();
+              }
+            }}
+          >
+            <Text
+              variant="textLg"
+              fontWeight="600"
+              style={{ color: theme.colors.iconBlue }}
+            >
+              확인
+            </Text>
+          </TouchableOpacity>
+        </Box>
+        {pickerContents === "sem" ? (
+          <Controller
+            name="sem"
+            control={control}
+            rules={{
+              required: true,
+            }}
+            render={({ field: { onChange, value } }) => (
+              <Picker
+                ref={pickerRef}
+                selectedValue={value}
+                onValueChange={onChange}
+              >
+                <Picker.Item
+                  label="ALL"
+                  value="ALL"
+                  color={theme.colors.textColor}
+                />
+                <Picker.Item
+                  label="2023 Fall"
+                  value="2023-fall"
+                  color={theme.colors.textColor}
+                />
+                <Picker.Item
+                  label="2023 Spring"
+                  value="2023-spring"
+                  color={theme.colors.textColor}
+                />
+                <Picker.Item
+                  label="2022 Fall"
+                  value="2022-fall"
+                  color={theme.colors.textColor}
+                />
+                <Picker.Item
+                  label="2022 Spring"
+                  value="2022-spring"
+                  color={theme.colors.textColor}
+                />
+                <Picker.Item
+                  label="2021 Fall"
+                  value="2021-fall"
+                  color={theme.colors.textColor}
+                />
+                <Picker.Item
+                  label="2021 Spring"
+                  value="2021-spring"
+                  color={theme.colors.textColor}
+                />
+              </Picker>
+            )}
+          />
+        ) : (
+          <Controller
+            name="inst"
+            control={control}
+            rules={{ required: true }}
+            render={({ field: { onChange, value } }) => (
+              <Picker
+                ref={pickerRef}
+                selectedValue={value}
+                onValueChange={onChange}
+              >
+                <Picker.Item
+                  label="ALL"
+                  value="ALL"
+                  color={theme.colors.textColor}
+                />
+                {course?.instructor_names
+                  .split(", ")
+                  .map((instructor, index) => (
+                    <Picker.Item
+                      key={index}
+                      label={instructor}
+                      value={instructor}
+                      color={theme.colors.textColor}
+                    />
+                  ))}
+              </Picker>
+            )}
+          />
+        )}
+      </BottomSheet>
     </SafeAreaWrapper>
   );
 };
