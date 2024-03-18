@@ -4,7 +4,7 @@ import { ICategory, ITask, ITaskRequest } from "../../types";
 import { isEqual, parseISO } from "date-fns";
 import { FlatList, TouchableOpacity, TextInput, Alert } from "react-native";
 import { Calendar } from "react-native-calendars";
-import useSWR, { mutate } from "swr";
+import useSWR from "swr";
 import useSWRMutation from "swr/mutation";
 import { Loader } from "../../components";
 import { Box, Text, Theme } from "../../theme";
@@ -77,7 +77,7 @@ const TaskActions = ({
   const onCreateTask = async () => {
     try {
       if (newTask.categoryId === "") {
-        Alert.alert("Please select a category");
+        Alert.alert("Please select a category or make one if none exists");
       }
 
       if (newTask.name.length.toString().trim().length > 0) {
@@ -137,6 +137,7 @@ const TaskActions = ({
           }}
           onSubmitEditing={onCreateTask}
           autoComplete="off"
+          autoCorrect={false}
         />
         <Box flexDirection="row" alignItems="center">
           <TouchableOpacity
