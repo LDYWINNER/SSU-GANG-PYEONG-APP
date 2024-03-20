@@ -1,7 +1,10 @@
 import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 
-export const BASE_URL = "http://localhost:1337/"; // or /api/v1/?
+// export const BASE_URL = "http://localhost:1337/";
+
+export const BASE_URL =
+  "https://port-0-ssu-gang-pyeong-backend-hdoly2altyqaphg.sel5.cloudtype.app/";
 
 const TIME_OUT = 30000;
 export const SSU_TOKEN_NAME = "ssu_user_token";
