@@ -65,7 +65,7 @@ const EmailVerification = () => {
           school: _user.school,
           major: _user.major,
           courseReviewNum: _user.courseReviewNum,
-          adminAccount: _user.adminAccount,
+          adminAccount: _user?.adminAccount,
           classHistory: _user.classHistory,
           personalSchedule: _user.personalSchedule,
         });
@@ -84,7 +84,6 @@ const EmailVerification = () => {
           school: _user.school,
           major: _user.major,
           courseReviewNum: _user.courseReviewNum,
-          adminAccount: _user.adminAccount,
           classHistory: _user.classHistory,
           personalSchedule: _user.personalSchedule,
         });

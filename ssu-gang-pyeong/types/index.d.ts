@@ -14,7 +14,7 @@ interface IAuthenticatedUser {
   school: string;
   major: string;
   courseReviewNum: number;
-  adminAccount: boolean;
+  adminAccount?: boolean;
   classHistory: {
     [index: string]: [string] | [];
   };

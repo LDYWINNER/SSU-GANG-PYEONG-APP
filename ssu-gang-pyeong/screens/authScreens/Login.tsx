@@ -7,8 +7,12 @@ import { Box, Text } from "../../theme";
 import { IUser } from "../../types";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import axiosInstance from "../../utils/config";
+import { loginUser } from "../../utils/api";
+import useUserGlobalStore from "../../store/useUserGlobal";
 
 const LoginScreen = () => {
+  const { updateUser } = useUserGlobalStore();
+
   const navigation = useNavigation<AuthScreenNavigationType<"Login">>();
 
   const navigateToSignInScreen = () => {
@@ -21,6 +25,24 @@ const LoginScreen = () => {
       email: watch("email"),
     });
     // console.log(response.data);
+
+    // for admin user
+    if (response.data.loginSkip) {
+      const _user = await loginUser({
+        email: watch("email").toLowerCase(),
+      });
+      updateUser({
+        _id: _user._id,
+        username: _user.username,
+        email: _user.email,
+        school: _user.school,
+        major: _user.major,
+        courseReviewNum: _user.courseReviewNum,
+        adminAccount: _user.adminAccount,
+        classHistory: _user.classHistory,
+        personalSchedule: _user.personalSchedule,
+      });
+    }
 
     navigation.navigate("EmailVerification", {
       isLogin: true,
