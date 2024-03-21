@@ -362,7 +362,7 @@ const CourseBulletin: React.FC<
             alignItems="center"
             position="absolute"
             right={windowWidth * 0.38}
-            bottom={windowHeight * 0.02}
+            bottom={windowHeight * 0.03}
             style={{ backgroundColor: theme.colors.sbuRed }}
             p="2"
             borderRadius="rounded-2xl"

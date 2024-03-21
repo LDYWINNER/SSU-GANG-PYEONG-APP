@@ -459,7 +459,7 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
                   ml="2"
                   color="textColor"
                 >
-                  Go to Course Bulletin Board
+                  수업별 게시판
                 </Text>
               </Box>
             </TouchableOpacity>
