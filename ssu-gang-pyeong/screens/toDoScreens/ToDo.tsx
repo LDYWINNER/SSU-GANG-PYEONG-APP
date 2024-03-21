@@ -272,27 +272,16 @@ const HomeScreen = () => {
           {isMutating ? (
             <Loader />
           ) : (
-            // <FlatList
-            //   data={specificDayTasks}
-            //   renderItem={({ item }) => (
-            //     <Task
-            //       task={item}
-            //       updateTaskStatus={trigger}
-            //       date={pickedDate}
-            //     />
-            //   )}
-            //   ItemSeparatorComponent={() => <Box height={14} />}
-            //   showsVerticalScrollIndicator={false}
-            //   keyExtractor={(item) => item._id}
-            // />
             <Box>
               {specificDayTasks.map((item) => (
-                <Task
-                  task={item}
-                  updateTaskStatus={trigger}
-                  date={pickedDate}
-                  key={item._id}
-                />
+                <Box key={item._id}>
+                  <Task
+                    task={item}
+                    updateTaskStatus={trigger}
+                    date={pickedDate}
+                  />
+                  <Box height={14} />
+                </Box>
               ))}
             </Box>
           )}

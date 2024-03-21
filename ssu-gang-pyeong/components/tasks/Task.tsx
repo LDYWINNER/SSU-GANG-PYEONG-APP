@@ -136,7 +136,7 @@ const Task = ({ task, mutateTasks, updateTaskStatus, date }: TaskProps) => {
   });
 
   return (
-    <AnimatedBox entering={FadeInRight} exiting={FadeInLeft}>
+    <AnimatedBox>
       <Box
         p="4"
         bg="lightGray"
@@ -144,7 +144,7 @@ const Task = ({ task, mutateTasks, updateTaskStatus, date }: TaskProps) => {
         flexDirection="row"
         justifyContent="space-between"
       >
-        <Box flexDirection="row" alignItems="center">
+        <Box flexDirection="row" alignItems="center" flex={1}>
           <TouchableOpacity onPress={toggleTaskStatus}>
             <AnimatedBox
               style={[animatedStyles]}
@@ -170,14 +170,22 @@ const Task = ({ task, mutateTasks, updateTaskStatus, date }: TaskProps) => {
 
           <Text
             ml="3"
-            variant="textXl"
+            variant="textLg"
             style={{
               color: task.categoryColor,
             }}
           >
-            {task.categoryName}:{" "}
+            {task.categoryName}:
           </Text>
-          <Text variant="textXl">{task.name}</Text>
+          <Text
+            variant="textBase"
+            style={{
+              flexShrink: 1,
+            }}
+            ml="2"
+          >
+            {task.name}
+          </Text>
         </Box>
 
         <Box flexDirection="row" alignItems="center">
