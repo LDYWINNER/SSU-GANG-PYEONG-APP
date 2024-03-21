@@ -7,8 +7,6 @@ import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { TouchableOpacity, useColorScheme } from "react-native";
 import {
-  FadeInLeft,
-  FadeInRight,
   useAnimatedStyle,
   useSharedValue,
   withSpring,

@@ -1,9 +1,15 @@
-import React, { useCallback, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { Loader, SafeAreaWrapper } from "../../components";
 import { Task, TaskActions } from "../../components/tasks";
 import { fetcher } from "../../utils/config";
 import { format, parseISO } from "date-fns";
-import { FlatList, TouchableOpacity, useColorScheme } from "react-native";
+import { TouchableOpacity, useColorScheme } from "react-native";
 import { ITask } from "../../types";
 import useUserGlobalStore from "../../store/useUserGlobal";
 import { Box, Text, Theme } from "../../theme";
@@ -21,7 +27,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { ScrollView } from "react-native-gesture-handler";
 
 const todayISODate = new Date();
-todayISODate.setHours(-5, 0, 0, 0);
+// todayISODate.setHours(-5, 0, 0, 0);
 
 const greeting = getGreeting({ hour: new Date().getHours() });
 
@@ -104,10 +110,9 @@ const HomeScreen = () => {
     isMutating,
   } = useSWRMutation<ITask[]>(`api/v1/todotask/${pickedDate}`, fetcher);
 
-  // useEffect(() => {
-  //   trigger();
-  //   // console.log(specificDayTasks);
-  // }, [pickedDate]);
+  useEffect(() => {
+    console.log(pickedDate);
+  }, [pickedDate]);
 
   const presetDots = () => {
     //preset tasks for calendar dots representation

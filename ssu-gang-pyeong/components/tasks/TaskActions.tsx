@@ -20,7 +20,7 @@ type TaskActionsProps = {
 export const today = new Date();
 
 export const todaysISODate = new Date();
-todaysISODate.setHours(-5, 0, 0, 0);
+// todaysISODate.setHours(-5, 0, 0, 0);
 
 const createTaskRequest = async (
   url: string,
