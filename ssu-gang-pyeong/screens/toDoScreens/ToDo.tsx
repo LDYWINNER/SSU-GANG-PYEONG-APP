@@ -18,6 +18,7 @@ import MoreMenu from "./MoreMenu";
 import { useTheme } from "@shopify/restyle";
 import useDarkMode from "../../store/useDarkMode";
 import { useFocusEffect } from "@react-navigation/native";
+import { ScrollView } from "react-native-gesture-handler";
 
 const todayISODate = new Date();
 todayISODate.setHours(-5, 0, 0, 0);
@@ -172,116 +173,131 @@ const HomeScreen = () => {
 
   return (
     <SafeAreaWrapper>
-      <Box flex={1} mx="4">
-        <Box
-          flexDirection="row"
-          justifyContent="space-between"
-          alignItems="center"
-        >
-          <Box>
-            <Text variant="textXl" fontWeight="500" color="textColor">
-              Good {greeting} {user?.username}
-            </Text>
-            <Text variant="textXl" fontWeight="500" color="textColor">
-              It’s{" "}
-              {format(
-                new Date(dateForHeader).setHours(29, 0, 0, 0),
-                "yyyy.MM.dd"
-              )}{" "}
-              - {specificDayTasks.length} tasks
-            </Text>
-          </Box>
-          <Box flexDirection="row">
-            <TouchableOpacity
-              onPress={() => setIsSelectingDate((prev) => !prev)}
-            >
-              <Ionicons
-                name={
-                  isDarkMode?.mode === "system"
-                    ? systemIsDark
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <Box flex={1} mx="4">
+          <Box
+            flexDirection="row"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Box>
+              <Text variant="textXl" fontWeight="500" color="textColor">
+                Good {greeting} {user?.username}
+              </Text>
+              <Text variant="textXl" fontWeight="500" color="textColor">
+                It’s{" "}
+                {format(
+                  new Date(dateForHeader).setHours(29, 0, 0, 0),
+                  "yyyy.MM.dd"
+                )}{" "}
+                - {specificDayTasks.length} tasks
+              </Text>
+            </Box>
+            <Box flexDirection="row">
+              <TouchableOpacity
+                onPress={() => setIsSelectingDate((prev) => !prev)}
+              >
+                <Ionicons
+                  name={
+                    isDarkMode?.mode === "system"
+                      ? systemIsDark
+                        ? "ios-calendar-outline"
+                        : "ios-calendar"
+                      : isDarkMode?.mode === "dark"
                       ? "ios-calendar-outline"
                       : "ios-calendar"
-                    : isDarkMode?.mode === "dark"
-                    ? "ios-calendar-outline"
-                    : "ios-calendar"
-                }
-                color={theme.colors.textColor}
-                size={35}
-                style={{ marginRight: 10 }}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => toggleMoreMenu()}>
-              <Ionicons
-                name={
-                  isDarkMode?.mode === "system"
-                    ? systemIsDark
+                  }
+                  color={theme.colors.textColor}
+                  size={35}
+                  style={{ marginRight: 10 }}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => toggleMoreMenu()}>
+                <Ionicons
+                  name={
+                    isDarkMode?.mode === "system"
+                      ? systemIsDark
+                        ? "ellipsis-horizontal-circle-outline"
+                        : "ellipsis-horizontal-circle-sharp"
+                      : isDarkMode?.mode === "dark"
                       ? "ellipsis-horizontal-circle-outline"
                       : "ellipsis-horizontal-circle-sharp"
-                    : isDarkMode?.mode === "dark"
-                    ? "ellipsis-horizontal-circle-outline"
-                    : "ellipsis-horizontal-circle-sharp"
-                }
-                color={theme.colors.textColor}
-                size={35}
+                  }
+                  color={theme.colors.textColor}
+                  size={35}
+                />
+              </TouchableOpacity>
+            </Box>
+          </Box>
+          <Box height={26} />
+
+          {isSelectingDate && (
+            <Box>
+              <Calendar
+                theme={{
+                  calendarBackground: theme.colors.mainBgColor,
+                  dayTextColor: theme.colors.textColor,
+                  textDisabledColor: "#444",
+                  monthTextColor: "#888",
+                }}
+                displayLoadingIndicator={isMutating}
+                onDayPress={(day) => {
+                  const selectedDate = new Date(day.dateString).toISOString();
+                  setPickedDate(selectedDate);
+                  setDateForHeader(parseISO(selectedDate));
+                  setSelected(day.dateString);
+                }}
+                markingType={"multi-dot"}
+                markedDates={{
+                  [selected]: {
+                    selected: true,
+                    disableTouchEvent: true,
+                    selectedColor: theme.colors.sbuRed,
+                    selectedTextColor: "white",
+                  },
+                  ...presetTasks,
+                }}
               />
-            </TouchableOpacity>
-          </Box>
-        </Box>
-        <Box height={26} />
+              <Box height={26} />
+            </Box>
+          )}
 
-        {isSelectingDate && (
-          <Box>
-            <Calendar
-              theme={{
-                calendarBackground: theme.colors.mainBgColor,
-                dayTextColor: theme.colors.textColor,
-                textDisabledColor: "#444",
-                monthTextColor: "#888",
-              }}
-              displayLoadingIndicator={isMutating}
-              onDayPress={(day) => {
-                const selectedDate = new Date(day.dateString).toISOString();
-                setPickedDate(selectedDate);
-                setDateForHeader(parseISO(selectedDate));
-                setSelected(day.dateString);
-              }}
-              markingType={"multi-dot"}
-              markedDates={{
-                [selected]: {
-                  selected: true,
-                  disableTouchEvent: true,
-                  selectedColor: theme.colors.sbuRed,
-                  selectedTextColor: "white",
-                },
-                ...presetTasks,
-              }}
-            />
-            <Box height={26} />
-          </Box>
-        )}
-
-        <TaskActions
-          categoryId=""
-          updateTaskStatus={trigger}
-          mutateCalendar={mutate}
-        />
-        <Box height={14} />
-
-        {isMutating ? (
-          <Loader />
-        ) : (
-          <FlatList
-            data={specificDayTasks}
-            renderItem={({ item }) => (
-              <Task task={item} updateTaskStatus={trigger} date={pickedDate} />
-            )}
-            ItemSeparatorComponent={() => <Box height={14} />}
-            showsVerticalScrollIndicator={false}
-            keyExtractor={(item) => item._id}
+          <TaskActions
+            categoryId=""
+            updateTaskStatus={trigger}
+            mutateCalendar={mutate}
           />
-        )}
-      </Box>
+          <Box height={14} />
 
+          {isMutating ? (
+            <Loader />
+          ) : (
+            // <FlatList
+            //   data={specificDayTasks}
+            //   renderItem={({ item }) => (
+            //     <Task
+            //       task={item}
+            //       updateTaskStatus={trigger}
+            //       date={pickedDate}
+            //     />
+            //   )}
+            //   ItemSeparatorComponent={() => <Box height={14} />}
+            //   showsVerticalScrollIndicator={false}
+            //   keyExtractor={(item) => item._id}
+            // />
+            <Box>
+              {specificDayTasks.map((item) => (
+                <Task
+                  task={item}
+                  updateTaskStatus={trigger}
+                  date={pickedDate}
+                  key={item._id}
+                />
+              ))}
+            </Box>
+          )}
+        </Box>
+      </ScrollView>
       <BottomSheet
         index={-1}
         ref={sheetRef}

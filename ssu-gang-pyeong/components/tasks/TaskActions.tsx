@@ -198,50 +198,38 @@ const TaskActions = ({
         </Box>
       </Box>
       {isSelectingCategory && (
-        <Box alignItems="flex-end" my="4" justifyContent="flex-end">
-          <FlatList
-            data={categories}
-            renderItem={({ item, index }) => {
-              return (
-                <TouchableOpacity
-                  onPress={() => {
-                    setNewTask((prev) => {
-                      return {
-                        ...prev,
-                        categoryId: item._id,
-                      };
-                    });
-                    setIsSelectingCategory(false);
-                  }}
-                >
-                  <Box
-                    bg="gray250"
-                    p="2"
-                    borderTopStartRadius={index === 0 ? "rounded-3xl" : "none"}
-                    borderTopEndRadius={index === 0 ? "rounded-3xl" : "none"}
-                    borderBottomStartRadius={
-                      categories?.length - 1 === index ? "rounded-2xl" : "none"
-                    }
-                    borderBottomEndRadius={
-                      categories?.length - 1 === index ? "rounded-2xl" : "none"
-                    }
+        <Box
+          alignSelf="flex-end"
+          my="4"
+          borderRadius="rounded-3xl"
+          bg="gray250"
+        >
+          {categories.map((item, index) => (
+            <TouchableOpacity
+              onPress={() => {
+                setNewTask((prev) => {
+                  return {
+                    ...prev,
+                    categoryId: item._id,
+                  };
+                });
+                setIsSelectingCategory(false);
+              }}
+              key={index}
+            >
+              <Box p="2">
+                <Box flexDirection="row">
+                  <Text>{item.icon.symbol}</Text>
+                  <Text
+                    ml="2"
+                    fontWeight={newTask.categoryId === item._id ? "700" : "400"}
                   >
-                    <Box flexDirection="row">
-                      <Text>{item.icon.symbol}</Text>
-                      <Text
-                        ml="2"
-                        fontWeight={
-                          newTask.categoryId === item._id ? "700" : "400"
-                        }
-                      >
-                        {item.name}
-                      </Text>
-                    </Box>
-                  </Box>
-                </TouchableOpacity>
-              );
-            }}
-          />
+                    {item.name}
+                  </Text>
+                </Box>
+              </Box>
+            </TouchableOpacity>
+          ))}
         </Box>
       )}
       {isSelectingDate && (
