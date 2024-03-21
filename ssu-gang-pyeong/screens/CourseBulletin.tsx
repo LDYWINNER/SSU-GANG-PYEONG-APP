@@ -258,7 +258,13 @@ const CourseBulletin: React.FC<
                     <Text variant="textBase" fontWeight="600" color="textColor">
                       {post.title}
                     </Text>
-                    <Text variant="textBase" fontWeight="500" color="textColor">
+                    <Text
+                      variant="textSm"
+                      fontWeight="500"
+                      color="textColor"
+                      mt="2"
+                      mb="1"
+                    >
                       {post.content.substring(0, 43)}
                       {post.content.length > 43 && "..."}
                     </Text>
@@ -362,7 +368,7 @@ const CourseBulletin: React.FC<
             alignItems="center"
             position="absolute"
             right={windowWidth * 0.38}
-            bottom={windowHeight * 0.03}
+            bottom={windowHeight * 0.05}
             style={{ backgroundColor: theme.colors.sbuRed }}
             p="2"
             borderRadius="rounded-2xl"

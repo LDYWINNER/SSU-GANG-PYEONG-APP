@@ -78,7 +78,7 @@ const WritePost: React.FC<NativeStackScreenProps<any, "WritePost">> = ({
   );
 
   const createNewPost = async () => {
-    const _id: string = route.params.post!._id;
+    const _id: string = route.params.post?._id as string;
     const title = watch("title");
     const content = watch("content");
 
@@ -139,7 +139,7 @@ const WritePost: React.FC<NativeStackScreenProps<any, "WritePost">> = ({
   }>(`/api/v1/bulletin?board=course&search=${courseInfo}`, fetcher);
 
   const { trigger: updatePost } = useSWRMutation<{ post: IBulletinPost }>(
-    `/api/v1/bulletin/${route.params.post!._id}`,
+    `/api/v1/bulletin/${route.params.post?._id as string}`,
     fetcher
   );
 

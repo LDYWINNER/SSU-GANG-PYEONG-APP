@@ -163,7 +163,7 @@ const BulletinDetail: React.FC<
                     {post.title}
                   </Text>
                   <Text
-                    variant="textBase"
+                    variant="textSm"
                     fontWeight="500"
                     color={
                       isDarkMode?.mode === "system"
@@ -174,6 +174,8 @@ const BulletinDetail: React.FC<
                         ? "gray300"
                         : "gray650"
                     }
+                    mt="2"
+                    mb="1"
                   >
                     {post.content.substring(0, 43)}
                     {post.content.length > 43 && "..."}
