@@ -92,10 +92,10 @@ const ListView: React.FC<NativeStackScreenProps<any, "ListView">> = ({
               </Text>
               <Box>
                 {courses?.takingCourses[index].unique_instructor.includes(
-                  ","
+                  "/"
                 ) ? (
                   courses?.takingCourses[index].unique_instructor
-                    .split(", ")
+                    .split("/")
                     .map((prof, index) => <Text key={index}>{prof}</Text>)
                 ) : (
                   <Text>{courses?.takingCourses[index].unique_instructor}</Text>
