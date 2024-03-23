@@ -14,6 +14,7 @@ const Input = ({ label, error, ...props }: InputProps) => {
         {label}
       </Text>
       <TextInput
+        keyboardType={label === "Email" ? "email-address" : "default"}
         autoComplete="off"
         autoCorrect={false}
         style={{
