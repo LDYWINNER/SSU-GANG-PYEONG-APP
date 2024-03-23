@@ -148,7 +148,7 @@ const Search: React.FC<NativeStackScreenProps<any, "Search">> = ({
                 onChangeText={onChange}
                 placeholder="Search with keywords"
                 style={{
-                  fontSize: 20,
+                  fontSize: 18,
                   lineHeight: 26,
                   padding: 16,
                 }}
@@ -205,7 +205,31 @@ const Search: React.FC<NativeStackScreenProps<any, "Search">> = ({
                       ) ? (
                         data.queryCourses[index].unique_instructor
                           .split("/")
-                          .map((prof, index) => <Text key={index}>{prof}</Text>)
+                          .map((prof, index) =>
+                            prof.length > 14 ? (
+                              <Box key={index}>
+                                <Text>{prof.split(" ").slice(0, -1)}</Text>
+                                <Text>{"~" + prof.split(" ").at(-1)}</Text>
+                              </Box>
+                            ) : (
+                              <Text key={index}>{prof}</Text>
+                            )
+                          )
+                      ) : data.queryCourses[index].unique_instructor.length >
+                        14 ? (
+                        <Box>
+                          <Text>
+                            {data.queryCourses[index].unique_instructor
+                              .split(" ")
+                              .slice(0, -1)}
+                          </Text>
+                          <Text>
+                            {"~" +
+                              data.queryCourses[index].unique_instructor
+                                .split(" ")
+                                .at(-1)}
+                          </Text>
+                        </Box>
                       ) : (
                         <Text>
                           {data.queryCourses[index].unique_instructor}

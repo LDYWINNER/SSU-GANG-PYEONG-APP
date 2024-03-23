@@ -11,6 +11,7 @@ import { useIsFocused } from "@react-navigation/native";
 import { Box, Text } from "../../theme";
 import { TouchableOpacity } from "react-native";
 import { Rating } from "@kolking/react-native-rating";
+import { ScrollView } from "react-native-gesture-handler";
 
 const ListView: React.FC<NativeStackScreenProps<any, "ListView">> = ({
   navigation,
@@ -59,65 +60,96 @@ const ListView: React.FC<NativeStackScreenProps<any, "ListView">> = ({
     );
   }
   return (
-    <Box>
-      {courses!.takingCourses.map((item, index) => (
-        <TouchableOpacity
-          key={item._id}
-          onPress={() => navigateToCourseDetail(item._id)}
-        >
-          <Box
-            borderRadius="rounded-xl"
-            bg={
-              item.avgGrade === null
-                ? "lightGray"
-                : item.avgGrade <= 1
-                ? "red200"
-                : item.avgGrade <= 2
-                ? "amber200"
-                : item.avgGrade <= 3
-                ? "orange200"
-                : item.avgGrade <= 4
-                ? "blu200"
-                : "green200"
-            }
-            px="4"
-            py="6"
-            m="3"
-            flexDirection="row"
-            justifyContent="space-between"
+    <ScrollView showsVerticalScrollIndicator={false}>
+      <Box>
+        {courses!.takingCourses.map((item, index) => (
+          <TouchableOpacity
+            key={item._id}
+            onPress={() => navigateToCourseDetail(item._id)}
           >
-            <Box>
-              <Text variant="text2Xl" mb="1">
-                {item.subj} {item.crs}
-              </Text>
+            <Box
+              borderRadius="rounded-xl"
+              bg={
+                item.avgGrade === null
+                  ? "lightGray"
+                  : item.avgGrade <= 1
+                  ? "red200"
+                  : item.avgGrade <= 2
+                  ? "amber200"
+                  : item.avgGrade <= 3
+                  ? "orange200"
+                  : item.avgGrade <= 4
+                  ? "blu200"
+                  : "green200"
+              }
+              px="4"
+              py="6"
+              m="3"
+              flexDirection="row"
+              justifyContent="space-between"
+            >
               <Box>
-                {courses?.takingCourses[index].unique_instructor.includes(
-                  "/"
-                ) ? (
-                  courses?.takingCourses[index].unique_instructor
-                    .split("/")
-                    .map((prof, index) => <Text key={index}>{prof}</Text>)
-                ) : (
-                  <Text>{courses?.takingCourses[index].unique_instructor}</Text>
-                )}
+                <Text variant="text2Xl" mb="1">
+                  {item.subj} {item.crs}
+                </Text>
+                <Box>
+                  {courses?.takingCourses[index].unique_instructor.includes(
+                    "/"
+                  ) ? (
+                    courses?.takingCourses[index].unique_instructor
+                      .split("/")
+                      .map((prof, index) =>
+                        prof.length > 14 ? (
+                          <Box key={index}>
+                            <Text>{prof.split(" ").slice(0, -1)}</Text>
+                            <Text>{"~" + prof.split(" ").at(-1)}</Text>
+                          </Box>
+                        ) : (
+                          <Text key={index}>{prof}</Text>
+                        )
+                      )
+                  ) : (courses?.takingCourses[index].unique_instructor
+                      ?.length ?? 0) > 14 ? (
+                    <Box>
+                      <Text>
+                        {courses?.takingCourses[index].unique_instructor
+                          .split(" ")
+                          .slice(0, -1)}
+                      </Text>
+                      <Text>
+                        {"~" +
+                          courses?.takingCourses[index].unique_instructor
+                            .split(" ")
+                            .at(-1)}
+                      </Text>
+                    </Box>
+                  ) : (
+                    <Text>
+                      {courses?.takingCourses[index].unique_instructor}
+                    </Text>
+                  )}
+                </Box>
+              </Box>
+              <Box justifyContent="center" alignItems="flex-end">
+                <Text mb="1">
+                  {item.avgGrade ? (
+                    <Rating
+                      rating={Number(item.avgGrade.toFixed(1))}
+                      disabled
+                    />
+                  ) : (
+                    <Rating rating={0} disabled />
+                  )}
+                </Text>
+                <Text>
+                  {item.avgGrade ? "(" + item.avgGrade.toFixed(1) + ")" : ""}
+                </Text>
               </Box>
             </Box>
-            <Box justifyContent="center" alignItems="flex-end">
-              <Text mb="1">
-                {item.avgGrade ? (
-                  <Rating rating={Number(item.avgGrade.toFixed(1))} disabled />
-                ) : (
-                  <Rating rating={0} disabled />
-                )}
-              </Text>
-              <Text>
-                {item.avgGrade ? "(" + item.avgGrade.toFixed(1) + ")" : ""}
-              </Text>
-            </Box>
-          </Box>
-        </TouchableOpacity>
-      ))}
-    </Box>
+          </TouchableOpacity>
+        ))}
+      </Box>
+    </ScrollView>
   );
 };
 
