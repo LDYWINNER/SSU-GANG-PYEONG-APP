@@ -276,7 +276,8 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
       }
       if (
         watch("inst") !== "ALL" &&
-        watch("inst") !== course!.reviews[j].instructor
+        watch("inst").toLowerCase().substring(0, 4) !==
+          course!.reviews[j].instructor.toLowerCase().substring(0, 4)
       ) {
         continue;
       }
@@ -548,14 +549,35 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
                     alignItems="center"
                     justifyContent="space-between"
                   >
-                    <Text
-                      variant="textSm"
-                      fontWeight="700"
-                      textAlign="center"
-                      color="white"
-                    >
-                      {watch("inst")}
-                    </Text>
+                    {watch("inst").length > 14 ? (
+                      <Box>
+                        <Text
+                          variant="textSm"
+                          fontWeight="700"
+                          textAlign="center"
+                          color="white"
+                        >
+                          {watch("inst").split(" ").slice(0, -1)}
+                        </Text>
+                        <Text
+                          variant="textSm"
+                          fontWeight="700"
+                          textAlign="center"
+                          color="white"
+                        >
+                          ~{watch("inst").split(" ").at(-1)}
+                        </Text>
+                      </Box>
+                    ) : (
+                      <Text
+                        variant="textSm"
+                        fontWeight="700"
+                        textAlign="center"
+                        color="white"
+                      >
+                        {watch("inst")}
+                      </Text>
+                    )}
                     <Text textAlign="right" mr="3">
                       <Ionicons name={"caret-down"} color={"white"} size={35} />
                     </Text>
