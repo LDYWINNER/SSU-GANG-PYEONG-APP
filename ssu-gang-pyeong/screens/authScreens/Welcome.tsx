@@ -29,9 +29,7 @@ const Welcome = () => {
             />
           </Animated.View>
         </Box>
-        <Text textAlign="center" variant="textXl" fontWeight="700">
-          The only app you need at SUNY Korea
-        </Text>
+
         <Box my="3.5" mx="10">
           <SmoothButton
             label="Start your journey"
