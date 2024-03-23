@@ -36,6 +36,7 @@ import * as WebBrowser from "expo-web-browser";
 import useDarkMode from "../store/useDarkMode";
 import BottomSheet, {
   BottomSheetBackdrop,
+  WINDOW_HEIGHT,
   WINDOW_WIDTH,
 } from "@gorhom/bottom-sheet";
 import { Picker } from "@react-native-picker/picker";
@@ -213,6 +214,26 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
     await WebBrowser.openBrowserAsync(baseUrl);
   };
 
+  const exceptionCourses = [
+    "475",
+    "476",
+    "487",
+    "488",
+    "499",
+    "522",
+    "523",
+    "524",
+    "587",
+    "593",
+    "596",
+    "599",
+    "696",
+    "697",
+    "698",
+    "699",
+    "700",
+  ];
+
   let courseReviewsCount = 0;
 
   if (isLoadingCourse) {
@@ -233,6 +254,11 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
       }
 
       temp.push(course?.day.split(", ")[i]);
+
+      if (exceptionCourses.includes(course!.crs)) {
+        tableResult.unshift(temp);
+        continue;
+      }
       temp.push(course?.startTime.split(", ")[i]);
       temp.push(course?.endTime.split(", ")[i]);
       temp.push(course?.room.split(", ")[i]);
@@ -427,7 +453,11 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
               }}
             >
               <Row
-                data={["Semester", "Day", "Start", "End", "Location"]}
+                data={
+                  tableResult[0].length === 2
+                    ? ["Semester", "Day"]
+                    : ["Semester", "Day", "Start", "End", "Location"]
+                }
                 style={{
                   height: 40,
                   backgroundColor: theme.colors.textColor,
@@ -1117,9 +1147,11 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
 
             <Box>
               {overallEvaluations.length === 0 && (
-                <Text color="textColor">
-                  작성된 자세한 수강평이 아직 없습니다 :(
-                </Text>
+                <Box>
+                  <Text color="textColor">
+                    작성된 자세한 수강평이 아직 없습니다 :(
+                  </Text>
+                </Box>
               )}
               {overallEvaluations.length >= 1 && (
                 <>
@@ -1372,7 +1404,11 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
               </Box>
             </TouchableOpacity>
           </Box>
+          {exceptionCourses.includes(course!.crs) && (
+            <Box height={WINDOW_HEIGHT * 0.1} />
+          )}
         </ScrollView>
+
         <TouchableOpacity onPress={navigateToWriteReview}>
           <Box
             flexDirection="row"
