@@ -253,16 +253,17 @@ const SignUpScreen = () => {
                 ref={pickerRef}
                 selectedValue={value}
                 onValueChange={onChange}
+                style={{ color: theme.colors.iconBlue }}
               >
                 <Picker.Item
                   label="SBU"
                   value="SBU"
-                  color={theme.colors.white}
+                  color={theme.colors.iconBlue}
                 />
                 <Picker.Item
                   label="FIT"
                   value="FIT"
-                  color={theme.colors.white}
+                  color={theme.colors.iconBlue}
                 />
               </Picker>
             )}
@@ -277,28 +278,37 @@ const SignUpScreen = () => {
                 ref={pickerRef}
                 selectedValue={value}
                 onValueChange={onChange}
+                style={{ color: theme.colors.iconBlue }}
               >
                 <Picker.Item
                   label="AMS"
                   value="AMS"
-                  color={theme.colors.white}
+                  color={theme.colors.iconBlue}
                 />
-                <Picker.Item label="BM" value="BM" color={theme.colors.white} />
-                <Picker.Item label="CS" value="CS" color={theme.colors.white} />
+                <Picker.Item
+                  label="BM"
+                  value="BM"
+                  color={theme.colors.iconBlue}
+                />
+                <Picker.Item
+                  label="CS"
+                  value="CS"
+                  color={theme.colors.iconBlue}
+                />
                 <Picker.Item
                   label="ECE"
                   value="ECE"
-                  color={theme.colors.white}
+                  color={theme.colors.iconBlue}
                 />
                 <Picker.Item
                   label="MEC"
                   value="MEC"
-                  color={theme.colors.white}
+                  color={theme.colors.iconBlue}
                 />
                 <Picker.Item
                   label="TSM"
                   value="TSM"
-                  color={theme.colors.white}
+                  color={theme.colors.iconBlue}
                 />
               </Picker>
             )}
