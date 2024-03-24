@@ -260,11 +260,11 @@ const SignUpScreen = () => {
                   value="SBU"
                   color={theme.colors.iconBlue}
                 />
-                <Picker.Item
+                {/* <Picker.Item
                   label="FIT"
                   value="FIT"
                   color={theme.colors.iconBlue}
-                />
+                /> */}
               </Picker>
             )}
           />
