@@ -9,9 +9,14 @@ import { ICourse } from "../types";
 import { SafeAreaWrapper, NavigateBack, Loader, Divider } from "../components";
 import { MainStackParamList } from "../navigation/types";
 import { Rating } from "@kolking/react-native-rating";
-import { FontAwesome5 } from "@expo/vector-icons";
+import { FontAwesome5, Octicons } from "@expo/vector-icons";
 import { ScrollView } from "react-native-gesture-handler";
-import { TouchableOpacity, Dimensions, useColorScheme } from "react-native";
+import {
+  TouchableOpacity,
+  Dimensions,
+  useColorScheme,
+  Alert,
+} from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import useDarkMode from "../store/useDarkMode";
@@ -20,6 +25,18 @@ type CourseReviewScreenRouteProp = RouteProp<
   MainStackParamList,
   "CourseReview"
 >;
+
+const reportCourseReviewRequest = async (
+  url: string,
+  { arg }: { arg: { reviewId: string } }
+) => {
+  try {
+    await axiosInstance.post(url + "/" + arg.reviewId);
+  } catch (error) {
+    console.log("error in reportCourseReviewRequest", error);
+    throw error;
+  }
+};
 
 const likeReviewRequest = async (
   url: string,
@@ -66,6 +83,23 @@ const CourseReview: React.FC<NativeStackScreenProps<any, "CourseReview">> = ({
     mutate,
   } = useSWR<ICourse>(`/api/v1/course/${id}`, fetcher);
 
+  const { trigger: reportCourseReviewTrigger } = useSWRMutation(
+    `api/v1/course/report`,
+    reportCourseReviewRequest
+  );
+
+  const reportCourseReview = async (reviewId: string) => {
+    try {
+      const _reportCourseReviewReq = {
+        reviewId,
+      };
+      await reportCourseReviewTrigger(_reportCourseReviewReq);
+    } catch (error) {
+      console.log("error in reportCourseReview", error);
+      throw error;
+    }
+  };
+
   useEffect(() => {
     if (isFocused) {
       mutate();
@@ -110,54 +144,88 @@ const CourseReview: React.FC<NativeStackScreenProps<any, "CourseReview">> = ({
                     rating={Number(reviewItem.overallGrade)}
                     disabled
                   />
-                  <TouchableOpacity
-                    onPress={() =>
-                      trigger({
-                        reviewId: reviewItem._id,
-                      })
-                    }
-                  >
-                    <Box
-                      flexDirection="row"
-                      alignItems="center"
-                      borderRadius="rounded-xl"
-                      backgroundColor={
-                        isDarkMode?.mode === "system"
-                          ? systemIsDark
-                            ? "gray300"
-                            : "gray650"
-                          : isDarkMode?.mode === "dark"
-                          ? "gray300"
-                          : "gray650"
-                      }
-                      p="1"
+                  <Box flexDirection="row" alignItems="center">
+                    <TouchableOpacity
+                      onPress={() => {
+                        Alert.alert(
+                          "신고",
+                          "해당 수강평이 부적절하다고 판단하시나요? 수강평을 신고하면 24시간 내에 검토되며, 부적절하다고 판단되면 해당 수강평은 해당 기간내에 삭제될 것입니다. 해당 작성자에 대해서도 조취를 취하게 됩니다.",
+                          [
+                            { text: "취소", onPress: () => {} },
+                            {
+                              text: "확인",
+                              onPress: () => reportCourseReview(reviewItem._id),
+                            },
+                          ]
+                        );
+                      }}
                     >
-                      <FontAwesome5
-                        name="thumbs-up"
-                        size={20}
-                        color={theme.colors.sbuRed}
-                      />
-                      <Box width={4} />
-                      <Text
-                        variant="textLg"
-                        style={{
-                          color: theme.colors.sbuRed,
-                        }}
+                      <Box
+                        flexDirection="row"
+                        alignItems="center"
+                        borderRadius="rounded-xl"
+                        backgroundColor="gray300"
+                        p="1.5"
+                        mr="2"
                       >
-                        {reviewItem.likes.length}
-                      </Text>
-                      <Box width={6} />
-                      <Text
-                        variant="textBase"
-                        fontWeight="600"
-                        style={{
-                          color: theme.colors.sbuRed,
-                        }}
+                        <Octicons
+                          name="report"
+                          size={20}
+                          color={theme.colors.sbuRed}
+                        />
+                        <Box width={6} />
+                        <Text
+                          variant="textBase"
+                          fontWeight="600"
+                          style={{
+                            color: theme.colors.sbuRed,
+                          }}
+                        >
+                          신고
+                        </Text>
+                      </Box>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() =>
+                        trigger({
+                          reviewId: reviewItem._id,
+                        })
+                      }
+                    >
+                      <Box
+                        flexDirection="row"
+                        alignItems="center"
+                        borderRadius="rounded-xl"
+                        backgroundColor="gray300"
+                        p="1"
                       >
-                        추천
-                      </Text>
-                    </Box>
-                  </TouchableOpacity>
+                        <FontAwesome5
+                          name="thumbs-up"
+                          size={20}
+                          color={theme.colors.sbuRed}
+                        />
+                        <Box width={4} />
+                        <Text
+                          variant="textLg"
+                          style={{
+                            color: theme.colors.sbuRed,
+                          }}
+                        >
+                          {reviewItem.likes.length}
+                        </Text>
+                        <Box width={6} />
+                        <Text
+                          variant="textBase"
+                          fontWeight="600"
+                          style={{
+                            color: theme.colors.sbuRed,
+                          }}
+                        >
+                          추천
+                        </Text>
+                      </Box>
+                    </TouchableOpacity>
+                  </Box>
                 </Box>
 
                 <Box flexDirection="row">
@@ -207,6 +275,7 @@ const CourseReview: React.FC<NativeStackScreenProps<any, "CourseReview">> = ({
             );
           })}
         </Box>
+        <Box height={windowHeight * 0.1} />
       </ScrollView>
 
       <TouchableOpacity onPress={navigateToWriteReview}>
