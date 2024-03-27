@@ -584,11 +584,11 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
                             color={theme.colors.gray500}
                           />
                         </TouchableOpacity>
-                        {comment.createdBy === user?._id && (
-                          <>
-                            <Text>
-                              {"   "}| {"  "}
-                            </Text>
+                        <>
+                          <Text>
+                            {"   "}| {"  "}
+                          </Text>
+                          {comment.createdBy === user?._id ? (
                             <TouchableOpacity
                               onPress={() =>
                                 Alert.alert(
@@ -610,8 +610,30 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
                                 color={theme.colors.gray500}
                               />
                             </TouchableOpacity>
-                          </>
-                        )}
+                          ) : (
+                            <TouchableOpacity
+                              onPress={() =>
+                                Alert.alert(
+                                  "신고",
+                                  "해당 댓글이 부적절하다고 판단하시나요? 댓글을 신고하면 24시간 내에 검토되며, 부적절하다고 판단되면 해당 댓글은 해당 기간내에 삭제될 것입니다. 해당 작성자에 대해서도 조취를 취하게 됩니다.",
+                                  [
+                                    { text: "취소", onPress: () => {} },
+                                    {
+                                      text: "확인",
+                                      onPress: () => reportComment(comment._id),
+                                    },
+                                  ]
+                                )
+                              }
+                            >
+                              <Octicons
+                                name="report"
+                                size={16}
+                                color={theme.colors.gray500}
+                              />
+                            </TouchableOpacity>
+                          )}
+                        </>
                       </Box>
                     </Box>
                   </Box>
