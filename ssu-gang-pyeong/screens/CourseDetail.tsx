@@ -37,11 +37,11 @@ import useDarkMode from "../store/useDarkMode";
 import BottomSheet, {
   BottomSheetBackdrop,
   WINDOW_HEIGHT,
-  WINDOW_WIDTH,
 } from "@gorhom/bottom-sheet";
 import { Picker } from "@react-native-picker/picker";
 import { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";
 import { Controller, useForm } from "react-hook-form";
+import useUserGlobalStore from "../store/useUserGlobal";
 
 type CourseDetailScreenRouteProp = RouteProp<
   MainStackParamList,
@@ -54,6 +54,8 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
   const theme = useTheme<Theme>();
   const { isDarkMode } = useDarkMode();
   const systemIsDark = useColorScheme() === "dark";
+
+  const { user } = useUserGlobalStore();
 
   const windowWidth = Dimensions.get("window").width;
   const windowHeight = Dimensions.get("window").height;
@@ -1431,33 +1433,35 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
           )}
         </ScrollView>
 
-        <TouchableOpacity onPress={navigateToWriteReview}>
-          <Box
-            flexDirection="row"
-            alignItems="center"
-            position="absolute"
-            right={windowWidth * 0.005}
-            bottom={windowHeight * 0.88}
-            style={{ backgroundColor: theme.colors.sbuRed }}
-            p="2"
-            borderRadius="rounded-2xl"
-          >
-            <MaterialCommunityIcons
-              name="pencil-plus-outline"
-              size={24}
-              color={theme.colors.white}
-            />
-            <Box width={6} />
-            <Text
-              fontWeight="700"
-              style={{
-                color: theme.colors.white,
-              }}
+        {!user!.blocked ? (
+          <TouchableOpacity onPress={navigateToWriteReview}>
+            <Box
+              flexDirection="row"
+              alignItems="center"
+              position="absolute"
+              right={windowWidth * 0.005}
+              bottom={windowHeight * 0.88}
+              style={{ backgroundColor: theme.colors.sbuRed }}
+              p="2"
+              borderRadius="rounded-2xl"
             >
-              평가하기
-            </Text>
-          </Box>
-        </TouchableOpacity>
+              <MaterialCommunityIcons
+                name="pencil-plus-outline"
+                size={24}
+                color={theme.colors.white}
+              />
+              <Box width={6} />
+              <Text
+                fontWeight="700"
+                style={{
+                  color: theme.colors.white,
+                }}
+              >
+                평가하기
+              </Text>
+            </Box>
+          </TouchableOpacity>
+        ) : null}
       </Box>
 
       <BottomSheet

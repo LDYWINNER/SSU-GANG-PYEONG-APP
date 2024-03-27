@@ -66,6 +66,7 @@ const EmailVerification = () => {
           major: _user.major,
           courseReviewNum: _user.courseReviewNum,
           adminAccount: _user?.adminAccount,
+          blocked: _user?.blocked,
           classHistory: _user.classHistory,
           personalSchedule: _user.personalSchedule,
         });
@@ -109,11 +110,11 @@ const EmailVerification = () => {
         }}
         render={({ field: { onChange, onBlur, value } }) => (
           <Input
-            label="Email"
+            label="Verification Code"
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
-            placeholder="Email"
+            placeholder="Verification Code"
             error={errors.verificationCode}
           />
         )}

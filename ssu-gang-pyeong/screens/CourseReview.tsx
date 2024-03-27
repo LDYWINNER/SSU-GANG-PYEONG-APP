@@ -20,6 +20,7 @@ import {
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import useDarkMode from "../store/useDarkMode";
+import useUserGlobalStore from "../store/useUserGlobal";
 
 type CourseReviewScreenRouteProp = RouteProp<
   MainStackParamList,
@@ -56,6 +57,8 @@ const CourseReview: React.FC<NativeStackScreenProps<any, "CourseReview">> = ({
   const theme = useTheme<Theme>();
   const { isDarkMode } = useDarkMode();
   const systemIsDark = useColorScheme() === "dark";
+
+  const { user } = useUserGlobalStore();
 
   const windowWidth = Dimensions.get("window").width;
   const windowHeight = Dimensions.get("window").height;
@@ -144,88 +147,92 @@ const CourseReview: React.FC<NativeStackScreenProps<any, "CourseReview">> = ({
                     rating={Number(reviewItem.overallGrade)}
                     disabled
                   />
-                  <Box flexDirection="row" alignItems="center">
-                    <TouchableOpacity
-                      onPress={() => {
-                        Alert.alert(
-                          "신고",
-                          "해당 수강평이 부적절하다고 판단하시나요? 수강평을 신고하면 24시간 내에 검토되며, 부적절하다고 판단되면 해당 수강평은 해당 기간내에 삭제될 것입니다. 해당 작성자에 대해서도 조취를 취하게 됩니다.",
-                          [
-                            { text: "취소", onPress: () => {} },
-                            {
-                              text: "확인",
-                              onPress: () => reportCourseReview(reviewItem._id),
-                            },
-                          ]
-                        );
-                      }}
-                    >
-                      <Box
-                        flexDirection="row"
-                        alignItems="center"
-                        borderRadius="rounded-xl"
-                        backgroundColor="gray300"
-                        p="1.5"
-                        mr="2"
+
+                  {!user!.blocked ? (
+                    <Box flexDirection="row" alignItems="center">
+                      <TouchableOpacity
+                        onPress={() => {
+                          Alert.alert(
+                            "신고",
+                            "해당 수강평이 부적절하다고 판단하시나요? 수강평을 신고하면 24시간 내에 검토되며, 부적절하다고 판단되면 해당 수강평은 해당 기간내에 삭제될 것입니다. 해당 작성자에 대해서도 조취를 취하게 됩니다.",
+                            [
+                              { text: "취소", onPress: () => {} },
+                              {
+                                text: "확인",
+                                onPress: () =>
+                                  reportCourseReview(reviewItem._id),
+                              },
+                            ]
+                          );
+                        }}
                       >
-                        <Octicons
-                          name="report"
-                          size={20}
-                          color={theme.colors.sbuRed}
-                        />
-                        <Box width={6} />
-                        <Text
-                          variant="textBase"
-                          fontWeight="600"
-                          style={{
-                            color: theme.colors.sbuRed,
-                          }}
+                        <Box
+                          flexDirection="row"
+                          alignItems="center"
+                          borderRadius="rounded-xl"
+                          backgroundColor="gray300"
+                          p="1.5"
+                          mr="2"
                         >
-                          신고
-                        </Text>
-                      </Box>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      onPress={() =>
-                        trigger({
-                          reviewId: reviewItem._id,
-                        })
-                      }
-                    >
-                      <Box
-                        flexDirection="row"
-                        alignItems="center"
-                        borderRadius="rounded-xl"
-                        backgroundColor="gray300"
-                        p="1"
+                          <Octicons
+                            name="report"
+                            size={20}
+                            color={theme.colors.sbuRed}
+                          />
+                          <Box width={6} />
+                          <Text
+                            variant="textBase"
+                            fontWeight="600"
+                            style={{
+                              color: theme.colors.sbuRed,
+                            }}
+                          >
+                            신고
+                          </Text>
+                        </Box>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() =>
+                          trigger({
+                            reviewId: reviewItem._id,
+                          })
+                        }
                       >
-                        <FontAwesome5
-                          name="thumbs-up"
-                          size={20}
-                          color={theme.colors.sbuRed}
-                        />
-                        <Box width={4} />
-                        <Text
-                          variant="textLg"
-                          style={{
-                            color: theme.colors.sbuRed,
-                          }}
+                        <Box
+                          flexDirection="row"
+                          alignItems="center"
+                          borderRadius="rounded-xl"
+                          backgroundColor="gray300"
+                          p="1"
                         >
-                          {reviewItem.likes.length}
-                        </Text>
-                        <Box width={6} />
-                        <Text
-                          variant="textBase"
-                          fontWeight="600"
-                          style={{
-                            color: theme.colors.sbuRed,
-                          }}
-                        >
-                          추천
-                        </Text>
-                      </Box>
-                    </TouchableOpacity>
-                  </Box>
+                          <FontAwesome5
+                            name="thumbs-up"
+                            size={20}
+                            color={theme.colors.sbuRed}
+                          />
+                          <Box width={4} />
+                          <Text
+                            variant="textLg"
+                            style={{
+                              color: theme.colors.sbuRed,
+                            }}
+                          >
+                            {reviewItem.likes.length}
+                          </Text>
+                          <Box width={6} />
+                          <Text
+                            variant="textBase"
+                            fontWeight="600"
+                            style={{
+                              color: theme.colors.sbuRed,
+                            }}
+                          >
+                            추천
+                          </Text>
+                        </Box>
+                      </TouchableOpacity>
+                    </Box>
+                  ) : null}
                 </Box>
 
                 <Box flexDirection="row">
@@ -278,33 +285,63 @@ const CourseReview: React.FC<NativeStackScreenProps<any, "CourseReview">> = ({
         <Box height={windowHeight * 0.1} />
       </ScrollView>
 
-      <TouchableOpacity onPress={navigateToWriteReview}>
-        <Box
-          flexDirection="row"
-          alignItems="center"
-          position="absolute"
-          right={windowWidth * 0.4}
-          bottom={windowHeight * 0.04}
-          style={{ backgroundColor: theme.colors.sbuRed }}
-          p="2"
-          borderRadius="rounded-2xl"
-        >
-          <MaterialCommunityIcons
-            name="pencil-plus-outline"
-            size={24}
-            color={theme.colors.white}
-          />
-          <Box width={6} />
-          <Text
-            fontWeight="700"
-            style={{
-              color: theme.colors.white,
-            }}
+      {!user!.blocked ? (
+        <TouchableOpacity onPress={navigateToWriteReview}>
+          <Box
+            flexDirection="row"
+            alignItems="center"
+            position="absolute"
+            right={windowWidth * 0.4}
+            bottom={windowHeight * 0.04}
+            style={{ backgroundColor: theme.colors.sbuRed }}
+            p="2"
+            borderRadius="rounded-2xl"
           >
-            평가하기
-          </Text>
-        </Box>
-      </TouchableOpacity>
+            <MaterialCommunityIcons
+              name="pencil-plus-outline"
+              size={24}
+              color={theme.colors.white}
+            />
+            <Box width={6} />
+            <Text
+              fontWeight="700"
+              style={{
+                color: theme.colors.white,
+              }}
+            >
+              평가하기
+            </Text>
+          </Box>
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity disabled>
+          <Box
+            flexDirection="row"
+            alignItems="center"
+            position="absolute"
+            right={windowWidth * 0.4}
+            bottom={windowHeight * 0.04}
+            style={{ backgroundColor: theme.colors.gray400 }}
+            p="2"
+            borderRadius="rounded-2xl"
+          >
+            <MaterialCommunityIcons
+              name="pencil-plus-outline"
+              size={24}
+              color={theme.colors.white}
+            />
+            <Box width={6} />
+            <Text
+              fontWeight="700"
+              style={{
+                color: theme.colors.white,
+              }}
+            >
+              평가하기
+            </Text>
+          </Box>
+        </TouchableOpacity>
+      )}
     </SafeAreaWrapper>
   );
 };

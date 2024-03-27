@@ -15,6 +15,7 @@ interface IAuthenticatedUser {
   major: string;
   courseReviewNum: number;
   adminAccount?: boolean;
+  blocked?: boolean;
   classHistory: {
     [index: string]: [string] | [];
   };

@@ -28,6 +28,7 @@ import { Picker } from "@react-native-picker/picker";
 import { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";
 import { useFocusEffect } from "@react-navigation/native";
 import useDarkMode from "../store/useDarkMode";
+import useUserGlobalStore from "../store/useUserGlobal";
 
 interface ISearch {
   crsNum: string;
@@ -47,6 +48,8 @@ const CourseBulletin: React.FC<
 
   const windowWidth = Dimensions.get("window").width;
   const windowHeight = Dimensions.get("window").height;
+
+  const { user } = useUserGlobalStore();
 
   const navigateToBulletinPost = (postId: string) => {
     navigate("BulletinStack", {
@@ -362,33 +365,63 @@ const CourseBulletin: React.FC<
           </ScrollView>
         )}
 
-        <TouchableOpacity onPress={() => navigateToWritePost("course")}>
-          <Box
-            flexDirection="row"
-            alignItems="center"
-            position="absolute"
-            right={windowWidth * 0.38}
-            bottom={windowHeight * 0.05}
-            style={{ backgroundColor: theme.colors.sbuRed }}
-            p="2"
-            borderRadius="rounded-2xl"
-          >
-            <MaterialCommunityIcons
-              name="pencil-plus-outline"
-              size={24}
-              color={theme.colors.white}
-            />
-            <Box width={6} />
-            <Text
-              fontWeight="700"
-              style={{
-                color: theme.colors.white,
-              }}
+        {!user!.blocked ? (
+          <TouchableOpacity onPress={() => navigateToWritePost("course")}>
+            <Box
+              flexDirection="row"
+              alignItems="center"
+              position="absolute"
+              right={windowWidth * 0.38}
+              bottom={windowHeight * 0.05}
+              style={{ backgroundColor: theme.colors.sbuRed }}
+              p="2"
+              borderRadius="rounded-2xl"
             >
-              글 쓰기
-            </Text>
-          </Box>
-        </TouchableOpacity>
+              <MaterialCommunityIcons
+                name="pencil-plus-outline"
+                size={24}
+                color={theme.colors.white}
+              />
+              <Box width={6} />
+              <Text
+                fontWeight="700"
+                style={{
+                  color: theme.colors.white,
+                }}
+              >
+                글 쓰기
+              </Text>
+            </Box>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity disabled>
+            <Box
+              flexDirection="row"
+              alignItems="center"
+              position="absolute"
+              right={windowWidth * 0.38}
+              bottom={windowHeight * 0.05}
+              style={{ backgroundColor: theme.colors.gray400 }}
+              p="2"
+              borderRadius="rounded-2xl"
+            >
+              <MaterialCommunityIcons
+                name="pencil-plus-outline"
+                size={24}
+                color={theme.colors.white}
+              />
+              <Box width={6} />
+              <Text
+                fontWeight="700"
+                style={{
+                  color: theme.colors.white,
+                }}
+              >
+                글 쓰기
+              </Text>
+            </Box>
+          </TouchableOpacity>
+        )}
       </Box>
 
       <BottomSheet

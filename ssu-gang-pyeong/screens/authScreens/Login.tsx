@@ -39,6 +39,7 @@ const LoginScreen = () => {
         major: _user.major,
         courseReviewNum: _user.courseReviewNum,
         adminAccount: _user.adminAccount,
+        blocked: _user.blocked,
         classHistory: _user.classHistory,
         personalSchedule: _user.personalSchedule,
       });

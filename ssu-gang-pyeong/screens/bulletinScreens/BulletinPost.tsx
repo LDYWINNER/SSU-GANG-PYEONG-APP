@@ -334,7 +334,12 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
           alignItems="center"
         >
           <NavigateBack />
-          <Text variant="textXl" fontWeight="600" mr="2" color="textColor">
+          <Text
+            variant="textXl"
+            fontWeight="600"
+            mr={!user?.blocked ? "2" : "10"}
+            color="textColor"
+          >
             {post.board === "Free"
               ? "자유 게시판"
               : post.board === "courseRegister"
@@ -349,79 +354,83 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
               ? "동아리 게시판"
               : "본교 게시판"}
           </Text>
-          <Menu
-            visible={visible}
-            anchor={
-              <Text onPress={showMenu}>
-                <MaterialIcons
-                  name="more-vert"
-                  size={30}
-                  color={theme.colors.textColor}
-                />
-              </Text>
-            }
-            onRequestClose={hideMenu}
-          >
-            {post.createdBy === user?._id ? (
-              <>
-                <MenuItem
-                  onPress={() => {
-                    hideMenu();
-                    navigate("MainStack", {
-                      screen: "WritePost",
-                      params: { post },
-                    });
-                  }}
-                >
-                  <Box flexDirection="row" alignItems="center">
-                    <Box width={10} />
-                    <MaterialCommunityIcons
-                      name="pencil-outline"
-                      size={28}
-                      color="black"
-                    />
-                    <Box width={6} />
-                    <Text>글 수정하기</Text>
-                  </Box>
-                </MenuItem>
-                <MenuItem onPress={deletePost}>
-                  <Box flexDirection="row" alignItems="center">
-                    <Box width={14} />
-                    <FontAwesome5 name="trash" size={24} color="black" />
-                    <Box width={10} />
-                    <Text>글 삭제하기</Text>
-                  </Box>
-                </MenuItem>
-              </>
-            ) : (
-              <Box mt="2" mb="1">
-                <MenuItem
-                  onPress={() => {
-                    Alert.alert(
-                      "신고",
-                      "해당 게시물이 부적절하다고 판단하시나요? 게시물을 신고하면 24시간 내에 검토되며, 부적절하다고 판단되면 해당 게시물은 해당 기간내에 삭제될 것입니다. 해당 작성자에 대해서도 조취를 취하게 됩니다.",
-                      [
-                        { text: "취소", onPress: () => {} },
-                        {
-                          text: "확인",
-                          onPress: () => {
-                            reportPost();
+          {!user?.blocked ? (
+            <Menu
+              visible={visible}
+              anchor={
+                <Text onPress={showMenu}>
+                  <MaterialIcons
+                    name="more-vert"
+                    size={30}
+                    color={theme.colors.textColor}
+                  />
+                </Text>
+              }
+              onRequestClose={hideMenu}
+            >
+              {post.createdBy === user?._id ? (
+                <>
+                  <MenuItem
+                    onPress={() => {
+                      hideMenu();
+                      navigate("MainStack", {
+                        screen: "WritePost",
+                        params: { post },
+                      });
+                    }}
+                  >
+                    <Box flexDirection="row" alignItems="center">
+                      <Box width={10} />
+                      <MaterialCommunityIcons
+                        name="pencil-outline"
+                        size={28}
+                        color="black"
+                      />
+                      <Box width={6} />
+                      <Text>글 수정하기</Text>
+                    </Box>
+                  </MenuItem>
+                  <MenuItem onPress={deletePost}>
+                    <Box flexDirection="row" alignItems="center">
+                      <Box width={14} />
+                      <FontAwesome5 name="trash" size={24} color="black" />
+                      <Box width={10} />
+                      <Text>글 삭제하기</Text>
+                    </Box>
+                  </MenuItem>
+                </>
+              ) : (
+                <Box mt="2" mb="1">
+                  <MenuItem
+                    onPress={() => {
+                      Alert.alert(
+                        "신고",
+                        "해당 게시물이 부적절하다고 판단하시나요? 게시물을 신고하면 24시간 내에 검토되며, 부적절하다고 판단되면 해당 게시물은 해당 기간내에 삭제될 것입니다. 해당 작성자에 대해서도 조취를 취하게 됩니다.",
+                        [
+                          { text: "취소", onPress: () => {} },
+                          {
+                            text: "확인",
+                            onPress: () => {
+                              reportPost();
+                            },
                           },
-                        },
-                      ]
-                    );
-                  }}
-                >
-                  <Box flexDirection="row" alignItems="center">
-                    <Box width={14} />
-                    <Octicons name="report" size={24} color="black" />
-                    <Box width={10} />
-                    <Text>글 신고하기</Text>
-                  </Box>
-                </MenuItem>
-              </Box>
-            )}
-          </Menu>
+                        ]
+                      );
+                    }}
+                  >
+                    <Box flexDirection="row" alignItems="center">
+                      <Box width={14} />
+                      <Octicons name="report" size={24} color="black" />
+                      <Box width={10} />
+                      <Text>글 신고하기</Text>
+                    </Box>
+                  </MenuItem>
+                </Box>
+              )}
+            </Menu>
+          ) : (
+            <Box />
+          )}
         </Box>
 
         <ScrollView
@@ -509,24 +518,26 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
                   </Text>
                 </Box>
 
-                <TouchableOpacity onPress={likePost}>
-                  <Box
-                    bg="gray300"
-                    px="3"
-                    py="2"
-                    borderRadius="rounded-xl"
-                    flexDirection="row"
-                    alignItems="center"
-                  >
-                    <FontAwesome5
-                      name="thumbs-up"
-                      size={16}
-                      color={theme.colors.gray500}
-                    />
-                    <Box width={6} />
-                    <Text fontWeight="500">공감</Text>
-                  </Box>
-                </TouchableOpacity>
+                {!user?.blocked ? (
+                  <TouchableOpacity onPress={likePost}>
+                    <Box
+                      bg="gray300"
+                      px="3"
+                      py="2"
+                      borderRadius="rounded-xl"
+                      flexDirection="row"
+                      alignItems="center"
+                    >
+                      <FontAwesome5
+                        name="thumbs-up"
+                        size={16}
+                        color={theme.colors.gray500}
+                      />
+                      <Box width={6} />
+                      <Text fontWeight="500">공감</Text>
+                    </Box>
+                  </TouchableOpacity>
+                ) : null}
               </Box>
 
               <Divider />
@@ -670,77 +681,80 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
           </Box>
         </ScrollView>
 
-        <Box
-          flexDirection="row"
-          alignItems="center"
-          position="absolute"
-          bottom={windowHeight * 0.03}
-          style={{ backgroundColor: theme.colors.gray400 }}
-          p="2"
-          borderRadius="rounded-2xl"
-          width={"100%"}
-        >
-          <TouchableOpacity onPress={() => setAnonymity(!anonymity)}>
-            <Box flexDirection="row" alignItems="center">
-              <BouncyCheckbox
-                size={25}
-                fillColor={theme.colors.sbuRed}
-                unfillColor="#FFFFFF"
-                text="익명"
-                iconStyle={{ borderColor: theme.colors.sbuRed }}
-                innerIconStyle={{
-                  borderWidth: 2,
-                }}
-                disableText
-                isChecked={anonymity}
-                disableBuiltInState
-                onPress={() => setAnonymity(!anonymity)}
-              />
-              <Text
-                ml="1"
-                variant="textBase"
-                style={{ color: theme.colors.sbuRed }}
-              >
-                익명
-              </Text>
-            </Box>
-          </TouchableOpacity>
-
-          <Box width={"75%"}>
-            <Box height={5} />
-            <Controller
-              name="text"
-              control={control}
-              rules={{
-                required: true,
-              }}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  placeholder="Write a comment."
-                  placeholderTextColor={theme.colors.gray300}
-                  style={{
-                    padding: 16,
-                    borderColor: theme.colors.grey,
-                    borderRadius: theme.borderRadii["rounded-7xl"],
-                    height: "100%",
-                    marginBottom: -6,
+        {!user?.blocked ? (
+          <Box
+            flexDirection="row"
+            alignItems="center"
+            position="absolute"
+            bottom={windowHeight * 0.03}
+            style={{ backgroundColor: theme.colors.gray400 }}
+            p="2"
+            borderRadius="rounded-2xl"
+            width={"100%"}
+            pr="4"
+          >
+            <TouchableOpacity onPress={() => setAnonymity(!anonymity)}>
+              <Box flexDirection="row" alignItems="center">
+                <BouncyCheckbox
+                  size={25}
+                  fillColor={theme.colors.sbuRed}
+                  unfillColor="#FFFFFF"
+                  text="익명"
+                  iconStyle={{ borderColor: theme.colors.sbuRed }}
+                  innerIconStyle={{
+                    borderWidth: 2,
                   }}
-                  value={value}
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                  multiline
-                  autoComplete={"off"}
-                  autoCorrect={false}
-                  keyboardAppearance={"default"}
+                  disableText
+                  isChecked={anonymity}
+                  disableBuiltInState
+                  onPress={() => setAnonymity(!anonymity)}
                 />
-              )}
-            />
+                <Text
+                  ml="1"
+                  variant="textBase"
+                  style={{ color: theme.colors.sbuRed }}
+                >
+                  익명
+                </Text>
+              </Box>
+            </TouchableOpacity>
+
+            <Box width={"75%"}>
+              <Box height={5} />
+              <Controller
+                name="text"
+                control={control}
+                rules={{
+                  required: true,
+                }}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    placeholder="Write a comment."
+                    placeholderTextColor={theme.colors.gray300}
+                    style={{
+                      padding: 16,
+                      borderColor: theme.colors.grey,
+                      borderRadius: theme.borderRadii["rounded-7xl"],
+                      height: "100%",
+                      marginBottom: -6,
+                    }}
+                    value={value}
+                    onChangeText={onChange}
+                    onBlur={onBlur}
+                    multiline
+                    autoComplete={"off"}
+                    autoCorrect={false}
+                    keyboardAppearance={"default"}
+                  />
+                )}
+              />
+            </Box>
+            <Box width={6} />
+            <TouchableOpacity onPress={addComment}>
+              <FontAwesome name="send" size={24} color={theme.colors.sbuRed} />
+            </TouchableOpacity>
           </Box>
-          <Box width={6} />
-          <TouchableOpacity onPress={addComment}>
-            <FontAwesome name="send" size={24} color={theme.colors.sbuRed} />
-          </TouchableOpacity>
-        </Box>
+        ) : null}
       </Box>
     </SafeAreaWrapper>
   );
