@@ -19,15 +19,33 @@ import { useTheme } from "@shopify/restyle";
 import { Alert } from "react-native";
 import { quotes } from "../../assets/asset";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
+import BottomSheet, {
+  BottomSheetBackdrop,
+  WINDOW_HEIGHT,
+} from "@gorhom/bottom-sheet";
 import { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";
 import { Picker } from "@react-native-picker/picker";
 import useDarkMode from "../../store/useDarkMode";
+import { AntDesign } from "@expo/vector-icons";
+import axiosInstance from "../../utils/config";
+import useSWRMutation from "swr/mutation";
 
 interface IQuote {
   content: string;
   author: string;
 }
+
+const userDeleteRequest = async (
+  url: string,
+  { arg }: { arg: { id: string } }
+) => {
+  try {
+    await axiosInstance.post(url + "/" + arg.id);
+  } catch (error) {
+    console.log("error in userDeleteRequest", error);
+    throw error;
+  }
+};
 
 const UserMain: React.FC<NativeStackScreenProps<any, "UserMain">> = ({
   navigation: { navigate },
@@ -40,6 +58,25 @@ const UserMain: React.FC<NativeStackScreenProps<any, "UserMain">> = ({
 
   const theme = useTheme<Theme>();
   const { isDarkMode, updateDarkMode } = useDarkMode();
+
+  const { user } = useUserGlobalStore();
+
+  const { trigger: userDeleteTrigger } = useSWRMutation(
+    `api/v1/auth/userDelete`,
+    userDeleteRequest
+  );
+
+  const userDelete = async () => {
+    try {
+      const _userDeleteReq = {
+        id: user!._id,
+      };
+      await userDeleteTrigger(_userDeleteReq);
+    } catch (error) {
+      console.log("error in userDelete", error);
+      throw error;
+    }
+  };
 
   //bottom sheet
   const sheetRef = useRef<BottomSheet>(null);
@@ -157,6 +194,33 @@ const UserMain: React.FC<NativeStackScreenProps<any, "UserMain">> = ({
                 <MaterialIcons name="logout" size={24} color="black" />
                 <Text variant="textBase" fontWeight="600" ml="3">
                   로그아웃
+                </Text>
+              </Box>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() =>
+                Alert.alert(
+                  "계정 삭제 요청",
+                  "계정을 영구적으로 삭제하시겠습니까? 계정 삭제를 요청하게 되면 관련 개인 데이터를 비롯한 전체 계정 기록이 삭제됩니다. 계정 삭제는 요청 후 영업일 기준 최대 3일 내로 삭제되므로 계정 삭제를 철회하고 싶으시면 ssugangpyeong@gmail.com으로 관련 내용과 함께 문의해주시기 바랍니다.",
+                  [
+                    { text: "아니오", onPress: () => {} },
+                    { text: "예", onPress: () => userDelete() },
+                  ]
+                )
+              }
+            >
+              <Box
+                bg="gray200"
+                borderRadius="rounded-2xl"
+                mb="3"
+                p="3"
+                flexDirection="row"
+                alignItems="center"
+              >
+                <AntDesign name="deleteuser" size={24} color="black" />
+                <Text variant="textBase" fontWeight="600" ml="3">
+                  계정 삭제
                 </Text>
               </Box>
             </TouchableOpacity>
@@ -292,7 +356,7 @@ const UserMain: React.FC<NativeStackScreenProps<any, "UserMain">> = ({
             </TouchableOpacity>
           </Box>
 
-          <Box mt="10">
+          <Box mt="5">
             <Text
               textAlign="center"
               fontWeight="600"
@@ -312,6 +376,7 @@ const UserMain: React.FC<NativeStackScreenProps<any, "UserMain">> = ({
             </Text>
           </Box>
         </Box>
+        <Box height={WINDOW_HEIGHT * 0.05} />
       </ScrollView>
 
       <BottomSheet
