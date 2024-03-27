@@ -41,11 +41,36 @@ import useDarkMode from "../../store/useDarkMode";
 import useSWRMutation from "swr/mutation";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Controller, useForm } from "react-hook-form";
+import { Octicons } from "@expo/vector-icons";
 
 type BulletinPostScreenRouteProp = RouteProp<
   BulletinStackParamList,
   "BulletinPost"
 >;
+
+const reportPostRequest = async (
+  url: string,
+  { arg }: { arg: { id: string } }
+) => {
+  try {
+    await axiosInstance.post(url + "/" + arg.id);
+  } catch (error) {
+    console.log("error in reportPostRequest", error);
+    throw error;
+  }
+};
+
+const reportCommentRequest = async (
+  url: string,
+  { arg }: { arg: { id: string } }
+) => {
+  try {
+    await axiosInstance.post(url + "/" + arg.id);
+  } catch (error) {
+    console.log("error in reportCommentRequest", error);
+    throw error;
+  }
+};
 
 const deletePostRequest = async (
   url: string,
@@ -182,6 +207,40 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
     likeCommentRequest
   );
 
+  const { trigger: reportPostTrigger } = useSWRMutation(
+    `api/v1/bulletin/report-post`,
+    reportPostRequest
+  );
+
+  const { trigger: reportCommentTrigger } = useSWRMutation(
+    `api/v1/bulletin/report-comment`,
+    reportCommentRequest
+  );
+
+  const reportPost = async () => {
+    try {
+      const _reportPostReq = {
+        id: post!._id,
+      };
+      await reportPostTrigger(_reportPostReq);
+    } catch (error) {
+      console.log("error in reportPost", error);
+      throw error;
+    }
+  };
+
+  const reportComment = async (commentId: string) => {
+    try {
+      const _reportCommentReq = {
+        id: commentId,
+      };
+      await reportCommentTrigger(_reportCommentReq);
+    } catch (error) {
+      console.log("error in reportComment", error);
+      throw error;
+    }
+  };
+
   const addComment = async () => {
     const text = watch("text");
 
@@ -275,12 +334,7 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
           alignItems="center"
         >
           <NavigateBack />
-          <Text
-            variant="textXl"
-            fontWeight="600"
-            mr={post.createdBy === user?._id ? "2" : "10"}
-            color="textColor"
-          >
+          <Text variant="textXl" fontWeight="600" mr="2" color="textColor">
             {post.board === "Free"
               ? "자유 게시판"
               : post.board === "courseRegister"
@@ -295,52 +349,79 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
               ? "동아리 게시판"
               : "본교 게시판"}
           </Text>
-          {post.createdBy === user?._id ? (
-            <Menu
-              visible={visible}
-              anchor={
-                <Text onPress={showMenu}>
-                  <MaterialIcons
-                    name="more-vert"
-                    size={30}
-                    color={theme.colors.textColor}
-                  />
-                </Text>
-              }
-              onRequestClose={hideMenu}
-            >
-              <MenuItem
-                onPress={() => {
-                  hideMenu();
-                  navigate("MainStack", {
-                    screen: "WritePost",
-                    params: { post },
-                  });
-                }}
-              >
-                <Box flexDirection="row" alignItems="center">
-                  <Box width={10} />
-                  <MaterialCommunityIcons
-                    name="pencil-outline"
-                    size={28}
-                    color="black"
-                  />
-                  <Box width={6} />
-                  <Text>글 수정하기</Text>
-                </Box>
-              </MenuItem>
-              <MenuItem onPress={deletePost}>
-                <Box flexDirection="row" alignItems="center">
-                  <Box width={14} />
-                  <FontAwesome5 name="trash" size={24} color="black" />
-                  <Box width={10} />
-                  <Text>글 삭제하기</Text>
-                </Box>
-              </MenuItem>
-            </Menu>
-          ) : (
-            <Box />
-          )}
+          <Menu
+            visible={visible}
+            anchor={
+              <Text onPress={showMenu}>
+                <MaterialIcons
+                  name="more-vert"
+                  size={30}
+                  color={theme.colors.textColor}
+                />
+              </Text>
+            }
+            onRequestClose={hideMenu}
+          >
+            {post.createdBy === user?._id ? (
+              <>
+                <MenuItem
+                  onPress={() => {
+                    hideMenu();
+                    navigate("MainStack", {
+                      screen: "WritePost",
+                      params: { post },
+                    });
+                  }}
+                >
+                  <Box flexDirection="row" alignItems="center">
+                    <Box width={10} />
+                    <MaterialCommunityIcons
+                      name="pencil-outline"
+                      size={28}
+                      color="black"
+                    />
+                    <Box width={6} />
+                    <Text>글 수정하기</Text>
+                  </Box>
+                </MenuItem>
+                <MenuItem onPress={deletePost}>
+                  <Box flexDirection="row" alignItems="center">
+                    <Box width={14} />
+                    <FontAwesome5 name="trash" size={24} color="black" />
+                    <Box width={10} />
+                    <Text>글 삭제하기</Text>
+                  </Box>
+                </MenuItem>
+              </>
+            ) : (
+              <Box mt="2" mb="1">
+                <MenuItem
+                  onPress={() => {
+                    Alert.alert(
+                      "신고",
+                      "해당 게시물이 부적절하다고 판단하시나요? 게시물을 신고하면 24시간 내에 검토되며, 부적절하다고 판단되면 해당 게시물은 해당 기간내에 삭제될 것입니다. 해당 작성자에 대해서도 조취를 취하게 됩니다.",
+                      [
+                        { text: "취소", onPress: () => {} },
+                        {
+                          text: "확인",
+                          onPress: () => {
+                            reportPost();
+                          },
+                        },
+                      ]
+                    );
+                  }}
+                >
+                  <Box flexDirection="row" alignItems="center">
+                    <Box width={14} />
+                    <Octicons name="report" size={24} color="black" />
+                    <Box width={10} />
+                    <Text>글 신고하기</Text>
+                  </Box>
+                </MenuItem>
+              </Box>
+            )}
+          </Menu>
         </Box>
 
         <ScrollView
