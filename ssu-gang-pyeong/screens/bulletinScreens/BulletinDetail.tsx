@@ -247,6 +247,7 @@ const BulletinDetail: React.FC<
               <Divider />
             </Box>
           ))}
+          <Box height={windowHeight * 0.1} />
         </ScrollView>
         <TouchableOpacity onPress={() => navigateToWritePost(name)}>
           <Box
