@@ -260,7 +260,7 @@ const BulletinDetail: React.FC<
               alignItems="center"
               position="absolute"
               right={windowWidth * 0.38}
-              bottom={windowHeight * 0.03}
+              bottom={windowHeight * 0.045}
               style={{ backgroundColor: theme.colors.sbuRed }}
               p="2"
               borderRadius="rounded-2xl"
@@ -288,7 +288,7 @@ const BulletinDetail: React.FC<
               alignItems="center"
               position="absolute"
               right={windowWidth * 0.38}
-              bottom={windowHeight * 0.03}
+              bottom={windowHeight * 0.045}
               style={{ backgroundColor: theme.colors.gray400 }}
               p="2"
               borderRadius="rounded-2xl"
