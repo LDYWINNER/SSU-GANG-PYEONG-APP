@@ -9,6 +9,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import axiosInstance from "../../utils/config";
 import { loginUser } from "../../utils/api";
 import useUserGlobalStore from "../../store/useUserGlobal";
+import { Alert } from "react-native";
 
 const LoginScreen = () => {
   const { updateUser } = useUserGlobalStore();
@@ -20,36 +21,41 @@ const LoginScreen = () => {
   };
 
   const navigateToEmailVerificationScreen = async () => {
-    // send email to the user
-    const response = await axiosInstance.post("api/v1/auth/loginEmail", {
-      email: watch("email"),
-    });
-    // console.log(response.data);
+    try {
+      // send email to the user
+      const response = await axiosInstance.post("api/v1/auth/loginEmail", {
+        email: watch("email"),
+      });
+      // console.log(response.data);
 
-    // for admin user
-    if (response.data.loginSkip) {
-      const _user = await loginUser({
-        email: watch("email").toLowerCase(),
+      // for admin user
+      if (response.data.loginSkip) {
+        const _user = await loginUser({
+          email: watch("email").toLowerCase(),
+        });
+        updateUser({
+          _id: _user._id,
+          username: _user.username,
+          email: _user.email,
+          school: _user.school,
+          major: _user.major,
+          courseReviewNum: _user.courseReviewNum,
+          adminAccount: _user.adminAccount,
+          blocked: _user.blocked,
+          classHistory: _user.classHistory,
+          personalSchedule: _user.personalSchedule,
+        });
+      }
+
+      navigation.navigate("EmailVerification", {
+        isLogin: true,
+        email: watch("email"),
+        verificationCodeFromBack: response.data.authNum || "",
       });
-      updateUser({
-        _id: _user._id,
-        username: _user.username,
-        email: _user.email,
-        school: _user.school,
-        major: _user.major,
-        courseReviewNum: _user.courseReviewNum,
-        adminAccount: _user.adminAccount,
-        blocked: _user.blocked,
-        classHistory: _user.classHistory,
-        personalSchedule: _user.personalSchedule,
-      });
+    } catch (error: any) {
+      // console.log(error.response.data);
+      return Alert.alert("Error", error.response.data.message);
     }
-
-    navigation.navigate("EmailVerification", {
-      isLogin: true,
-      email: watch("email"),
-      verificationCodeFromBack: response.data.authNum || "",
-    });
   };
 
   const {

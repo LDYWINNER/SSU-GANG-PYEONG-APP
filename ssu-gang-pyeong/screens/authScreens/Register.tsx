@@ -40,9 +40,9 @@ const SignUpScreen = () => {
         verificationCodeFromBack: response.data.authNum || "",
       });
 
-      console.log(response.data);
+      // console.log(response.data);
     } catch (error: any) {
-      console.log(error.response.data);
+      // console.log(error.response.data);
       return Alert.alert("Error", error.response.data.message);
     }
   };
