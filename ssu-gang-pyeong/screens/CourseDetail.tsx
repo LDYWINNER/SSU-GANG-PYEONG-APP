@@ -1434,16 +1434,15 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
         </ScrollView>
 
         {!user!.blocked ? (
-          <Box
-            position="absolute"
-            right={windowWidth * 0.005}
-            top={0}
-            style={{ backgroundColor: theme.colors.sbuRed }}
-            p="2"
-            borderRadius="rounded-2xl"
-          >
+          <Box position="absolute" right={windowWidth * 0.005} top={0}>
             <TouchableOpacity onPress={navigateToWriteReview}>
-              <Box flexDirection="row" alignItems="center">
+              <Box
+                flexDirection="row"
+                alignItems="center"
+                p="2"
+                style={{ backgroundColor: theme.colors.sbuRed }}
+                borderRadius="rounded-2xl"
+              >
                 <MaterialCommunityIcons
                   name="pencil-plus-outline"
                   size={24}
