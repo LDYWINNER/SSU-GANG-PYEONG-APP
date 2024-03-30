@@ -181,7 +181,7 @@ const CourseReview: React.FC<NativeStackScreenProps<any, "CourseReview">> = ({
                           />
                           <Box width={6} />
                           <Text
-                            variant="textBase"
+                            variant="textSm"
                             fontWeight="600"
                             style={{
                               color: theme.colors.sbuRed,
@@ -212,7 +212,7 @@ const CourseReview: React.FC<NativeStackScreenProps<any, "CourseReview">> = ({
                           />
                           <Box width={4} />
                           <Text
-                            variant="textLg"
+                            variant="textBase"
                             style={{
                               color: theme.colors.sbuRed,
                             }}
@@ -221,7 +221,7 @@ const CourseReview: React.FC<NativeStackScreenProps<any, "CourseReview">> = ({
                           </Text>
                           <Box width={6} />
                           <Text
-                            variant="textBase"
+                            variant="textSm"
                             fontWeight="600"
                             style={{
                               color: theme.colors.sbuRed,
