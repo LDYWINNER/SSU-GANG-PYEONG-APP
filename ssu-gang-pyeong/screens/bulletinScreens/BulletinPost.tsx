@@ -408,9 +408,9 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
                         "신고",
                         "해당 게시물이 부적절하다고 판단하시나요? 게시물을 신고하면 24시간 내에 검토되며, 부적절하다고 판단되면 해당 게시물은 해당 기간내에 삭제될 것입니다. 해당 작성자에 대해서도 조취를 취하게 됩니다.",
                         [
-                          { text: "취소", onPress: () => {} },
+                          { text: "아니오", onPress: () => {} },
                           {
-                            text: "확인",
+                            text: "네",
                             onPress: () => {
                               reportPost();
                             },
@@ -432,9 +432,9 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
                         "유저 차단",
                         "글쓴이를 차단하시겠습니까? 차단하면 해당 유저의 글과 댓글을 영구적으로 볼 수 없습니다.",
                         [
-                          { text: "취소", onPress: () => {} },
+                          { text: "아니오", onPress: () => {} },
                           {
-                            text: "확인",
+                            text: "네",
                             onPress: () => {},
                           },
                         ]
@@ -604,9 +604,9 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
                         <TouchableOpacity
                           onPress={() =>
                             Alert.alert("공감", "이 댓글에 공감하시겠습니까?", [
-                              { text: "취소", onPress: () => {} },
+                              { text: "아니오", onPress: () => {} },
                               {
-                                text: "확인",
+                                text: "네",
                                 onPress: () => likeComment(comment._id),
                               },
                             ])
@@ -629,9 +629,9 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
                                   "삭제",
                                   "이 댓글을 삭제하시겠습니까?",
                                   [
-                                    { text: "취소", onPress: () => {} },
+                                    { text: "아니오", onPress: () => {} },
                                     {
-                                      text: "확인",
+                                      text: "네",
                                       onPress: () => deleteComment(comment._id),
                                     },
                                   ]
@@ -652,9 +652,9 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
                                     "신고",
                                     "해당 댓글이 부적절하다고 판단하시나요? 댓글을 신고하면 24시간 내에 검토되며, 부적절하다고 판단되면 해당 댓글은 해당 기간내에 삭제될 것입니다. 해당 작성자에 대해서도 조취를 취하게 됩니다.",
                                     [
-                                      { text: "취소", onPress: () => {} },
+                                      { text: "아니오", onPress: () => {} },
                                       {
-                                        text: "확인",
+                                        text: "네",
                                         onPress: () =>
                                           reportComment(comment._id),
                                       },
@@ -677,9 +677,9 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
                                     "유저 차단",
                                     "글쓴이를 차단하시겠습니까? 차단하면 해당 유저의 글과 댓글을 영구적으로 볼 수 없습니다.",
                                     [
-                                      { text: "취소", onPress: () => {} },
+                                      { text: "아니오", onPress: () => {} },
                                       {
-                                        text: "확인",
+                                        text: "네",
                                         onPress: () => {},
                                       },
                                     ]

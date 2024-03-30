@@ -156,9 +156,9 @@ const CourseReview: React.FC<NativeStackScreenProps<any, "CourseReview">> = ({
                             "신고",
                             "해당 수강평이 부적절하다고 판단하시나요? 수강평을 신고하면 24시간 내에 검토되며, 부적절하다고 판단되면 해당 수강평은 해당 기간내에 삭제될 것입니다. 해당 작성자에 대해서도 조취를 취하게 됩니다.",
                             [
-                              { text: "취소", onPress: () => {} },
+                              { text: "아니오", onPress: () => {} },
                               {
-                                text: "확인",
+                                text: "네",
                                 onPress: () =>
                                   reportCourseReview(reviewItem._id),
                               },

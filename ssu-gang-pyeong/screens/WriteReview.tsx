@@ -46,7 +46,7 @@ const addCourseEvalRequest = async (
 ) => {
   try {
     if (arg.instructor === "Pick the instructor") {
-      return Alert.alert("교수님을 선택해주세요.");
+      return Alert.alert("Please select an instructor");
     }
     if (arg.myLetterGrade === "Pick an item") {
       arg.myLetterGrade = "";
