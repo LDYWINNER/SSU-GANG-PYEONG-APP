@@ -16,7 +16,10 @@ import { Box, Text, Theme } from "../../theme";
 import { getGreeting } from "../../utils/helpers";
 import { Ionicons } from "@expo/vector-icons";
 import { Calendar } from "react-native-calendars";
-import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
+import BottomSheet, {
+  BottomSheetBackdrop,
+  WINDOW_HEIGHT,
+} from "@gorhom/bottom-sheet";
 import { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";
 import useSWR from "swr";
 import useSWRMutation from "swr/mutation";
@@ -63,7 +66,7 @@ const HomeScreen = () => {
 
   //bottom sheet
   const sheetRef = useRef<BottomSheet>(null);
-  const snapPoints = useMemo(() => ["30%"], []);
+  const snapPoints = useMemo(() => [230], []);
   const handleSnapPress = useCallback(() => {
     sheetRef.current?.snapToIndex(0);
   }, []);

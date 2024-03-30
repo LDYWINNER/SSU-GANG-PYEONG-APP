@@ -13,7 +13,10 @@ import { Box, Text } from "../theme";
 import { ICourse } from "../types";
 import { FlatList, TouchableOpacity } from "react-native";
 import { Rating } from "@kolking/react-native-rating";
-import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
+import BottomSheet, {
+  BottomSheetBackdrop,
+  WINDOW_HEIGHT,
+} from "@gorhom/bottom-sheet";
 import { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";
 import { Picker } from "@react-native-picker/picker";
 import { TextInput } from "react-native-gesture-handler";
@@ -64,7 +67,7 @@ const Search: React.FC<NativeStackScreenProps<any, "Search">> = ({
 
   //bottom sheet
   const sheetRef = useRef<BottomSheet>(null);
-  const snapPoints = useMemo(() => ["30%"], []);
+  const snapPoints = useMemo(() => [270], []);
   const handleSnapPress = useCallback(() => {
     sheetRef.current?.snapToIndex(0);
   }, []);

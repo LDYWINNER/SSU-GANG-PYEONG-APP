@@ -4,7 +4,10 @@ import { Dimensions, TouchableOpacity, useColorScheme } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ListView, MoreMenu, TableView } from "../screens/homeScreens/index";
-import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
+import BottomSheet, {
+  BottomSheetBackdrop,
+  WINDOW_HEIGHT,
+} from "@gorhom/bottom-sheet";
 import { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";
 import useUserGlobalStore from "../store/useUserGlobal";
 import { Loader, SafeAreaWrapper } from "../components";
@@ -29,7 +32,7 @@ const HomeTopTabs: React.FC<NativeStackScreenProps<any, "HomeTopTabs">> = ({
 
   // bottom sheet
   const sheetRef = useRef<BottomSheet>(null);
-  const snapPoints = useMemo(() => ["25%"], []);
+  const snapPoints = useMemo(() => [200], []);
   const handleSnapPress = useCallback(() => {
     sheetRef.current?.snapToIndex(0);
   }, []);

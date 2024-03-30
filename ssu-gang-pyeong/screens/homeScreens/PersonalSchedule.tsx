@@ -16,7 +16,10 @@ import { useTheme } from "@shopify/restyle";
 import { TouchableOpacity, TextInput } from "react-native";
 import useSWRMutation from "swr/mutation";
 import useUserGlobalStore from "../../store/useUserGlobal";
-import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
+import BottomSheet, {
+  BottomSheetBackdrop,
+  WINDOW_HEIGHT,
+} from "@gorhom/bottom-sheet";
 import { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";
 import { Picker } from "@react-native-picker/picker";
 import useGlobalToggle from "../../store/useGlobalToggle";
@@ -207,7 +210,7 @@ const PersonalSchedule = () => {
 
   //bottom sheet
   const sheetRef = useRef<BottomSheet>(null);
-  const snapPoints = useMemo(() => ["30%"], []);
+  const snapPoints = useMemo(() => [270], []);
   const handleSnapPress = useCallback(() => {
     sheetRef.current?.snapToIndex(0);
   }, []);
@@ -397,7 +400,12 @@ const PersonalSchedule = () => {
             시간 및 장소 추가
           </Text>
         </TouchableOpacity>
-        <Box position="absolute" bottom={4} left={0} right={0}>
+        <Box
+          position="absolute"
+          bottom={WINDOW_HEIGHT * -0.1 + 100}
+          left={0}
+          right={0}
+        >
           <SmoothButton
             label={isEditing ? "Edit table item" : "Done"}
             onPress={() => createNewPS()}
@@ -460,13 +468,41 @@ const PersonalSchedule = () => {
               setTempDay(itemValue as number);
             }}
           >
-            <Picker.Item label="월요일" value={1} color={theme.colors.white} />
-            <Picker.Item label="화요일" value={2} color={theme.colors.white} />
-            <Picker.Item label="수요일" value={3} color={theme.colors.white} />
-            <Picker.Item label="목요일" value={4} color={theme.colors.white} />
-            <Picker.Item label="금요일" value={5} color={theme.colors.white} />
-            <Picker.Item label="토요일" value={6} color={theme.colors.white} />
-            <Picker.Item label="일요일" value={7} color={theme.colors.white} />
+            <Picker.Item
+              label="월요일"
+              value={1}
+              color={theme.colors.textColor}
+            />
+            <Picker.Item
+              label="화요일"
+              value={2}
+              color={theme.colors.textColor}
+            />
+            <Picker.Item
+              label="수요일"
+              value={3}
+              color={theme.colors.textColor}
+            />
+            <Picker.Item
+              label="목요일"
+              value={4}
+              color={theme.colors.textColor}
+            />
+            <Picker.Item
+              label="금요일"
+              value={5}
+              color={theme.colors.textColor}
+            />
+            <Picker.Item
+              label="토요일"
+              value={6}
+              color={theme.colors.textColor}
+            />
+            <Picker.Item
+              label="일요일"
+              value={7}
+              color={theme.colors.textColor}
+            />
           </Picker>
         ) : (
           <Box flexDirection="row" justifyContent="center">

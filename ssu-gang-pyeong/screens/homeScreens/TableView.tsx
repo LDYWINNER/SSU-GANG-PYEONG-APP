@@ -16,6 +16,7 @@ import {
   BottomSheetModal,
   BottomSheetModalProvider,
   BottomSheetBackdrop,
+  WINDOW_HEIGHT,
 } from "@gorhom/bottom-sheet";
 import { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";
 import {
@@ -56,7 +57,7 @@ const TableView: React.FC<NativeStackScreenProps<any, "TableView">> = ({
 
   //bottom sheet
   const sheetRef = useRef<BottomSheetModal>(null);
-  const snapPoints = useMemo(() => ["50%"], []);
+  const snapPoints = useMemo(() => [320], []);
   const handleSnapPress = useCallback(() => {
     sheetRef.current?.present();
   }, []);

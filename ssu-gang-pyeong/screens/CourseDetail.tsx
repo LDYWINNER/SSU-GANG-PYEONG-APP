@@ -90,7 +90,7 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
 
   //bottom sheet
   const sheetRef = useRef<BottomSheet>(null);
-  const snapPoints = useMemo(() => ["30%"], []);
+  const snapPoints = useMemo(() => [270], []);
   const handleSnapPress = useCallback(() => {
     sheetRef.current?.snapToIndex(0);
   }, []);
@@ -1473,7 +1473,10 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
         onChange={handleSheetChange}
         backdropComponent={renderBackdrop}
         backgroundStyle={{
-          backgroundColor: theme.colors.stDarkerGrey,
+          backgroundColor: theme.colors.mainBgColor,
+        }}
+        handleIndicatorStyle={{
+          backgroundColor: theme.colors.textColor,
         }}
       >
         <Box flexDirection="row" justifyContent="flex-end" mr="5">
