@@ -1434,33 +1434,33 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
         </ScrollView>
 
         {!user!.blocked ? (
-          <TouchableOpacity onPress={navigateToWriteReview}>
-            <Box
-              flexDirection="row"
-              alignItems="center"
-              position="absolute"
-              right={windowWidth * 0.005}
-              bottom={windowHeight * 0.88}
-              style={{ backgroundColor: theme.colors.sbuRed }}
-              p="2"
-              borderRadius="rounded-2xl"
-            >
-              <MaterialCommunityIcons
-                name="pencil-plus-outline"
-                size={24}
-                color={theme.colors.white}
-              />
-              <Box width={6} />
-              <Text
-                fontWeight="700"
-                style={{
-                  color: theme.colors.white,
-                }}
-              >
-                평가하기
-              </Text>
-            </Box>
-          </TouchableOpacity>
+          <Box
+            position="absolute"
+            right={windowWidth * 0.005}
+            top={0}
+            style={{ backgroundColor: theme.colors.sbuRed }}
+            p="2"
+            borderRadius="rounded-2xl"
+          >
+            <TouchableOpacity onPress={navigateToWriteReview}>
+              <Box flexDirection="row" alignItems="center">
+                <MaterialCommunityIcons
+                  name="pencil-plus-outline"
+                  size={24}
+                  color={theme.colors.white}
+                />
+                <Box width={6} />
+                <Text
+                  fontWeight="700"
+                  style={{
+                    color: theme.colors.white,
+                  }}
+                >
+                  평가하기
+                </Text>
+              </Box>
+            </TouchableOpacity>
+          </Box>
         ) : null}
       </Box>
 
