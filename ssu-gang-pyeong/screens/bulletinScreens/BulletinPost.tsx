@@ -42,6 +42,7 @@ import useSWRMutation from "swr/mutation";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Controller, useForm } from "react-hook-form";
 import { Octicons } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
 
 type BulletinPostScreenRouteProp = RouteProp<
   BulletinStackParamList,
@@ -425,6 +426,28 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
                       <Text>글 신고하기</Text>
                     </Box>
                   </MenuItem>
+                  <MenuItem
+                    onPress={() => {
+                      Alert.alert(
+                        "유저 차단",
+                        "글쓴이를 차단하시겠습니까? 차단하면 해당 유저의 글과 댓글을 영구적으로 볼 수 없습니다.",
+                        [
+                          { text: "취소", onPress: () => {} },
+                          {
+                            text: "확인",
+                            onPress: () => {},
+                          },
+                        ]
+                      );
+                    }}
+                  >
+                    <Box flexDirection="row" alignItems="center">
+                      <Box width={14} />
+                      <Entypo name="block" size={24} color="black" />
+                      <Box width={10} />
+                      <Text>유저 차단하기</Text>
+                    </Box>
+                  </MenuItem>
                 </Box>
               )}
             </Menu>
@@ -596,7 +619,7 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
                           />
                         </TouchableOpacity>
                         <>
-                          <Text>
+                          <Text color="gray500">
                             {"   "}| {"  "}
                           </Text>
                           {comment.createdBy === user?._id ? (
@@ -622,27 +645,56 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
                               />
                             </TouchableOpacity>
                           ) : (
-                            <TouchableOpacity
-                              onPress={() =>
-                                Alert.alert(
-                                  "신고",
-                                  "해당 댓글이 부적절하다고 판단하시나요? 댓글을 신고하면 24시간 내에 검토되며, 부적절하다고 판단되면 해당 댓글은 해당 기간내에 삭제될 것입니다. 해당 작성자에 대해서도 조취를 취하게 됩니다.",
-                                  [
-                                    { text: "취소", onPress: () => {} },
-                                    {
-                                      text: "확인",
-                                      onPress: () => reportComment(comment._id),
-                                    },
-                                  ]
-                                )
-                              }
-                            >
-                              <Octicons
-                                name="report"
-                                size={16}
-                                color={theme.colors.gray500}
-                              />
-                            </TouchableOpacity>
+                            <>
+                              <TouchableOpacity
+                                onPress={() =>
+                                  Alert.alert(
+                                    "신고",
+                                    "해당 댓글이 부적절하다고 판단하시나요? 댓글을 신고하면 24시간 내에 검토되며, 부적절하다고 판단되면 해당 댓글은 해당 기간내에 삭제될 것입니다. 해당 작성자에 대해서도 조취를 취하게 됩니다.",
+                                    [
+                                      { text: "취소", onPress: () => {} },
+                                      {
+                                        text: "확인",
+                                        onPress: () =>
+                                          reportComment(comment._id),
+                                      },
+                                    ]
+                                  )
+                                }
+                              >
+                                <Octicons
+                                  name="report"
+                                  size={16}
+                                  color={theme.colors.gray500}
+                                />
+                              </TouchableOpacity>
+                              <Text color="gray500">
+                                {"   "}| {"  "}
+                              </Text>
+                              <TouchableOpacity
+                                onPress={() => {
+                                  Alert.alert(
+                                    "유저 차단",
+                                    "글쓴이를 차단하시겠습니까? 차단하면 해당 유저의 글과 댓글을 영구적으로 볼 수 없습니다.",
+                                    [
+                                      { text: "취소", onPress: () => {} },
+                                      {
+                                        text: "확인",
+                                        onPress: () => {},
+                                      },
+                                    ]
+                                  );
+                                }}
+                              >
+                                <Box flexDirection="row" alignItems="center">
+                                  <Entypo
+                                    name="block"
+                                    size={16}
+                                    color={theme.colors.gray500}
+                                  />
+                                </Box>
+                              </TouchableOpacity>
+                            </>
                           )}
                         </>
                       </Box>
