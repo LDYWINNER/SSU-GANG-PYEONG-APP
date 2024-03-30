@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useRef, useState } from "react";
 import { SmoothButton, Input } from "../../components";
-import { TouchableOpacity } from "react-native";
+import { Alert, TouchableOpacity } from "react-native";
 import { AuthScreenNavigationType } from "../../navigation/types";
 import { useNavigation } from "@react-navigation/native";
 import { Controller, useForm } from "react-hook-form";
@@ -23,22 +23,28 @@ const SignUpScreen = () => {
 
   const navigateToEmailVerificationScreen = async () => {
     // send email to the user
-    const response = await axiosInstance.post("api/v1/auth/registerEmail", {
-      email: watch("email"),
-      username: watch("username"),
-      school: watch("school"),
-      major: watch("major"),
-    });
-    // console.log(response.data);
+    try {
+      const response = await axiosInstance.post("api/v1/auth/registerEmail", {
+        email: watch("email"),
+        username: watch("username"),
+        school: watch("school"),
+        major: watch("major"),
+      });
 
-    navigation.navigate("EmailVerification", {
-      isLogin: false,
-      email: watch("email"),
-      username: watch("username"),
-      school: watch("school"),
-      major: watch("major"),
-      verificationCodeFromBack: response.data.authNum || "",
-    });
+      navigation.navigate("EmailVerification", {
+        isLogin: false,
+        email: watch("email"),
+        username: watch("username"),
+        school: watch("school"),
+        major: watch("major"),
+        verificationCodeFromBack: response.data.authNum || "",
+      });
+
+      console.log(response.data);
+    } catch (error: any) {
+      console.log(error.response.data);
+      return Alert.alert("Error", error.response.data.message);
+    }
   };
 
   const {
@@ -58,7 +64,7 @@ const SignUpScreen = () => {
 
   //bottom sheet
   const sheetRef = useRef<BottomSheet>(null);
-  const snapPoints = useMemo(() => ["30%"], []);
+  const snapPoints = useMemo(() => [270], []);
   const handleSnapPress = useCallback(() => {
     sheetRef.current?.snapToIndex(0);
   }, []);

@@ -65,7 +65,7 @@ const RegisterReviewCourse = () => {
 
   //bottom sheet
   const sheetRef = useRef<BottomSheet>(null);
-  const snapPoints = useMemo(() => ["35%"], []);
+  const snapPoints = useMemo(() => [270], []);
   const handleSnapPress = useCallback(() => {
     sheetRef.current?.snapToIndex(0);
   }, []);
