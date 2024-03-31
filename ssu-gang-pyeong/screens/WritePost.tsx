@@ -261,9 +261,6 @@ const WritePost: React.FC<NativeStackScreenProps<any, "WritePost">> = ({
               feature.
             </Text>
             <Text color="gray400">
-              - In the case of posting illegaly filmed material, etc.
-            </Text>
-            <Text color="gray400">
               - Acts that infringe on the rights of others or cause discomfort.
             </Text>
             <Text color="gray400">

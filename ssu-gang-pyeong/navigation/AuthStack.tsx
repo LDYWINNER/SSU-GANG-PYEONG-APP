@@ -7,6 +7,7 @@ import {
   EmailVerification,
   RegisterReviewCourse,
   RegisterReviewWrite,
+  ConfirmTerms,
 } from "../screens/authScreens";
 import useDarkMode from "../store/useDarkMode";
 import { useTheme } from "@shopify/restyle";
@@ -74,6 +75,11 @@ const AuthStack = () => {
       <NativeStack.Screen
         name="RegisterReviewWrite"
         component={RegisterReviewWrite}
+        options={{ presentation: "card", headerShown: false }}
+      />
+      <NativeStack.Screen
+        name="ConfirmTerms"
+        component={ConfirmTerms}
         options={{ presentation: "card", headerShown: false }}
       />
     </NativeStack.Navigator>

@@ -69,6 +69,7 @@ const EmailVerification = () => {
           blocked: _user?.blocked,
           classHistory: _user.classHistory,
           personalSchedule: _user.personalSchedule,
+          hateUsers: _user.hateUsers,
         });
       } else {
         // first register user
@@ -87,9 +88,10 @@ const EmailVerification = () => {
           courseReviewNum: _user.courseReviewNum,
           classHistory: _user.classHistory,
           personalSchedule: _user.personalSchedule,
+          hateUsers: _user.hateUsers,
         });
-        // then go to register review course to fill out three reviews
-        navigation.navigate("RegisterReviewCourse");
+        // then go to register review course to fill out three reviews - after confirm terms
+        navigation.navigate("ConfirmTerms");
       }
     } catch (error) {
       console.log(error);

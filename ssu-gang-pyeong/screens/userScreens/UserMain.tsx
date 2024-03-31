@@ -241,7 +241,7 @@ const UserMain: React.FC<NativeStackScreenProps<any, "UserMain">> = ({
               onPress={() =>
                 Alert.alert(
                   "이용 규칙",
-                  "SSUGANGPYEONG established rules to operate the community where anyone can use without any discomfort. Violations may result in postings being deleted and use of the service permanently restricted.\n\n Below is an summary of key content for using the bulletin board feature. \n\n  - In the case of posting illegaly filmed material, etc. \n\n- Acts that infringe on the rights of others or cause discomfort. \n\n - Acts that violate law, such as criminal or illegal acts. \n\n  - Acts of writing posts including content related to profanity, demeaning, discrimination, hatred, suicide, and violence. \n\n  - Pornography, acts that cause sexual shame.",
+                  "SSUGANGPYEONG established rules to operate the community where anyone can use without any discomfort. Violations may result in postings being deleted and use of the service permanently restricted.\n\n Below is an summary of key content for using the bulletin board feature. \n\n- Acts that infringe on the rights of others or cause discomfort. \n\n - Acts that violate law, such as criminal or illegal acts. \n\n  - Acts of writing posts including content related to profanity, demeaning, discrimination, hatred, suicide, and violence. \n\n  - Pornography, acts that cause sexual shame.",
                   [{ text: "OK", onPress: () => {} }]
                 )
               }

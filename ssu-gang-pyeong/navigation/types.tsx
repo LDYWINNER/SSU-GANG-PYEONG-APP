@@ -91,6 +91,7 @@ export type AuthStackParamList = {
     id: string;
     instructors: string;
   };
+  ConfirmTerms: undefined;
 };
 
 export type MainTabsParamList = {

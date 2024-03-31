@@ -4,6 +4,7 @@ import Login from "./Login";
 import EmailVerification from "./EmailVerification";
 import RegisterReviewCourse from "./RegisterReviewCourse";
 import RegisterReviewWrite from "./RegisterReviewWrite";
+import ConfirmTerms from "./ConfirmTerms";
 
 export {
   Welcome,
@@ -12,4 +13,5 @@ export {
   EmailVerification,
   RegisterReviewCourse,
   RegisterReviewWrite,
+  ConfirmTerms,
 };
