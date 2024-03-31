@@ -36,4 +36,6 @@ yarn-error.*
 
 ssugangpyeong.keystore
 
+.env
+
 

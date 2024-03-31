@@ -1,5 +1,5 @@
 import { IUser } from "../types";
-import axiosInstance, { SSU_TOKEN_NAME, saveToken } from "./config";
+import axiosInstance, { saveToken } from "./config";
 
 type RegisterUserTypes = IUser;
 
@@ -18,7 +18,7 @@ export const registerUser = async ({
     });
     const _token = response.data.token;
     axiosInstance.defaults.headers.common["Authorization"] = _token;
-    saveToken(SSU_TOKEN_NAME, _token);
+    saveToken(process.env.SSU_USER_TOKEN as string, _token);
     return response.data.user;
   } catch (error) {
     console.log("error in registerUser", error);
@@ -35,7 +35,7 @@ export const loginUser = async ({ email }: LoginUserTypes) => {
     });
     const _token = response.data.token;
     axiosInstance.defaults.headers.common["Authorization"] = _token;
-    saveToken(SSU_TOKEN_NAME, _token);
+    saveToken(process.env.SSU_USER_TOKEN as string, _token);
     return response.data.user;
   } catch (error) {
     console.log("error in loginUser", error);

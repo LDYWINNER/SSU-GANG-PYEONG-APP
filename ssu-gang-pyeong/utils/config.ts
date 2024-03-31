@@ -3,11 +3,9 @@ import * as SecureStore from "expo-secure-store";
 
 // export const BASE_URL = "http://localhost:1337/";
 
-export const BASE_URL =
-  "https://port-0-ssu-gang-pyeong-backend-hdoly2altyqaphg.sel5.cloudtype.app/";
+export const BASE_URL = process.env.BACKEND_URL;
 
 const TIME_OUT = 30000;
-export const SSU_TOKEN_NAME = "ssu_user_token";
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
@@ -25,7 +23,9 @@ export const saveToken = async (key: string, value: string) => {
 
 axiosInstance.interceptors.request.use(async (req) => {
   try {
-    const access_token = await SecureStore.getItemAsync(SSU_TOKEN_NAME);
+    const access_token = await SecureStore.getItemAsync(
+      process.env.SSU_USER_TOKEN as string
+    );
     req.headers.Authorization = access_token;
     return req;
   } catch (error) {
