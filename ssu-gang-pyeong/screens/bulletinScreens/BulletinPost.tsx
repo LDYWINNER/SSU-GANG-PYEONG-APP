@@ -137,6 +137,18 @@ const likeCommentRequest = async (
   }
 };
 
+const hateUserRequest = async (
+  url: string,
+  { arg }: { arg: { id: string } }
+) => {
+  try {
+    await axiosInstance.patch(url + "/" + arg.id);
+  } catch (error) {
+    console.log("error in hateUserRequest", error);
+    throw error;
+  }
+};
+
 const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
   navigation: { navigate, goBack },
 }) => {
@@ -208,6 +220,11 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
     likeCommentRequest
   );
 
+  const { trigger: hateUserTrigger } = useSWRMutation(
+    "api/v1/bulletin/hateUser",
+    hateUserRequest
+  );
+
   const { trigger: reportPostTrigger } = useSWRMutation(
     `api/v1/bulletin/report-post`,
     reportPostRequest
@@ -217,6 +234,18 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
     `api/v1/bulletin/report-comment`,
     reportCommentRequest
   );
+
+  const hateUser = async (userId: string) => {
+    try {
+      await hateUserTrigger({
+        id: userId,
+      });
+      goBack();
+    } catch (error) {
+      console.log("error in hateUser", error);
+      throw error;
+    }
+  };
 
   const reportPost = async () => {
     try {
@@ -435,7 +464,7 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
                           { text: "아니오", onPress: () => {} },
                           {
                             text: "네",
-                            onPress: () => {},
+                            onPress: () => hateUser(post.createdBy),
                           },
                         ]
                       );
@@ -680,7 +709,8 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
                                       { text: "아니오", onPress: () => {} },
                                       {
                                         text: "네",
-                                        onPress: () => {},
+                                        onPress: () =>
+                                          hateUser(comment.createdBy),
                                       },
                                     ]
                                   );

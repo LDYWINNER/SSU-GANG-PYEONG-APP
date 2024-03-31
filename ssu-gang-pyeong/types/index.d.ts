@@ -20,6 +20,7 @@ interface IAuthenticatedUser {
     [index: string]: [string] | [];
   };
   personalSchedule: IPersonalSchedule[];
+  hateUsers: string[];
 }
 
 export interface IPersonalSchedule {

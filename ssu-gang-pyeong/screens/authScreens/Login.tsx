@@ -42,6 +42,7 @@ const LoginScreen = () => {
           courseReviewNum: _user.courseReviewNum,
           adminAccount: _user.adminAccount,
           blocked: _user.blocked,
+          hateUsers: _user.hateUsers,
           classHistory: _user.classHistory,
           personalSchedule: _user.personalSchedule,
         });
