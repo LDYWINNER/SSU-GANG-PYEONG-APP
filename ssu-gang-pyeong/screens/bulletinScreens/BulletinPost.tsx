@@ -493,7 +493,7 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
           </Box>
 
           <ScrollView
-            contentContainerStyle={{ minHeight: WINDOW_HEIGHT * 1.15 }}
+            contentContainerStyle={{ minHeight: WINDOW_HEIGHT * 1.1 }}
             refreshControl={
               <RefreshControl
                 refreshing={refreshing}
