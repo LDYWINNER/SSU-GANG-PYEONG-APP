@@ -109,115 +109,117 @@ const SignUpScreen = () => {
   );
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <Box flex={1} px="5.5" justifyContent="center">
-        <Text variant="textXl" fontWeight="700" mb="6">
-          Welcome to SSU GANG PYEONG!
-        </Text>
-
-        <Controller
-          control={control}
-          rules={{
-            required: "Username is required",
-          }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <Input
-              label="Username"
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-              error={errors.username}
-            />
-          )}
-          name="username"
-        />
-        <Box mb="6" />
-        <Controller
-          control={control}
-          rules={{
-            required: "Email is required",
-            pattern: {
-              value: /@stonybrook\.edu$/,
-              message: "Email must end with @stonybrook.edu",
-            },
-          }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <Input
-              label="Email"
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-              error={errors.email}
-            />
-          )}
-          name="email"
-        />
-        <Box mt="5.5" />
-        <TouchableOpacity onPress={() => togglePicker("school")}>
-          <Text>SCHOOL</Text>
-          <Box mb="2" />
-          <Box
-            bg="gray500"
-            py="2"
-            borderRadius="rounded-xl"
-            flexDirection="row"
-            alignItems="center"
-            justifyContent="space-between"
-          >
-            <Box width={35} />
-            <Text
-              variant="textSm"
-              fontWeight="700"
-              textAlign="center"
-              color="white"
-            >
-              {watch("school")}
-            </Text>
-            <Text textAlign="right" mr="3">
-              <Ionicons name={"caret-down"} color={"white"} size={35} />
-            </Text>
-          </Box>
-        </TouchableOpacity>
-        <Box mb="5.5" />
-        <TouchableOpacity onPress={() => togglePicker("major")}>
-          <Text>MAJOR</Text>
-          <Box mb="2" />
-          <Box
-            bg="gray500"
-            py="2"
-            borderRadius="rounded-xl"
-            flexDirection="row"
-            alignItems="center"
-            justifyContent="space-between"
-          >
-            <Box width={35} />
-            <Text
-              variant="textSm"
-              fontWeight="700"
-              textAlign="center"
-              color="white"
-            >
-              {watch("major")}
-            </Text>
-            <Text textAlign="right" mr="3">
-              <Ionicons name={"caret-down"} color={"white"} size={35} />
-            </Text>
-          </Box>
-        </TouchableOpacity>
-        <Box mb="5.5" />
-        <TouchableOpacity onPress={navigateToLoginScreen}>
-          <Text color="primary" textAlign="right" variant="textBase">
-            Log in?
+    <>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        <Box flex={1} px="5.5" justifyContent="center">
+          <Text variant="textXl" fontWeight="700" mb="6">
+            Welcome to SSU GANG PYEONG!
           </Text>
-        </TouchableOpacity>
-        <Box mb="5.5" />
 
-        <SmoothButton
-          label="Register"
-          onPress={handleSubmit(navigateToEmailVerificationScreen)}
-          uppercase
-        />
-      </Box>
+          <Controller
+            control={control}
+            rules={{
+              required: "Username is required",
+            }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <Input
+                label="Username"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                error={errors.username}
+              />
+            )}
+            name="username"
+          />
+          <Box mb="6" />
+          <Controller
+            control={control}
+            rules={{
+              required: "Email is required",
+              pattern: {
+                value: /@stonybrook\.edu$/,
+                message: "Email must end with @stonybrook.edu",
+              },
+            }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <Input
+                label="Email"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                error={errors.email}
+              />
+            )}
+            name="email"
+          />
+          <Box mt="5.5" />
+          <TouchableOpacity onPress={() => togglePicker("school")}>
+            <Text>SCHOOL</Text>
+            <Box mb="2" />
+            <Box
+              bg="gray500"
+              py="2"
+              borderRadius="rounded-xl"
+              flexDirection="row"
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              <Box width={35} />
+              <Text
+                variant="textSm"
+                fontWeight="700"
+                textAlign="center"
+                color="white"
+              >
+                {watch("school")}
+              </Text>
+              <Text textAlign="right" mr="3">
+                <Ionicons name={"caret-down"} color={"white"} size={35} />
+              </Text>
+            </Box>
+          </TouchableOpacity>
+          <Box mb="5.5" />
+          <TouchableOpacity onPress={() => togglePicker("major")}>
+            <Text>MAJOR</Text>
+            <Box mb="2" />
+            <Box
+              bg="gray500"
+              py="2"
+              borderRadius="rounded-xl"
+              flexDirection="row"
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              <Box width={35} />
+              <Text
+                variant="textSm"
+                fontWeight="700"
+                textAlign="center"
+                color="white"
+              >
+                {watch("major")}
+              </Text>
+              <Text textAlign="right" mr="3">
+                <Ionicons name={"caret-down"} color={"white"} size={35} />
+              </Text>
+            </Box>
+          </TouchableOpacity>
+          <Box mb="5.5" />
+          <TouchableOpacity onPress={navigateToLoginScreen}>
+            <Text color="primary" textAlign="right" variant="textBase">
+              Log in?
+            </Text>
+          </TouchableOpacity>
+          <Box mb="5.5" />
+
+          <SmoothButton
+            label="Register"
+            onPress={handleSubmit(navigateToEmailVerificationScreen)}
+            uppercase
+          />
+        </Box>
+      </TouchableWithoutFeedback>
 
       <BottomSheet
         index={-1}
@@ -326,7 +328,7 @@ const SignUpScreen = () => {
           />
         )}
       </BottomSheet>
-    </TouchableWithoutFeedback>
+    </>
   );
 };
 
