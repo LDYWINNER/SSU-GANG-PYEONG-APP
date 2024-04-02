@@ -725,7 +725,7 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
                 점수 너그러운 정도
               </Text>
               {generosityStore.toString() !== "0,0,0" ? (
-                <Box ml="1" mt="-6">
+                <Box mt="-6">
                   <VictoryChart
                     theme={VictoryTheme.material}
                     domainPadding={{ y: 45, x: 30 }}
@@ -733,12 +733,15 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
                     width={400}
                   >
                     <VictoryAxis
+                      tickLabelComponent={
+                        <VictoryLabel angle={45} textAnchor="middle" />
+                      }
                       crossAxis
                       style={{
                         ticks: { stroke: "grey", size: 5 },
                         tickLabels: {
                           fontSize: 15,
-                          padding: 5,
+                          padding: 20,
                           fill: theme.colors.textColor,
                         },
                       }}
@@ -926,7 +929,7 @@ const CourseDetail: React.FC<NativeStackScreenProps<any, "CourseDetail">> = ({
                         ticks: { stroke: "grey", size: 5 },
                         tickLabels: {
                           fontSize: 15,
-                          padding: 5,
+                          padding: 10,
                           fill: theme.colors.textColor,
                         },
                       }}

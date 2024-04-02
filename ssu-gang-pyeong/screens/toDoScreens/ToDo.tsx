@@ -187,7 +187,6 @@ const HomeScreen = () => {
                 Good {greeting} {user?.username}
               </Text>
               <Text variant="textXl" fontWeight="500" color="textColor">
-                It’s{" "}
                 {format(
                   new Date(dateForHeader).setHours(29, 0, 0, 0),
                   "yyyy.MM.dd"
