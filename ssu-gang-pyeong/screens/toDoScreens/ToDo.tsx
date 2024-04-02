@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 import { Loader, SafeAreaWrapper } from "../../components";
 import { Task, TaskActions } from "../../components/tasks";
 import { fetcher } from "../../utils/config";
@@ -113,9 +107,9 @@ const HomeScreen = () => {
     isMutating,
   } = useSWRMutation<ITask[]>(`api/v1/todotask/${pickedDate}`, fetcher);
 
-  useEffect(() => {
-    console.log(pickedDate);
-  }, [pickedDate]);
+  // useEffect(() => {
+  //   console.log(pickedDate);
+  // }, [pickedDate]);
 
   const presetDots = () => {
     //preset tasks for calendar dots representation
