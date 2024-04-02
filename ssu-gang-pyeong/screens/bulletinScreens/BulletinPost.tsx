@@ -43,6 +43,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Controller, useForm } from "react-hook-form";
 import { Octicons } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
+import { WINDOW_HEIGHT } from "@gorhom/bottom-sheet";
 
 type BulletinPostScreenRouteProp = RouteProp<
   BulletinStackParamList,
@@ -486,6 +487,7 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
         </Box>
 
         <ScrollView
+          contentContainerStyle={{ minHeight: WINDOW_HEIGHT * 1.1 }}
           refreshControl={
             <RefreshControl
               refreshing={refreshing}
