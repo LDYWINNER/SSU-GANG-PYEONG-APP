@@ -8,7 +8,13 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Box, Text, Theme } from "../../theme";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { useTheme } from "@shopify/restyle";
-import { TouchableOpacity, TextInput, Dimensions } from "react-native";
+import {
+  TouchableOpacity,
+  TextInput,
+  Dimensions,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from "react-native";
 import { useSWRConfig } from "swr";
 import useSWRMutation from "swr/mutation";
 import { ScrollView } from "react-native-gesture-handler";
@@ -154,158 +160,160 @@ const CreateCategory = () => {
   };
 
   return (
-    <SafeAreaWrapper>
-      <Box flex={1} mx="4">
-        <Box height={16} />
-        <Box
-          flexDirection="row"
-          justifyContent="space-between"
-          alignItems="center"
-        >
-          <NavigateBack />
-          {isEditing && (
-            <TouchableOpacity onPress={deleteCategory}>
-              <MaterialCommunityIcons
-                name="delete"
-                size={24}
-                color={theme.colors.rose500}
-              />
-            </TouchableOpacity>
-          )}
-        </Box>
-        <Box height={16} />
-        <Box bg="gray250" borderRadius="rounded-2xl">
-          <TextInput
-            style={{
-              fontSize: 20,
-              lineHeight: 26,
-              padding: 16,
-            }}
-            value={newCategory.name}
-            maxLength={36}
-            placeholder="Create new category"
-            placeholderTextColor={theme.colors.gray5}
-            onChangeText={(text) => {
-              setNewCategory((prev) => {
-                return {
-                  ...prev,
-                  name: text,
-                };
-              });
-            }}
-          />
-        </Box>
-        <Box height={24} />
-
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <Box bg="gray250" p="4" borderRadius="rounded-2xl">
-            <Box
-              bg="white"
-              width={80}
-              p="2"
-              mb="4"
-              borderRadius="rounded-2xl"
-              alignItems="center"
-            >
-              <Text
-                variant="textBase"
-                fontWeight="600"
-                color={newCategory.color.name as any}
-              >
-                Colors
-              </Text>
-            </Box>
-
-            <Box
-              flexDirection="row"
-              flexWrap="wrap"
-              justifyContent="flex-start"
-            >
-              {COLORS.map((_color) => {
-                return (
-                  <TouchableOpacity
-                    key={_color.id}
-                    onPress={() => {
-                      updateColor(_color);
-                    }}
-                    style={{ width: "25%" }}
-                  >
-                    <Box
-                      style={{
-                        backgroundColor: _color.code,
-                        margin: 4,
-                      }}
-                      width={windowWidth * 0.1}
-                      height={windowHeight * 0.045}
-                      borderRadius="rounded-2xl"
-                    />
-                  </TouchableOpacity>
-                );
-              })}
-            </Box>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <SafeAreaWrapper>
+        <Box flex={1} mx="4">
+          <Box height={16} />
+          <Box
+            flexDirection="row"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <NavigateBack />
+            {isEditing && (
+              <TouchableOpacity onPress={deleteCategory}>
+                <MaterialCommunityIcons
+                  name="delete"
+                  size={24}
+                  color={theme.colors.rose500}
+                />
+              </TouchableOpacity>
+            )}
           </Box>
-
+          <Box height={16} />
+          <Box bg="gray250" borderRadius="rounded-2xl">
+            <TextInput
+              style={{
+                fontSize: 20,
+                lineHeight: 26,
+                padding: 16,
+              }}
+              value={newCategory.name}
+              maxLength={36}
+              placeholder="Create new category"
+              placeholderTextColor={theme.colors.gray5}
+              onChangeText={(text) => {
+                setNewCategory((prev) => {
+                  return {
+                    ...prev,
+                    name: text,
+                  };
+                });
+              }}
+            />
+          </Box>
           <Box height={24} />
 
-          <Box bg="gray250" p="4" borderRadius="rounded-2xl">
-            <Box
-              bg="white"
-              width={60}
-              p="2"
-              mb="4"
-              borderRadius="rounded-2xl"
-              alignItems="center"
-            >
-              <Text
-                variant="textBase"
-                fontWeight="600"
-                color={newCategory.color.name as any}
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <Box bg="gray250" p="4" borderRadius="rounded-2xl">
+              <Box
+                bg="white"
+                width={80}
+                p="2"
+                mb="4"
+                borderRadius="rounded-2xl"
+                alignItems="center"
               >
-                {newCategory.icon.symbol}
-              </Text>
-            </Box>
+                <Text
+                  variant="textBase"
+                  fontWeight="600"
+                  color={newCategory.color.name as any}
+                >
+                  Colors
+                </Text>
+              </Box>
 
-            <Box
-              flexDirection="row"
-              flexWrap="wrap"
-              justifyContent="flex-start"
-            >
-              {ICONS.map((icon) => {
-                return (
-                  <TouchableOpacity
-                    key={icon.id}
-                    onPress={() => {
-                      updateIcon(icon);
-                    }}
-                    style={{ width: "25%" }}
-                  >
-                    <Box
-                      backgroundColor="white"
-                      width={windowWidth * 0.1}
-                      height={windowHeight * 0.045}
-                      borderRadius="rounded-2xl"
-                      justifyContent="center"
-                      alignItems="center"
-                      margin="2"
+              <Box
+                flexDirection="row"
+                flexWrap="wrap"
+                justifyContent="flex-start"
+              >
+                {COLORS.map((_color) => {
+                  return (
+                    <TouchableOpacity
+                      key={_color.id}
+                      onPress={() => {
+                        updateColor(_color);
+                      }}
+                      style={{ width: "25%" }}
                     >
-                      <Text fontSize={20}>{icon.symbol}</Text>
-                    </Box>
-                  </TouchableOpacity>
-                );
-              })}
+                      <Box
+                        style={{
+                          backgroundColor: _color.code,
+                          margin: 4,
+                        }}
+                        width={windowWidth * 0.1}
+                        height={windowHeight * 0.045}
+                        borderRadius="rounded-2xl"
+                      />
+                    </TouchableOpacity>
+                  );
+                })}
+              </Box>
             </Box>
-          </Box>
-          <Box height={windowHeight * 0.1} />
-        </ScrollView>
 
-        <Box position="absolute" bottom={16} left={0} right={0}>
-          <SmoothButton
-            label={isEditing ? "Edit category" : "Create new Category"}
-            onPress={createNewCategory}
-          />
+            <Box height={24} />
+
+            <Box bg="gray250" p="4" borderRadius="rounded-2xl">
+              <Box
+                bg="white"
+                width={60}
+                p="2"
+                mb="4"
+                borderRadius="rounded-2xl"
+                alignItems="center"
+              >
+                <Text
+                  variant="textBase"
+                  fontWeight="600"
+                  color={newCategory.color.name as any}
+                >
+                  {newCategory.icon.symbol}
+                </Text>
+              </Box>
+
+              <Box
+                flexDirection="row"
+                flexWrap="wrap"
+                justifyContent="flex-start"
+              >
+                {ICONS.map((icon) => {
+                  return (
+                    <TouchableOpacity
+                      key={icon.id}
+                      onPress={() => {
+                        updateIcon(icon);
+                      }}
+                      style={{ width: "25%" }}
+                    >
+                      <Box
+                        backgroundColor="white"
+                        width={windowWidth * 0.1}
+                        height={windowHeight * 0.045}
+                        borderRadius="rounded-2xl"
+                        justifyContent="center"
+                        alignItems="center"
+                        margin="2"
+                      >
+                        <Text fontSize={20}>{icon.symbol}</Text>
+                      </Box>
+                    </TouchableOpacity>
+                  );
+                })}
+              </Box>
+            </Box>
+            <Box height={windowHeight * 0.1} />
+          </ScrollView>
+
+          <Box position="absolute" bottom={16} left={0} right={0}>
+            <SmoothButton
+              label={isEditing ? "Edit category" : "Create new Category"}
+              onPress={createNewCategory}
+            />
+          </Box>
         </Box>
-      </Box>
-    </SafeAreaWrapper>
+      </SafeAreaWrapper>
+    </TouchableWithoutFeedback>
   );
 };
 

@@ -1,6 +1,11 @@
 import React, { useCallback, useMemo, useRef, useState } from "react";
 import { SmoothButton, Input } from "../../components";
-import { Alert, TouchableOpacity } from "react-native";
+import {
+  Alert,
+  Keyboard,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+} from "react-native";
 import { AuthScreenNavigationType } from "../../navigation/types";
 import { useNavigation } from "@react-navigation/native";
 import { Controller, useForm } from "react-hook-form";
@@ -104,7 +109,7 @@ const SignUpScreen = () => {
   );
 
   return (
-    <>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <Box flex={1} px="5.5" justifyContent="center">
         <Text variant="textXl" fontWeight="700" mb="6">
           Welcome to SSU GANG PYEONG!
@@ -321,7 +326,7 @@ const SignUpScreen = () => {
           />
         )}
       </BottomSheet>
-    </>
+    </TouchableWithoutFeedback>
   );
 };
 

@@ -9,7 +9,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import axiosInstance from "../../utils/config";
 import { loginUser } from "../../utils/api";
 import useUserGlobalStore from "../../store/useUserGlobal";
-import { Alert } from "react-native";
+import { Alert, Keyboard, TouchableWithoutFeedback } from "react-native";
 
 const LoginScreen = () => {
   const { updateUser } = useUserGlobalStore();
@@ -71,47 +71,49 @@ const LoginScreen = () => {
   });
 
   return (
-    <Box flex={1} px="5.5" justifyContent="center">
-      <Text variant="textXl" fontWeight="700">
-        Welcome Back
-      </Text>
-      <Box mb="6" />
-      <Controller
-        control={control}
-        rules={{
-          required: "Email is required",
-          pattern: {
-            value: /@stonybrook\.edu$/,
-            message: "Email must end with @stonybrook.edu",
-          },
-        }}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <Input
-            label="Email"
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-            error={errors.email}
-          />
-        )}
-        name="email"
-      />
-      <Box mb="6" />
-
-      <Box mt="5.5" />
-      <TouchableOpacity onPress={navigateToSignInScreen}>
-        <Text color="primary" textAlign="right" variant="textBase">
-          Register?
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <Box flex={1} px="5.5" justifyContent="center">
+        <Text variant="textXl" fontWeight="700">
+          Welcome Back
         </Text>
-      </TouchableOpacity>
-      <Box mb="5.5" />
+        <Box mb="6" />
+        <Controller
+          control={control}
+          rules={{
+            required: "Email is required",
+            pattern: {
+              value: /@stonybrook\.edu$/,
+              message: "Email must end with @stonybrook.edu",
+            },
+          }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <Input
+              label="Email"
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+              error={errors.email}
+            />
+          )}
+          name="email"
+        />
+        <Box mb="6" />
 
-      <SmoothButton
-        label="Next"
-        onPress={handleSubmit(navigateToEmailVerificationScreen)}
-        uppercase
-      />
-    </Box>
+        <Box mt="5.5" />
+        <TouchableOpacity onPress={navigateToSignInScreen}>
+          <Text color="primary" textAlign="right" variant="textBase">
+            Register?
+          </Text>
+        </TouchableOpacity>
+        <Box mb="5.5" />
+
+        <SmoothButton
+          label="Next"
+          onPress={handleSubmit(navigateToEmailVerificationScreen)}
+          uppercase
+        />
+      </Box>
+    </TouchableWithoutFeedback>
   );
 };
 
