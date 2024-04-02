@@ -149,7 +149,7 @@ const Search: React.FC<NativeStackScreenProps<any, "Search">> = ({
               <TextInput
                 onBlur={onBlur}
                 onChangeText={onChange}
-                placeholder="Search with keywords"
+                placeholder="Course Number Only"
                 style={{
                   fontSize: 18,
                   lineHeight: 26,

@@ -160,7 +160,7 @@ const RegisterReviewCourse = () => {
               <TextInput
                 onBlur={onBlur}
                 onChangeText={onChange}
-                placeholder="Search with keywords"
+                placeholder="Course Number Only"
                 style={{
                   fontSize: 20,
                   lineHeight: 26,
