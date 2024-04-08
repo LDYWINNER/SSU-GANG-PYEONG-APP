@@ -361,6 +361,7 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : WINDOW_HEIGHT * 0.13}
       style={{ flex: 1 }}
     >
       <SafeAreaWrapper>
@@ -781,12 +782,19 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
               flexDirection="row"
               alignItems="center"
               position="absolute"
-              bottom={windowHeight * -0.09 + 110}
-              style={{ backgroundColor: theme.colors.gray400 }}
-              p="2"
+              bottom={
+                Platform.OS === "ios"
+                  ? windowHeight * -0.09 + 110
+                  : windowHeight * -0.09 + 120
+              }
+              style={{
+                backgroundColor: theme.colors.gray400,
+                padding: Platform.OS === "ios" ? 8 : 0,
+                paddingRight: Platform.OS === "ios" ? 16 : 8,
+                paddingLeft: Platform.OS === "ios" ? 8 : 12,
+              }}
               borderRadius="rounded-2xl"
               width={"100%"}
-              pr="4"
             >
               <TouchableOpacity onPress={() => setAnonymity(!anonymity)}>
                 <Box flexDirection="row" alignItems="center">
@@ -816,33 +824,35 @@ const BulletinPost: React.FC<NativeStackScreenProps<any, "BulletinPost">> = ({
 
               <Box width={"75%"}>
                 <Box height={5} />
-                <Controller
-                  name="text"
-                  control={control}
-                  rules={{
-                    required: true,
-                  }}
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput
-                      placeholder="Write a comment."
-                      placeholderTextColor={theme.colors.gray300}
-                      style={{
-                        padding: 16,
-                        borderColor: theme.colors.grey,
-                        borderRadius: theme.borderRadii["rounded-7xl"],
-                        height: "100%",
-                        marginBottom: -6,
-                      }}
-                      value={value}
-                      onChangeText={onChange}
-                      onBlur={onBlur}
-                      multiline
-                      autoComplete={"off"}
-                      autoCorrect={false}
-                      keyboardAppearance={"default"}
-                    />
-                  )}
-                />
+                <Box>
+                  <Controller
+                    name="text"
+                    control={control}
+                    rules={{
+                      required: true,
+                    }}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                      <TextInput
+                        placeholder="Write a comment."
+                        placeholderTextColor={theme.colors.gray300}
+                        style={{
+                          padding: 16,
+                          borderColor: theme.colors.grey,
+                          borderRadius: theme.borderRadii["rounded-7xl"],
+                          height: "100%",
+                          marginBottom: -6,
+                        }}
+                        value={value}
+                        onChangeText={onChange}
+                        onBlur={onBlur}
+                        multiline
+                        autoComplete={"off"}
+                        autoCorrect={false}
+                        keyboardAppearance={"default"}
+                      />
+                    )}
+                  />
+                </Box>
               </Box>
               <Box width={6} />
               <TouchableOpacity onPress={addComment}>

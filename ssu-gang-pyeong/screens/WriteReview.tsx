@@ -208,7 +208,7 @@ const WriteReview = () => {
 
   return (
     <SafeAreaWrapper>
-      <Box flex={1} mx="2">
+      <Box flex={1} mx="2" pb="6">
         <Box
           flexDirection="row"
           justifyContent="space-between"

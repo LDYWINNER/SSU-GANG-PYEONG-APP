@@ -145,7 +145,7 @@ const WritePost: React.FC<NativeStackScreenProps<any, "WritePost">> = ({
 
   return (
     <SafeAreaWrapper>
-      <Box flex={1} mx="2" mb="-6">
+      <Box flex={1} mx="2" pb="5">
         <Box
           flexDirection="row"
           justifyContent="space-between"

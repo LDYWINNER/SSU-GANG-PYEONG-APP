@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
   useColorScheme,
   RefreshControl,
+  Platform,
+  TouchableNativeFeedback,
 } from "react-native";
 import { BulletinStackParamList } from "../../navigation/types";
 import {
@@ -254,33 +256,71 @@ const BulletinDetail: React.FC<
         </ScrollView>
 
         {!user!.blocked ? (
-          <TouchableOpacity onPress={() => navigateToWritePost(name)}>
-            <Box
-              flexDirection="row"
-              alignItems="center"
-              position="absolute"
-              right={windowWidth * 0.38}
-              bottom={windowHeight * -0.09 + 110}
-              style={{ backgroundColor: theme.colors.sbuRed }}
-              p="2"
-              borderRadius="rounded-2xl"
+          Platform.OS === "ios" ? (
+            <TouchableOpacity
+              onPress={() => navigateToWritePost(name)}
+              style={{ zIndex: 1 }}
             >
-              <MaterialCommunityIcons
-                name="pencil-plus-outline"
-                size={24}
-                color={theme.colors.white}
-              />
-              <Box width={6} />
-              <Text
-                fontWeight="700"
-                style={{
-                  color: theme.colors.white,
-                }}
+              <Box
+                flexDirection="row"
+                alignItems="center"
+                position="absolute"
+                right={windowWidth * 0.38}
+                bottom={windowHeight * -0.09 + 110}
+                style={{ backgroundColor: theme.colors.sbuRed }}
+                p="2"
+                borderRadius="rounded-2xl"
               >
-                글 쓰기
-              </Text>
-            </Box>
-          </TouchableOpacity>
+                <MaterialCommunityIcons
+                  name="pencil-plus-outline"
+                  size={24}
+                  color={theme.colors.white}
+                />
+                <Box width={6} />
+                <Text
+                  fontWeight="700"
+                  style={{
+                    color: theme.colors.white,
+                  }}
+                >
+                  글 쓰기
+                </Text>
+              </Box>
+            </TouchableOpacity>
+          ) : (
+            <TouchableNativeFeedback
+              onPress={() => navigateToWritePost(name)}
+              style={{ zIndex: 1 }}
+              // background={TouchableNativeFeedback.Ripple("white", false)}
+              hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
+            >
+              <Box
+                flexDirection="row"
+                alignItems="center"
+                position="absolute"
+                right={windowWidth * 0.38}
+                bottom={windowHeight * -0.09 + 130}
+                style={{ backgroundColor: theme.colors.sbuRed }}
+                p="2"
+                borderRadius="rounded-2xl"
+              >
+                <MaterialCommunityIcons
+                  name="pencil-plus-outline"
+                  size={24}
+                  color={theme.colors.white}
+                />
+                <Box width={6} />
+                <Text
+                  fontWeight="700"
+                  style={{
+                    color: theme.colors.white,
+                  }}
+                >
+                  글 쓰기
+                </Text>
+              </Box>
+            </TouchableNativeFeedback>
+          )
         ) : (
           <TouchableOpacity disabled>
             <Box
@@ -288,7 +328,11 @@ const BulletinDetail: React.FC<
               alignItems="center"
               position="absolute"
               right={windowWidth * 0.38}
-              bottom={windowHeight * -0.09 + 110}
+              bottom={
+                Platform.OS === "ios"
+                  ? windowHeight * -0.09 + 110
+                  : windowHeight * -0.09 + 130
+              }
               style={{ backgroundColor: theme.colors.gray400 }}
               p="2"
               borderRadius="rounded-2xl"
